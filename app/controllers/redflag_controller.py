@@ -50,12 +50,13 @@ class RedflagController:
             }
             return Response(json.dumps(response_data), content_type="application/json", status=422)
 
-        if self.redflagValidator.check_status_value(status):
-            response_data = {
-                "status": 412,
-                "message": "Wrong Status given"
-            }
-            return Response(json.dumps(response_data), content_type="application/json", status=412)
+        self.response_empty_string (status)
+        # if self.redflagValidator.check_status_value(status):
+        #     response_data = {
+        #         "status": 412,
+        #         "message": "Wrong Status given"
+        #     }
+        #     return Response(json.dumps(response_data), content_type="application/json", status=412)
             
 
         new_redflag = RedFlag(redflag_id=redflag_id,report_type=report_type,created_on=created_on,\
@@ -165,3 +166,10 @@ class RedflagController:
                 "message": "No empty fields are allowed"
             }
             return Response(json.dumps(response_data), content_type="application/json", status=406)
+
+        if self.redflagValidator.check_status_value(input_field):
+            response_data = {
+                "status": 412,
+                "message": "Wrong Status given"
+            }
+            return Response(json.dumps(response_data), content_type="application/json", status=412)
