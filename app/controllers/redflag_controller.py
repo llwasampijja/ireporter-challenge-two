@@ -28,20 +28,20 @@ class RedflagController:
         if self.redflagValidator.check_empty_string(report_type,created_by,location,status,\
             videos,images,comment):
             response_data = {
-                "status": 411,
+                "status": 406,
                 "message": "No empty fields are allowed"
             }
-            return Response(json.dumps(response_data), content_type="application/json", status=411)
+            return Response(json.dumps(response_data), content_type="application/json", status=406)
 
         if self.redflagValidator.check_str_datatype(report_type) or self.redflagValidator.check_str_datatype(created_by) or \
             self.redflagValidator.check_str_datatype(location) or self.redflagValidator.check_str_datatype(status) or \
             self.redflagValidator.check_str_datatype(videos) or self.redflagValidator.check_str_datatype(images) or \
             self.redflagValidator.check_str_datatype(comment):
             response_data = {
-                "status": 415,
+                "status": 422,
                 "message": "Wrong data type entered"
             }
-            return Response(json.dumps(response_data), content_type="application/json", status=415)
+            return Response(json.dumps(response_data), content_type="application/json", status=422)
 
         if self.redflagValidator.check_status_value(status):
             response_data = {
@@ -56,11 +56,11 @@ class RedflagController:
         redflagData.create_redflag(new_redflag.redflag_dict())
 
         response_data = {
-            "status": 201,
+            "status": 202,
             "data": [new_redflag.redflag_dict()],
             "message": "Red-Flag created successifully"
         }
-        return Response(json.dumps(response_data), content_type="application/json", status=201)
+        return Response(json.dumps(response_data), content_type="application/json", status=202)
         
     def get_reflags(self):
         get_redflags_instance = redflagData.get_redflags() 
@@ -87,3 +87,33 @@ class RedflagController:
                 "status": 200,
                 "data": [get_redflag_instance]
             }), content_type="application/json", status=200)
+
+    def updated_redflag(self, redflag_id):
+        request_data = request.get_json()
+        comment = request_data.get("comment")
+
+        if self.redflagValidator.check_empty_string(comment):
+            response_data = {
+                "status": 406,
+                "message": "No empty fields are allowed"
+            }
+            return Response(json.dumps(response_data), content_type="application/json", status=406)
+
+        if self.redflagValidator.check_str_datatype(comment):
+            return Response(json.dumps({
+                "status": 422,
+                "message": "Wrong data type entered"
+            }), content_type="application/json", status=422)
+
+        update_redflag_instance = redflagData.update_redflag(redflag_id, request_data)
+        if update_redflag_instance == None:
+            return Response(json.dumps({
+                "status": 404,
+                "message": "No redflag of that specific id found"
+            }), content_type="application/json", status=404)
+        else:
+            return Response(json.dumps({
+                "status": 202,
+                "data": [update_redflag_instance],
+                "message": "Updated red-flag record’s location"
+            }), content_type="application/json", status=202)

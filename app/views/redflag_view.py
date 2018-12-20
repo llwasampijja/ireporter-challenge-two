@@ -15,3 +15,7 @@ def get_redflags():
 @redflag_bp.route("/<int:redflag_id>", methods=["GET"])
 def get_flag(redflag_id):
     return redflagController.get_redflag(redflag_id)
+
+@redflag_bp.route("/<int:redflag_id>/location", methods=["PATCH"])
+def update_redflag(redflag_id):
+    return redflagController.updated_redflag(redflag_id)

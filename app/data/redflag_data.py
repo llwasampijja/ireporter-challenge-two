@@ -13,3 +13,10 @@ class RedflagData:
             if redflag.get("redflag_id") == redflag_id:
                 return redflag
         return None
+
+    def update_redflag(self, redflag_id, new_update):
+        for redflag in self.redflags_list:
+            if redflag.get("redflag_id") == redflag_id:
+                redflag.update(new_update)
+                return redflag
+        return None
