@@ -6,7 +6,8 @@ install:
   - "pip install -r requirements.txt"
 
 script:
-  - python3 -m pytest --cov=app/
+  - python3 -m pytest --cov
+  # - python3 -m pytest --cov=app/
   
 after_success:
   - coveralls
