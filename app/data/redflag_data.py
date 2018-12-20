@@ -20,3 +20,10 @@ class RedflagData:
                 redflag.update(new_update)
                 return redflag
         return None
+
+    def delete_redflag(self, redflag_id):
+        for redflag in self.redflags_list:
+            if redflag.get("redflag_id") == redflag_id:
+                self.redflags_list.remove(redflag)
+                return redflag
+        return None

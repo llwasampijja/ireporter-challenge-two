@@ -101,9 +101,9 @@ class RedflagController:
 
         if self.redflagValidator.check_str_datatype(comment):
             return Response(json.dumps({
-                "status": 422,
+                "status": 406,
                 "message": "Wrong data type entered"
-            }), content_type="application/json", status=422)
+            }), content_type="application/json", status=406)
 
         update_redflag_instance = redflagData.update_redflag(redflag_id, request_data)
         if update_redflag_instance == None:
@@ -116,4 +116,18 @@ class RedflagController:
                 "status": 202,
                 "data": [update_redflag_instance],
                 "message": "Updated red-flag record’s location"
+            }), content_type="application/json", status=202)
+
+    def delete_redflag(self, redflag_id):
+        delete_redflag_instance = redflagData.delete_redflag(redflag_id)
+        if delete_redflag_instance == None:
+            return Response(json.dumps({
+                "status": 404,
+                "message": "No redflag of that specific id found"
+            }), content_type="application/json", status=404)
+        else:
+            return Response(json.dumps({
+                "status": 202,
+                "data": [delete_redflag_instance],
+                "message": "Red-flag deleted successfully"
             }), content_type="application/json", status=202)
