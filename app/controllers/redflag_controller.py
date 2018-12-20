@@ -88,7 +88,7 @@ class RedflagController:
                 "data": [get_redflag_instance]
             }), content_type="application/json", status=200)
 
-    def updated_redflag(self, redflag_id):
+    def update_redflag(self, redflag_id):
         request_data = request.get_json()
         comment = request_data.get("comment")
 
