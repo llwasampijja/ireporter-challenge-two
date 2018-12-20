@@ -1,0 +1,21 @@
+class RedflagValidator():
+    def check_empty_string(self, *args):
+        if any(str(user_input).replace(" ", "") == "" for user_input in args):
+            return True
+        return False
+
+    def check_str_datatype(self, string_value):
+        if isinstance(string_value, str):
+            return False
+        return True
+
+    def check_int_datatype(self, int_value):
+        if isinstance(int_value, int):
+            return True
+        return False
+
+    def check_status_value(self, status):
+        status = status.lower()
+        if status=="resolved" or status=="pending investigation" or status=="rejected":
+            return False
+        return True
