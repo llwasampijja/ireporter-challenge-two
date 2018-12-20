@@ -23,20 +23,27 @@ class RedflagController:
         images = request_data.get("images")
         comment = request_data.get("comment")
 
+        redflag_str_args = [report_type, created_by, location, status, videos, images, comment]
+
         
+        self.response_empty_string(report_type)
+        self.response_empty_string(created_by)
+        self.response_empty_string(location)
+        self.response_empty_string(status)
+        self.response_empty_string(videos)
+        self.response_empty_string(images)
+        self.response_empty_string(comment)
 
-        if self.redflagValidator.check_empty_string(report_type,created_by,location,status,\
-            videos,images,comment):
-            response_data = {
-                "status": 406,
-                "message": "No empty fields are allowed"
-            }
-            return Response(json.dumps(response_data), content_type="application/json", status=406)
+        # if self.redflagValidator.check_empty_string(report_type,created_by,location,status,\
+        #     videos,images,comment):
+        #     response_data = {
+        #         "status": 406,
+        #         "message": "No empty fields are allowed"
+        #     }
+        #     return Response(json.dumps(response_data), content_type="application/json", status=406)
 
-        if self.redflagValidator.check_str_datatype(report_type) or self.redflagValidator.check_str_datatype(created_by) or \
-            self.redflagValidator.check_str_datatype(location) or self.redflagValidator.check_str_datatype(status) or \
-            self.redflagValidator.check_str_datatype(videos) or self.redflagValidator.check_str_datatype(images) or \
-            self.redflagValidator.check_str_datatype(comment):
+
+        if any(self.redflagValidator.check_str_datatype(str_arg) for str_arg in redflag_str_args):
             response_data = {
                 "status": 422,
                 "message": "Wrong data type entered"
@@ -92,42 +99,69 @@ class RedflagController:
         request_data = request.get_json()
         comment = request_data.get("comment")
 
-        if self.redflagValidator.check_empty_string(comment):
+        self.response_empty_string(comment)
+
+        # if self.redflagValidator.check_empty_string(comment):
+        #     response_data = {
+        #         "status": 406,
+        #         "message": "No empty fields are allowed"
+        #     }
+        #     return Response(json.dumps(response_data), content_type="application/json", status=406)
+
+        self.response_empty_string(comment)
+        # if self.redflagValidator.check_str_datatype(comment):
+        #     return Response(json.dumps({
+        #         "status": 406,
+        #         "message": "Wrong data type entered"
+        #     }), content_type="application/json", status=406)
+
+        update_redflag_instance = redflagData.update_redflag(redflag_id, request_data)
+        self.response_for_none (update_redflag_instance)
+        # if update_redflag_instance == None:
+        #     return Response(json.dumps({
+        #         "status": 404,
+        #         "message": "No redflag of that specific id found"
+        #     }), content_type="application/json", status=404)
+        # else:
+        #     return Response(json.dumps({
+        #         "status": 202,
+        #         "data": [update_redflag_instance],
+        #         "message": "Updated red-flag record’s location"
+        #     }), content_type="application/json", status=202)
+
+    def delete_redflag(self, redflag_id):
+        delete_redflag_instance = redflagData.delete_redflag(redflag_id)
+        self.response_for_none (delete_redflag_instance)
+        # if delete_redflag_instance == None:
+        #     return Response(json.dumps({
+        #         "status": 404,
+        #         "message": "No redflag of that specific id found"
+        #     }), content_type="application/json", status=404)
+        # else:
+        #     return Response(json.dumps({
+        #         "status": 202,
+        #         "data": [delete_redflag_instance],
+        #         "message": "Red-flag deleted successfully"
+        #     }), content_type="application/json", status=202)
+
+
+    def response_for_none (self, return_value):
+        if return_value == None:
+            return Response(json.dumps({
+                "status": 404,
+                "message": "No redflag of that specific id found"
+            }), content_type="application/json", status=404)
+        else:
+            return Response(json.dumps({
+                "status": 202,
+                "data": [return_value],
+                "message": "Red-flag deleted successfully"
+            }), content_type="application/json", status=202)
+
+    def response_empty_string (self, input_field):
+        if self.redflagValidator.check_empty_string(input_field):
             response_data = {
                 "status": 406,
                 "message": "No empty fields are allowed"
             }
             return Response(json.dumps(response_data), content_type="application/json", status=406)
-
-        if self.redflagValidator.check_str_datatype(comment):
-            return Response(json.dumps({
-                "status": 406,
-                "message": "Wrong data type entered"
-            }), content_type="application/json", status=406)
-
-        update_redflag_instance = redflagData.update_redflag(redflag_id, request_data)
-        if update_redflag_instance == None:
-            return Response(json.dumps({
-                "status": 404,
-                "message": "No redflag of that specific id found"
-            }), content_type="application/json", status=404)
-        else:
-            return Response(json.dumps({
-                "status": 202,
-                "data": [update_redflag_instance],
-                "message": "Updated red-flag record’s location"
-            }), content_type="application/json", status=202)
-
-    def delete_redflag(self, redflag_id):
-        delete_redflag_instance = redflagData.delete_redflag(redflag_id)
-        if delete_redflag_instance == None:
-            return Response(json.dumps({
-                "status": 404,
-                "message": "No redflag of that specific id found"
-            }), content_type="application/json", status=404)
-        else:
-            return Response(json.dumps({
-                "status": 202,
-                "data": [delete_redflag_instance],
-                "message": "Red-flag deleted successfully"
-            }), content_type="application/json", status=202)
