@@ -87,22 +87,14 @@ class RedflagController:
         if update_redflag_instance == None:
             return self.mainresponse("none")
         else:
-            return Response(json.dumps({
-                "status": 202,
-                "data": [update_redflag_instance],
-                "message": "Updated red-flag record’s location"
-            }), content_type="application/json", status=202)
+            return self.main2(update_redflag_instance, "update")
 
     def delete_redflag(self, redflag_id):
         delete_redflag_instance = redflagData.delete_redflag(redflag_id)
         if delete_redflag_instance == None:
             return self.mainresponse("none")
         else:
-            return Response(json.dumps({
-                "status": 202,
-                "data": [delete_redflag_instance],
-                "message": "Red-flag deleted successfully"
-            }), content_type="application/json", status=202)
+            return self.main2(delete_redflag_instance, "delete")
 
     def response_emptystring(self):
         return Response(json.dumps({
@@ -145,3 +137,14 @@ class RedflagController:
             "status": status_code,
             "message": message
         }), content_type="application/json", status=status_code)
+
+    def main2(self, return_data, keyword):
+        if keyword=="delete":
+            message = "Red-flag deleted successfully"
+        else:
+            message = "Updated red-flag record’s location"
+        return Response(json.dumps({
+                "status": 202,
+                "data": [return_data],
+                "message": message
+            }), content_type="application/json", status=202)
