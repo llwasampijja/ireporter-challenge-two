@@ -26,27 +26,14 @@ class RedflagController:
 
         
 
-        if self.redflagValidator.check_empty_string(report_type,created_by,location,status,\
-            videos,images,comment):
-            response_data = {
-                "status": 406,
-                "message": "No empty fields are allowed"
-            }
-            return Response(json.dumps(response_data), content_type="application/json", status=406)
+        if any (self.redflagValidator.check_empty_string(item) for item in args_strings):
+            return self.response_emptystring()
 
         if any(self.redflagValidator.check_str_datatype(item) for item in args_strings):
-            response_data = {
-                "status": 422,
-                "message": "Wrong data type entered"
-            }
-            return Response(json.dumps(response_data), content_type="application/json", status=422)
+            return self.response_wrongdatatype()
 
         if self.redflagValidator.check_status_value(status):
-            response_data = {
-                "status": 412,
-                "message": "Wrong Status given"
-            }
-            return Response(json.dumps(response_data), content_type="application/json", status=412)
+            return self.reponse_wrong_status()
             
 
         new_redflag = RedFlag(redflag_id=redflag_id,report_type=report_type,created_on=created_on,\
@@ -91,24 +78,14 @@ class RedflagController:
         comment = request_data.get("comment")
 
         if self.redflagValidator.check_empty_string(comment):
-            response_data = {
-                "status": 406,
-                "message": "No empty fields are allowed"
-            }
-            return Response(json.dumps(response_data), content_type="application/json", status=406)
+            return self.response_emptystring()
 
         if self.redflagValidator.check_str_datatype(comment):
-            return Response(json.dumps({
-                "status": 406,
-                "message": "Wrong data type entered"
-            }), content_type="application/json", status=406)
+            return self.response_wrongdatatype()
 
         update_redflag_instance = redflagData.update_redflag(redflag_id, request_data)
         if update_redflag_instance == None:
-            return Response(json.dumps({
-                "status": 404,
-                "message": "No redflag of that specific id found"
-            }), content_type="application/json", status=404)
+            return self.response_none()
         else:
             return Response(json.dumps({
                 "status": 202,
@@ -119,13 +96,34 @@ class RedflagController:
     def delete_redflag(self, redflag_id):
         delete_redflag_instance = redflagData.delete_redflag(redflag_id)
         if delete_redflag_instance == None:
-            return Response(json.dumps({
-                "status": 404,
-                "message": "No redflag of that specific id found"
-            }), content_type="application/json", status=404)
+            return self.response_none()
         else:
             return Response(json.dumps({
                 "status": 202,
                 "data": [delete_redflag_instance],
                 "message": "Red-flag deleted successfully"
             }), content_type="application/json", status=202)
+
+    def response_emptystring(self):
+        return Response(json.dumps({
+            "status": 406,
+            "message": "No empty fields are allowed"
+        }), content_type="application/json", status=406)
+
+    def response_wrongdatatype(self):
+        return Response(json.dumps({
+            "status": 422,
+            "message": "Wrong data type entered"
+        }), content_type="application/json", status=422)
+
+    def reponse_wrong_status(self):
+        return Response(json.dumps({
+            "status": 412,
+            "message": "Wrong Status given"
+        }), content_type="application/json", status=412)
+
+    def response_none(self):
+        return Response(json.dumps({
+            "status": 404,
+            "message": "No redflag of that specific id found"
+        }), content_type="application/json", status=404)
