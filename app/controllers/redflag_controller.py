@@ -11,6 +11,7 @@ class RedflagController:
     redflagValidator = RedflagValidator()
     
     def create_redflag(self):
+        """method for creating red-flags"""
         request_data = request.get_json()
         redflag_id = request_data.get("redflag_id")
         report_type = request_data.get("report_type")
