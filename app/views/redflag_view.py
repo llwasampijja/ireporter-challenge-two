@@ -8,3 +8,6 @@ redflagController = RedflagController()
 def create_redflag():
     return redflagController.create_redflag()
     
+@redflag_bp.route("", methods=["GET"])
+def get_redflags():
+    return redflagController.get_reflags()
