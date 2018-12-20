@@ -71,7 +71,19 @@ class RedflagController:
             }),content_type="application/json", status=411)
         else:
             return Response(json.dumps ({
-                "status": 201,
+                "status": 200,
                 "data": get_redflags_instance
                 }), content_type="application/json", status=200)
     
+    def get_redflag(self, redflag_id):
+        get_redflag_instance = redflagData.get_redflag(redflag_id) 
+        if get_redflag_instance == None:
+            return Response(json.dumps({
+                "status": 404,
+                "message": "No redflag of that specific id found"
+            }), content_type="application/json", status=404)
+        else:
+            return Response(json.dumps({
+                "status": 200,
+                "data": [get_redflag_instance]
+            }), content_type="application/json", status=200)

@@ -11,3 +11,7 @@ def create_redflag():
 @redflag_bp.route("", methods=["GET"])
 def get_redflags():
     return redflagController.get_reflags()
+
+@redflag_bp.route("/<int:redflag_id>", methods=["GET"])
+def get_flag(redflag_id):
+    return redflagController.get_redflag(redflag_id)
