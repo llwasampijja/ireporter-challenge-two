@@ -30,11 +30,12 @@ class RedflagController:
             return self.response_emptystring()
 
         if any(self.redflagValidator.check_str_datatype(item) for item in args_strings):
-            return self.response_wrongdatatype()
+            return self.response_unaccepted("datatype")
 
         if self.redflagValidator.check_status_value(status):
-            return self.reponse_wrong_status()
+            return self.response_unaccepted("status")
             
+
 
         new_redflag = RedFlag(redflag_id=redflag_id,report_type=report_type,created_on=created_on,\
         created_by=created_by,location=location,status=status,videos=videos,images=images,comment=comment)
@@ -81,20 +82,20 @@ class RedflagController:
             return self.response_emptystring()
 
         if self.redflagValidator.check_str_datatype(comment):
-            return self.mainresponse("datatype")
+            return self.response_unaccepted("datatype")
 
         update_redflag_instance = redflagData.update_redflag(redflag_id, request_data)
         if update_redflag_instance == None:
-            return self.mainresponse("none")
+            return self.response_unaccepted("none")
         else:
-            return self.main2(update_redflag_instance, "update")
+            return self.response_sumission_success(update_redflag_instance, "update")
 
     def delete_redflag(self, redflag_id):
         delete_redflag_instance = redflagData.delete_redflag(redflag_id)
         if delete_redflag_instance == None:
-            return self.mainresponse("none")
+            return self.response_unaccepted("none")
         else:
-            return self.main2(delete_redflag_instance, "delete")
+            return self.response_sumission_success(delete_redflag_instance, "delete")
 
     def response_emptystring(self):
         return Response(json.dumps({
@@ -102,25 +103,7 @@ class RedflagController:
             "message": "No empty fields are allowed"
         }), content_type="application/json", status=406)
 
-    # def response_wrongdatatype(self):
-    #     return Response(json.dumps({
-    #         "status": 422,
-    #         "message": "Wrong data type entered"
-    #     }), content_type="application/json", status=422)
-
-    # def reponse_wrong_status(self):
-    #     return Response(json.dumps({
-    #         "status": 412,
-    #         "message": "Wrong Status given"
-    #     }), content_type="application/json", status=412)
-
-    # def response_none(self):
-    #     return Response(json.dumps({
-    #         "status": 404,
-    #         "message": "No redflag of that specific id found"
-    #     }), content_type="application/json", status=404)
-
-    def mainresponse(self, word):
+    def response_unaccepted(self, word):
         if word == "none":
             status_code= 404
             message = "No redflag of that specific id found"
@@ -132,13 +115,13 @@ class RedflagController:
             message = "No empty fields are allowed"
         else:
             status_code= 406
-            message = "No empty fields are allowed"
+            message = "Unaccepted datatype"
         return Response(json.dumps({
             "status": status_code,
             "message": message
         }), content_type="application/json", status=status_code)
 
-    def main2(self, return_data, keyword):
+    def response_sumission_success(self, return_data, keyword):
         if keyword=="delete":
             message = "Red-flag deleted successfully"
         else:
