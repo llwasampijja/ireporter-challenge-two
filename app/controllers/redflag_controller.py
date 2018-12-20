@@ -167,9 +167,9 @@ class RedflagController:
             }
             return Response(json.dumps(response_data), content_type="application/json", status=406)
 
-        if self.redflagValidator.check_status_value(input_field):
-            response_data = {
-                "status": 412,
-                "message": "Wrong Status given"
-            }
-            return Response(json.dumps(response_data), content_type="application/json", status=412)
+        # if self.redflagValidator.check_status_value(input_field):
+        #     response_data = {
+        #         "status": 412,
+        #         "message": "Wrong Status given"
+        #     }
+        #     return Response(json.dumps(response_data), content_type="application/json", status=412)
