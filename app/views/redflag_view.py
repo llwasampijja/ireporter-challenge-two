@@ -18,7 +18,7 @@ def get_flag(redflag_id):
 
 @redflag_bp.route("/<int:redflag_id>/location", methods=["PATCH"])
 def update_redflag(redflag_id):
-    return redflagController.updated_redflag(redflag_id)
+    return redflagController.update_redflag(redflag_id)
 
 @redflag_bp.route("/<int:redflag_id>", methods=["DELETE"])
 def delete_redflag(redflag_id):
