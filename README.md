@@ -91,7 +91,7 @@ On running that command, the application server will be launched and the URL to 
 ## Unit Testing the Application
 * In order to run unit tests for this application, you must install pytest, pytest-cov and coverage installed on your pc or virtual environment.
 * While in the root of the project, run the command below to run the unit tests and also generate a coverage report.
-    `pytest --cov`
+- `pytest --cov`
 
 ## URL Versioning
 The endpoints of this application have been versioned. The current version is one (1); i.e.: `api/v1`
