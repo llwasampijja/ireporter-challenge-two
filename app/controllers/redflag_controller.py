@@ -29,18 +29,18 @@ class RedflagController:
         
         redflag_id = self.create_id(get_redflags_instance)
 
-        if self.redflag_validator.invalid_redflag(request_data):
-            return Response(json.dumps({
-                "status": 406,
-                "message": "Not a valid red-flag"
-            }), content_type="application/json", status=411)
+        # if self.redflag_validator.invalid_redflag(request_data):
+        #     return Response(json.dumps({
+        #         "status": 406,
+        #         "message": "Not a valid red-flag"
+        #     }), content_type="application/json", status=411)
 
         if any(self.redflag_validator.check_empty_string(item) for item in
                args_strings):
             return self.response_emptystring()
 
         if any(self.redflag_validator.check_str_datatype(item) for item in
-               args_strings):
+               args_strings) or self.redflag_validator.invalid_redflag(request_data):
             return self.response_unaccepted("datatype")
 
         if self.redflag_validator.check_status_value(status):
@@ -52,13 +52,11 @@ class RedflagController:
                               images=images, comment=comment)
         redflag_data.create_redflag(new_redflag.redflag_dict())
 
-        response_data = {
+        return Response(json.dumps({
             "status": 202,
             "data": [new_redflag.redflag_dict()],
             "message": "Red-Flag created successifully"
-        }
-        return Response(json.dumps(response_data),
-                        content_type="application/json", status=202)
+        }), content_type="application/json", status=202)
 
     def get_reflags(self):
         get_redflags_instance = redflag_data.get_redflags()
@@ -130,7 +128,7 @@ class RedflagController:
             message = "No empty fields are allowed"
         else:
             status_code = 406
-            message = "Unaccepted datatype"
+            message = "Unaccepted datatype or Inavlid Redflag"
         return Response(json.dumps({
             "status": status_code,
             "message": message
