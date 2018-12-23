@@ -26,7 +26,7 @@ class RedflagController:
 
 
         get_redflags_instance = redflag_data.get_redflags()
-        if len(get_redflags_instance) <= 0:
+        if not get_redflags_instance:
             redflag_id = 1
         else:
             redflag_id = 1 + get_redflags_instance[-1].get("redflag_id")
@@ -58,7 +58,7 @@ class RedflagController:
 
     def get_reflags(self):
         get_redflags_instance = redflag_data.get_redflags()
-        if len(get_redflags_instance) <= 0:
+        if not get_redflags_instance:
             return Response(json.dumps({
                 "status": 411,
                 "message": "Redflags list is empty"
