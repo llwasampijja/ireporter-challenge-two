@@ -4,8 +4,8 @@ from app.data.redflag_data import RedflagData
 class TestRedflagData(unittest.TestCase):
 
     def setUp(self):
-        self.redflagData = RedflagData()
-        self.redflagData.create_redflag({
+        self.redflag_data = RedflagData()
+        self.redflag_data.create_redflag({
             "comment": "He was caught red handed",
             "created_by": "Jon Mark",
             "created_on": "Thu, 20 Dec 2018 07:23:22 GMT",
@@ -30,11 +30,11 @@ class TestRedflagData(unittest.TestCase):
                         "images":"images urls",
                         "comment":"test comment"
                     }
-        self.assertEqual(self.redflagData.update_redflag(1, new_comment), None)
-        self.assertEqual(self.redflagData.update_redflag(4, new_comment), data_test)
+        self.assertEqual(self.redflag_data.update_redflag(1, new_comment), None)
+        self.assertEqual(self.redflag_data.update_redflag(4, new_comment), data_test)
 
     def test_delete_redflag(self):
-        self.assertEqual(self.redflagData.delete_redflag(3), None)
+        self.assertEqual(self.redflag_data.delete_redflag(3), None)
         data_test = {
                         
             "comment": "He was caught red handed",
@@ -47,4 +47,4 @@ class TestRedflagData(unittest.TestCase):
             "type": "redflag",
             "videos": "Video url"
                     }
-        self.assertEqual(self.redflagData.delete_redflag(4), data_test)
+        self.assertEqual(self.redflag_data.delete_redflag(4), data_test)

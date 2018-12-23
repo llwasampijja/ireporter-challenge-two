@@ -145,3 +145,4 @@ class RedflagController:
             return 1
         else:
             return 1 + get_redflags_instance[-1].get("redflag_id")
+            

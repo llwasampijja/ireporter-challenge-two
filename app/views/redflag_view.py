@@ -26,3 +26,4 @@ def update_redflag(redflag_id):
 @redflag_bp.route("/<int:redflag_id>", methods=["DELETE"])
 def delete_redflag(redflag_id):
     return redflag_controller.delete_redflag(redflag_id)
+    
