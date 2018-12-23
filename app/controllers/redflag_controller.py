@@ -107,9 +107,9 @@ class RedflagController:
 
     def response_emptystring(self):
         return Response(json.dumps({
-            "status": 406,
+            "status": 400,
             "message": "No empty fields are allowed"
-        }), content_type="application/json", status=406)
+        }), content_type="application/json", status=400)
 
     def response_unaccepted(self, word):
         if word == "none":
@@ -119,10 +119,10 @@ class RedflagController:
             status_code = 404
             message = "Wrong Status given"
         elif word == "empty":
-            status_code = 406
+            status_code = 400
             message = "No empty fields are allowed"
         else:
-            status_code = 406
+            status_code = 400
             message = "Unaccepted datatype or Inavlid Redflag"
         return Response(json.dumps({
             "status": status_code,

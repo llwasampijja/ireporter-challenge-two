@@ -44,7 +44,7 @@ class TestRedflagView (unittest.TestCase):
             "comment":"He was caught red handed"
         }), content_type="application/json")
         data = json.loads(response.data.decode())
-        self.assertEqual(response.status_code, 406)
+        self.assertEqual(response.status_code, 400)
         self.assertEqual(data.get("message"), "Unaccepted datatype or Inavlid Redflag") 
 
    
@@ -57,7 +57,7 @@ class TestRedflagView (unittest.TestCase):
             "comment":"He was caught red handed"
         }), content_type="application/json")
         data = json.loads(response.data.decode())
-        self.assertEqual(response.status_code, 406)
+        self.assertEqual(response.status_code, 400)
         self.assertEqual(data.get("message"), "Unaccepted datatype or Inavlid Redflag")
 
         """Test for creating an invalid red-flag with string of vidoes instead of list"""
@@ -70,7 +70,7 @@ class TestRedflagView (unittest.TestCase):
             "comment":"He was caught red handed"
         }), content_type="application/json")
         data = json.loads(response.data.decode())
-        self.assertEqual(response.status_code, 406)
+        self.assertEqual(response.status_code, 400)
         self.assertEqual(data.get("message"), "Unaccepted datatype or Inavlid Redflag")
 
         """Test for creating an invalid red-flag with an int value instead of string for status"""
@@ -83,7 +83,7 @@ class TestRedflagView (unittest.TestCase):
             "comment":"He was caught red handed"
         }), content_type="application/json")
         data = json.loads(response.data.decode())
-        self.assertEqual(response.status_code, 406)
+        self.assertEqual(response.status_code, 400)
         self.assertEqual(data.get("message"), "Unaccepted datatype or Inavlid Redflag")           
 
     def test_get_redflags(self):
@@ -111,7 +111,7 @@ class TestRedflagView (unittest.TestCase):
         """Test update redflag with unavailable id"""
         response = self.client.patch("api/v1/red-flags/4/location", data = json.dumps(new_location), content_type="application/json")
         data = json.loads(response.data.decode())
-        self.assertEqual(response.status_code, 406)
+        self.assertEqual(response.status_code, 400)
         self.assertEqual(data.get("message"), "Unaccepted datatype or Inavlid Redflag")
 
         """Test update redflag with the right id"""
