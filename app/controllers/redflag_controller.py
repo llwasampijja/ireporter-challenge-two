@@ -29,12 +29,6 @@ class RedflagController:
         
         redflag_id = self.create_id(get_redflags_instance)
 
-        # if self.redflag_validator.invalid_redflag(request_data):
-        #     return Response(json.dumps({
-        #         "status": 406,
-        #         "message": "Not a valid red-flag"
-        #     }), content_type="application/json", status=411)
-
         if any(self.redflag_validator.check_empty_string(item) for item in
                args_strings):
             return self.response_emptystring()
