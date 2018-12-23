@@ -12,7 +12,7 @@ class RedflagController:
 
     def create_redflag(self, request_data):
         """method for creating red-flags"""
-        report_type = request_data.get("report_type")
+        # report_type = request_data.get("report_type")
         created_on = datetime.datetime.now()
         created_by = request_data.get("created_by")
         location = request_data.get("location")
@@ -21,7 +21,7 @@ class RedflagController:
         images = request_data.get("images")
         comment = request_data.get("comment")
 
-        args_strings = [report_type, created_by,
+        args_strings = [created_by,
                         location, status, videos, images, comment]
 
 
@@ -30,6 +30,12 @@ class RedflagController:
             redflag_id = 1
         else:
             redflag_id = 1 + get_redflags_instance[-1].get("redflag_id")
+
+        if self.redflag_validator.invalid_redflag(request_data):
+            return Response(json.dumps({
+                "status": 406,
+                "message": "Not a valid red-flag"
+            }), content_type="application/json", status=411)
 
         if any(self.redflag_validator.check_empty_string(item) for item in
                args_strings):
@@ -42,7 +48,7 @@ class RedflagController:
         if self.redflag_validator.check_status_value(status):
             return self.response_unaccepted("status")
 
-        new_redflag = RedFlag(redflag_id=redflag_id, report_type=report_type,
+        new_redflag = RedFlag(redflag_id=redflag_id, 
                               created_on=created_on, created_by=created_by,
                               location=location, status=status, videos=videos,
                               images=images, comment=comment)

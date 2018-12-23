@@ -24,3 +24,9 @@ class RedflagValidator():
         if status=="resolved" or status=="pending investigation" or status=="rejected":
             return False
         return True
+
+    def invalid_redflag(self, request_data):
+        valid_redflags = ["created_on", "created_by", "location", "status", "videos", "images", "comment"]
+        if any((item not in valid_redflags) for item in request_data):
+            return True
+        return False 

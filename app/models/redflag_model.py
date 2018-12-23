@@ -1,7 +1,7 @@
 class RedFlag():
     def __init__(self, **kwargs):
         self.redflag_id = kwargs.get("redflag_id")
-        self.report_type = kwargs.get("report_type")
+        self.report_type = "red-flag"
         self.created_on = kwargs.get("created_on")
         self.created_by = kwargs.get("created_by")
         self.location = kwargs.get("location")
