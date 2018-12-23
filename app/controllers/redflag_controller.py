@@ -26,10 +26,8 @@ class RedflagController:
 
 
         get_redflags_instance = redflag_data.get_redflags()
-        if not get_redflags_instance:
-            redflag_id = 1
-        else:
-            redflag_id = 1 + get_redflags_instance[-1].get("redflag_id")
+        
+        redflag_id = self.create_id(get_redflags_instance)
 
         if self.redflag_validator.invalid_redflag(request_data):
             return Response(json.dumps({
@@ -148,3 +146,9 @@ class RedflagController:
             "data": [return_data],
             "message": message
         }), content_type="application/json", status=202)
+
+    def create_id(self, get_redflags_instance):
+        if not get_redflags_instance:
+            return 1
+        else:
+            return 1 + get_redflags_instance[-1].get("redflag_id")
