@@ -15,23 +15,23 @@ class TestRedflagView (unittest.TestCase):
     def test_create_redflag(self):
         test_data = {
             # "redflag_id":4,
-            "report_type":"redflag",
+            # "report_type":"redflag",
             "created_by":"Jon Mark",
             "location":"Kawempe",
             "status":"Pending Investigation",
-            "videos":"Video url",
-            "images":"images urls",
+            "videos":["Video url"],
+            "images":["images urls"],
             "comment":"He was caught red handed"
         }
         test_data2 = {
             # "redflag_id":3,
-            "report_type":"redflag",
+            # "report_type":"redflag",
             "created_on": "Thu, 20 Dec 2018 07:23:22 GMT",
             "created_by":"Jon Mark",
             "location":"Kawempe",
             "status":"Pending Investigation",
-            "videos":"Video url",
-            "images":"images urls",
+            "videos":["Video url"],
+            "images":["images urls"],
             "comment":"He was caught red handed"
         }
         self.client.post("api/v1/red-flags", data = json.dumps(test_data2), content_type="application/json")

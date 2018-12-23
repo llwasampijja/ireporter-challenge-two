@@ -14,12 +14,33 @@ class TestRedflagValidator(unittest.TestCase):
         self.assertTrue(self.redflagValidator.check_str_datatype(3))
         self.assertFalse(self.redflagValidator.check_str_datatype("posted something"))
 
-    def test_check_int_datatype(self):
-        self.assertTrue(self.redflagValidator.check_int_datatype(3))
-        self.assertFalse(self.redflagValidator.check_int_datatype("posted something"))
-
     def test_check_status_value(self):
         self.assertFalse(self.redflagValidator.check_status_value("resolved"))
         self.assertFalse(self.redflagValidator.check_status_value("pending investigation"))
         self.assertFalse(self.redflagValidator.check_status_value("rejected"))
         self.assertTrue(self.redflagValidator.check_status_value("some string"))
+
+    def test_invalid_redflag(self):
+        
+        self.assertFalse(self.redflagValidator.invalid_redflag({
+            "created_by":"Jon Mark",
+            "location":"8",
+            "status":"Pending Investigation",
+            "videos":["Video url"],
+            "images":["8"],
+            "comment":"He was caught red handed"}))
+        self.assertTrue(self.redflagValidator.invalid_redflag({
+            "created_by":"Jon Mark",
+            "location":"8",
+            "allien":"8",
+            "status":"Pending Investigation",
+            "videos":["Video url"],
+            "images":["8"],
+            "comment":"He was caught red handed"}))
+    
+    def test_check_list_datatype(self):
+        self.assertFalse(self.redflagValidator.check_list_datatype(["video url"]))
+        self.assertTrue(self.redflagValidator.check_list_datatype([6,8]))
+        self.assertTrue(self.redflagValidator.check_list_datatype("video url"))
+        self.assertTrue(self.redflagValidator.check_list_datatype(6))
+

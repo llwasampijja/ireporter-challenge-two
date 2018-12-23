@@ -19,11 +19,6 @@ class RedflagValidator():
             return True
         return False
 
-    def check_int_datatype(self, int_value):
-        if isinstance(int_value, int):
-            return True
-        return False
-
     def check_status_value(self, status):
         status = status.lower()
         if status=="resolved" or status=="pending investigation" or status=="rejected":

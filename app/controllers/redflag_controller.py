@@ -41,13 +41,6 @@ class RedflagController:
         if self.redflag_validator.check_status_value(status):
             return self.response_unaccepted("status")
 
-        # if any(self.redflag_validator.check_list_datatype(item) for item in
-        #        args_list):
-        #     return Response(json.dumps({
-        #         "status": 404,
-        #         "message": "Images or videos not a list"
-        #     }), content_type="application/json", status=404)
-
         new_redflag = RedFlag(redflag_id=redflag_id, 
                               created_on=created_on, created_by=created_by,
                               location=location, status=status, videos=videos,
