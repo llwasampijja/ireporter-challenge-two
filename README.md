@@ -45,32 +45,36 @@ Postman is available as a Google Chrome extention (getting outdated) and as a na
 ##### Cloning the Repository to Your Local Machine (Windows PC)
 - Step 1: Open the git bash tool and navigate to where you want to place this project.
 - Step 2: Now run this command in git bash CLI.
+
     `git clone https://github.com/llwasampijja/ireporter-challenge-two`
+
     This will copy the entire project onto your local machine. Project name should be “ireporter-challenge-two”
 - Navigate to the root folder of the project in git bash cmd using the command below.
+- 
     `cd ireporter-challenge-two`
+
 - Step 4: Switch to the "develop" branch using the command below.
+
 `git checkout feature`
 
 ##### Set Up the Virtual Environment
 Inorder to set up the virtual environment, you need to install the python package called virtualenv using pip. Run the command below to install it.
-`pip install virtualenv` to install virtualenv
-`virtualenv env`  to create a virtual environment named env
-`env/scripts/activate.bat` to activate your virtual environment.
-`env/scripts/deactivate.bat` to deactivate your virtual environment at anytime you feel like.
+- `pip install virtualenv` to install virtualenv
+- `virtualenv env`  to create a virtual environment named env
+- `env/scripts/activate.bat` to activate your virtual environment.
+- `env/scripts/deactivate.bat` to deactivate your virtual environment at anytime you feel like.
 
 ### Installing Requirements
 After setting up and activating your virtual environment, you need to install all the packages required by the project. All these requirements are listed and stored in the requirements.txt file in the root folder of the project.
 While in this folder, run the command below to install these requirements.
-`pip install -r requirements.txt`
+- `pip install -r requirements.txt`
 
 And now you have successfully cloned the project and also configured it to run on your computer.
 
 
 ## Running the Application
 To run this application, while in the root folder of the project via the Terminal or command prompt, run the command below:
-
-`py main.py`
+- `py main.py`
 
 On running that command, the application server will be launched and the URL to that server will be shown to you in the command-line/terminal.
 
