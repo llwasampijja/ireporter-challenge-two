@@ -10,11 +10,10 @@ class TestRedflagView (unittest.TestCase):
     def setUp(self):
         self.app = create_app()
         self.client = self.app.test_client(self)
-       
         
     def test_create_redflag(self):
+        """redflag to ensure that the list is not empty when one item is deleted during testing for deleting"""
         self.client.post("api/v1/red-flags", data = json.dumps({
-            "created_on": "Thu, 20 Dec 2018 07:23:22 GMT",
             "created_by":"Jon Mark",
             "location":"Kawempe",
             "status":"Pending Investigation",
@@ -22,6 +21,8 @@ class TestRedflagView (unittest.TestCase):
             "images":["images urls"],
             "comment":"He was caught red handed"
         }), content_type="application/json")
+
+        """Test for creating a valid red-flag"""
         response = self.client.post("api/v1/red-flags", data = json.dumps({
             "created_by":"Jon Mark",
             "location":"Kawempe",
@@ -33,7 +34,57 @@ class TestRedflagView (unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 202)
         self.assertEqual(data.get("message"), "Red-Flag created successifully")
-        
+   
+        """Test for creating an invalid red-flag missing one required parameter"""
+        response = self.client.post("api/v1/red-flags", data = json.dumps({
+            "created_by":"Jon Mark",
+            "location":"Kawempe",
+            "videos":["Video url"],
+            "images":["images urls"],
+            "comment":"He was caught red handed"
+        }), content_type="application/json")
+        data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 406)
+        self.assertEqual(data.get("message"), "Unaccepted datatype or Inavlid Redflag") 
+
+   
+        """Test for creating an invalid red-flag with more parameters than needed"""
+        response = self.client.post("api/v1/red-flags", data = json.dumps({
+            "created_by":"Jon Mark",
+            "location":"Kawempe",
+            "videos":["Video url"],
+            "images":["images urls"],
+            "comment":"He was caught red handed"
+        }), content_type="application/json")
+        data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 406)
+        self.assertEqual(data.get("message"), "Unaccepted datatype or Inavlid Redflag")
+
+        """Test for creating an invalid red-flag with string of vidoes instead of list"""
+        response = self.client.post("api/v1/red-flags", data = json.dumps({
+            "created_by":"Jon Mark",
+            "location":"Kawempe",
+            "status":"Pending Investigation",
+            "videos":["Video url"],
+            "images":"images urls",
+            "comment":"He was caught red handed"
+        }), content_type="application/json")
+        data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 406)
+        self.assertEqual(data.get("message"), "Unaccepted datatype or Inavlid Redflag")
+
+        """Test for creating an invalid red-flag with an int value instead of string for status"""
+        response = self.client.post("api/v1/red-flags", data = json.dumps({
+            "created_by":"Jon Mark",
+            "location":"Kawempe",
+            "status":55,
+            "videos":["Video url"],
+            "images":"images urls",
+            "comment":"He was caught red handed"
+        }), content_type="application/json")
+        data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 406)
+        self.assertEqual(data.get("message"), "Unaccepted datatype or Inavlid Redflag")           
 
     def test_get_redflags(self):
         response = self.client.get("api/v1/red-flags", content_type="application/json")
