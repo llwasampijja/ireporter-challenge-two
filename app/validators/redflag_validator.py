@@ -4,11 +4,6 @@ class RedflagValidator():
             return True
         return False
 
-    # def check_empty_string(self, *args):
-    #     if any(str(user_input).replace(" ", "") == "" for user_input in args):
-    #         return True
-    #     return False
-
     def check_str_datatype(self, string_value):
         if isinstance(string_value, str):
             return False
