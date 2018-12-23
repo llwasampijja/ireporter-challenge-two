@@ -12,7 +12,6 @@ class RedflagController:
 
     def create_redflag(self, request_data):
         """method for creating red-flags"""
-        # report_type = request_data.get("report_type")
         created_on = datetime.datetime.now()
         created_by = request_data.get("created_by")
         location = request_data.get("location")
@@ -22,7 +21,8 @@ class RedflagController:
         comment = request_data.get("comment")
 
         args_strings = [created_by,
-                        location, status, videos, images, comment]
+                        location, status, comment]
+        args_list = [videos, images]
 
 
         get_redflags_instance = redflag_data.get_redflags()
@@ -39,6 +39,13 @@ class RedflagController:
 
         if self.redflag_validator.check_status_value(status):
             return self.response_unaccepted("status")
+
+        if any(self.redflag_validator.check_list_datatype(item) for item in
+               args_list):
+            return Response(json.dumps({
+                "status": 404,
+                "message": "Images or videos not a list"
+            }), content_type="application/json", status=404)
 
         new_redflag = RedFlag(redflag_id=redflag_id, 
                               created_on=created_on, created_by=created_by,

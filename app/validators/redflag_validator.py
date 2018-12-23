@@ -14,6 +14,11 @@ class RedflagValidator():
             return False
         return True
 
+    def check_list_datatype(self, list_value):
+        if not isinstance(list_value, list) or any(not isinstance(item, str) for item in list_value) or not list_value:
+            return True
+        return False
+
     def check_int_datatype(self, int_value):
         if isinstance(int_value, int):
             return True
