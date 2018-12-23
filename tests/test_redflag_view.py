@@ -14,7 +14,7 @@ class TestRedflagView (unittest.TestCase):
         
     def test_create_redflag(self):
         test_data = {
-            "redflag_id":4,
+            # "redflag_id":4,
             "report_type":"redflag",
             "created_by":"Jon Mark",
             "location":"Kawempe",
@@ -24,7 +24,7 @@ class TestRedflagView (unittest.TestCase):
             "comment":"He was caught red handed"
         }
         test_data2 = {
-            "redflag_id":3,
+            # "redflag_id":3,
             "report_type":"redflag",
             "created_on": "Thu, 20 Dec 2018 07:23:22 GMT",
             "created_by":"Jon Mark",
@@ -44,7 +44,7 @@ class TestRedflagView (unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_get_redflag(self):
-        response = self.client.get("api/v1/red-flags/4", content_type="application/json")
+        response = self.client.get("api/v1/red-flags/1", content_type="application/json")
         response2 = self.client.get("api/v1/red-flags/19", content_type="application/json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response2.status_code, 404)
@@ -55,6 +55,6 @@ class TestRedflagView (unittest.TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_delete_redflag(self):
-        response = self.client.delete("api/v1/red-flags/2", content_type="application/json")
+        response = self.client.delete("api/v1/red-flags/3", content_type="application/json")
         self.assertEqual(response.status_code, 404)
         pass

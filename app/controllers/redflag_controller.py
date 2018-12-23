@@ -12,8 +12,7 @@ class RedflagController:
 
     def create_redflag(self, request_data):
         """method for creating red-flags"""
-        # request_data = request.get_json()
-        redflag_id = request_data.get("redflag_id")
+        # redflag_id = request_data.get("redflag_id")
         report_type = request_data.get("report_type")
         created_on = datetime.datetime.now()
         created_by = request_data.get("created_by")
@@ -25,6 +24,13 @@ class RedflagController:
 
         args_strings = [report_type, created_by,
                         location, status, videos, images, comment]
+
+
+        get_redflags_instance = redflagData.get_redflags()
+        if len(get_redflags_instance) <= 0:
+            redflag_id = 1
+        else:
+            redflag_id = 1 + get_redflags_instance[-1].get("redflag_id")
 
         if any(self.redflagValidator.check_empty_string(item) for item in
                args_strings):
