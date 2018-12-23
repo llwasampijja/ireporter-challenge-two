@@ -120,16 +120,16 @@ class RedflagController:
         if word == "none":
             status_code = 404
             message = "No redflag of that specific id found"
-        elif word == "status":
+        if word == "status":
             status_code = 404
             message = "Wrong Status given"
-        elif word == "empty":
+        if word == "empty":
             status_code = 406
             message = "No empty fields are allowed"
-        elif word == "create_success":
+        if word == "create_success":
             status_code = 202
             message = "Red-Flag created successifully"
-        elif word == "update_success":
+        if word == "update_success":
             status_code = 202
             message = "Red-flag updated successfully" 
         elif word == "delete_success":
