@@ -3,16 +3,15 @@ import datetime
 from app.models.redflag_model import RedFlag
 from app.data.redflag_data import RedflagData
 from app.validators.redflag_validator import RedflagValidator
-redflagData = RedflagData()
+redflag_data = RedflagData()
 
 
 class RedflagController:
 
-    redflagValidator = RedflagValidator()
+    redflag_validator = RedflagValidator()
 
     def create_redflag(self, request_data):
         """method for creating red-flags"""
-        # redflag_id = request_data.get("redflag_id")
         report_type = request_data.get("report_type")
         created_on = datetime.datetime.now()
         created_by = request_data.get("created_by")
@@ -26,28 +25,28 @@ class RedflagController:
                         location, status, videos, images, comment]
 
 
-        get_redflags_instance = redflagData.get_redflags()
+        get_redflags_instance = redflag_data.get_redflags()
         if len(get_redflags_instance) <= 0:
             redflag_id = 1
         else:
             redflag_id = 1 + get_redflags_instance[-1].get("redflag_id")
 
-        if any(self.redflagValidator.check_empty_string(item) for item in
+        if any(self.redflag_validator.check_empty_string(item) for item in
                args_strings):
             return self.response_emptystring()
 
-        if any(self.redflagValidator.check_str_datatype(item) for item in
+        if any(self.redflag_validator.check_str_datatype(item) for item in
                args_strings):
             return self.response_unaccepted("datatype")
 
-        if self.redflagValidator.check_status_value(status):
+        if self.redflag_validator.check_status_value(status):
             return self.response_unaccepted("status")
 
         new_redflag = RedFlag(redflag_id=redflag_id, report_type=report_type,
                               created_on=created_on, created_by=created_by,
                               location=location, status=status, videos=videos,
                               images=images, comment=comment)
-        redflagData.create_redflag(new_redflag.redflag_dict())
+        redflag_data.create_redflag(new_redflag.redflag_dict())
 
         response_data = {
             "status": 202,
@@ -58,7 +57,7 @@ class RedflagController:
                         content_type="application/json", status=202)
 
     def get_reflags(self):
-        get_redflags_instance = redflagData.get_redflags()
+        get_redflags_instance = redflag_data.get_redflags()
         if len(get_redflags_instance) <= 0:
             return Response(json.dumps({
                 "status": 411,
@@ -71,7 +70,7 @@ class RedflagController:
             }), content_type="application/json", status=200)
 
     def get_redflag(self, redflag_id):
-        get_redflag_instance = redflagData.get_redflag(redflag_id)
+        get_redflag_instance = redflag_data.get_redflag(redflag_id)
         if get_redflag_instance is None:
             return Response(json.dumps({
                 "status": 404,
@@ -87,13 +86,13 @@ class RedflagController:
 
         comment = request_data.get("comment")
 
-        if self.redflagValidator.check_empty_string(comment):
+        if self.redflag_validator.check_empty_string(comment):
             return self.response_emptystring()
 
-        if self.redflagValidator.check_str_datatype(comment):
+        if self.redflag_validator.check_str_datatype(comment):
             return self.response_unaccepted("datatype")
 
-        update_redflag_instance = redflagData.update_redflag(
+        update_redflag_instance = redflag_data.update_redflag(
             redflag_id, request_data)
         if update_redflag_instance is None:
             return self.response_unaccepted("none")
@@ -102,7 +101,7 @@ class RedflagController:
                                                    "update")
 
     def delete_redflag(self, redflag_id):
-        delete_redflag_instance = redflagData.delete_redflag(redflag_id)
+        delete_redflag_instance = redflag_data.delete_redflag(redflag_id)
         if delete_redflag_instance is None:
             return self.response_unaccepted("none")
         else:
