@@ -12,14 +12,14 @@ class TestRedflagValidator(unittest.TestCase):
 
     def test_check_str_datatype(self):
         self.assertTrue(self.redflagValidator.check_str_datatype(3))
-        self.assertFalse(self.redflagValidator.check_str_datatype("nothing much ma nigga"))
+        self.assertFalse(self.redflagValidator.check_str_datatype("posted something"))
 
     def test_check_int_datatype(self):
         self.assertTrue(self.redflagValidator.check_int_datatype(3))
-        self.assertFalse(self.redflagValidator.check_int_datatype("nothing much ma nigga"))
+        self.assertFalse(self.redflagValidator.check_int_datatype("posted something"))
 
     def test_check_status_value(self):
         self.assertFalse(self.redflagValidator.check_status_value("resolved"))
         self.assertFalse(self.redflagValidator.check_status_value("pending investigation"))
         self.assertFalse(self.redflagValidator.check_status_value("rejected"))
-        self.assertTrue(self.redflagValidator.check_status_value("nothing much ma nigga"))
+        self.assertTrue(self.redflagValidator.check_status_value("some string"))
