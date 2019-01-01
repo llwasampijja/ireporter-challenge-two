@@ -33,10 +33,6 @@ def update_redflag(redflag_id):
 @redflag_bp.route("/<int:redflag_id>/status", methods=["PATCH"])
 @authenticator.admin_only
 def update_redflag_status(redflag_id):
-    # if not request.headers.get("Authorization"):
-    #     return Response(json.dumps({
-    #         "message":"must supply authorization header"
-    #     }))
     request_data = request.get_json()
     return redflag_controller.update_incident_status(redflag_id, request_data, "redflag")
 
