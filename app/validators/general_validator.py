@@ -1,4 +1,4 @@
-class RedflagValidator():
+class GeneralValidator():
     def check_empty_string(self, user_input):
         if str(user_input).replace(" ", "") == "":
             return True
@@ -15,13 +15,20 @@ class RedflagValidator():
         return False
 
     def check_status_value(self, status):
-        status = status.lower()
+        status = str(status).lower()
         if status=="resolved" or status=="pending investigation" or status=="rejected":
             return False
         return True
 
-    def invalid_redflag(self, request_data):
-        valid_redflags = ["created_on", "created_by", "location", "status", "videos", "images", "comment"]
-        if any((item not in valid_redflags) for item in request_data):
+    def invalid_incident(self, request_data):
+        valid_incidents = ["created_on", "created_by", "location", "status", "videos", "images", "comment"]
+        if any((item not in valid_incidents) for item in request_data):
             return True
         return False 
+
+
+    def create_id(self, get_incidents_instance, key_id):
+        if not get_incidents_instance:
+            return 1
+        else:
+            return 1 + get_incidents_instance[-1].get(key_id)
