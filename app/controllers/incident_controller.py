@@ -12,8 +12,8 @@ class IncidentController:
     def create_incident(self, request_data, keyword):
         """method for creating red-flags"""
         created_on = datetime.datetime.now()
-        # created_by = request.cookies.get('username')
-        created_by = request_data.get("created_by")
+        created_by = request.cookies.get('username')
+        # created_by = request_data.get("created_by")
         location = request_data.get("location")
         status = request_data.get("status")
         videos = request_data.get("videos")
