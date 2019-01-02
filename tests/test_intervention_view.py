@@ -155,3 +155,18 @@ class TestInterventionView (unittest.TestCase):
         response = self.client.get(
             "api/v1/interventions", headers=dict(Authorization='Bearer '+ jwt_token), content_type="application/json")
         self.assertEqual(response.status_code, 200)
+
+    def test_get_intervention(self):
+        """Test get intervention with available id"""
+        jwt_token = json.loads(self.login_response.data)["access_token"]
+        response = self.client.get(
+            "api/v1/interventions/1", headers=dict(Authorization='Bearer '+ jwt_token), content_type="application/json")
+        self.assertEqual(response.status_code, 200)
+
+        """Test get intervention with with id not available"""
+        response = self.client.get(
+            "api/v1/interventions/19", headers=dict(Authorization='Bearer '+ jwt_token), content_type="application/json")
+        data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(data.get("message"),
+                         "No incident of that specific id found")

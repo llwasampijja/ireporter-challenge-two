@@ -17,3 +17,8 @@ def create_intervention():
 @authenticator.authorized
 def get_interventions():
     return interventionController.get_incidents("intervention")
+
+@intervention_bp.route("/<int:intervention_id>", methods=["GET"])
+@authenticator.authorized
+def get_intervention(intervention_id):
+    return interventionController.get_incident(intervention_id, "intervention")
