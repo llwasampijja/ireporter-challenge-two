@@ -18,14 +18,15 @@ class TestGeneralValidator(unittest.TestCase):
         self.assertFalse(self.general_validator_obj.check_status_value("resolved"))
         self.assertFalse(self.general_validator_obj.check_status_value("pending investigation"))
         self.assertFalse(self.general_validator_obj.check_status_value("rejected"))
+        self.assertFalse(self.general_validator_obj.check_status_value("under investigation"))
         self.assertTrue(self.general_validator_obj.check_status_value("some string"))
 
     def test_invalid_incident(self):
         
         self.assertFalse(self.general_validator_obj.invalid_incident({
-            "created_by":"Jon Mark",
+            # "created_by":"Jon Mark",
             "location":"8",
-            "status":"Pending Investigation",
+            # "status":"Pending Investigation",
             "videos":["Video url"],
             "images":["8"],
             "comment":"He was caught red handed"}))

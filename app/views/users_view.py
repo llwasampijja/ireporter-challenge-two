@@ -7,7 +7,7 @@ users_controller = UsersController()
 authenticator = Authenticator()
 
 @user_bp.route("", methods=["GET"])
-# @authenticator.admin_only
+@authenticator.admin_only
 def get_users():
     return users_controller.get_users()
 
@@ -22,7 +22,7 @@ def login_user():
     return users_controller.signin(request_info)
 
 @user_bp.route("/<int:user_id>", methods=["PATCH"])
-# @authenticator.admin_only
+@authenticator.admin_only
 def update_user(user_id):
     request_data = request.get_json()
     return users_controller.update_user_role(user_id, request_data)

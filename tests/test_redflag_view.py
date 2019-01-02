@@ -44,9 +44,7 @@ class TestRedflagView (unittest.TestCase):
         """redflag to ensure that the list is not empty when one item is deleted during testing for deleting"""
         jwt_token = json.loads(self.login_response.data)["access_token"]
         self.client.post("api/v1/red-flags", headers=dict(Authorization='Bearer ' + jwt_token), data=json.dumps({
-            "created_by": "Jon Mark",
             "location": "Kawempe",
-            "status": "Pending Investigation",
             "videos": ["Video url"],
             "images": ["images urls"],
             "comment": "He was caught red handed"
@@ -54,9 +52,7 @@ class TestRedflagView (unittest.TestCase):
 
         """Test for creating a valid red-flag"""
         response = self.client.post("api/v1/red-flags", headers=dict(Authorization='Bearer ' + jwt_token), data=json.dumps({
-            "created_by": "Jon Mark",
             "location": "Kawempe",
-            "status": "Pending Investigation",
             "videos": ["Video url"],
             "images": ["images urls"],
             "comment": "He was caught red handed"
@@ -67,11 +63,9 @@ class TestRedflagView (unittest.TestCase):
 
         """Test for creating an invalid red-flag missing one required parameter"""
         response = self.client.post("api/v1/red-flags", headers=dict(Authorization='Bearer ' + jwt_token), data=json.dumps({
-            "created_by": "Jon Mark",
             "location": "Kawempe",
             "videos": ["Video url"],
             "images": ["images urls"],
-            "comment": "He was caught red handed"
         }), content_type="application/json")
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
@@ -93,9 +87,7 @@ class TestRedflagView (unittest.TestCase):
 
         """Test for creating an invalid red-flag with string of vidoes instead of list"""
         response = self.client.post("api/v1/red-flags", headers=dict(Authorization='Bearer ' + jwt_token), data=json.dumps({
-            "created_by": "Jon Mark",
             "location": "Kawempe",
-            "status": "Pending Investigation",
             "videos": ["Video url"],
             "images": "images urls",
             "comment": "He was caught red handed"
@@ -105,25 +97,23 @@ class TestRedflagView (unittest.TestCase):
         self.assertEqual(data.get("message"),
                          "Unaccepted datatype or Inavlid incident")
 
-        """Test for creating an invalid red-flag with an int value instead of string for status"""
-        response = self.client.post("api/v1/red-flags", headers=dict(Authorization='Bearer ' + jwt_token), data=json.dumps({
-            "created_by": "Jon Mark",
-            "location": "Kawempe",
-            "status": 55,
-            "videos": ["Video url"],
-            "images": "images urls",
-            "comment": "He was caught red handed"
-        }), content_type="application/json")
-        data = json.loads(response.data.decode())
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(data.get("message"),
-                         "Unaccepted datatype or Inavlid incident")
+        # """Test for creating an invalid red-flag with an int value instead of string for status"""
+        # response = self.client.post("api/v1/red-flags", headers=dict(Authorization='Bearer ' + jwt_token), data=json.dumps({
+        #     "created_by": "Jon Mark",
+        #     "location": "Kawempe",
+        #     "status": 55,
+        #     "videos": ["Video url"],
+        #     "images": "images urls",
+        #     "comment": "He was caught red handed"
+        # }), content_type="application/json")
+        # data = json.loads(response.data.decode())
+        # self.assertEqual(response.status_code, 400)
+        # self.assertEqual(data.get("message"),
+        #                  "Unaccepted datatype or Inavlid incident")
 
         """Test for creating an invalid red-flag with an empty string"""
         response = self.client.post("api/v1/red-flags", headers=dict(Authorization='Bearer ' + jwt_token), data=json.dumps({
-            "created_by": "Jon Mark",
             "location": " ",
-            "status": "pending investigation",
             "videos": ["Video url"],
             "images": "images urls",
             "comment": "He was caught red handed"
@@ -133,19 +123,19 @@ class TestRedflagView (unittest.TestCase):
         self.assertEqual(data.get("message"),
                          "No empty fields are allowed")
 
-        """Test for creating an invalid red-flag with a wrong status"""
-        response = self.client.post("api/v1/red-flags", headers=dict(Authorization='Bearer ' + jwt_token), data=json.dumps({
-            "created_by": "Jon Mark",
-            "location": "0.333, 1.45343",
-            "status": "status doesnt exist",
-            "videos": ["Video url"],
-            "images": ["images urls"],
-            "comment": "He was caught red handed"
-        }), content_type="application/json")
-        data = json.loads(response.data.decode())
-        self.assertEqual(response.status_code, 404)
-        self.assertEqual(data.get("message"),
-                         "Wrong Status given")
+        # """Test for creating an invalid red-flag with a wrong status"""
+        # response = self.client.post("api/v1/red-flags", headers=dict(Authorization='Bearer ' + jwt_token), data=json.dumps({
+        #     "created_by": "Jon Mark",
+        #     "location": "0.333, 1.45343",
+        #     "status": "status doesnt exist",
+        #     "videos": ["Video url"],
+        #     "images": ["images urls"],
+        #     "comment": "He was caught red handed"
+        # }), content_type="application/json")
+        # data = json.loads(response.data.decode())
+        # self.assertEqual(response.status_code, 404)
+        # self.assertEqual(data.get("message"),
+        #                  "Wrong Status given")
 
     def test_get_redflags(self):
         """test get all redflags"""
@@ -192,7 +182,7 @@ class TestRedflagView (unittest.TestCase):
 
         """Test update redflag with unavailable id"""
         response = self.client.patch(
-            "api/v1/red-flags/4/location", headers=dict(Authorization='Bearer ' + jwt_token), data=json.dumps(new_location), content_type="application/json")
+            "api/v1/red-flags/4000/location", headers=dict(Authorization='Bearer ' + jwt_token), data=json.dumps(new_location), content_type="application/json")
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 404)
         self.assertEqual(data.get("message"),
@@ -271,6 +261,12 @@ class TestRedflagView (unittest.TestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(data.get("message"), "Incident deleted successfully")
 
+        """test delete a red-flag by a user who didn't create it"""
+        response = self.client.delete("api/v1/red-flags/1", headers=dict(Authorization="Bearer " + jwt_token), content_type="application/json")
+        response_data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response_data.get("message"), "You are not authorised to delete this incident")
+
     def test_update_redflag_status(self):
         """Test update status of redflag by admin"""
         admin_login_response = self.client.post("api/v1/auth/users/login", data=json.dumps({
@@ -303,12 +299,18 @@ class TestRedflagView (unittest.TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response_data.get("message"), "No incident of that specific id found")
 
+        """test update redflag with a wrong status value"""
+        response = self.client.patch("api/v1/red-flags/1/status", headers=dict(Authorization="Bearer " + admin_jwt_token), data=json.dumps({
+            "status":"wrong value"
+        }), content_type="application/json")
+        response_data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response_data.get("message"), "Wrong Status given")
+
 
         """test try to create an incident as an admin"""
         response = self.client.post("api/v1/red-flags", headers=dict(Authorization='Bearer ' + admin_jwt_token), data=json.dumps({
-            "created_by": "Jon Mark",
-            "location": " ",
-            "status": "pending investigation",
+            "location": "0.00938, 2.46287",
             "videos": ["Video url"],
             "images": "images urls",
             "comment": "He was caught red handed"

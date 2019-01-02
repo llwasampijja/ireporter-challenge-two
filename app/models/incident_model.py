@@ -84,6 +84,8 @@ class IncidentData:
             if incident.get("incident_id") == incident_id and username == incident.get("created_by"):
                 incidednts_list.remove(incident)
                 return incident
+            elif incident.get("incident_id") == incident_id and username != incident.get("created_by"):
+                return "non_author"
         return None
 
     def my_get_incident(self, incidents_list, incident_id):

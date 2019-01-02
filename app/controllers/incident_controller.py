@@ -15,13 +15,14 @@ class IncidentController:
         created_by = request.cookies.get('username')
         # created_by = request_data.get("created_by")
         location = request_data.get("location")
-        status = request_data.get("status")
+        # status = request_data.get("status")
+        status = "pending investigation"
         videos = request_data.get("videos")
         images = request_data.get("images")
         comment = request_data.get("comment")
 
         args_strings = [created_by,
-                        location, status, comment]
+                        location, comment]
         args_list = [videos, images]
 
 
@@ -38,8 +39,8 @@ class IncidentController:
                any(self.validator.check_list_datatype(item) for item in args_list):
             return self.response_unaccepted("datatype")
 
-        if self.validator.check_status_value(status):
-            return self.response_unaccepted("status")
+        # if self.validator.check_status_value(status):
+        #     return self.response_unaccepted("status")
 
         new_incident = Incident(incident_id=incident_id,
                               created_on=created_on, created_by=created_by,
@@ -57,9 +58,9 @@ class IncidentController:
         get_incidents_instance = incident_data.get_incidents(keyword)
         if not get_incidents_instance:
             return Response(json.dumps({
-                "status": 404,
+                "status": 200,
                 "message": "incidents list is empty"
-            }), content_type="application/json", status=404)
+            }), content_type="application/json", status=200)
         else:
             return Response(json.dumps({
                 "status": 200,
@@ -102,11 +103,15 @@ class IncidentController:
                                                    "update")
 
     def update_incident_status(self, incident_id, request_data, keyword):
-        if "status" not in request_data or len(request_data) != 1 or self.validator.check_status_value(request_data.get("status")):
+        # if "status" not in request_data or len(request_data) != 1 or self.validator.check_status_value(request_data.get("status")):
+        if "status" not in request_data or len(request_data) != 1:
             return Response(json.dumps({
                 "status": 401,
                 "message": "An admin can only edit the status of an incident, nothing more. The only accepted values include: 'pending investigation', 'resolved' and 'rejected'"
             }), content_type="application/json", status=401)
+        
+        if self.validator.check_status_value(request_data.get("status")):
+            return self.response_unaccepted("status")
 
         update_incident_instance = incident_data.update_incident(
             incident_id, request_data, keyword, None)
@@ -120,6 +125,11 @@ class IncidentController:
         delete_incident_instance = incident_data.delete_incident(incident_id, keyword, username)
         if delete_incident_instance is None:
             return self.response_unaccepted("none")
+        elif delete_incident_instance == "non_author":
+            return Response(json.dumps({
+                "status":401,
+                "message": "You are not authorised to delete this incident"
+            }), content_type="application/json", status=401)
         else:
             return self.response_sumission_success(delete_incident_instance,
                                                    "delete")
@@ -129,7 +139,7 @@ class IncidentController:
             status_code = 404
             message = "No incident of that specific id found"
         elif word == "status":
-            status_code = 404
+            status_code = 400
             message = "Wrong Status given"
         elif word == "empty":
             status_code = 400

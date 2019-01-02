@@ -16,12 +16,13 @@ class GeneralValidator():
 
     def check_status_value(self, status):
         status = str(status).lower()
-        if status=="resolved" or status=="pending investigation" or status=="rejected":
+        if status=="resolved" or status=="pending investigation" or status=="rejected" or status=="under investigation":
             return False
         return True
 
     def invalid_incident(self, request_data):
-        valid_incidents = ["created_on", "created_by", "location", "status", "videos", "images", "comment"]
+        # valid_incidents = ["created_on", "created_by", "location", "status", "videos", "images", "comment"]
+        valid_incidents = ["location", "videos", "images", "comment"]
         if any((item not in valid_incidents) for item in request_data):
             return True
         return False 

@@ -192,8 +192,6 @@ class TestUserView(unittest.TestCase):
         self.assertEqual(response_data.get("message"), "That specified user wasn't found on the system")
 
 
-
-
     def test_signin(self):
         """test sign-in with wrong password"""
         response = self.client.post("api/v1/auth/users/login", data=json.dumps({
