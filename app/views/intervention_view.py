@@ -22,3 +22,10 @@ def get_interventions():
 @authenticator.authorized
 def get_intervention(intervention_id):
     return interventionController.get_incident(intervention_id, "intervention")
+
+@intervention_bp.route("/<int:intervention_id>/location", methods=["PATCH"])
+@authenticator.concerned_citzen
+def update_intervention(intervention_id):
+    request_data = request.get_json()
+    username_cookie = request.cookies.get('username')
+    return interventionController.update_incident(intervention_id, request_data, "intervention", username_cookie)

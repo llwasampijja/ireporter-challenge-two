@@ -170,3 +170,46 @@ class TestInterventionView (unittest.TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertEqual(data.get("message"),
                          "No incident of that specific id found")
+
+    def test_update_intervention(self):
+        new_location = {"location": "1.500, 0.3000"}
+        jwt_token = json.loads(self.login_response.data)["access_token"]
+
+        """Test update intervention with wrong url"""
+        response = self.client.patch(
+            "api/v1/interventions/4/wrong", headers=dict(Authorization='Bearer '+ jwt_token), data=json.dumps(new_location), content_type="application/json")
+        self.assertEqual(response.status_code, 404)
+
+        """Test update intervention with unavailable id"""
+        response = self.client.patch("api/v1/interventions/4/location",
+                                     data=json.dumps(new_location), headers=dict(Authorization='Bearer '+ jwt_token), content_type="application/json")
+        data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(data.get("message"),
+                         "No incident of that specific id found")
+
+        """Test update intervention with the right id"""
+        response = self.client.patch("api/v1/interventions/1/location", headers=dict(Authorization='Bearer '+ jwt_token), data=json.dumps(
+            {"location": "1.500, 0.3000"}), content_type="application/json")
+        data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(data.get("message"),
+                         "Updated incident record’s location")
+
+        """Test update intervention with empty string"""
+        new_location = {"location": " "}
+        response = self.client.patch("api/v1/interventions/1/location", headers=dict(Authorization='Bearer '+ jwt_token),
+                                     data=json.dumps(new_location), content_type="application/json")
+        data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(data.get("message"),
+                         "No empty fields are allowed")
+
+        """Test update intervention with wrong data type"""
+        new_location = {"location": 67}
+        response = self.client.patch("api/v1/interventions/1/location", headers=dict(Authorization='Bearer '+ jwt_token),
+                                     data=json.dumps(new_location), content_type="application/json")
+        data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(data.get("message"),
+                         "Unaccepted datatype or Inavlid incident")
