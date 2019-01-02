@@ -229,4 +229,20 @@ class TestInterventionView (unittest.TestCase):
         self.assertEqual(data.get("message"),
                          "Updated incident record’s status")
 
-    
+    def test_delete_intervention(self):
+        """Test delete intervention with unavailable id"""
+        jwt_token = json.loads(self.login_response.data)["access_token"]
+        response = self.client.delete(
+            "api/v1/interventions/3", headers=dict(Authorization='Bearer '+ jwt_token), content_type="application/json")
+        data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(data.get("message"),
+                         "No incident of that specific id found")
+
+        """Test delete intervention with available id"""
+        response = self.client.delete(
+            "api/v1/interventions/2", headers=dict(Authorization='Bearer '+ jwt_token), content_type="application/json")
+        data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(data.get("message"),
+                        "Incident deleted successfully")
