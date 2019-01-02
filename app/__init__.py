@@ -20,10 +20,11 @@ def create_app():
     jwt_manager = JWTManager()
     jwt_manager.init_app(app)
 
-    swagger_ui_bp = get_swaggerui_blueprint(SWAGGER_UI_URL, API_URL)
-    app.register_blueprint(swagger_ui_bp, url_prefix=SWAGGER_UI_URL)
-
     app.register_blueprint(redflag_bp, url_prefix="/api/v1/red-flags")
     app.register_blueprint(user_bp, url_prefix="/api/v1/auth/users")
     app.register_blueprint(intervention_bp, url_prefix="/api/v1/interventions")
+
+    swagger_ui_bp = get_swaggerui_blueprint(SWAGGER_UI_URL, API_URL)
+    app.register_blueprint(swagger_ui_bp, url_prefix=SWAGGER_UI_URL)
+    
     return app
