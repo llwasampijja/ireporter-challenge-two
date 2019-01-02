@@ -1,0 +1,1139 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Corruption is a huge bane to Africa’s development. African countries must develop novel and localised solutions that will curb this menace, hence the birth of iReporter. iReporter enables any/every citizen to bring any form of corruption to the notice of appropriate authorities and the general public. Users can also report on things that needs government intervention.",
+    "version": "1.0.0",
+    "title": "iReporter",
+    "contact": {
+      "email": "llwasampijja@gmail.com"
+    }
+  },
+  "host": "ireporter-challenge-two.herokuapp.com",
+  "basePath": "/api/v1",
+  "tags": [
+    {
+      "name": "Users",
+      "description": "Admin and concerned citizens who report cases of corruption and cases that require the government's intervention.",
+      "externalDocs": {
+        "description": "Find out more",
+        "url": "https://llwasampijja.github.io/ireporter-challenge-one/UI/"
+      }
+    },
+    {
+      "name": "Red-Flags",
+      "description": "These are the cases of corruption that registered members report."
+    },
+    {
+      "name": "Interventions",
+      "description": "These are the cases/incidents which are reported by registered users that require the intervention of the government.",
+      "externalDocs": {
+        "description": "Find out more about interventions at",
+        "url": "https://llwasampijja.github.io/ireporter-challenge-one/UI/"
+      }
+    }
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "paths": {
+    "/red-flags": {
+      "post": {
+        "tags": [
+          "red-flag"
+        ],
+        "summary": "Add a new red-flag",
+        "description": "Post a new red-flag",
+        "operationId": "add-redflag",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Red-flag object that needs to be added on the system.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RedflagAdd"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Red-flag incident was created successfully"
+          },
+          "400": {
+            "description": "This results from input of invalid data. i.e., empty fields or wrong datatypes"
+          },
+          "401": {
+            "description": "Unauthorised access of the endpoint"
+          },
+          "403": {
+            "description": "Unauthorised access of the endpoint usually when you are not logged in to the system"
+          },
+          "404": {
+            "description": "Requested resource not found on the system"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "red-flag"
+        ],
+        "summary": "All redflags",
+        "description": "Get a list of all redflags.",
+        "operationId": "get-redflags",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Request completed successfully"
+          },
+          "401": {
+            "description": "Unauthorised access of the endpoint"
+          },
+          "403": {
+            "description": "Unauthorised access of the endpoint usually when you are not logged in to the system"
+          },
+          "404": {
+            "description": "Empty list"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/red-flags/{redflag_id}": {
+      "get": {
+        "tags": [
+          "red-flag"
+        ],
+        "summary": "Get a red-flag by its Id",
+        "description": "Returns a single red-flag",
+        "operationId": "getRedflagById",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "redflag_id",
+            "in": "path",
+            "description": "ID of red-flag to return",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Redflag"
+            }
+          },
+          "400": {
+            "description": "Supplied a non-integer value for the redflag."
+          },
+          "404": {
+            "description": "Red-flag not found on the system"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "red-flag"
+        ],
+        "summary": "Deletes a red-flag",
+        "description": "",
+        "operationId": "deleteRedflag",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "redflag_id",
+            "in": "path",
+            "description": "Id of the redflag to delete",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Red-flag deleted successifully"
+          },
+          "400": {
+            "description": "Non integer ID supplied"
+          },
+          "401": {
+            "description": "Unauthorized to delete this red-flag"
+          },
+          "404": {
+            "description": "Red-flag of that specific ID not found on the system"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/red-flags/{redflag_id}/location": {
+      "patch": {
+        "tags": [
+          "red-flag"
+        ],
+        "summary": "Update the red-flag's location",
+        "description": "",
+        "operationId": "updateRedflag",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "redflag_id",
+            "in": "path",
+            "description": "ID of red-flag to update",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Redflag parameters to update",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RedflagUpdateLocation"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Red-flag updated successifully"
+          },
+          "400": {
+            "description": "Non integer ID supplied"
+          },
+          "401": {
+            "description": "Unauthorized to update this red-flag"
+          },
+          "404": {
+            "description": "Red-flag of that specific ID not found on the system",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/red-flags/{redflag_id}/status": {
+      "patch": {
+        "tags": [
+          "red-flag"
+        ],
+        "summary": "Update the red-flag's status",
+        "description": "",
+        "operationId": "updateRedflagStatus",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "redflag_id",
+            "in": "path",
+            "description": "ID of red-flag to update",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Redflag parameters to update",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RedflagUpdateStatus"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Red-flag updated successifully"
+          },
+          "400": {
+            "description": "Non integer ID supplied"
+          },
+          "401": {
+            "description": "Unauthorized to update this red-flag"
+          },
+          "404": {
+            "description": "Red-flag of that specific ID not found on the system",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/interventions": {
+      "post": {
+        "tags": [
+          "intervention"
+        ],
+        "summary": "Add a new intervention",
+        "description": "Post a new intervention",
+        "operationId": "add-intervention",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Intervention object that needs to be added on the system.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/InterventionAdd"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Intervention incident was created successfully"
+          },
+          "400": {
+            "description": "This results from input of invalid data. i.e., empty fields or wrong datatypes"
+          },
+          "401": {
+            "description": "Unauthorised access of the endpoint"
+          },
+          "403": {
+            "description": "Unauthorised access of the endpoint usually when you are not logged in to the system"
+          },
+          "404": {
+            "description": "Requested resource not found on the system"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "intervention"
+        ],
+        "summary": "All interventions",
+        "description": "Get a list of all interventions.",
+        "operationId": "get-interventions",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Request completed successfully"
+          },
+          "401": {
+            "description": "Unauthorised access of the endpoint"
+          },
+          "403": {
+            "description": "Unauthorised access of the endpoint usually when you are not logged in to the system"
+          },
+          "404": {
+            "description": "Empty list"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/interventions/{intervention_id}": {
+      "get": {
+        "tags": [
+          "intervention"
+        ],
+        "summary": "Get an intervention by its Id",
+        "description": "Returns a single intervention",
+        "operationId": "getInterventionById",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "intervention_id",
+            "in": "path",
+            "description": "ID of intervention to return",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Intervention"
+            }
+          },
+          "400": {
+            "description": "Supplied a non-integer value for the intervention."
+          },
+          "404": {
+            "description": "Intervention not found on the system"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "intervention"
+        ],
+        "summary": "Deletes an intervention",
+        "description": "",
+        "operationId": "deleteIntervention",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "intervention_id",
+            "in": "path",
+            "description": "Id of the intervention to delete",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Intervention deleted successifully"
+          },
+          "400": {
+            "description": "Non integer ID supplied"
+          },
+          "401": {
+            "description": "Unauthorized to delete this intervention"
+          },
+          "404": {
+            "description": "Intervention of that specific ID not found on the system"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/interventions/{intervention_id}/location": {
+      "patch": {
+        "tags": [
+          "intervention"
+        ],
+        "summary": "Update the intervention's location",
+        "description": "",
+        "operationId": "updateIntervention",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "intervention_id",
+            "in": "path",
+            "description": "ID of intervention to update",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Intervention parameters to update",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/InterventionUpdateLocation"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Intervention updated successifully"
+          },
+          "400": {
+            "description": "Non integer ID supplied"
+          },
+          "401": {
+            "description": "Unauthorized to update this intervention"
+          },
+          "404": {
+            "description": "Intervention of that specific ID not found on the system",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/interventions/{intervention_id}/status": {
+      "patch": {
+        "tags": [
+          "intervention"
+        ],
+        "summary": "Update the intervention's status",
+        "description": "",
+        "operationId": "updateInterventionStatus",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "intervention_id",
+            "in": "path",
+            "description": "ID of intervention to update",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Intervention parameters to update",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/InterventionUpdateStatus"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Intervention updated successifully"
+          },
+          "400": {
+            "description": "Non integer ID supplied"
+          },
+          "401": {
+            "description": "Unauthorized to update this intervention"
+          },
+          "404": {
+            "description": "Intervention of that specific ID not found on the system",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/auth/users": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get all users on the system",
+        "description": "This can only be done by the administrator.",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation"
+          },
+          "403": {
+            "description": "User forbidden to access the resources"
+          }
+        }
+      }
+    },
+    "/auth/users/register": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Register user",
+        "description": "Anyone can register on the system",
+        "operationId": "registerUser",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Created user object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserRegister"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "registering user successful"
+          },
+          "400": {
+            "description": "Operation failed due to wrong data input"
+          }
+        }
+      }
+    },
+    "/auth/users/login": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Logs user into the system",
+        "description": "",
+        "operationId": "loginUser",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "The user name for login",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserLogin"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User logged in successifully"
+          },
+          "400": {
+            "description": "Failed to login due to providing bad data"
+          },
+          "403": {
+            "description": "Failed to login due to wrong password or username"
+          }
+        }
+      }
+    },
+    "/auth/users/{user_id}": {
+      "patch": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Edit the admin rights of the user",
+        "description": "This feature is only available to administrators and they can only edit the 'is_admin' field of a user",
+        "operationId": "updateUser",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "ID of the user to update",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/UserUpdateRole"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Updated the user's admin rights successifully"
+          },
+          "400": {
+            "description": "Failed to update user's admin rights due to providing wrong data"
+          },
+          "401": {
+            "description": "Attempted to update user fields that the admin isn't allowed to"
+          },
+          "403": {
+            "description": "Non admin attempted to access this endpoint url"
+          },
+          "404": {
+            "description": "Attempted to update a user who doesnt exist on the system"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "description": "This model presents all the fields and their data types that every user has.",
+      "properties": {
+        "user_id": {
+          "description": "Unique identify of th user. It is non repeating.",
+          "type": "integer",
+          "format": "int64"
+        },
+        "firstname": {
+          "description": "The first name of the user.",
+          "type": "string"
+        },
+        "lastname": {
+          "description": "The last name or surname of the user.",
+          "type": "string"
+        },
+        "othernames": {
+          "description": "Middle name or any other names of the user",
+          "type": "string"
+        },
+        "email": {
+          "description": "The email address of the user. There can be only one user account for a given email.",
+          "type": "string"
+        },
+        "phonenumber": {
+          "description": "The primary telephone number of the user. No more than one phonenumber should be provided.",
+          "type": "string"
+        },
+        "username": {
+          "description": "The username of the user. There can be only onw user account with a given username.",
+          "type": "string"
+        },
+        "registered_on": {
+          "description": "The date on which the user signs-up on the system.",
+          "type": "string"
+        },
+        "is_admin": {
+          "description": "The role of the user on the system. True is for admins and false is for non-admins. Any other value other than that simply means the user isn't properly registered in the system and thus can't access any of the protected features of the system apart",
+          "type": "boolean"
+        },
+        "password": {
+          "description": "The password of the user for a particular account. ",
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "User"
+      }
+    },
+    "UserRegister": {
+      "type": "object",
+      "description": "This model is for registering or signing up a user on the system. Includes all the fields required to successifully register. For a detailed description of each of the fields of this model, look at the User model",
+      "properties": {
+        "firstname": {
+          "type": "string"
+        },
+        "lastname": {
+          "type": "string"
+        },
+        "othernames": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "phonenumber": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "User"
+      }
+    },
+    "UserUpdateRole": {
+      "type": "object",
+      "description": "This model is for updating the user's role. It takes only one parameter, i.e., is_admin. Get the detailed description of this field in the 'User' model descriptions.",
+      "properties": {
+        "is_admin": {
+          "type": "boolean"
+        }
+      },
+      "xml": {
+        "name": "User"
+      }
+    },
+    "UserLogin": {
+      "type": "object",
+      "description": "This model is for logging in a user. For a detailed description of its fields, look under the 'User' model.",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "User"
+      }
+    },
+    "Redflag": {
+      "type": "object",
+      "description": "This model presents all the parameters of a red-flag incident. A red-flag incident is one which involves corruption.",
+      "required": [
+        "location",
+        "videos",
+        "images",
+        "comment"
+      ],
+      "properties": {
+        "incident_id": {
+          "type": "integer",
+          "description": "The unique identifier of a redflag incident. This field is automatically generated and therefore not obtained from the user.",
+          "format": "int64"
+        },
+        "created_on": {
+          "type": "string",
+          "description": "The date and time on which a a particular red-flag incident is created. This field is automatically generated by the system and thus not obtained as an input from the user."
+        },
+        "created_by": {
+          "type": "string",
+          "description": "The creator of the red-flag incident. This field is automatically filled in from the user's logged in session."
+        },
+        "location": {
+          "type": "string",
+          "description": "The coodinates of red-flag incident that is being reported."
+        },
+        "status": {
+          "type": "string",
+          "description": "The status of the red-flag incident. It can either be 'pending investigation', 'Under investigation', 'resolved' or 'rejected' The initial value of this field is set to 'pending investigation' and therefore is not obtained from the user. Only an admin can change its value",
+          "enum": [
+            "pending investigation",
+            "Under investigation",
+            "resolved",
+            "rejected"
+          ]
+        },
+        "images": {
+          "type": "array",
+          "description": "A list of urls of images or photographs which support the corruption case and can be used in the courts of law to sue the particular corrupt individual",
+          "xml": {
+            "name": "imagesUrl",
+            "wrapped": true
+          },
+          "items": {
+            "type": "string"
+          }
+        },
+        "videos": {
+          "type": "array",
+          "description": "A list of urls of videos which support the corruption case and can be used in the courts of law to sue the particular corrupt individual",
+          "xml": {
+            "name": "videosUrl",
+            "wrapped": true
+          },
+          "items": {
+            "type": "string"
+          }
+        },
+        "comment": {
+          "type": "string",
+          "description": "The description of the corruption case in details."
+        }
+      },
+      "xml": {
+        "name": "Redflag"
+      }
+    },
+    "RedflagAdd": {
+      "type": "object",
+      "description": "This model is for creating a red-flag incident. Look under the 'Redflag' model for the descriptions of each of its fields/parameters.",
+      "required": [
+        "location",
+        "videos",
+        "images",
+        "comment"
+      ],
+      "properties": {
+        "location": {
+          "type": "string"
+        },
+        "images": {
+          "type": "array",
+          "xml": {
+            "name": "imagesUrl",
+            "wrapped": true
+          },
+          "items": {
+            "type": "string"
+          }
+        },
+        "videos": {
+          "type": "array",
+          "xml": {
+            "name": "videosUrl",
+            "wrapped": true
+          },
+          "items": {
+            "type": "string"
+          }
+        },
+        "comment": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "Redflag"
+      }
+    },
+    "RedflagUpdateLocation": {
+      "type": "object",
+      "description": "This model is for updating the location of a red-flag incident. Look under the 'Redflag' model for a description of its field.",
+      "properties": {
+        "location": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "Redflag"
+      }
+    },
+    "RedflagUpdateStatus": {
+      "type": "object",
+      "description": " This model is for updating the status of the particular red-flag incident. Acceptable options include: 'pending investigation', 'under investigation', 'resolved' and 'rejected'",
+      "properties": {
+        "status": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "Redflag"
+      }
+    },
+    "Intervention": {
+      "type": "object",
+      "description": "This model presents all the parameters of an intervention incident. An intervention incident is one which involves a case which requires the government's intervention or a call to action from the government.",
+      "required": [
+        "location",
+        "videos",
+        "images",
+        "comment"
+      ],
+      "properties": {
+        "incident_id": {
+          "description": "The unique identifier of a redflag incident.",
+          "type": "integer",
+          "format": "int64"
+        },
+        "created_on": {
+          "type": "string",
+          "description": "The date and time on which the intervention incident was created."
+        },
+        "created_by": {
+          "type": "string",
+          "description": "The creator of the intervention incident. This field is automatically filled in by the system from the logged user details."
+        },
+        "location": {
+          "type": "string",
+          "description": "The coordinates of the location where that particular incident which requires the government's intervention is located."
+        },
+        "status": {
+          "type": "string",
+          "description": "The status of the intervention incident. It can either be 'pending investigation', 'Under investigation', 'resolved' or 'rejected'",
+          "enum": [
+            "pending investigation",
+            "Under investigation",
+            "resolved",
+            "rejected"
+          ]
+        },
+        "images": {
+          "type": "array",
+          "xml": {
+            "name": "imagesUrl",
+            "wrapped": true
+          },
+          "items": {
+            "type": "string"
+          }
+        },
+        "videos": {
+          "type": "array",
+          "xml": {
+            "name": "videosUrl",
+            "wrapped": true
+          },
+          "items": {
+            "type": "string"
+          }
+        },
+        "comment": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "Intervention"
+      }
+    },
+    "InterventionAdd": {
+      "type": "object",
+      "description": "This model is for creating an intervention incident. Look under the 'Intervention' model for the descriptions of each of its fields/parameters.",
+      "required": [
+        "location",
+        "videos",
+        "images",
+        "comment"
+      ],
+      "properties": {
+        "location": {
+          "type": "string"
+        },
+        "images": {
+          "type": "array",
+          "xml": {
+            "name": "imagesUrl",
+            "wrapped": true
+          },
+          "items": {
+            "type": "string"
+          }
+        },
+        "videos": {
+          "type": "array",
+          "xml": {
+            "name": "videosUrl",
+            "wrapped": true
+          },
+          "items": {
+            "type": "string"
+          }
+        },
+        "comment": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "Intervention"
+      }
+    },
+    "InterventionUpdateLocation": {
+      "type": "object",
+      "description": "This model is for updating the location of an intervention incident. Look under the 'Intervention' model for a description of its field.",
+      "properties": {
+        "location": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "Intervention"
+      }
+    },
+    "InterventionUpdateStatus": {
+      "type": "object",
+      "description": " This model is for updating the status of the particular intervention incident. Acceptable options include: 'pending investigation', 'under investigation', 'resolved' and 'rejected'",
+      "properties": {
+        "status": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "Intervention"
+      }
+    },
+    "ApiResponse": {
+      "type": "object",
+      "description": "This is model presents the format of the responses.",
+      "properties": {
+        "status": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about the iReporter API at ",
+    "url": "https://llwasampijja.github.io/ireporter-challenge-one/UI/"
+  }
+}
