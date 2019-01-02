@@ -149,3 +149,9 @@ class TestInterventionView (unittest.TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertEqual(data.get("message"),
                          "Wrong Status given")
+
+    def test_get_interventions(self):
+        jwt_token = json.loads(self.login_response.data)["access_token"]
+        response = self.client.get(
+            "api/v1/interventions", headers=dict(Authorization='Bearer '+ jwt_token), content_type="application/json")
+        self.assertEqual(response.status_code, 200)
