@@ -101,5 +101,5 @@ The endpoints of this application have been versioned. The current version is on
 This API is deployed on heroku. Find it [here](https://ireporter-challenge-two.herokuapp.com/api/v1/red-flags "iReporter on Heroku")
 ## API Documentation
 The API Endpoints of this project have been documented using Swagger UI and postman.
-* The Swagger-UI documentation can be found [here](https://ireporter-challenge-two.heroku.com/api/v1/docs/ "iReporter Swagger-UI Documentation")
+* The Swagger-UI documentation can be found [here](https://ireporter-challenge-two.herokuapp.com/api/v1/docs "iReporter Swagger-UI Documentation")
 * The Postman documentation can be found [here](https://documenter.getpostman.com/view/5689256/Rzn8QMm9 "IReporter Documentation")

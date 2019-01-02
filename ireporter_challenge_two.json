@@ -735,7 +735,7 @@
       "type": "apiKey",
       "name": "Authorization",
       "in": "header",
-      "description": "Copy the value access_token from the login response and paste it after the word 'Bearer' and a space in the text box below. i.e., Bearer access_token_value "
+      "description": "Copy the value of the access_token from the login response and paste it after the word 'Bearer' and a space in the text-box below. i.e., Bearer access_token_value "
     }
   },
   "definitions": {
