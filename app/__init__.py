@@ -10,7 +10,7 @@ from app.views.intervention_view import intervention_bp
 
 def create_app():
     SWAGGER_UI_URL = "/api/v1/docs"
-    API_URL = "https://llwasampijja.github.io/ireporter-challenge-two/swagger.json" #remote API documenation url
+    API_URL = "https://llwasampijja.github.io/ireporter-challenge-two/ireporter_challenge_two.json" #remote API documenation url
     # APi_URL = "http://localhost/swagger-ui/dist/ireporter_challenge_two.json" #local API documentation url
 
 
