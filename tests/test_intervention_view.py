@@ -213,3 +213,20 @@ class TestInterventionView (unittest.TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data.get("message"),
                          "Unaccepted datatype or Inavlid incident")
+
+    def test_update_intervention_status(self):
+        """Test update intervention status by admin"""
+        new_status = {"status": "resolved"}
+        self.admin_login_response = self.client.post("api/v1/auth/users/login", data=json.dumps({
+            "username": "edward",
+            "password": "i@mG8t##"
+        }),content_type="application/json")
+        jwt_token = json.loads(self.admin_login_response.data)["access_token"]
+        response = self.client.patch("api/v1/interventions/1/status", headers=dict(Authorization='Bearer '+ jwt_token),
+                                     data=json.dumps(new_status), content_type="application/json")
+        data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(data.get("message"),
+                         "Updated incident record’s status")
+
+    

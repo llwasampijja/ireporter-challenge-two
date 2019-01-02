@@ -29,3 +29,9 @@ def update_intervention(intervention_id):
     request_data = request.get_json()
     username_cookie = request.cookies.get('username')
     return interventionController.update_incident(intervention_id, request_data, "intervention", username_cookie)
+
+@intervention_bp.route("/<int:intervention_id>/status", methods=["PATCH"])
+@authenticator.admin_only
+def update_intervention_status(intervention_id):
+    request_data = request.get_json()
+    return interventionController.update_incident_status(intervention_id, request_data, "intervention")
