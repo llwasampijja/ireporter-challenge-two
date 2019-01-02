@@ -4,6 +4,7 @@ import os
 
 from app.views.redflag_view import redflag_bp
 from app.views.users_view import user_bp
+from app.views.intervention_view import intervention_bp
 
 
 def create_app():
@@ -15,4 +16,5 @@ def create_app():
 
     app.register_blueprint(redflag_bp, url_prefix="/api/v1/red-flags")
     app.register_blueprint(user_bp, url_prefix="/api/v1/auth/users")
+    app.register_blueprint(intervention_bp, url_prefix="/api/v1/interventions")
     return app
