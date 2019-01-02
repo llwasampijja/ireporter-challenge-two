@@ -10,8 +10,8 @@ from app.views.intervention_view import intervention_bp
 
 def create_app():
     SWAGGER_UI_URL = "/api/v1/docs"
-    # API_URL = "https://llwasampijja.github.io/ireporter-challenge-two/swagger.json" #remote API documenation url
-    APi_URL = "http://localhost/swagger-ui/dist/swagger.json" #local API documentation url
+    API_URL = "https://llwasampijja.github.io/ireporter-challenge-two/swagger.json" #remote API documenation url
+    # APi_URL = "http://localhost/swagger-ui/dist/ireporter_challenge_two.json" #local API documentation url
 
 
     app = Flask(__name__)
@@ -20,7 +20,7 @@ def create_app():
     jwt_manager = JWTManager()
     jwt_manager.init_app(app)
 
-    swagger_ui_bp = get_swaggerui_blueprint(SWAGGER_UI_URL, APi_URL)
+    swagger_ui_bp = get_swaggerui_blueprint(SWAGGER_UI_URL, API_URL)
     app.register_blueprint(swagger_ui_bp, url_prefix=SWAGGER_UI_URL)
 
     app.register_blueprint(redflag_bp, url_prefix="/api/v1/red-flags")
