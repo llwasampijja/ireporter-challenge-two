@@ -46,7 +46,7 @@ class TestInterventionView (unittest.TestCase):
         """intervention to ensure that the list is not empty when one item is deleted during testing for deleting"""
         jwt_token = json.loads(self.login_response.data)["access_token"]
         self.client.post("api/v1/interventions", headers=dict(Authorization='Bearer '+ jwt_token), data=json.dumps({
-            "location": "Kawempe",
+            "location": "2.00, 3.222",
             "videos": ["Video url"],
             "images": ["images urls"],
             "comment": "He was caught red handed"
@@ -54,7 +54,7 @@ class TestInterventionView (unittest.TestCase):
 
         """Test for creating a valid intervention"""
         response = self.client.post("api/v1/interventions", headers=dict(Authorization='Bearer '+ jwt_token), data=json.dumps({
-            "location": "Kawempe",
+            "location": "2.00, 3.222",
             "videos": ["Video url"],
             "images": ["images urls"],
             "comment": "He was caught red handed"
@@ -66,7 +66,7 @@ class TestInterventionView (unittest.TestCase):
 
         """Test for creating an invalid intervention missing one required parameter"""
         response = self.client.post("api/v1/interventions", headers=dict(Authorization='Bearer '+ jwt_token), data=json.dumps({
-            "location": "Kawempe",
+            "location": "2.00, 3.222",
             "videos": ["Video url"],
             "comment": "He was caught red handed"
         }), content_type="application/json")
@@ -78,7 +78,7 @@ class TestInterventionView (unittest.TestCase):
         """Test for creating an invalid intervention with more parameters than needed"""
         response = self.client.post("api/v1/interventions", headers=dict(Authorization='Bearer '+ jwt_token), data=json.dumps({
             "created_by": "Jon Mark",
-            "location": "Kawempe",
+            "location": "2.00, 3.222",
             "videos": ["Video url"],
             "images": ["images urls"],
             "comment": "He was caught red handed"
@@ -90,7 +90,7 @@ class TestInterventionView (unittest.TestCase):
 
         """Test for creating an invalid intervention with string of vidoes instead of list"""
         response = self.client.post("api/v1/interventions", headers=dict(Authorization='Bearer '+ jwt_token), data=json.dumps({
-            "location": "Kawempe",
+            "location": "2.00, 3.222",
             "videos": ["Video url"],
             "images": "images urls",
             "comment": "He was caught red handed"
@@ -103,7 +103,7 @@ class TestInterventionView (unittest.TestCase):
         # """Test for creating an invalid intervention with an int value instead of string for status"""
         # response = self.client.post("api/v1/interventions", headers=dict(Authorization='Bearer '+ jwt_token), data=json.dumps({
         #     "created_by": "Jon Mark",
-        #     "location": "Kawempe",
+        #     "location": "2.00, 3.222",
         #     "status": 55,
         #     "videos": ["Video url"],
         #     "images": "images urls",
