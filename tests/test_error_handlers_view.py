@@ -21,7 +21,7 @@ class TestErroHandlersView(unittest.TestCase):
         self.assertEqual(response_data.get("message"), "No such page on this site")
 
     def test_method_not_allowed(self):
-        response = self.client.get("api/v1/auth/users/register", data=json.dumps({
+        response = self.client.patch("api/v1/auth/users/register", data=json.dumps({
             "username":"username",
             "password":"password"
         }), content_type="application/json")
