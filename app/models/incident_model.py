@@ -11,6 +11,7 @@ class Incident:
         self.status = kwargs.get("status")
         self.videos = kwargs.get("videos")
         self.images = kwargs.get("images")
+        self.title = kwargs.get("title")
         self.comment = kwargs.get("comment")
 
     def incident_dict(self, keyword):
@@ -28,6 +29,7 @@ class Incident:
             "status": self.status,
             "videos": self.videos,
             "images": self.images,
+            "title": self.title,
             "comment": self.comment
         }
 
@@ -44,6 +46,7 @@ class IncidentData:
                 "status": "pending investigation",
                 "videos": ['stole.mp4', 'corrupe.mp4'],
                 "images": ['stole.jpg', 'corrupt.jpg'],
+                "title": "cop thief",
                 "comment": "I saw him steal"
             }
         ]

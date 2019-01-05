@@ -36,6 +36,7 @@ RESP_INCIDENT_STATUS_UPDATE_SUCCESS = "Updated incident record’s status"
 RESP_INCIDENT_WROND_STATUS = "Wrong Status given"
 RESP_ADMIN_ONLY = "This feature is only available to adminitrators"
 RESP_INCIDENT_DELETE_SUCCESS = "Incident deleted successfully"
+RESP_INCIDENT_DUPLICATE = "Creating a dupplicate incident isn't allowed"
 
 # error response string constants
 RESP_ERROR_BAD_REQUEST = "Bad request, check your input and try again"

@@ -2,7 +2,7 @@ from flask import request, Response, json
 import datetime
 from app.models.incident_model import Incident, IncidentData
 from app.validators.general_validator import GeneralValidator
-from app.utilitiez.static_strings import RESP_USER_STATUS_NORIGHTS, RESP_INCIDENT_STATUS_UPDATE_SUCCESS, RESP_INCIDENT_DELETE_SUCCESS, RESP_INVALID_INCIDENT_INPUT, RESP_EMPTY_STRING, RESP_INCIDENT_WROND_STATUS, RESP_UNAUTHORIZED_DELETE, RESP_UNAUTHORIZED_EDIT, RESP_CREATE_INCIDENT_SUCCESS, RESP_INCIDENT_UPDATE_SUCCESS, RESP_INCIDENT_LIST_EMPTY, RESP_INCIDENT_NOT_FOUND
+from app.utilitiez.static_strings import RESP_USER_STATUS_NORIGHTS, RESP_INCIDENT_DUPLICATE, RESP_INCIDENT_STATUS_UPDATE_SUCCESS, RESP_INCIDENT_DELETE_SUCCESS, RESP_INVALID_INCIDENT_INPUT, RESP_EMPTY_STRING, RESP_INCIDENT_WROND_STATUS, RESP_UNAUTHORIZED_DELETE, RESP_UNAUTHORIZED_EDIT, RESP_CREATE_INCIDENT_SUCCESS, RESP_INCIDENT_UPDATE_SUCCESS, RESP_INCIDENT_LIST_EMPTY, RESP_INCIDENT_NOT_FOUND
 incident_data = IncidentData()
 
 
@@ -20,10 +20,11 @@ class IncidentController:
         status = "pending investigation"
         videos = request_data.get("videos")
         images = request_data.get("images")
+        title = request_data.get("title")
         comment = request_data.get("comment")
 
         args_strings = [created_by,
-                        location, comment]
+                        location, title, comment]
         args_list = [videos, images]
 
 
@@ -40,13 +41,19 @@ class IncidentController:
                any(self.validator.check_list_datatype(item) for item in args_list):
             return self.response_unaccepted("datatype")
 
+        if self.validator.incident_duplicate(comment, get_incidents_instance):
+            return Response(json.dumps({
+                "status": 400,
+                "message": RESP_INCIDENT_DUPLICATE
+            }), content_type="application/json", status=400)
+
         # if self.validator.check_status_value(status):
         #     return self.response_unaccepted("status")
 
         new_incident = Incident(incident_id=incident_id,
                               created_on=created_on, created_by=created_by,
                               location=location, status=status, videos=videos,
-                              images=images, comment=comment)
+                              images=images, title=title, comment=comment)
         incident_data.create_incident(new_incident.incident_dict(keyword), keyword)
 
         return Response(json.dumps({

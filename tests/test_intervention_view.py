@@ -4,7 +4,7 @@ from flask import Response, json
 from app.models.incident_model import IncidentData
 from app.controllers.incident_controller import IncidentController
 from app import create_app
-from app.utilitiez.static_strings import URL_LOGIN, RESP_INCIDENT_UPDATE_SUCCESS, RESP_INCIDENT_DELETE_SUCCESS, RESP_INCIDENT_STATUS_UPDATE_SUCCESS, RESP_INCIDENT_NOT_FOUND, URL_REGISTER, URL_INTERVENTIONS, RESP_EMPTY_STRING, RESP_CREATE_INCIDENT_SUCCESS, RESP_INVALID_INCIDENT_INPUT
+from app.utilitiez.static_strings import URL_LOGIN, RESP_INCIDENT_DUPLICATE, RESP_INCIDENT_UPDATE_SUCCESS, RESP_INCIDENT_DELETE_SUCCESS, RESP_INCIDENT_STATUS_UPDATE_SUCCESS, RESP_INCIDENT_NOT_FOUND, URL_REGISTER, URL_INTERVENTIONS, RESP_EMPTY_STRING, RESP_CREATE_INCIDENT_SUCCESS, RESP_INVALID_INCIDENT_INPUT
 
 
 
@@ -52,7 +52,8 @@ class TestInterventionView (unittest.TestCase):
             "location": "2.00, 3.222",
             "videos": ["Video url"],
             "images": ["images urls"],
-            "comment": "He was caught red handed"
+            "title": "this road is bad",
+            "comment": "The road has very bif potholes"
         }), content_type="application/json")
 
         """Test for creating a valid intervention"""
@@ -60,18 +61,32 @@ class TestInterventionView (unittest.TestCase):
             "location": "2.00, 3.222",
             "videos": ["Video url"],
             "images": ["images urls"],
-            "comment": "He was caught red handed"
+            "title": "bad hospital",
+            "comment": "This Hospital's sanitation is really worrying"
         }), content_type="application/json")
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 201)
         self.assertEqual(data.get("message"),
                          RESP_CREATE_INCIDENT_SUCCESS)
 
+        """Test for creating a duplicate intervention"""
+        response = self.client.post(URL_INTERVENTIONS, headers=dict(Authorization='Bearer '+ jwt_token), data=json.dumps({
+            "location": "2.00, 3.222",
+            "videos": ["Video url"],
+            "images": ["images urls"],
+            "title": "we need a market",
+            "comment": "This Hospital's sanitation is really worrying"
+        }), content_type="application/json")
+        data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(data.get("message"),
+                         RESP_INCIDENT_DUPLICATE)
+
         """Test for creating an invalid intervention missing one required parameter"""
         response = self.client.post(URL_INTERVENTIONS, headers=dict(Authorization='Bearer '+ jwt_token), data=json.dumps({
             "location": "2.00, 3.222",
             "videos": ["Video url"],
-            "comment": "He was caught red handed"
+            "comment": "Schoo;l is bad"
         }), content_type="application/json")
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
@@ -84,7 +99,8 @@ class TestInterventionView (unittest.TestCase):
             "location": "2.00, 3.222",
             "videos": ["Video url"],
             "images": ["images urls"],
-            "comment": "He was caught red handed"
+            "title": "this road is bad",
+            "comment": "when i saw the road i was so sad"
         }), content_type="application/json")
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
@@ -96,7 +112,8 @@ class TestInterventionView (unittest.TestCase):
             "location": "2.00, 3.222",
             "videos": ["Video url"],
             "images": "images urls",
-            "comment": "He was caught red handed"
+            "title": "this road is bad",
+            "comment": "I saw the headmaster takeing a bribe from parents"
         }), content_type="application/json")
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
@@ -122,7 +139,8 @@ class TestInterventionView (unittest.TestCase):
             "location": "",
             "videos": ["Video url"],
             "images": "images urls",
-            "comment": "He was caught red handed"
+            "title": "this road is bad",
+            "comment": "the road as bad as i dont know"
         }), content_type="application/json")
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)

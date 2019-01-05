@@ -44,3 +44,7 @@ class TestGeneralValidator(unittest.TestCase):
         self.assertTrue(self.general_validator_obj.check_list_datatype([6,8]))
         self.assertTrue(self.general_validator_obj.check_list_datatype("video url"))
         self.assertTrue(self.general_validator_obj.check_list_datatype(6))
+
+    def test_incident_duplicate(self):
+        self.assertTrue(self.general_validator_obj.incident_duplicate("Hi whatup", [{"comment":"hi whatup"}]))
+        self.assertFalse(self.general_validator_obj.incident_duplicate("Hi whatup, yes it is", [{"comment":"hi whatup"}]))

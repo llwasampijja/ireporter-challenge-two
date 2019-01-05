@@ -22,10 +22,16 @@ class GeneralValidator():
 
     def invalid_incident(self, request_data):
         # valid_incidents = ["created_on", "created_by", "location", "status", "videos", "images", "comment"]
-        valid_incidents = ["location", "videos", "images", "comment"]
+        valid_incidents = ["location", "videos", "images", "title", "comment"]
         if any((item not in valid_incidents) for item in request_data):
             return True
         return False 
+
+    def incident_duplicate(self, comment, incidents_list):
+        if any((incident.get("comment")).lower() ==comment.lower() for incident in incidents_list):
+            return True
+        return False
+
 
 
     def create_id(self, get_incidents_instance, key_id):

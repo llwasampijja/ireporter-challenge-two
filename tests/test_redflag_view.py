@@ -30,7 +30,6 @@ class TestRedflagView (unittest.TestCase):
 
         """get redflags before logging in"""
         response = self.client.get(URL_REDFLAGS, content_type="application/json")
-        data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 401)
         self.assertEqual(json.loads(response.data).get("message"), None)
 
@@ -48,7 +47,8 @@ class TestRedflagView (unittest.TestCase):
             "location": "Kawempe",
             "videos": ["Video url"],
             "images": ["images urls"],
-            "comment": "He was caught red handed"
+            "title": "Cop taking a bribe",
+            "comment": "He was caught red handed 1"
         }), content_type="application/json")
 
         """Test for creating a valid red-flag"""
@@ -56,6 +56,7 @@ class TestRedflagView (unittest.TestCase):
             "location": "Kawempe",
             "videos": ["Video url"],
             "images": ["images urls"],
+            "title": "Corrupt cop",
             "comment": "He was caught red handed"
         }), content_type="application/json")
         data = json.loads(response.data.decode())
@@ -79,7 +80,8 @@ class TestRedflagView (unittest.TestCase):
             "location": "Kawempe",
             "videos": ["Video url"],
             "images": ["images urls"],
-            "comment": "He was caught red handed"
+            "title": "Cop taking a bribe",
+            "comment": "He was caught red handed y"
         }), content_type="application/json")
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
@@ -91,7 +93,8 @@ class TestRedflagView (unittest.TestCase):
             "location": "Kawempe",
             "videos": ["Video url"],
             "images": "images urls",
-            "comment": "He was caught red handed"
+            "title": "Cop taking a bribe",
+            "comment": "He was caught red handed k"
         }), content_type="application/json")
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
@@ -117,7 +120,8 @@ class TestRedflagView (unittest.TestCase):
             "location": " ",
             "videos": ["Video url"],
             "images": "images urls",
-            "comment": "He was caught red handed"
+            "title": "Cop taking a bribe",
+            "comment": "He was caught red handed empty string"
         }), content_type="application/json")
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
@@ -314,7 +318,8 @@ class TestRedflagView (unittest.TestCase):
             "location": "0.00938, 2.46287",
             "videos": ["Video url"],
             "images": "images urls",
-            "comment": "He was caught red handed"
+            "title": "Cop taking a bribe",
+            "comment": "He was caught red handed admin post"
         }), content_type="application/json")
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 403)
