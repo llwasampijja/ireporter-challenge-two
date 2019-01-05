@@ -14,6 +14,10 @@ class TestUserValidity(unittest.TestCase):
         self.assertTrue(self.uservalidator.username_in_db("dallkased", [{"username":"dallkased"}]))
         self.assertFalse(self.uservalidator.username_in_db("llwasampijja", [{"username":"llwasa"}]))
 
+    def test_phonenumber_in_db(self):
+        self.assertTrue(self.uservalidator.phonenumber_in_db("0775961853", [{"phonenumber":"0775961853"}]))
+        self.assertFalse(self.uservalidator.phonenumber_in_db("0715961853", [{"phonenumber":"0775961853"}]))
+
     def test_validate_phone_numbers(self):
         self.assertTrue(self.uservalidator.validate_phone_numbers("3715961853"))
         self.assertFalse(self.uservalidator.validate_phone_numbers("0715961853"))

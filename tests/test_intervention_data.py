@@ -8,24 +8,6 @@ class TestInterventionData(unittest.TestCase):
 
     def setUp(self):
         self.intervention_data = IncidentData()
-        # self.app = create_app()
-        # self.client = self.app.test_client(self)
-        # test_user = {
-        #     "firstname": "Dall",
-        #     "lastname": "Kased",
-        #     "othernames": "eddy2",
-        #     "email": "dall@bolon.com",
-        #     "phonenumber": "0775961853",
-        #     "username": "dallkased",
-        #     "password": "ABd1234@1"
-        # }
-        # self.client.post("api/v1/auth/register", data=json.dumps(test_user),
-        #                  content_type="application/json")
-        # self.login_response = self.client.post("api/v1/auth/login", data=json.dumps({
-        #     "username": "dallkased",
-        #     "password": "ABd1234@1"
-        # }),content_type="application/json")
-
 
         self.intervention_data.create_incident({
             "comment": "He was caught red handed",

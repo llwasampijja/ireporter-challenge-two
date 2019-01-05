@@ -1,8 +1,11 @@
 import unittest
+from flask import Response, json
+
 from app.models.incident_model import IncidentData
 from app.controllers.incident_controller import IncidentController
 from app import create_app
-from flask import Response, json
+from app.utilitiez.static_strings import URL_LOGIN, RESP_INCIDENT_UPDATE_SUCCESS, RESP_INCIDENT_DELETE_SUCCESS, RESP_INCIDENT_STATUS_UPDATE_SUCCESS, RESP_INCIDENT_NOT_FOUND, URL_REGISTER, URL_INTERVENTIONS, RESP_EMPTY_STRING, RESP_CREATE_INCIDENT_SUCCESS, RESP_INVALID_INCIDENT_INPUT
+
 
 
 class TestInterventionView (unittest.TestCase):
@@ -16,20 +19,20 @@ class TestInterventionView (unittest.TestCase):
             "lastname": "Kased",
             "othernames": "eddy2",
             "email": "dall@bolon.com",
-            "phonenumber": "0775961853",
+            "phonenumber": "0775961753",
             "username": "dallkased",
             "password": "ABd1234@1"
         }
-        self.client.post("api/v1/auth/users/register", data=json.dumps(test_user),
+        self.client.post(URL_REGISTER, data=json.dumps(test_user),
                          content_type="application/json")
-        self.login_response = self.client.post("api/v1/auth/users/login", data=json.dumps({
+        self.login_response = self.client.post(URL_LOGIN, data=json.dumps({
             "username": "dallkased",
             "password": "ABd1234@1"
         }),content_type="application/json")
 
         # """try to get list of interventions without logging in first"""
         # response = self.client.get(
-        #     "api/v1/interventions", content_type="application/json")
+        #     URL_INTERVENTIONS, content_type="application/json")
         # data = json.loads(response.data.decode())
         # self.assertEqual(response.status_code, 401)
         # self.assertEqual(data.get("message"),None)
@@ -37,7 +40,7 @@ class TestInterventionView (unittest.TestCase):
         """get list of interventions after logging in """
         jwt_token = json.loads(self.login_response.data)["access_token"]
         response = self.client.get(
-            "api/v1/interventions", headers=dict(Authorization='Bearer '+ jwt_token), content_type="application/json")
+            URL_INTERVENTIONS, headers=dict(Authorization='Bearer '+ jwt_token), content_type="application/json")
         # data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 200)
         # self.assertEqual(data.get("message"),"incidents list is empty")
@@ -45,7 +48,7 @@ class TestInterventionView (unittest.TestCase):
     def test_create_intervention(self):
         """intervention to ensure that the list is not empty when one item is deleted during testing for deleting"""
         jwt_token = json.loads(self.login_response.data)["access_token"]
-        self.client.post("api/v1/interventions", headers=dict(Authorization='Bearer '+ jwt_token), data=json.dumps({
+        self.client.post(URL_INTERVENTIONS, headers=dict(Authorization='Bearer '+ jwt_token), data=json.dumps({
             "location": "2.00, 3.222",
             "videos": ["Video url"],
             "images": ["images urls"],
@@ -53,7 +56,7 @@ class TestInterventionView (unittest.TestCase):
         }), content_type="application/json")
 
         """Test for creating a valid intervention"""
-        response = self.client.post("api/v1/interventions", headers=dict(Authorization='Bearer '+ jwt_token), data=json.dumps({
+        response = self.client.post(URL_INTERVENTIONS, headers=dict(Authorization='Bearer '+ jwt_token), data=json.dumps({
             "location": "2.00, 3.222",
             "videos": ["Video url"],
             "images": ["images urls"],
@@ -62,10 +65,10 @@ class TestInterventionView (unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 201)
         self.assertEqual(data.get("message"),
-                         "Incident created successifully")
+                         RESP_CREATE_INCIDENT_SUCCESS)
 
         """Test for creating an invalid intervention missing one required parameter"""
-        response = self.client.post("api/v1/interventions", headers=dict(Authorization='Bearer '+ jwt_token), data=json.dumps({
+        response = self.client.post(URL_INTERVENTIONS, headers=dict(Authorization='Bearer '+ jwt_token), data=json.dumps({
             "location": "2.00, 3.222",
             "videos": ["Video url"],
             "comment": "He was caught red handed"
@@ -73,10 +76,10 @@ class TestInterventionView (unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data.get("message"),
-                         "Unaccepted datatype or Inavlid incident")
+                         RESP_INVALID_INCIDENT_INPUT)
 
         """Test for creating an invalid intervention with more parameters than needed"""
-        response = self.client.post("api/v1/interventions", headers=dict(Authorization='Bearer '+ jwt_token), data=json.dumps({
+        response = self.client.post(URL_INTERVENTIONS, headers=dict(Authorization='Bearer '+ jwt_token), data=json.dumps({
             "created_by": "Jon Mark",
             "location": "2.00, 3.222",
             "videos": ["Video url"],
@@ -86,10 +89,10 @@ class TestInterventionView (unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data.get("message"),
-                         "Unaccepted datatype or Inavlid incident")
+                         RESP_INVALID_INCIDENT_INPUT)
 
         """Test for creating an invalid intervention with string of vidoes instead of list"""
-        response = self.client.post("api/v1/interventions", headers=dict(Authorization='Bearer '+ jwt_token), data=json.dumps({
+        response = self.client.post(URL_INTERVENTIONS, headers=dict(Authorization='Bearer '+ jwt_token), data=json.dumps({
             "location": "2.00, 3.222",
             "videos": ["Video url"],
             "images": "images urls",
@@ -98,10 +101,10 @@ class TestInterventionView (unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data.get("message"),
-                         "Unaccepted datatype or Inavlid incident")
+                         RESP_INVALID_INCIDENT_INPUT)
 
         # """Test for creating an invalid intervention with an int value instead of string for status"""
-        # response = self.client.post("api/v1/interventions", headers=dict(Authorization='Bearer '+ jwt_token), data=json.dumps({
+        # response = self.client.post(URL_INTERVENTIONS, headers=dict(Authorization='Bearer '+ jwt_token), data=json.dumps({
         #     "created_by": "Jon Mark",
         #     "location": "2.00, 3.222",
         #     "status": 55,
@@ -112,10 +115,10 @@ class TestInterventionView (unittest.TestCase):
         # data = json.loads(response.data.decode())
         # self.assertEqual(response.status_code, 400)
         # self.assertEqual(data.get("message"),
-        #                  "Unaccepted datatype or Inavlid incident")
+        #                  RESP_INVALID_INCIDENT_INPUT)
 
         """Test for creating an invalid intervention with an empty string"""
-        response = self.client.post("api/v1/interventions", headers=dict(Authorization='Bearer '+ jwt_token), data=json.dumps({
+        response = self.client.post(URL_INTERVENTIONS, headers=dict(Authorization='Bearer '+ jwt_token), data=json.dumps({
             "location": "",
             "videos": ["Video url"],
             "images": "images urls",
@@ -124,10 +127,10 @@ class TestInterventionView (unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data.get("message"),
-                         "No empty fields are allowed")
+                         RESP_EMPTY_STRING)
 
         # """Test for creating an invalid intervention with an invalid status"""
-        # response = self.client.post("api/v1/interventions", headers=dict(Authorization='Bearer '+ jwt_token), data=json.dumps({
+        # response = self.client.post(URL_INTERVENTIONS, headers=dict(Authorization='Bearer '+ jwt_token), data=json.dumps({
         #     "created_by": "Jon Mark",
         #     "location": "0.2009, 1.3443",
         #     "status": "wrong status",
@@ -143,23 +146,23 @@ class TestInterventionView (unittest.TestCase):
     def test_get_interventions(self):
         jwt_token = json.loads(self.login_response.data)["access_token"]
         response = self.client.get(
-            "api/v1/interventions", headers=dict(Authorization='Bearer '+ jwt_token), content_type="application/json")
+            URL_INTERVENTIONS, headers=dict(Authorization='Bearer '+ jwt_token), content_type="application/json")
         self.assertEqual(response.status_code, 200)
 
     def test_get_intervention(self):
         """Test get intervention with available id"""
         jwt_token = json.loads(self.login_response.data)["access_token"]
         response = self.client.get(
-            "api/v1/interventions/1", headers=dict(Authorization='Bearer '+ jwt_token), content_type="application/json")
+            URL_INTERVENTIONS + "/1", headers=dict(Authorization='Bearer '+ jwt_token), content_type="application/json")
         self.assertEqual(response.status_code, 200)
 
         """Test get intervention with with id not available"""
         response = self.client.get(
-            "api/v1/interventions/19", headers=dict(Authorization='Bearer '+ jwt_token), content_type="application/json")
+            URL_INTERVENTIONS + "/19", headers=dict(Authorization='Bearer '+ jwt_token), content_type="application/json")
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 404)
         self.assertEqual(data.get("message"),
-                         "No incident of that specific id found")
+                         RESP_INCIDENT_NOT_FOUND)
 
     def test_update_intervention(self):
         new_location = {"location": "1.500, 0.3000"}
@@ -167,72 +170,72 @@ class TestInterventionView (unittest.TestCase):
 
         """Test update intervention with wrong url"""
         response = self.client.patch(
-            "api/v1/interventions/4/wrong", headers=dict(Authorization='Bearer '+ jwt_token), data=json.dumps(new_location), content_type="application/json")
+            URL_INTERVENTIONS + "/4/wrong", headers=dict(Authorization='Bearer '+ jwt_token), data=json.dumps(new_location), content_type="application/json")
         self.assertEqual(response.status_code, 404)
 
         """Test update intervention with unavailable id"""
-        response = self.client.patch("api/v1/interventions/4/location",
+        response = self.client.patch(URL_INTERVENTIONS + "/4/location",
                                      data=json.dumps(new_location), headers=dict(Authorization='Bearer '+ jwt_token), content_type="application/json")
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 404)
         self.assertEqual(data.get("message"),
-                         "No incident of that specific id found")
+                         RESP_INCIDENT_NOT_FOUND)
 
         """Test update intervention with the right id"""
-        response = self.client.patch("api/v1/interventions/1/location", headers=dict(Authorization='Bearer '+ jwt_token), data=json.dumps(
+        response = self.client.patch(URL_INTERVENTIONS + "/1/location", headers=dict(Authorization='Bearer '+ jwt_token), data=json.dumps(
             {"location": "1.500, 0.3000"}), content_type="application/json")
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 201)
         self.assertEqual(data.get("message"),
-                         "Updated incident record’s location")
+                         RESP_INCIDENT_UPDATE_SUCCESS)
 
         """Test update intervention with empty string"""
         new_location = {"location": " "}
-        response = self.client.patch("api/v1/interventions/1/location", headers=dict(Authorization='Bearer '+ jwt_token),
+        response = self.client.patch(URL_INTERVENTIONS + "/1/location", headers=dict(Authorization='Bearer '+ jwt_token),
                                      data=json.dumps(new_location), content_type="application/json")
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data.get("message"),
-                         "No empty fields are allowed")
+                         RESP_EMPTY_STRING)
 
         """Test update intervention with wrong data type"""
         new_location = {"location": 67}
-        response = self.client.patch("api/v1/interventions/1/location", headers=dict(Authorization='Bearer '+ jwt_token),
+        response = self.client.patch(URL_INTERVENTIONS + "/1/location", headers=dict(Authorization='Bearer '+ jwt_token),
                                      data=json.dumps(new_location), content_type="application/json")
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data.get("message"),
-                         "Unaccepted datatype or Inavlid incident")
+                         RESP_INVALID_INCIDENT_INPUT)
 
     def test_update_intervention_status(self):
         """Test update intervention status by admin"""
         new_status = {"status": "resolved"}
-        self.admin_login_response = self.client.post("api/v1/auth/users/login", data=json.dumps({
+        self.admin_login_response = self.client.post(URL_LOGIN, data=json.dumps({
             "username": "edward",
             "password": "i@mG8t##"
         }),content_type="application/json")
         jwt_token = json.loads(self.admin_login_response.data)["access_token"]
-        response = self.client.patch("api/v1/interventions/1/status", headers=dict(Authorization='Bearer '+ jwt_token),
+        response = self.client.patch(URL_INTERVENTIONS + "/1/status", headers=dict(Authorization='Bearer '+ jwt_token),
                                      data=json.dumps(new_status), content_type="application/json")
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 201)
         self.assertEqual(data.get("message"),
-                         "Updated incident record’s status")
+                         RESP_INCIDENT_STATUS_UPDATE_SUCCESS)
 
     def test_delete_intervention(self):
         """Test delete intervention with unavailable id"""
         jwt_token = json.loads(self.login_response.data)["access_token"]
         response = self.client.delete(
-            "api/v1/interventions/3", headers=dict(Authorization='Bearer '+ jwt_token), content_type="application/json")
+            URL_INTERVENTIONS + "/3", headers=dict(Authorization='Bearer '+ jwt_token), content_type="application/json")
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 404)
         self.assertEqual(data.get("message"),
-                         "No incident of that specific id found")
+                         RESP_INCIDENT_NOT_FOUND)
 
         """Test delete intervention with available id"""
         response = self.client.delete(
-            "api/v1/interventions/2", headers=dict(Authorization='Bearer '+ jwt_token), content_type="application/json")
+            URL_INTERVENTIONS + "/2", headers=dict(Authorization='Bearer '+ jwt_token), content_type="application/json")
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 201)
         self.assertEqual(data.get("message"),
-                        "Incident deleted successfully")
+                        RESP_INCIDENT_DELETE_SUCCESS)

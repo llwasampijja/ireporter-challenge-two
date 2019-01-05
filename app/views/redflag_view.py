@@ -1,6 +1,6 @@
 from flask import Blueprint, request, Response, json
 from app.controllers.incident_controller import IncidentController
-from app.authenticator import Authenticator
+from app.utilitiez.authenticator import Authenticator
 
 redflag_bp = Blueprint("redflag_bp", __name__)
 redflag_controller = IncidentController()

@@ -15,6 +15,9 @@ class UserValidator():
     def email_in_db(self, email, users_list):
         return self.user_in_db(email, users_list, "email")
 
+    def phonenumber_in_db(self, phonenumber, users_list):
+        return self.user_in_db(phonenumber, users_list, "phonenumber")
+
     def validate_phone_numbers(self, phonenumber):
         if all(digit.isdigit() for digit in phonenumber) and len(phonenumber) <=10 and phonenumber.startswith("0"):
             return False 

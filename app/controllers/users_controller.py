@@ -7,6 +7,7 @@ import hashlib
 from app.models.user_model import User, UsersData
 from app.validators.general_validator import GeneralValidator
 from app.validators.user_validator import UserValidator
+from app.utilitiez.static_strings import RESP_INVALID_USER_INPUT, RESP_REGISTRATION_SUCCESS, RESP_ALREADY_TAKEN, RESP_EMPTY_INVALID_EMAIL_PASSWORD_PHONE, RESP_ROLE_INVALID, RESP_USER_NOT_FOUND, RESP_ADMIN_RIGHTS_SUCCESS, RESP_ROLE_NO_RIGHTS, RESP_AUTH_LOGIN_FAILED, RESP_AUTH_LOGIN_SUCCESS, RESP_EMPTY_STRING
 # from app.models.temp_model import IncidentData
 
 
@@ -51,7 +52,7 @@ class UsersController():
                 any(self.my_validator.check_str_datatype(item) for item in user_properties):
             return Response(json.dumps({
                 "status": 400,
-                "message": "An invalid user or Wrong datatype entered"
+                "message": RESP_INVALID_USER_INPUT
             }), content_type="application/json", status=400)
 
         # if any(self.my_validator.check_empty_string(item) for item in user_properties):
@@ -66,14 +67,15 @@ class UsersController():
                 any(self.my_validator.check_empty_string(item) for item in user_properties):
             return Response(json.dumps({
                 "status": 400,
-                "message": "Entered an empty field or an invalid email address, phonenumber or password"
+                "message": RESP_EMPTY_INVALID_EMAIL_PASSWORD_PHONE 
             }), content_type="application/json", status=400)
 
         if self.user_validator.username_in_db(username, self.usersdata.get_users()) \
-                or self.user_validator.email_in_db(email, self.usersdata.get_users()):
+                or self.user_validator.email_in_db(email, self.usersdata.get_users())\
+                or self.user_validator.phonenumber_in_db( phonenumber, self.usersdata.get_users()):
             return Response(json.dumps({
                 "status": 400,
-                "message": "Email address or username is already taken"
+                "message": RESP_ALREADY_TAKEN 
             }), content_type="application/json", status=400)
 
         # if not self.user_validator.valid_password(password):
@@ -102,7 +104,7 @@ class UsersController():
         return Response(json.dumps({
             "status": 201,
             "data": [newuser_dict],
-            "message": "User account created successifully"
+            "message": RESP_REGISTRATION_SUCCESS
         }), content_type="application/json", status=201)
 
     def signin(self, request_info):
@@ -116,7 +118,7 @@ class UsersController():
                 # response.headers.add("Access-Control-Allow-Origin", "*")
                 return Response(json.dumps({
                     "status": 400,
-                    "message": "No empty fields are allowed"
+                    "message": RESP_EMPTY_STRING
                 }), content_type="application/json", status=400)
 
         # if not any(self.my_validator.check_empty_string(login_field) for login_field in request_info):
@@ -154,7 +156,7 @@ class UsersController():
                                     }
                                     ],
                     "access_token": access_token,
-                    "message": "Logged in successifully"
+                    "message": RESP_AUTH_LOGIN_SUCCESS 
                 }), content_type="application/json", status=201)
                 response.set_cookie("username", user.get("username"))
                 # response.headers.add("Access-Control-Allow-Origin", "*")
@@ -167,18 +169,18 @@ class UsersController():
             # response.headers.add("Access-Control-Allow-Origin", "*")
             return Response(json.dumps({
                             "status": 403,
-                            "message": "Failed to login, username or password is incorrect"
+                            "message": RESP_AUTH_LOGIN_FAILED 
                             }), content_type="application/json", status=403)
 
     def update_user_role(self, user_id, request_info):
         if request_info is None or "is_admin" not in request_info or len(request_info) != 1:
             return Response(json.dumps({
-                "message": "An administrator can only edit a user's role"
+                "message": RESP_ROLE_NO_RIGHTS
             }), content_type="application/json", status=401)
 
         if self.user_validator.invalid_admin_state(request_info.get("is_admin")):
             return Response(json.dumps({
-                "message": "The value can either be true (admin) or false (not admin)"
+                "message": RESP_ROLE_INVALID
             }), content_type="application/json", status=400)
 
         user_modified = self.usersdata.update_user(user_id, request_info)
@@ -186,11 +188,11 @@ class UsersController():
         if user_modified is None:
             return Response(json.dumps({
                 "status": 404,
-                "message": "That specified user wasn't found on the system"
+                "message": RESP_USER_NOT_FOUND
             }), content_type="application/json", status=404)
         else:
             return Response(json.dumps({
                 "status": 201,
                 "data": [user_modified],
-                "message": "The admin rights of the user have been updated successifully"
+                "message": RESP_ADMIN_RIGHTS_SUCCESS
             }), content_type="application/json", status=201)

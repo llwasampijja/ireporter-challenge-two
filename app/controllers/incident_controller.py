@@ -2,6 +2,7 @@ from flask import request, Response, json
 import datetime
 from app.models.incident_model import Incident, IncidentData
 from app.validators.general_validator import GeneralValidator
+from app.utilitiez.static_strings import RESP_USER_STATUS_NORIGHTS, RESP_INCIDENT_STATUS_UPDATE_SUCCESS, RESP_INCIDENT_DELETE_SUCCESS, RESP_INVALID_INCIDENT_INPUT, RESP_EMPTY_STRING, RESP_INCIDENT_WROND_STATUS, RESP_UNAUTHORIZED_DELETE, RESP_UNAUTHORIZED_EDIT, RESP_CREATE_INCIDENT_SUCCESS, RESP_INCIDENT_UPDATE_SUCCESS, RESP_INCIDENT_LIST_EMPTY, RESP_INCIDENT_NOT_FOUND
 incident_data = IncidentData()
 
 
@@ -51,7 +52,7 @@ class IncidentController:
         return Response(json.dumps({
             "status": 201,
             "data": [new_incident.incident_dict(keyword)],
-            "message": "Incident created successifully"
+            "message": RESP_CREATE_INCIDENT_SUCCESS
         }), content_type="application/json", status=201)
 
     def get_incidents(self, keyword):
@@ -59,7 +60,7 @@ class IncidentController:
         if not get_incidents_instance:
             return Response(json.dumps({
                 "status": 200,
-                "message": "incidents list is empty"
+                "message": RESP_INCIDENT_LIST_EMPTY
             }), content_type="application/json", status=200)
         else:
             return Response(json.dumps({
@@ -72,7 +73,7 @@ class IncidentController:
         if get_incident_instance is None:
             return Response(json.dumps({
                 "status": 404,
-                "message": "No incident of that specific id found"
+                "message": RESP_INCIDENT_NOT_FOUND
             }), content_type="application/json", status=404)
         else:
             return Response(json.dumps({
@@ -96,7 +97,7 @@ class IncidentController:
         elif update_incident_instance == "non_author":
             return Response(json.dumps({
                 "status":401,
-                "message": "You are not authorised to edit this incident."
+                "message": RESP_UNAUTHORIZED_EDIT
             }), content_type="application/json", status=401)
         else:
             return self.response_sumission_success(update_incident_instance,
@@ -107,7 +108,7 @@ class IncidentController:
         if "status" not in request_data or len(request_data) != 1:
             return Response(json.dumps({
                 "status": 401,
-                "message": "An admin can only edit the status of an incident, nothing more. The only accepted values include: 'pending investigation', 'resolved' and 'rejected'"
+                "message": RESP_USER_STATUS_NORIGHTS
             }), content_type="application/json", status=401)
         
         if self.validator.check_status_value(request_data.get("status")):
@@ -128,7 +129,7 @@ class IncidentController:
         elif delete_incident_instance == "non_author":
             return Response(json.dumps({
                 "status":401,
-                "message": "You are not authorised to delete this incident"
+                "message": RESP_UNAUTHORIZED_DELETE
             }), content_type="application/json", status=401)
         else:
             return self.response_sumission_success(delete_incident_instance,
@@ -137,16 +138,16 @@ class IncidentController:
     def response_unaccepted(self, word):
         if word == "none":
             status_code = 404
-            message = "No incident of that specific id found"
+            message = RESP_INCIDENT_NOT_FOUND
         elif word == "status":
             status_code = 400
-            message = "Wrong Status given"
+            message = RESP_INCIDENT_WROND_STATUS
         elif word == "empty":
             status_code = 400
-            message = "No empty fields are allowed"
+            message = RESP_EMPTY_STRING
         else:
             status_code = 400
-            message = "Unaccepted datatype or Inavlid incident"
+            message = RESP_INVALID_INCIDENT_INPUT
         return Response(json.dumps({
             "status": status_code,
             "message": message
@@ -154,11 +155,11 @@ class IncidentController:
 
     def response_sumission_success(self, return_data, keyword):
         if keyword == "delete":
-            message = "Incident deleted successfully"
+            message = RESP_INCIDENT_DELETE_SUCCESS
         elif keyword == "incident_status":
-            message = "Updated incident record’s status"
+            message = RESP_INCIDENT_STATUS_UPDATE_SUCCESS
         else:
-            message = "Updated incident record’s location"
+            message = RESP_INCIDENT_UPDATE_SUCCESS
         return Response(json.dumps({
             "status": 201,
             "data": [return_data],

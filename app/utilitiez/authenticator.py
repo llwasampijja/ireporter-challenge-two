@@ -3,6 +3,8 @@ from functools import wraps
 from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
 import hashlib
 
+from app.utilitiez.static_strings import RESP_UNAUTHORIZED_VIEW, RESP_ADMIN_ONLY
+
 
 class Authenticator():
 
@@ -16,7 +18,7 @@ class Authenticator():
             else:
                 return Response(json.dumps({
                     "status": 403,
-                    "message": "You are not authorised to access this content"
+                    "message": RESP_UNAUTHORIZED_VIEW
                 }), content_type="application/json", status=403)
                 
         return wrapper
@@ -30,7 +32,7 @@ class Authenticator():
                 return fn(*args, **kwargs)
             else:
                 return Response(json.dumps({
-                    "message": "You are not authorised to access this content"
+                    "message": RESP_UNAUTHORIZED_VIEW
                 }), content_type="application/json", status=403)
         return wrapper
 
@@ -43,7 +45,7 @@ class Authenticator():
                 return fn(*args, **kwargs)
             else:
                 return Response(json.dumps({
-                    "message": "This feature is only available to adminitrators"
+                    "message": RESP_ADMIN_ONLY
                 }), content_type="application/json", status=403)
 
         return wrapper

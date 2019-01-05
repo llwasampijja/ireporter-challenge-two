@@ -1,6 +1,6 @@
 from flask import Blueprint, json, Response, request
 from app.controllers.incident_controller import IncidentController
-from app.authenticator import Authenticator
+from app.utilitiez.authenticator import Authenticator
 
 interventionController = IncidentController()
 intervention_bp = Blueprint("intervention_bp", __name__)

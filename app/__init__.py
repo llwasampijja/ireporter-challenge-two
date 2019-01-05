@@ -5,14 +5,14 @@ import os
 
 from app.views.redflag_view import redflag_bp
 from app.views.users_view import user_bp
+from app.views.auth_view import auth_bp
 from app.views.intervention_view import intervention_bp
 from app.views.error_handlers_view import page_not_found, method_not_allowed, bad_request_error
+from app.utilitiez.static_strings import SWAGGER_UI_URL, API_URL, URL_LOGIN, URL_REGISTER, URL_INTERVENTIONS, URL_REDFLAGS, URL_USERS
 
 
 def create_app():
-    SWAGGER_UI_URL = "/api/v1/docs"
-    API_URL = "https://llwasampijja.github.io/ireporter-challenge-two/ireporter_challenge_two.json" #remote API documenation url
-    # APi_URL = "http://localhost/swagger-ui/dist/ireporter_challenge_two.json" #local API documentation url
+    
 
 
     app = Flask(__name__)
@@ -22,8 +22,9 @@ def create_app():
     jwt_manager.init_app(app)
 
     app.register_blueprint(redflag_bp, url_prefix="/api/v1/red-flags")
-    app.register_blueprint(user_bp, url_prefix="/api/v1/auth/users")
+    app.register_blueprint(user_bp, url_prefix="/api/v1/users")
     app.register_blueprint(intervention_bp, url_prefix="/api/v1/interventions")
+    app.register_blueprint(auth_bp, url_prefix="/api/v1/auth")
     
     app.register_error_handler(404, page_not_found)
     app.register_error_handler(405, method_not_allowed)
