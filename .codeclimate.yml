@@ -17,3 +17,4 @@ exclude_patterns:
 - "**/*_test.go"
 - "**/*.d.ts"
 - "app/views"
+- "app/models"
