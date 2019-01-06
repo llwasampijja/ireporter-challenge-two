@@ -41,15 +41,15 @@ class GeneralValidator():
     def invalid_coordinates(self, geolocation):
         geolocation = geolocation.replace(" ", "")
         cordinates = geolocation.split(",")
-        if len(cordinates) != 2:
-            return True
+        # if len(cordinates) != 2:
+        #     return True
         for cordinate in cordinates:
             try:
                 float(cordinate)
             except ValueError:
                 return True
 
-        if self.geo_coordinate_not_inrange(float(cordinates[0]), 90) or \
+        if len(cordinates) != 2 or self.geo_coordinate_not_inrange(float(cordinates[0]), 90) or \
                 self.geo_coordinate_not_inrange(float(cordinates[1]), 180):
             return True
 
