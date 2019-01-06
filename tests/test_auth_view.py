@@ -103,11 +103,11 @@ class TestAuthView(unittest.TestCase):
 
         """test register with an invalid password"""
         response = self.client.post(URL_REGISTER, data=json.dumps({
-            "firstname":"edward",
+            "firstname":"ann",
             "lastname":"pjoth",
-            "othernames":"ed war d",
-            'phonenumber':"4777727727",
-            "email":"edwardpjoth@bolon.emp",
+            "othernames":"ann the woman",
+            'phonenumber':"0777727727",
+            "email":"annpjoth@bolon.emp",
             "username":"edwardpjoth",
             "password":"password#1"
         }), content_type="application/json")

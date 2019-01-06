@@ -136,11 +136,11 @@ class TestInterventionView (unittest.TestCase):
 
         """Test for creating an invalid intervention with an empty string"""
         response = self.client.post(URL_INTERVENTIONS, headers=dict(Authorization='Bearer '+ jwt_token), data=json.dumps({
-            "location": "",
+            "location": "2.00, 3.222",
             "videos": ["Video url"],
             "images": "images urls",
             "title": "this road is bad",
-            "comment": "the road as bad as i dont know"
+            "comment": "  "
         }), content_type="application/json")
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)

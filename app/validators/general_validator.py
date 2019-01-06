@@ -16,7 +16,7 @@ class GeneralValidator():
 
     def check_status_value(self, status):
         status = str(status).lower()
-        if status=="resolved" or status=="pending investigation" or status=="rejected" or status=="under investigation":
+        if status == "resolved" or status == "pending investigation" or status == "rejected" or status == "under investigation":
             return False
         return True
 
@@ -25,17 +25,39 @@ class GeneralValidator():
         valid_incidents = ["location", "videos", "images", "title", "comment"]
         if any((item not in valid_incidents) for item in request_data):
             return True
-        return False 
-
-    def incident_duplicate(self, comment, incidents_list):
-        if any((incident.get("comment")).lower() ==comment.lower() for incident in incidents_list):
-            return True
         return False
 
-
+    def incident_duplicate(self, comment, incidents_list):
+        if any((incident.get("comment")).lower() == comment.lower() for incident in incidents_list):
+            return True
+        return False
 
     def create_id(self, get_incidents_instance, key_id):
         if not get_incidents_instance:
             return 1
         else:
             return 1 + get_incidents_instance[-1].get(key_id)
+
+    def invalid_coordinates(self, geolocation):
+        geolocation = geolocation.replace(" ", "")
+        cordinates = geolocation.split(",")
+        if len(cordinates) != 2:
+            return True
+        for cordinate in cordinates:
+            try:
+                float(cordinate)
+            except ValueError:
+                return True
+
+        if self.geo_coordinate_not_inrange(float(cordinates[0]), 90) or \
+                self.geo_coordinate_not_inrange(float(cordinates[1]), 180):
+            return True
+
+        return False
+
+    def geo_coordinate_not_inrange(self, coordinate, bound):
+        if 0 <= coordinate and coordinate <= bound:
+            return False
+        if -bound <= coordinate and coordinate <= 0:
+            return False
+        return True

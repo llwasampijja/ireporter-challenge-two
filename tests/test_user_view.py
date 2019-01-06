@@ -65,6 +65,14 @@ class TestUserView(unittest.TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response_data.get("message"), RESP_USER_NOT_FOUND)
 
+        """test update a primary admin"""
+        response = self.client.patch(URL_USERS + "/1", headers=dict(Authorization='Bearer ' + jwt_token), data=json.dumps({
+            "is_admin":True
+        }), content_type="application/json")
+        response_data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response_data.get("message"), RESP_ROLE_NO_RIGHTS)
+
 
 
 

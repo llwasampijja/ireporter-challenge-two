@@ -27,10 +27,10 @@ class IncidentController:
                         location, title, comment]
         args_list = [videos, images]
 
-
         get_incidents_instance = incident_data.get_incidents(keyword)
-        
-        incident_id = self.validator.create_id(get_incidents_instance, "incident_id")
+
+        incident_id = self.validator.create_id(
+            get_incidents_instance, "incident_id")
 
         if any(self.validator.check_empty_string(item) for item in
                args_strings):
@@ -38,7 +38,8 @@ class IncidentController:
 
         if any(self.validator.check_str_datatype(item) for item in
                args_strings) or self.validator.invalid_incident(request_data) or \
-               any(self.validator.check_list_datatype(item) for item in args_list):
+                any(self.validator.check_list_datatype(item) for item in args_list) or \
+                self.validator.invalid_coordinates(location):
             return self.response_unaccepted("datatype")
 
         if self.validator.incident_duplicate(comment, get_incidents_instance):
@@ -51,10 +52,11 @@ class IncidentController:
         #     return self.response_unaccepted("status")
 
         new_incident = Incident(incident_id=incident_id,
-                              created_on=created_on, created_by=created_by,
-                              location=location, status=status, videos=videos,
-                              images=images, title=title, comment=comment)
-        incident_data.create_incident(new_incident.incident_dict(keyword), keyword)
+                                created_on=created_on, created_by=created_by,
+                                location=location, status=status, videos=videos,
+                                images=images, title=title, comment=comment)
+        incident_data.create_incident(
+            new_incident.incident_dict(keyword), keyword)
 
         return Response(json.dumps({
             "status": 201,
@@ -76,7 +78,8 @@ class IncidentController:
             }), content_type="application/json", status=200)
 
     def get_incident(self, incident_id, keyword):
-        get_incident_instance = incident_data.get_incident(incident_id, keyword)
+        get_incident_instance = incident_data.get_incident(
+            incident_id, keyword)
         if get_incident_instance is None:
             return Response(json.dumps({
                 "status": 404,
@@ -87,6 +90,7 @@ class IncidentController:
                 "status": 200,
                 "data": [get_incident_instance]
             }), content_type="application/json", status=200)
+
     def update_incident(self, incident_id, request_data, keyword, username):
 
         location = request_data.get("location")
@@ -103,7 +107,7 @@ class IncidentController:
             return self.response_unaccepted("none")
         elif update_incident_instance == "non_author":
             return Response(json.dumps({
-                "status":401,
+                "status": 401,
                 "message": RESP_UNAUTHORIZED_EDIT
             }), content_type="application/json", status=401)
         else:
@@ -117,7 +121,7 @@ class IncidentController:
                 "status": 401,
                 "message": RESP_USER_STATUS_NORIGHTS
             }), content_type="application/json", status=401)
-        
+
         if self.validator.check_status_value(request_data.get("status")):
             return self.response_unaccepted("status")
 
@@ -128,14 +132,15 @@ class IncidentController:
         else:
             return self.response_sumission_success(update_incident_instance,
                                                    "incident_status")
-    
+
     def delete_incident(self, incident_id, keyword, username):
-        delete_incident_instance = incident_data.delete_incident(incident_id, keyword, username)
+        delete_incident_instance = incident_data.delete_incident(
+            incident_id, keyword, username)
         if delete_incident_instance is None:
             return self.response_unaccepted("none")
         elif delete_incident_instance == "non_author":
             return Response(json.dumps({
-                "status":401,
+                "status": 401,
                 "message": RESP_UNAUTHORIZED_DELETE
             }), content_type="application/json", status=401)
         else:
@@ -172,6 +177,3 @@ class IncidentController:
             "data": [return_data],
             "message": message
         }), content_type="application/json", status=201)
-
-
-            

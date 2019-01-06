@@ -44,7 +44,7 @@ class TestRedflagView (unittest.TestCase):
         """redflag to ensure that the list is not empty when one item is deleted during testing for deleting"""
         jwt_token = json.loads(self.login_response.data)["access_token"]
         self.client.post(URL_REDFLAGS, headers=dict(Authorization='Bearer ' + jwt_token), data=json.dumps({
-            "location": "Kawempe",
+            "location": "34, -115",
             "videos": ["Video url"],
             "images": ["images urls"],
             "title": "Cop taking a bribe",
@@ -53,7 +53,7 @@ class TestRedflagView (unittest.TestCase):
 
         """Test for creating a valid red-flag"""
         response = self.client.post(URL_REDFLAGS, headers=dict(Authorization='Bearer ' + jwt_token), data=json.dumps({
-            "location": "Kawempe",
+            "location": "90, 128",
             "videos": ["Video url"],
             "images": ["images urls"],
             "title": "Corrupt cop",
@@ -65,7 +65,7 @@ class TestRedflagView (unittest.TestCase):
 
         """Test for creating an invalid red-flag missing one required parameter"""
         response = self.client.post(URL_REDFLAGS, headers=dict(Authorization='Bearer ' + jwt_token), data=json.dumps({
-            "location": "Kawempe",
+            "location": "0.342, 143",
             "videos": ["Video url"],
             "images": ["images urls"],
         }), content_type="application/json")
@@ -77,7 +77,7 @@ class TestRedflagView (unittest.TestCase):
         """Test for creating an invalid red-flag with more parameters than needed"""
         response = self.client.post(URL_REDFLAGS, headers=dict(Authorization='Bearer ' + jwt_token), data=json.dumps({
             "created_by": "Jon Mark",
-            "location": "Kawempe",
+            "location": "0.342, 143",
             "videos": ["Video url"],
             "images": ["images urls"],
             "title": "Cop taking a bribe",
@@ -90,7 +90,7 @@ class TestRedflagView (unittest.TestCase):
 
         """Test for creating an invalid red-flag with string of vidoes instead of list"""
         response = self.client.post(URL_REDFLAGS, headers=dict(Authorization='Bearer ' + jwt_token), data=json.dumps({
-            "location": "Kawempe",
+            "location": "0.342, 143",
             "videos": ["Video url"],
             "images": "images urls",
             "title": "Cop taking a bribe",
@@ -117,10 +117,10 @@ class TestRedflagView (unittest.TestCase):
 
         """Test for creating an invalid red-flag with an empty string"""
         response = self.client.post(URL_REDFLAGS, headers=dict(Authorization='Bearer ' + jwt_token), data=json.dumps({
-            "location": " ",
+            "location": "0.342, 143",
             "videos": ["Video url"],
             "images": "images urls",
-            "title": "Cop taking a bribe",
+            "title": "  ",
             "comment": "He was caught red handed empty string"
         }), content_type="application/json")
         data = json.loads(response.data.decode())
@@ -141,6 +141,42 @@ class TestRedflagView (unittest.TestCase):
         # self.assertEqual(response.status_code, 404)
         # self.assertEqual(data.get("message"),
         #                  "Wrong Status given")
+
+        """test add redflag with location with only one coordinate"""
+        response = self.client.post(URL_REDFLAGS, headers=dict(Authorization='Bearer ' + jwt_token), data=json.dumps({
+            "location": "90",
+            "videos": ["Video url"],
+            "images": ["images urls"],
+            "title": "Corrupt cop",
+            "comment": "He was caught red handed"
+        }), content_type="application/json")
+        data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(data.get("message"), RESP_INVALID_INCIDENT_INPUT)
+
+        """test add redflag with location with coordinate not in range"""
+        response = self.client.post(URL_REDFLAGS, headers=dict(Authorization='Bearer ' + jwt_token), data=json.dumps({
+            "location": "180, 180",
+            "videos": ["Video url"],
+            "images": ["images urls"],
+            "title": "Corrupt cop",
+            "comment": "He was caught red handed"
+        }), content_type="application/json")
+        data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(data.get("message"), RESP_INVALID_INCIDENT_INPUT)
+
+        """test add redflag with location with coordinate not in range"""
+        response = self.client.post(URL_REDFLAGS, headers=dict(Authorization='Bearer ' + jwt_token), data=json.dumps({
+            "location": "0.342r, 143",
+            "videos": ["Video url"],
+            "images": ["images urls"],
+            "title": "Corrupt cop",
+            "comment": "He was caught red handed"
+        }), content_type="application/json")
+        data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(data.get("message"), RESP_INVALID_INCIDENT_INPUT)
 
     def test_get_redflags(self):
         """test get all redflags"""

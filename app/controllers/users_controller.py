@@ -173,7 +173,7 @@ class UsersController():
                             }), content_type="application/json", status=403)
 
     def update_user_role(self, user_id, request_info):
-        if request_info is None or "is_admin" not in request_info or len(request_info) != 1:
+        if request_info is None or "is_admin" not in request_info or len(request_info) != 1 or user_id == 1:
             return Response(json.dumps({
                 "message": RESP_ROLE_NO_RIGHTS
             }), content_type="application/json", status=401)
