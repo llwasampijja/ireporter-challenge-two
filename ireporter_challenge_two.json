@@ -161,7 +161,7 @@
         "tags": [
           "Red-flag"
         ],
-        "summary": "All redflags",
+        "summary": "Get all redflags",
         "description": "Get a list of all redflags.",
         "operationId": "get-redflags",
         "produces": [
@@ -436,7 +436,7 @@
         "tags": [
           "Intervention"
         ],
-        "summary": "All interventions",
+        "summary": "Get all interventions",
         "description": "Get a list of all interventions.",
         "operationId": "get-interventions",
         "produces": [
