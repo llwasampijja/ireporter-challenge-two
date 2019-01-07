@@ -26,6 +26,7 @@ This project is about a set of endpoints for the ireporter App. The data used is
 
 ## Table of Contents
 - [Project Description](#ireporter)
+- [Project Planning](#project-planning)
 - [Language and Tools used](#language-and-tools-used)
 - [Installing](#installing)
 - [Running the application](#running-the-application)
@@ -35,6 +36,9 @@ This project is about a set of endpoints for the ireporter App. The data used is
 - [Available Version](#url-versioning)
 - [Deployed Version](#deployed-version)
 - [Documentation](#api-documentation)
+
+## Project Planning
+Project planing and management was accomplished using PivotalTracker. You can find the PivotalTracker Board [here](https://www.pivotaltracker.com/n/projects/2232126 "iReporter on PivotalTracker")
 
 ## Language and Tools Used
 ### Tools used include:
@@ -132,7 +136,7 @@ The endpoints of this application have been versioned. The current version is on
 
 ## Deployed Version
 ### Heroku
-This API is deployed on heroku. Find it [here](https://ireporter-challenge-two.herokuapp.com/api/v1 "iReporter on Heroku")
+This API is deployed on heroku. Find it [here](https://ireporter-challenge-two.herokuapp.com/api/v1/red-flags "iReporter on Heroku")
 ## API Documentation
 The API Endpoints of this project have been documented using Swagger UI and postman.
 * The Swagger-UI documentation can be found [here](https://ireporter-challenge-two.herokuapp.com/api/v1/docs "iReporter Swagger-UI Documentation")
