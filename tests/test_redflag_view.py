@@ -68,11 +68,8 @@ class TestRedflagView(unittest.TestCase):
         )
         self.assertEqual(response.status_code, 200)
 
-    def test_create_redflag(self):
-        """unit tests for creating redflags"""
-        # redflag to ensure that the list is not empty when one
         # item is deleted during testing for deleting
-        jwt_token = json.loads(self.login_response.data)["access_token"]
+        # jwt_token = json.loads(self.login_response.data)["access_token"]
         self.client.post(
             URL_REDFLAGS,
             headers=dict(Authorization='Bearer ' + jwt_token),
@@ -85,6 +82,24 @@ class TestRedflagView(unittest.TestCase):
             }),
             content_type="application/json"
         )
+
+    def test_create_redflag(self):
+        """unit tests for creating redflags"""
+        # redflag to ensure that the list is not empty when one
+        # # item is deleted during testing for deleting
+        jwt_token = json.loads(self.login_response.data)["access_token"]
+        # self.client.post(
+        #     URL_REDFLAGS,
+        #     headers=dict(Authorization='Bearer ' + jwt_token),
+        #     data=json.dumps({
+        #         "location": "34, -115",
+        #         "videos": ["Video url"],
+        #         "images": ["images urls"],
+        #         "title": "Cop taking a bribe",
+        #         "comment": "He was caught red handed 1"
+        #     }),
+        #     content_type="application/json"
+        # )
 
         # Test for creating a valid red-flag
         response = self.client.post(
@@ -341,9 +356,38 @@ class TestRedflagView(unittest.TestCase):
         self.assertEqual(response_data.get("message"),
                          RESP_UNAUTHORIZED_EDIT)
 
-        # Test update redflag with the right id
+        # test updated red-flag whose status isnt equal to
+        # 'pending investigation'
         response = self.client.patch(
             URL_REDFLAGS + "/2/location",
+            headers=dict(Authorization='Bearer ' + jwt_token),
+            data=json.dumps(
+                {"location": "1.500, 0.3000"}),
+            content_type="application/json"
+        )
+        response_data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response_data.get("message"),
+                         RESP_UNAUTHORIZED_EDIT)
+
+        # test update red-flag with fields other than location'
+        response = self.client.patch(
+            URL_REDFLAGS + "/3/location",
+            headers=dict(Authorization='Bearer ' + jwt_token),
+            data=json.dumps({
+                    "location": "1.500, 0.3000",
+                    "title": "no a chance"
+                }),
+            content_type="application/json"
+        )
+        response_data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response_data.get("message"),
+                         RESP_INVALID_INCIDENT_INPUT)
+
+        # Test update redflag with the right id
+        response = self.client.patch(
+            URL_REDFLAGS + "/3/location",
             headers=dict(Authorization='Bearer ' + jwt_token),
             data=json.dumps(
                 {"location": "1.500, 0.3000"}),
@@ -384,7 +428,7 @@ class TestRedflagView(unittest.TestCase):
 
         # Test delete red-flag with unavailable id
         response = self.client.delete(
-            URL_REDFLAGS + "/3",
+            URL_REDFLAGS + "/4",
             headers=dict(Authorization='Bearer ' + jwt_token),
             content_type="application/json"
         )
@@ -403,6 +447,18 @@ class TestRedflagView(unittest.TestCase):
         self.assertEqual(response_data.get("message"),
                          RESP_UNAUTHORIZED_DELETE)
 
+        # test delete red-flag whose status isnt equal to
+        # 'pending investigation'
+        response = self.client.delete(
+            URL_REDFLAGS + "/2",
+            headers=dict(Authorization='Bearer ' + jwt_token),
+            content_type="application/json"
+        )
+        response_data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response_data.get("message"),
+                         RESP_UNAUTHORIZED_DELETE)
+
     def test_update_redflag_status(self):
         """unit tests for updating status of redflag"""
         # Test update status of redflag by admin
@@ -412,7 +468,7 @@ class TestRedflagView(unittest.TestCase):
         }), content_type="application/json")
         admin_jwt_token = json.loads(admin_login_response.data)["access_token"]
         response = self.client.patch(
-            URL_REDFLAGS + "/2/status",
+            URL_REDFLAGS + "/3/status",
             headers=dict(Authorization='Bearer ' + admin_jwt_token),
             data=json.dumps({
                 "status": "rejected"

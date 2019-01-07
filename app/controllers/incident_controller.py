@@ -124,6 +124,10 @@ class IncidentController:
         if self.validator.check_str_datatype(location):
             return self.response_unaccepted("datatype")
 
+        for input_value in request_data:
+            if input_value not in ("location"):
+                return self.response_unaccepted("datatype")
+
         update_incident_instance = self.incident_data.update_incident(
             incident_id, request_data, keyword, username)
         return self.delete_update(
@@ -170,7 +174,7 @@ class IncidentController:
         incident and update location"""
         if action_instance is None:
             return self.response_unaccepted("none")
-        elif action_instance == "non_author":
+        elif action_instance in ("non_author", "revoked"):
             return Response(json.dumps({
                 "status": 401,
                 "message": message_fail

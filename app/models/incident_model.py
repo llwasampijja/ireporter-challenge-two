@@ -50,6 +50,18 @@ class IncidentData:
                 "images": ['stole.jpg', 'corrupt.jpg'],
                 "title": "cop thief",
                 "comment": "I saw him steal"
+            },
+            {
+                "incident_id": 2,
+                "incident_type": "red-flag",
+                "created_on": "30/10/2018",
+                "created_by": "dallkased",
+                "location": "2.0000, 90.3019",
+                "status": "resolved",
+                "videos": ['stole.mp4', 'corrupe.mp4'],
+                "images": ['stole.jpg', 'corrupt.jpg'],
+                "title": "cop thief",
+                "comment": "Every one saw him stealing money"
             }
         ]
         self.interventions_list = []
@@ -80,9 +92,14 @@ class IncidentData:
         """method with logic to update an incident in the incidents list"""
         for incident in incidednts_list:
             if incident.get("incident_id") == incident_id \
-            and username == incident.get("created_by"):
+            and username == incident.get("created_by") \
+            and incident.get("status") == "pending investigation":
                 incident.update(new_update)
                 return incident
+            elif incident.get("incident_id") == incident_id \
+            and username == incident.get("created_by") \
+            and incident.get("status") != "pending investigation":
+                return "revoked"
             elif incident.get("incident_id") == incident_id and not username:
                 incident.update(new_update)
                 return incident
@@ -96,9 +113,14 @@ class IncidentData:
         """method with the logic to delete an incident in the incidents list"""
         for incident in incidednts_list:
             if incident.get("incident_id") == incident_id \
-            and username == incident.get("created_by"):
+            and username == incident.get("created_by") \
+            and incident.get("status") == "pending investigation":
                 incidednts_list.remove(incident)
                 return incident
+            elif incident.get("incident_id") == incident_id \
+            and username == incident.get("created_by") \
+            and incident.get("status") != "pending investigation":
+                return "revoked"
             elif incident.get("incident_id") == incident_id \
             and username != incident.get("created_by"):
                 return "non_author"
