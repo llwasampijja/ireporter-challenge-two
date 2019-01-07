@@ -18,10 +18,12 @@ This project is about a set of endpoints for the ireporter App. The data used is
 - [Language and Tools used](#language-and-tools-used)
 - [Installing](#installing)
 - [Running the application](#running-the-application)
+- [List of Endpoints](#endpoints-included)
 - [Unit Testing the app](#unit-testing-the-application)
-- [Available Version](#available-version)
+- [System Security](#system-security)
+- [Available Version](#url-versioning)
 - [Deployed Version](#deployed-version)
-- [Documentation](#documentation)
+- [Documentation](#api-documentation)
 
 ## Language and Tools Used
 ### Tools used include:
