@@ -14,21 +14,27 @@ This project is about a set of endpoints for the ireporter App. The data used is
 * Delete a red-flag by id.
 
 ## Table of Contents
-- [Language and Tools used](##Language)
-- [Installing](##Installing)
-- [Running the application](##RunningtheApplication)
-- [Unit Testing the app](##UnitTestingtheApplication)
-- [Available Version](##URLVersioning)
-- [Deployed Version](##DeployedVersion)
-- [Documentation](##Documentation)
+- [Project Description](#ireporter)
+- [Language and Tools used](#language-and-tools-used)
+- [Installing](#installing)
+- [Running the application](#running-the-application)
+- [Unit Testing the app](#unit-testing-the-application)
+- [Available Version](#available-version)
+- [Deployed Version](#deployed-version)
+- [Documentation](#documentation)
 
 ## Language and Tools Used
 ### Tools used include:
 * [Python 3.7](https://www.python.org)
-* Pip - A python package installer
-* Virtualenv
-* Git
-* VSCode (IDE)
+* [Flask](http://flask.pocoo.org/)
+* [JWT](https://jwt.io/)
+* [Pip - A python package installer](https://pypi.org/project/pip/)
+* [Virtualenv](https://pypi.org/project/virtualenv/)
+* [Git](https://git-scm.com/downloads)
+* [VSCode (IDE)](https://code.visualstudio.com/)
+* [Open API](https://www.openapis.org/)
+* [Swagger](https://swagger.io/)
+* [Postman](https://www.getpostman.com/)
 
 ## Installing
 ### Pre-Installations
@@ -81,28 +87,32 @@ On running that command, the application server will be launched and the URL to 
 #### Endpoints included
 |Endpoint|Endpoint Purpose|Allowed HTTP Method|Requirements|
 |---|---|---|---|
-| /auth/register  | Register/signup a user  |POST  | firstname (String), lastname (String), othernames (String), email (String), phonenumber (String), username (String), password (String)  |
-| /auth/login  | Login/sign-in a user  |POST, GET  | username (String), password (String)  |
-| /red-flags  | Get red-flags  |GET  | None |
-| /red-flags/redflag_id | Get red-flag of the specified id  |GET  |None  |
-| /red-flags | Create a red-flag  |POST  |	location (String), images ([String, String]), videos ([String, String]), title (String), comment (String) |
-| /red-flags/redflag_id/location  | Edit location of a red-flag of specicif id  |PATCH  |	location(String) |
-| /red-flags/redflag_id/status  | Edit status of a red-flag of specific id  |PATCH  | status (String)  |
-| /red-flags/redflag_id  | Delete a red-flag of specific id  |DELETE  |None  |
-| /interventions  | Get interventions  |GET  | None |
-| /interventions/intervention_id | Get intervention of the specified id  |GET  |None  |
-| /interventions | Create a intervention  |POST  |	location (String), images ([String, String]), videos ([String, String]), title (String), comment (String) |
-| /interventions/intervention_id/location  | Edit location of a intervention of specicif id  |PATCH  |•	location(String) |
-| /interventions/intervention_id/status  | Edit status of a intervention of specific id  |PATCH  |• status (String)  |
-| /interventions/intervention_id  | Delete a intervention of specific id  |DELETE  |None  |
-| /users  | Ge all users  |GET  | None  |
-| /users/user_id  | Edit user's role  |PATCH  | is_admin (Boolean)  |
+| [/](https://ireporter-challenge-two.herokuapp.com/api/v1)  | Index Endpointr  |GET  | None  |
+| [/auth/register](https://ireporter-challenge-two.herokuapp.com/api/v1/auth/register)  | Register/signup a user  |POST  | firstname (String), lastname (String), othernames (String), email (String), phonenumber (String), username (String), password (String)  |
+| [/auth/login](https://ireporter-challenge-two.herokuapp.com/api/v1/auth/login)  | Login/sign-in a user  |POST, GET  | username (String), password (String)  |
+| [/red-flags](https://ireporter-challenge-two.herokuapp.com/api/v1/red-flags) | Create a red-flag  |POST  |	location (String), images ([String, String]), videos ([String, String]), title (String), comment (String) |
+| [/red-flags](https://ireporter-challenge-two.herokuapp.com/api/v1/red-flags)  | Get red-flags  |GET  | None |
+| [/red-flags/redflag_id](https://ireporter-challenge-two.herokuapp.com/api/v1/red-flags/3) | Get red-flag of the specified id  |GET  |None  |
+| [/red-flags/redflag_id/location](https://ireporter-challenge-two.herokuapp.com/api/v1/red-flags/3/location)  | Edit location of a red-flag of specicif id  |PATCH  |	location(String) |
+| [/red-flags/redflag_id/status](https://ireporter-challenge-two.herokuapp.com/api/v1/red-flags/3/status)  | Edit status of a red-flag of specific id  |PATCH  | status (String)  |
+| [/red-flags/redflag_id](https://ireporter-challenge-two.herokuapp.com/api/v1/red-flags/3)  | Delete a red-flag of specific id  |DELETE  |None  |
+| [/interventions](https://ireporter-challenge-two.herokuapp.com/api/v1/interventions) | Create a intervention  |POST  |	location (String), images ([String, String]), videos ([String, String]), title (String), comment (String) |
+| [/interventions](https://ireporter-challenge-two.herokuapp.com/api/v1/interventions)  | Get interventions  |GET  | None |
+| [/interventions/intervention_id](https://ireporter-challenge-two.herokuapp.com/api/v1/interventions/5) | Get intervention of the specified id  |GET  |None  |
+| [/interventions/intervention_id/location](https://ireporter-challenge-two.herokuapp.com/api/v1/interventions/5/location)  | Edit location of a intervention of specicif id  |PATCH  |•	location(String) |
+| [/interventions/intervention_id/status](https://ireporter-challenge-two.herokuapp.com/api/v1/interventions/5/status)  | Edit status of a intervention of specific id  |PATCH  |• status (String)  |
+| [/interventions/intervention_id](https://ireporter-challenge-two.herokuapp.com/api/v1/interventions/5)  | Delete a intervention of specific id  |DELETE  |None  |
+| [/users](https://ireporter-challenge-two.herokuapp.com/api/v1/users)  | Ge all users  |GET  | None  |
+| [/users/user_id](https://ireporter-challenge-two.herokuapp.com/api/v1/users/10)  | Edit user's role  |PATCH  | is_admin (Boolean)  |
 
 
 ## Unit Testing the Application
 * In order to run unit tests for this application, you must install pytest, pytest-cov and coverage installed on your pc or virtual environment.
 * While in the root of the project, run the command below to run the unit tests and also generate a coverage report.
 - `pytest --cov`
+
+## System Security
+The endpoints of this web application have been secured using JWT (Json Web Tokens).
 
 ## URL Versioning
 The endpoints of this application have been versioned. The current version is one (1); i.e.: `api/v1`
