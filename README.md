@@ -7,11 +7,22 @@ Corruption is a huge bane to Africa’s development. African countries must deve
 # iReporter API Endpoints
 This project is about a set of endpoints for the ireporter App. The data used is stored in memory using data structures and not a database.
 ## The Features Include:
-* Create a red-flag.
-* Get a red-flag by id.
-* Get all red-flags.
-* Update a red-flag by id
-* Delete a red-flag by id.
+* Sign-up a user.
+* Login a user.
+* Create a red-flag incident.
+* Get a red-flag incident by id.
+* Get all red-flag incidents.
+* Update a red-flag incident's location by id.
+* Update a red-flag incident's status by id.
+* Delete a red-flag incident by id.
+* Create an intervention incident.
+* Get all intervention incidents.
+* Get an intervention incident by id.
+* Update an intervention incident's location by id.
+* Update an intervention incident's status by id.
+* Delete an intervention incident by id.
+* Get all users.
+* Update a user's role by id.
 
 ## Table of Contents
 - [Project Description](#ireporter)
