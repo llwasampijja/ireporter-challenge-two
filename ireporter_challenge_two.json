@@ -36,6 +36,79 @@
     "https"
   ],
   "paths": {
+    "/auth/register": {
+      "post": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Register user",
+        "description": "Anyone can register on the system",
+        "operationId": "registerUser",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Created user object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserRegister"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "registering user successful"
+          },
+          "400": {
+            "description": "Operation failed due to wrong data input"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Logs user into the system",
+        "description": "",
+        "operationId": "loginUser",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "The user name for login",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserLogin"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User logged in successifully"
+          },
+          "400": {
+            "description": "Failed to login due to providing bad data"
+          },
+          "403": {
+            "description": "Failed to login due to wrong password or username"
+          }
+        }
+      }
+    },
     "/red-flags": {
       "post": {
         "tags": [
@@ -586,7 +659,7 @@
         ]
       }
     },
-    "/auth/users": {
+    "/users": {
       "get": {
         "tags": [
           "user"
@@ -606,80 +679,7 @@
         }
       }
     },
-    "/auth/users/register": {
-      "post": {
-        "tags": [
-          "user"
-        ],
-        "summary": "Register user",
-        "description": "Anyone can register on the system",
-        "operationId": "registerUser",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Created user object",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/UserRegister"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "registering user successful"
-          },
-          "400": {
-            "description": "Operation failed due to wrong data input"
-          }
-        }
-      }
-    },
-    "/auth/users/login": {
-      "post": {
-        "tags": [
-          "user"
-        ],
-        "summary": "Logs user into the system",
-        "description": "",
-        "operationId": "loginUser",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "The user name for login",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/UserLogin"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "User logged in successifully"
-          },
-          "400": {
-            "description": "Failed to login due to providing bad data"
-          },
-          "403": {
-            "description": "Failed to login due to wrong password or username"
-          }
-        }
-      }
-    },
-    "/auth/users/{user_id}": {
+    "/users/{user_id}": {
       "patch": {
         "tags": [
           "user"
@@ -905,6 +905,10 @@
             "type": "string"
           }
         },
+        "title": {
+          "type": "string",
+          "description": "A single line or phrase summarizing the corruption case in details."
+        },
         "comment": {
           "type": "string",
           "description": "The description of the corruption case in details."
@@ -921,6 +925,7 @@
         "location",
         "videos",
         "images",
+        "title",
         "comment"
       ],
       "properties": {
@@ -946,6 +951,9 @@
           "items": {
             "type": "string"
           }
+        },
+        "title": {
+          "type": "string"
         },
         "comment": {
           "type": "string"
@@ -1018,6 +1026,7 @@
         },
         "images": {
           "type": "array",
+          "description": "The imagery evidence or proof for the incident that is being reported.",
           "xml": {
             "name": "imagesUrl",
             "wrapped": true
@@ -1028,6 +1037,7 @@
         },
         "videos": {
           "type": "array",
+          "description": "Video (motion picture) evidence for the incident that is being reported",
           "xml": {
             "name": "videosUrl",
             "wrapped": true
@@ -1036,8 +1046,13 @@
             "type": "string"
           }
         },
+        "title": {
+          "type": "string",
+          "description": "A single phrase or line of words summarizing the incident which is being reported."
+        },
         "comment": {
-          "type": "string"
+          "type": "string",
+          "description": "A detailed description of the incident which is being reported."
         }
       },
       "xml": {
@@ -1051,6 +1066,7 @@
         "location",
         "videos",
         "images",
+        "title",
         "comment"
       ],
       "properties": {
@@ -1076,6 +1092,9 @@
           "items": {
             "type": "string"
           }
+        },
+        "title": {
+          "type": "string"
         },
         "comment": {
           "type": "string"
