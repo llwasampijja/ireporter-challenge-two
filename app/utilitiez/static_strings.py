@@ -56,22 +56,32 @@ RESP_AUTH_LOGIN_SUCCESS = "Logged in successifully"
 RESP_AUTH_LOGIN_FAILED = "Failed to login, username or password is incorrect"
 
 # dictionary of routes
+
 MY_ROUTES = {
-    "NB:" "Add these endpoints to the versioned base url, i.e with /api/v1"
+    
     "Register": "/auth/register",
     "Login": "/auth/login",
     "Create a Red-flag": "/red-flags",
     "Get All Red-flags": "/red-flags",
+    "Get a Red-flag": "/red-flags/redflag_id",
     "Update Red-flag's location": "/red-flags/redflag_id/location",
     "Update a Red-flag's status": "/red-flags/redflag_id/status",
     "Delete a Red-flag": "/red-flags/redflag_id",
     "Create an Intervention": "/interventions",
     "Get All Interventions": "/interventions",
+    "Get an Intervention": "/interventions/intervention_id",
     "Update an Intervention's location": "/interventions/intervention_id/location",
     "Update an Intervention's status": "/interventions/intervention_id/status",
     "Delete  an Intervention": "/interventions/intervention_id",
     "Get all users": "/users",
     "Update a user's role": "users/user_id"
 }
+
+RESP_INDEX_MESSAGE = {
+    "NB": "Add these endpoints to the versioned base url, i.e immediately after '/api/v1'",
+    "Admin Credentials": "username = 'edward', password = 'i@mG8t##'",
+    "Endpoints": MY_ROUTES
+}
+
 
 WELCOME_MSG = "Welcome to Lwasa Lamech's iReporter"
