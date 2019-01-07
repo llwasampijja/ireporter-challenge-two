@@ -17,3 +17,4 @@ def login_user():
     """method for logging in a user"""
     request_info = request.get_json()
     return users_controller.signin(request_info)
+

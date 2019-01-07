@@ -10,10 +10,12 @@ from app.views.redflag_view import redflag_blueprint
 from app.views.users_view import user_blueprint
 from app.views.auth_view import auth_blueprint
 from app.views.intervention_view import intervention_blueprint
+from app.views.index_view import index_blueprint
 from app.views.error_handlers_view import (
     page_not_found,
     method_not_allowed,
-    bad_request_error
+    bad_request_error,
+    internal_server_error
 )
 from app.utilitiez.static_strings import (
     SWAGGER_UI_URL,
@@ -22,7 +24,8 @@ from app.utilitiez.static_strings import (
     URL_REGISTER,
     URL_INTERVENTIONS,
     URL_REDFLAGS,
-    URL_USERS
+    URL_USERS,
+    URL_BASE
 )
 
 def create_app():
@@ -37,10 +40,12 @@ def create_app():
     app.register_blueprint(user_blueprint, url_prefix="/api/v1/users")
     app.register_blueprint(intervention_blueprint, url_prefix="/api/v1/interventions")
     app.register_blueprint(auth_blueprint, url_prefix="/api/v1/auth")
+    app.register_blueprint(index_blueprint, url_prefix="/api/v1")
 
+    app.register_error_handler(400, bad_request_error)
     app.register_error_handler(404, page_not_found)
     app.register_error_handler(405, method_not_allowed)
-    app.register_error_handler(400, bad_request_error)
+    app.register_error_handler(500, internal_server_error)
 
     swagger_ui_blueprint = get_swaggerui_blueprint(SWAGGER_UI_URL, API_URL)
     app.register_blueprint(swagger_ui_blueprint, url_prefix=SWAGGER_UI_URL)

@@ -4,7 +4,8 @@ from flask import Response, json
 from app.utilitiez.static_strings import (
     RESP_ERRO_PAGE_NOT,
     RESP_ERROR_BAD_REQUEST,
-    RESP_ERROR_METHOD_NOT_ALLOWED
+    RESP_ERROR_METHOD_NOT_ALLOWED,
+    RESP_INTERNAL_SERVER_ERROR
 )
 
 def bad_request_error(error):
@@ -27,3 +28,10 @@ def method_not_allowed(error):
         "status": 405,
         "message": RESP_ERROR_METHOD_NOT_ALLOWED
     }), content_type="application/json", status=405)
+
+def internal_server_error(error):
+    """method for handling internal server errors"""
+    return Response(json.dumps({
+        "status": 500,
+        "message": RESP_INTERNAL_SERVER_ERROR
+    }), content_type="application/json", status=500)

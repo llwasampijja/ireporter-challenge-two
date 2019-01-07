@@ -78,14 +78,25 @@ To run this application, while in the root folder of the project via the Termina
 
 On running that command, the application server will be launched and the URL to that server will be shown to you in the command-line/terminal.
 
-#### Trying out the different Endpoints using postman
+#### Endpoints included
 |Endpoint|Endpoint Purpose|Allowed HTTP Method|Requirements|
 |---|---|---|---|
+| /auth/register  | Register/signup a user  |POST  | firstname (String), lastname (String), othernames (String), email (String), phonenumber (String), username (String), password (String)  |
+| /auth/login  | Login/sign-in a user  |POST, GET  | username (String), password (String)  |
 | /red-flags  | Get red-flags  |GET  | None |
 | /red-flags/redflag_id | Get red-flag of the specified id  |GET  |None  |
-| /red-flags | Create a red-flag  |POST  |•	created_by (String), location (String), status (String), images ([String, String]), videos ([String, String]), comment (String) |
-| /red-flags/redflag_id/location  | Edit location of a red-flag of specicif id  |PATCH  |•	location(String) |
+| /red-flags | Create a red-flag  |POST  |	location (String), images ([String, String]), videos ([String, String]), title (String), comment (String) |
+| /red-flags/redflag_id/location  | Edit location of a red-flag of specicif id  |PATCH  |	location(String) |
+| /red-flags/redflag_id/status  | Edit status of a red-flag of specific id  |PATCH  | status (String)  |
 | /red-flags/redflag_id  | Delete a red-flag of specific id  |DELETE  |None  |
+| /interventions  | Get interventions  |GET  | None |
+| /interventions/intervention_id | Get intervention of the specified id  |GET  |None  |
+| /interventions | Create a intervention  |POST  |	location (String), images ([String, String]), videos ([String, String]), title (String), comment (String) |
+| /interventions/intervention_id/location  | Edit location of a intervention of specicif id  |PATCH  |•	location(String) |
+| /interventions/intervention_id/status  | Edit status of a intervention of specific id  |PATCH  |• status (String)  |
+| /interventions/intervention_id  | Delete a intervention of specific id  |DELETE  |None  |
+| /users  | Ge all users  |GET  | None  |
+| /users/user_id  | Edit user's role  |PATCH  | is_admin (Boolean)  |
 
 
 ## Unit Testing the Application
@@ -103,6 +114,3 @@ This API is deployed on heroku. Find it [here](https://ireporter-challenge-two.h
 The API Endpoints of this project have been documented using Swagger UI and postman.
 * The Swagger-UI documentation can be found [here](https://ireporter-challenge-two.herokuapp.com/api/v1/docs "iReporter Swagger-UI Documentation")
 * The Postman documentation can be found [here](https://documenter.getpostman.com/view/5689256/Rzn8QMm9 "IReporter Documentation")
-
-
-![Alt text](img.jpg()

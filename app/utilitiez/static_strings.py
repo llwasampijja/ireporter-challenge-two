@@ -3,6 +3,7 @@
 URL_REGISTER = "/api/v1/auth/register"
 URL_LOGIN = "/api/v1/auth/login"
 URL_USERS = "/api/v1/users"
+URL_BASE = "/api/v1"
 
 # url string constants for incidents
 URL_REDFLAGS = "/api/v1/red-flags"
@@ -48,6 +49,29 @@ RESP_INCIDENT_DUPLICATE = "Creating a dupplicate incident isn't allowed"
 RESP_ERROR_BAD_REQUEST = "Bad request, check your input and try again"
 RESP_ERRO_PAGE_NOT = "No such page on this site"
 RESP_ERROR_METHOD_NOT_ALLOWED = "method not allowed"
+RESP_INTERNAL_SERVER_ERROR = "An internal server error occured. Try again later \
+when this issue is resolved by the site administrators"
 
 RESP_AUTH_LOGIN_SUCCESS = "Logged in successifully"
 RESP_AUTH_LOGIN_FAILED = "Failed to login, username or password is incorrect"
+
+# dictionary of routes
+MY_ROUTES = {
+    "NB:" "Add these endpoints to the versioned base url, i.e with /api/v1"
+    "Register": "/auth/register",
+    "Login": "/auth/login",
+    "Create a Red-flag": "/red-flags",
+    "Get All Red-flags": "/red-flags",
+    "Update Red-flag's location": "/red-flags/redflag_id/location",
+    "Update a Red-flag's status": "/red-flags/redflag_id/status",
+    "Delete a Red-flag": "/red-flags/redflag_id",
+    "Create an Intervention": "/interventions",
+    "Get All Interventions": "/interventions",
+    "Update an Intervention's location": "/interventions/intervention_id/location",
+    "Update an Intervention's status": "/interventions/intervention_id/status",
+    "Delete  an Intervention": "/interventions/intervention_id",
+    "Get all users": "/users",
+    "Update a user's role": "users/user_id"
+}
+
+WELCOME_MSG = "Welcome to Lwasa Lamech's iReporter"
