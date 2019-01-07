@@ -52,6 +52,7 @@ Project planing and management was accomplished using PivotalTracker. You can fi
 * [Open API](https://www.openapis.org/)
 * [Swagger](https://swagger.io/)
 * [Postman](https://www.getpostman.com/)
+* [PivotalTracker](https://www.pivotaltracker.com "PivotalTracker")
 
 ## Installing
 ### Pre-Installations
