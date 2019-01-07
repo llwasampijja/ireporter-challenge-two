@@ -2,9 +2,15 @@ import unittest
 from flask import Response, json
 from app.models.incident_model import IncidentData
 from app.controllers.incident_controller import IncidentController
-from app.utilitiez.static_strings import RESP_UNAUTHORIZED_VIEW, RESP_INCIDENT_WROND_STATUS, RESP_USER_STATUS_NORIGHTS, RESP_INCIDENT_STATUS_UPDATE_SUCCESS, RESP_UNAUTHORIZED_DELETE, RESP_INCIDENT_DELETE_SUCCESS, RESP_INCIDENT_UPDATE_SUCCESS, RESP_ADMIN_ONLY, RESP_INCIDENT_NOT_FOUND, URL_REDFLAGS, RESP_INVALID_INCIDENT_INPUT, RESP_UNAUTHORIZED_EDIT, RESP_INCIDENT_NOT_FOUND, URL_LOGIN, URL_REGISTER, RESP_EMPTY_STRING, RESP_CREATE_INCIDENT_SUCCESS
+from app.utilitiez.static_strings import (
+    RESP_UNAUTHORIZED_VIEW, RESP_INCIDENT_WROND_STATUS, 
+    RESP_USER_STATUS_NORIGHTS, RESP_INCIDENT_STATUS_UPDATE_SUCCESS, 
+    RESP_UNAUTHORIZED_DELETE, RESP_INCIDENT_DELETE_SUCCESS, 
+    RESP_INCIDENT_UPDATE_SUCCESS, RESP_ADMIN_ONLY, RESP_INCIDENT_NOT_FOUND, 
+    URL_REDFLAGS, RESP_INVALID_INCIDENT_INPUT, RESP_UNAUTHORIZED_EDIT, 
+    RESP_INCIDENT_NOT_FOUND, URL_LOGIN, URL_REGISTER, RESP_EMPTY_STRING, 
+    RESP_CREATE_INCIDENT_SUCCESS)
 from app import create_app
-
 
 
 class TestRedflagView (unittest.TestCase):
@@ -29,7 +35,8 @@ class TestRedflagView (unittest.TestCase):
         }), content_type="application/json")
 
         """get redflags before logging in"""
-        response = self.client.get(URL_REDFLAGS, content_type="application/json")
+        response = self.client.get(
+            URL_REDFLAGS, content_type="application/json")
         self.assertEqual(response.status_code, 401)
         self.assertEqual(json.loads(response.data).get("message"), None)
 
@@ -303,10 +310,12 @@ class TestRedflagView (unittest.TestCase):
         self.assertEqual(data.get("message"), RESP_INCIDENT_DELETE_SUCCESS)
 
         """test delete a red-flag by a user who didn't create it"""
-        response = self.client.delete(URL_REDFLAGS + "/1", headers=dict(Authorization="Bearer " + jwt_token), content_type="application/json")
+        response = self.client.delete(URL_REDFLAGS + "/1", headers=dict(
+            Authorization="Bearer " + jwt_token), content_type="application/json")
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 401)
-        self.assertEqual(response_data.get("message"), RESP_UNAUTHORIZED_DELETE)
+        self.assertEqual(response_data.get("message"),
+                         RESP_UNAUTHORIZED_DELETE)
 
     def test_update_redflag_status(self):
         """Test update status of redflag by admin"""
@@ -325,16 +334,17 @@ class TestRedflagView (unittest.TestCase):
 
         """test update red-flag with more than just the status as an admin"""
         response = self.client.patch(URL_REDFLAGS + "/2/status", headers=dict(Authorization='Bearer ' + admin_jwt_token), data=json.dumps({
-            "status":"rejected",
-            "comment":"You are lieing, you will be arrested for trying to destroy the name of a good man"
+            "status": "rejected",
+            "comment": "You are lieing, you will be arrested for trying to destroy the name of a good man"
         }), content_type="application/json")
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 401)
-        self.assertEqual(response_data.get("message"), RESP_USER_STATUS_NORIGHTS)
+        self.assertEqual(response_data.get("message"),
+                         RESP_USER_STATUS_NORIGHTS)
 
         """test update the status of an incident which doesn't exist"""
         response = self.client.patch(URL_REDFLAGS + "/300/status", headers=dict(Authorization='Bearer ' + admin_jwt_token), data=json.dumps({
-            "status":"resolved"
+            "status": "resolved"
         }), content_type="application/json")
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 404)
@@ -342,12 +352,12 @@ class TestRedflagView (unittest.TestCase):
 
         """test update redflag with a wrong status value"""
         response = self.client.patch(URL_REDFLAGS + "/1/status", headers=dict(Authorization="Bearer " + admin_jwt_token), data=json.dumps({
-            "status":"wrong value"
+            "status": "wrong value"
         }), content_type="application/json")
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response_data.get("message"), RESP_INCIDENT_WROND_STATUS)
-
+        self.assertEqual(response_data.get("message"),
+                         RESP_INCIDENT_WROND_STATUS)
 
         """test try to create an incident as an admin"""
         response = self.client.post(URL_REDFLAGS, headers=dict(Authorization='Bearer ' + admin_jwt_token), data=json.dumps({

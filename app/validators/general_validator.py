@@ -1,63 +1,89 @@
+"""this module includes validations for incidents and users"""
 class GeneralValidator():
-    def check_empty_string(self, user_input):
+    """this class includes methods used to validate incident fields and users"""
+
+    @staticmethod
+    def check_empty_string(user_input):
+        """this method checks for empty incident and user fields"""
         if str(user_input).replace(" ", "") == "":
             return True
         return False
 
-    def check_str_datatype(self, string_value):
+    @staticmethod
+    def check_str_datatype(string_value):
+        """this method checks if input is a string"""
         if isinstance(string_value, str):
             return False
         return True
 
-    def check_list_datatype(self, list_value):
-        if not isinstance(list_value, list) or any(not isinstance(item, str) for item in list_value) or not list_value:
+    @staticmethod
+    def check_list_datatype(list_value):
+        """this method checks is field is a list of strings"""
+        if not isinstance(list_value, list) \
+        or any(not isinstance(item, str) for item in list_value) or not list_value:
             return True
         return False
 
-    def check_status_value(self, status):
+    @staticmethod
+    def check_status_value(status):
+        """this methods checks is incidents status is among the given values"""
         status = str(status).lower()
-        if status == "resolved" or status == "pending investigation" or status == "rejected" or status == "under investigation":
+        if status in ("resolved", "pending investigation", "rejected", "under investigation"):
             return False
         return True
+        # if status == "resolved" or status == "pending investigation" \
+        # or status == "rejected" or status == "under investigation":
+        #     return False
+        # return True
 
-    def invalid_incident(self, request_data):
-        # valid_incidents = ["created_on", "created_by", "location", "status", "videos", "images", "comment"]
-        valid_incidents = ["location", "videos", "images", "title", "comment"]
+    @staticmethod
+    def invalid_incident(request_data):
+        """this method checks if an incident contains all and only required fields"""
+        valid_incidents = [
+            "location",
+            "videos",
+            "images",
+            "title",
+            "comment"]
         if any((item not in valid_incidents) for item in request_data):
             return True
         return False
 
-    def incident_duplicate(self, comment, incidents_list):
-        if any((incident.get("comment")).lower() == comment.lower() for incident in incidents_list):
+    @staticmethod
+    def incident_duplicate(comment, incidents_list):
+        """method to check is an incident exists on the system"""
+        if any((incident.get("comment")).lower() == comment.lower()
+               for incident in incidents_list):
             return True
         return False
 
-    def create_id(self, get_incidents_instance, key_id):
+    @staticmethod
+    def create_id(get_incidents_instance, key_id):
+        """method for creating an id for every new item created"""
         if not get_incidents_instance:
             return 1
-        else:
-            return 1 + get_incidents_instance[-1].get(key_id)
+        # else:
+        return 1 + get_incidents_instance[-1].get(key_id)
 
     def invalid_coordinates(self, geolocation):
+        """method checks if a given string includes valid coordinates"""
         geolocation = geolocation.replace(" ", "")
         cordinates = geolocation.split(",")
-        # if len(cordinates) != 2:
-        #     return True
         for cordinate in cordinates:
             try:
                 float(cordinate)
             except ValueError:
                 return True
-
-        if len(cordinates) != 2 or self.geo_coordinate_not_inrange(float(cordinates[0]), 90) or \
-                self.geo_coordinate_not_inrange(float(cordinates[1]), 180):
+        if len(cordinates) != 2 or self.geo_coordinate_not_inrange(float(cordinates[0]), 90) \
+        or self.geo_coordinate_not_inrange(float(cordinates[1]), 180):
             return True
-
         return False
 
-    def geo_coordinate_not_inrange(self, coordinate, bound):
-        if 0 <= coordinate and coordinate <= bound:
+    @staticmethod
+    def geo_coordinate_not_inrange(coordinate, bound):
+        """method to determin whether a particulr coordinate is within an acceptable range"""
+        if bound >= coordinate >= 0:
             return False
-        if -bound <= coordinate and coordinate <= 0:
+        if -bound <= coordinate <= 0:
             return False
         return True

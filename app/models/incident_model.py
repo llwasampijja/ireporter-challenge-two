@@ -1,7 +1,7 @@
-from flask import request
-
+"""module containing models and data methods for incidents"""
 
 class Incident:
+    """incident model"""
     def __init__(self, **kwargs):
         self.incident_id = kwargs.get("incident_id")
         self.incident_type = kwargs.get("incident_type")
@@ -15,6 +15,7 @@ class Incident:
         self.comment = kwargs.get("comment")
 
     def incident_dict(self, keyword):
+        """method to return a dictionary of an incident"""
         if keyword == "redflag":
             self.incident_type = "redflag"
         else:
@@ -35,6 +36,7 @@ class Incident:
 
 
 class IncidentData:
+    """class for managing data of incidents"""
     def __init__(self):
         self.redflags_list = [
             {
@@ -50,65 +52,81 @@ class IncidentData:
                 "comment": "I saw him steal"
             }
         ]
-        self.interventions_List = []
+        self.interventions_list = []
 
     def create_incident(self, incident, keyword):
+        """method for addind an incident to a list of incidents"""
         if keyword == "redflag":
             return self.redflags_list.append(incident)
         else:
-            return self.interventions_List.append(incident)
+            return self.interventions_list.append(incident)
 
     def get_incidents(self, keyword):
+        """method for reading the incidents list"""
         if keyword == "redflag":
             return self.redflags_list
         else:
-            return self.interventions_List
+            return self.interventions_list
 
     def update_incident(self, incident_id, new_update, keyword, username):
+        """method for updating the an incident in the incidents list"""
         if keyword == "redflag":
             return self.update(self.redflags_list, incident_id, new_update, username)
         else:
-            return self.update(self.interventions_List, incident_id, new_update, username)
+            return self.update(self.interventions_list, incident_id, new_update, username)
 
-    def update(self, incidednts_list, incident_id, new_update, username):
+    @staticmethod
+    def update(incidednts_list, incident_id, new_update, username):
+        """method with logic to update an incident in the incidents list"""
         for incident in incidednts_list:
-            if incident.get("incident_id") == incident_id and username == incident.get("created_by"):
+            if incident.get("incident_id") == incident_id \
+            and username == incident.get("created_by"):
                 incident.update(new_update)
                 return incident
             elif incident.get("incident_id") == incident_id and not username:
                 incident.update(new_update)
                 return incident
-            elif incident.get("incident_id") == incident_id and username != incident.get("created_by"):
+            elif incident.get("incident_id") == incident_id \
+            and username != incident.get("created_by"):
                 return "non_author"
         return None
 
-    def delete(self, incidednts_list, incident_id, username):
+    @staticmethod
+    def delete(incidednts_list, incident_id, username):
+        """method with the logic to delete an incident in the incidents list"""
         for incident in incidednts_list:
-            if incident.get("incident_id") == incident_id and username == incident.get("created_by"):
+            if incident.get("incident_id") == incident_id \
+            and username == incident.get("created_by"):
                 incidednts_list.remove(incident)
                 return incident
-            elif incident.get("incident_id") == incident_id and username != incident.get("created_by"):
+            elif incident.get("incident_id") == incident_id \
+            and username != incident.get("created_by"):
                 return "non_author"
         return None
 
-    def my_get_incident(self, incidents_list, incident_id):
+    @staticmethod
+    def my_get_incident(incidents_list, incident_id):
+        """method for retrieving an incident from the incidents list"""
         for incident in incidents_list:
             if incident.get("incident_id") == incident_id:
                 return incident
         return None
 
     def delete_incident(self, incident_id, keyword, username):
+        """helper method for deleting or updaing incident"""
         return self.get_or_delete(incident_id, keyword, "delete", username)
 
     def get_incident(self, incident_id, keyword):
+        """helper method for geing an incident"""
         return self.get_or_delete(incident_id, keyword, "get", None)
 
     def get_or_delete(self, incident_id, keyword, action_keyword, username):
+        """helper method for getting or deleting an incident"""
         if keyword == "redflag" and action_keyword == "delete":
             return self.delete(self.redflags_list, incident_id, username)
         elif keyword == "intervention" and action_keyword == "delete":
-            return self.delete(self.interventions_List, incident_id, username)
+            return self.delete(self.interventions_list, incident_id, username)
         elif keyword == "redflag" and action_keyword == "get":
             return self.my_get_incident(self.redflags_list, incident_id)
         else:
-            return self.my_get_incident(self.interventions_List, incident_id)
+            return self.my_get_incident(self.interventions_list, incident_id)
