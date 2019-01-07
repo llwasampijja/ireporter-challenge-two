@@ -39,7 +39,7 @@
     "/auth/register": {
       "post": {
         "tags": [
-          "authentication"
+          "Authentication"
         ],
         "summary": "Register user",
         "description": "Anyone can register on the system",
@@ -74,7 +74,7 @@
     "/auth/login": {
       "post": {
         "tags": [
-          "authentication"
+          "Authentication"
         ],
         "summary": "Logs user into the system",
         "description": "",
@@ -112,7 +112,7 @@
     "/red-flags": {
       "post": {
         "tags": [
-          "red-flag"
+          "Red-flag"
         ],
         "summary": "Add a new red-flag",
         "description": "Post a new red-flag",
@@ -159,7 +159,7 @@
       },
       "get": {
         "tags": [
-          "red-flag"
+          "Red-flag"
         ],
         "summary": "All redflags",
         "description": "Get a list of all redflags.",
@@ -191,7 +191,7 @@
     "/red-flags/{redflag_id}": {
       "get": {
         "tags": [
-          "red-flag"
+          "Red-flag"
         ],
         "summary": "Get a red-flag by its Id",
         "description": "Returns a single red-flag",
@@ -231,7 +231,7 @@
       },
       "delete": {
         "tags": [
-          "red-flag"
+          "Red-flag"
         ],
         "summary": "Deletes a red-flag",
         "description": "",
@@ -273,7 +273,7 @@
     "/red-flags/{redflag_id}/location": {
       "patch": {
         "tags": [
-          "red-flag"
+          "Red-flag"
         ],
         "summary": "Update the red-flag's location",
         "description": "",
@@ -330,7 +330,7 @@
     "/red-flags/{redflag_id}/status": {
       "patch": {
         "tags": [
-          "red-flag"
+          "Red-flag"
         ],
         "summary": "Update the red-flag's status",
         "description": "",
@@ -387,7 +387,7 @@
     "/interventions": {
       "post": {
         "tags": [
-          "intervention"
+          "Intervention"
         ],
         "summary": "Add a new intervention",
         "description": "Post a new intervention",
@@ -434,7 +434,7 @@
       },
       "get": {
         "tags": [
-          "intervention"
+          "Intervention"
         ],
         "summary": "All interventions",
         "description": "Get a list of all interventions.",
@@ -466,7 +466,7 @@
     "/interventions/{intervention_id}": {
       "get": {
         "tags": [
-          "intervention"
+          "Intervention"
         ],
         "summary": "Get an intervention by its Id",
         "description": "Returns a single intervention",
@@ -506,7 +506,7 @@
       },
       "delete": {
         "tags": [
-          "intervention"
+          "Intervention"
         ],
         "summary": "Deletes an intervention",
         "description": "",
@@ -548,7 +548,7 @@
     "/interventions/{intervention_id}/location": {
       "patch": {
         "tags": [
-          "intervention"
+          "Intervention"
         ],
         "summary": "Update the intervention's location",
         "description": "",
@@ -605,7 +605,7 @@
     "/interventions/{intervention_id}/status": {
       "patch": {
         "tags": [
-          "intervention"
+          "Intervention"
         ],
         "summary": "Update the intervention's status",
         "description": "",
@@ -662,7 +662,7 @@
     "/users": {
       "get": {
         "tags": [
-          "user"
+          "User"
         ],
         "summary": "Get all users on the system",
         "description": "This can only be done by the administrator.",
@@ -682,7 +682,7 @@
     "/users/{user_id}": {
       "patch": {
         "tags": [
-          "user"
+          "User"
         ],
         "summary": "Edit the admin rights of the user",
         "description": "This feature is only available to administrators and they can only edit the 'is_admin' field of a user",
