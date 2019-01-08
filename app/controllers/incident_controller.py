@@ -59,9 +59,9 @@ class IncidentController:
 
         if self.validator.incident_duplicate(comment, get_incidents_instance):
             return Response(json.dumps({
-                "status": 400,
+                "status": 403,
                 "message": RESP_INCIDENT_DUPLICATE
-            }), content_type="application/json", status=400)
+            }), content_type="application/json", status=403)
 
         # if self.validator.check_status_value(status):
         #     return self.response_unaccepted("status")
@@ -133,7 +133,7 @@ class IncidentController:
         return self.delete_update(
             update_incident_instance,
             RESP_UNAUTHORIZED_EDIT,
-            self.response_sumission_success(
+            self.response_submission_success(
                 update_incident_instance,
                 "update"))
 
@@ -155,7 +155,7 @@ class IncidentController:
         if update_incident_instance is None:
             return self.response_unaccepted("none")
         else:
-            return self.response_sumission_success(update_incident_instance,
+            return self.response_submission_success(update_incident_instance,
                                                    "incident_status")
 
     def delete_incident(self, incident_id, keyword, username):
@@ -165,7 +165,7 @@ class IncidentController:
         return self.delete_update(
             delete_incident_instance,
             RESP_UNAUTHORIZED_DELETE,
-            self.response_sumission_success(
+            self.response_submission_success(
                 delete_incident_instance,
                 "delete"))
 
@@ -203,7 +203,7 @@ class IncidentController:
         }), content_type="application/json", status=status_code)
 
     @staticmethod
-    def response_sumission_success(return_data, keyword):
+    def response_submission_success(return_data, keyword):
         """refactored method for returning right response for successful delete and update"""
         if keyword == "delete":
             message = RESP_INCIDENT_DELETE_SUCCESS

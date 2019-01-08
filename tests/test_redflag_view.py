@@ -33,7 +33,7 @@ class TestRedflagView(unittest.TestCase):
         test_user = {
             "firstname": "Dall",
             "lastname": "Kased",
-            "othernames": "eddy2",
+            "othernames": "eddy",
             "email": "dall@bolon.com",
             "phonenumber": "0775961857",
             "username": "dallkased",

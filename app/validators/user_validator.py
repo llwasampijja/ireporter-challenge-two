@@ -68,7 +68,15 @@ class UserValidator():
     @staticmethod
     def invalid_user(request_info):
         """method checks if a user has all and only the acceptable fields"""
-        valid_user_properties = [
+        minimum_user_properties = (
+            "firstname",
+            "lastname",
+            "email",
+            "phonenumber",
+            "username",
+            "password"
+        )
+        all_user_fields = (
             "firstname",
             "lastname",
             "othernames",
@@ -76,8 +84,29 @@ class UserValidator():
             "phonenumber",
             "username",
             "password"
-        ]
-        if any((item not in valid_user_properties) for item in request_info) \
-                or len(request_info) != 7:
+            )
+
+        if any(item not in request_info for item in minimum_user_properties)\
+        or any(item not in all_user_fields for item in request_info):#\
+            return True
+        return False
+
+    def invalid_othername(self, request_info):
+        word_letters = []
+        if "othernames" in request_info \
+        and self.invalid_name(request_info.get("othernames")):
+            return True
+        return False
+
+    @staticmethod
+    def invalid_username(username):
+        word_letters = re.sub('[^a-zA-Z-0-9]+', '', str(username))
+        if any(item.isalpha() for item in word_letters):
+            return False
+        return True
+
+    @staticmethod
+    def invalid_name(name):
+        if any(not item.isalpha() for item in str(name)):
             return True
         return False

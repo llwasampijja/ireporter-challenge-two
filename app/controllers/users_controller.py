@@ -51,19 +51,22 @@ class UsersController():
         user_id = self.my_validator.create_id(
             self.usersdata.get_users(), "user_id")
 
-        user_properties = [firstname, lastname, othernames, username]
+        user_properties = [firstname, lastname, username]
 
-        if self.user_validator.invalid_user(request_info) or any(
-                self.my_validator.check_str_datatype(item) for item in user_properties):
+        if self.user_validator.invalid_user(request_info) \
+        or any(self.my_validator.check_str_datatype(item) for item in user_properties)\
+        or self.user_validator.invalid_othername(request_info)\
+        or any(self.user_validator.invalid_name(item) for item in (firstname, lastname))\
+        or self.user_validator.invalid_username(username):
             return Response(json.dumps({
                 "status": 400,
                 "message": RESP_INVALID_USER_INPUT
             }), content_type="application/json", status=400)
 
-        if self.user_validator.valid_email(email) or \
-            self.user_validator.validate_phone_numbers(str(phonenumber)) or \
-            not self.user_validator.valid_password(password) or\
-            any(self.my_validator.check_empty_string(item) for item in user_properties):
+        if self.user_validator.valid_email(email)\
+        or self.user_validator.validate_phone_numbers(str(phonenumber))\
+        or not self.user_validator.valid_password(password)\
+        or any(self.my_validator.check_empty_string(item) for item in (firstname, lastname)):#user_properties):
             return Response(json.dumps({
                 "status": 400,
                 "message": RESP_EMPTY_INVALID_EMAIL_PASSWORD_PHONE

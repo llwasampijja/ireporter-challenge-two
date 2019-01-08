@@ -31,7 +31,7 @@ class TestInterventionView(unittest.TestCase):
         test_user = {
             "firstname": "Dall",
             "lastname": "Kased",
-            "othernames": "eddy2",
+            "othernames": "eddy",
             "email": "dall@bolon.com",
             "phonenumber": "0775961753",
             "username": "dallkased",
@@ -112,7 +112,7 @@ class TestInterventionView(unittest.TestCase):
             content_type="application/json"
         )
         data = json.loads(response.data.decode())
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 403)
         self.assertEqual(data.get("message"),
                          RESP_INCIDENT_DUPLICATE)
 
