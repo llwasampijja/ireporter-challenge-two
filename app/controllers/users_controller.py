@@ -10,17 +10,19 @@ from app.models.user_model import User, UsersData
 from app.validators.general_validator import GeneralValidator
 from app.validators.user_validator import UserValidator
 from app.utilitiez.static_strings import (
-    RESP_INVALID_USER_INPUT,
-    RESP_REGISTRATION_SUCCESS,
-    RESP_ALREADY_TAKEN,
-    RESP_EMPTY_INVALID_EMAIL_PASSWORD_PHONE,
-    RESP_ROLE_INVALID,
-    RESP_USER_NOT_FOUND,
-    RESP_ADMIN_RIGHTS_SUCCESS,
-    RESP_ROLE_NO_RIGHTS,
-    RESP_AUTH_LOGIN_FAILED,
-    RESP_AUTH_LOGIN_SUCCESS,
-    RESP_EMPTY_STRING)
+    RESP_SUCCESS_MSG_REGISTRATION,
+    RESP_SUCCESS_MSG_ADMIN_RIGHTS,
+    RESP_SUCCESS_MSG_AUTH_LOGIN,
+
+    RESP_ERROR_SIGNUP_FAIL_INVALID_DATA,
+    RESP_ERROR_SIGNUP_FAIL_WRONG_FORMAT,
+    RESP_ERROR_SIGNUP_FAIL_USER_EXISTS,
+    RESP_ERROR_POST_EMPTY_DATA,
+    RESP_ERROR_LOGIN_FAILED,
+    RESP_ERROR_UPDATE_ROLE_FAILED,
+    RESP_ERROR_INVALID_ROLE,
+    RESP_ERROR_USER_NOT_FOUND
+)
 
 
 class UsersController():
@@ -58,27 +60,17 @@ class UsersController():
         or self.user_validator.invalid_othername(request_info)\
         or any(self.user_validator.invalid_name(item) for item in (firstname, lastname))\
         or self.user_validator.invalid_username(username):
-            return Response(json.dumps({
-                "status": 400,
-                "message": RESP_INVALID_USER_INPUT
-            }), content_type="application/json", status=400)
+            return RESP_ERROR_SIGNUP_FAIL_INVALID_DATA
 
         if self.user_validator.valid_email(email)\
         or self.user_validator.validate_phone_numbers(str(phonenumber))\
-        or not self.user_validator.valid_password(password)\
-        or any(self.my_validator.check_empty_string(item) for item in (firstname, lastname)):#user_properties):
-            return Response(json.dumps({
-                "status": 400,
-                "message": RESP_EMPTY_INVALID_EMAIL_PASSWORD_PHONE
-            }), content_type="application/json", status=400)
+        or not self.user_validator.valid_password(password):
+            return RESP_ERROR_SIGNUP_FAIL_WRONG_FORMAT
 
         if self.user_validator.username_in_db(username, self.usersdata.get_users())\
             or self.user_validator.email_in_db(email, self.usersdata.get_users())\
             or self.user_validator.phonenumber_in_db(phonenumber, self.usersdata.get_users()):
-            return Response(json.dumps({
-                "status": 400,
-                "message": RESP_ALREADY_TAKEN
-            }), content_type="application/json", status=400)
+            return RESP_ERROR_SIGNUP_FAIL_USER_EXISTS
 
         hashed_password = hashlib.sha224(b"{}").hexdigest().format(password)
 
@@ -101,17 +93,14 @@ class UsersController():
         return Response(json.dumps({
             "status": 201,
             "data": [newuser_dict],
-            "message": RESP_REGISTRATION_SUCCESS
+            "message": RESP_SUCCESS_MSG_REGISTRATION
         }), content_type="application/json", status=201)
 
     def signin(self, request_info):
         """method for signing in a user"""
         for login_key, login_val in request_info.items():
             if self.my_validator.check_empty_string(login_val):
-                return Response(json.dumps({
-                    "status": 400,
-                    "message": RESP_EMPTY_STRING
-                }), content_type="application/json", status=400)
+                return RESP_ERROR_POST_EMPTY_DATA
 
         username = request_info.get("username")
         hashed_password = hashlib.sha224(
@@ -145,40 +134,30 @@ class UsersController():
                         }
                     ],
                     "access_token": access_token,
-                    "message": RESP_AUTH_LOGIN_SUCCESS
+                    "message": RESP_SUCCESS_MSG_AUTH_LOGIN
                 }), content_type="application/json", status=201)
                 response.set_cookie("username", user.get("username"))
                 return response
         # else:
-        return Response(json.dumps({
-            "status": 403,
-            "message": RESP_AUTH_LOGIN_FAILED
-        }), content_type="application/json", status=403)
+        return RESP_ERROR_LOGIN_FAILED
 
     def update_user_role(self, user_id, request_info):
         """method for updating a user's role"""
         if request_info is None or "is_admin" not in request_info or len(
                 request_info) != 1 or user_id == 1:
-            return Response(json.dumps({
-                "message": RESP_ROLE_NO_RIGHTS
-            }), content_type="application/json", status=401)
+            return RESP_ERROR_UPDATE_ROLE_FAILED
 
         if self.user_validator.invalid_admin_state(
                 request_info.get("is_admin")):
-            return Response(json.dumps({
-                "message": RESP_ROLE_INVALID
-            }), content_type="application/json", status=400)
+            return RESP_ERROR_INVALID_ROLE
 
         user_modified = self.usersdata.update_user(user_id, request_info)
 
         if user_modified is None:
-            return Response(json.dumps({
-                "status": 404,
-                "message": RESP_USER_NOT_FOUND
-            }), content_type="application/json", status=404)
+            return RESP_ERROR_USER_NOT_FOUND
         else:
             return Response(json.dumps({
                 "status": 201,
                 "data": [user_modified],
-                "message": RESP_ADMIN_RIGHTS_SUCCESS
+                "message": RESP_SUCCESS_MSG_ADMIN_RIGHTS
             }), content_type="application/json", status=201)

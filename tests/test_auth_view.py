@@ -7,12 +7,15 @@ from app import create_app
 from app.utilitiez.static_strings import (
     URL_REGISTER,
     URL_LOGIN,
-    RESP_REGISTRATION_SUCCESS,
-    RESP_REGISTRATION_FAILED,
-    RESP_EMPTY_INVALID_EMAIL_PASSWORD_PHONE,
-    RESP_INVALID_USER_INPUT,
-    RESP_ALREADY_TAKEN,
-    RESP_EMPTY_STRING
+
+    RESP_SUCCESS_MSG_REGISTRATION,
+    RESP_SUCCESS_MSG_AUTH_LOGIN,
+
+    RESP_ERROR_MSG_REGISTRATION_FAILED,
+    RESP_ERROR_MSG_SIGNUP,
+    RESP_ERROR_MSG_SIGNUP_FAIL_WRONG_FORMAT,
+    RESP_ERROR_MSG_SIGNUP_FAIL_USER_EXISTS,
+    RESP_ERROR_MSG_EMPTY_STRING
 )
 
 
@@ -39,7 +42,7 @@ class TestAuthView(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
             json.loads(response.data)["message"],
-            RESP_EMPTY_INVALID_EMAIL_PASSWORD_PHONE
+            RESP_ERROR_MSG_SIGNUP_FAIL_WRONG_FORMAT
         )
 
         #test register an invalid user with less fields
@@ -53,7 +56,7 @@ class TestAuthView(unittest.TestCase):
         }), content_type="application/json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.data).get(
-            "message"), RESP_INVALID_USER_INPUT)
+            "message"), RESP_ERROR_MSG_SIGNUP)
 
         # test register with a field which isnt supposed to be their
         response = self.client.post(URL_REGISTER, data=json.dumps({
@@ -67,7 +70,7 @@ class TestAuthView(unittest.TestCase):
         }), content_type="application/json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.data).get(
-            "message"), RESP_INVALID_USER_INPUT)
+            "message"), RESP_ERROR_MSG_SIGNUP)
 
         # test register with more fields than necessary
         response = self.client.post(URL_REGISTER, data=json.dumps({
@@ -82,7 +85,7 @@ class TestAuthView(unittest.TestCase):
         }), content_type="application/json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.data).get(
-            "message"), RESP_INVALID_USER_INPUT)
+            "message"), RESP_ERROR_MSG_SIGNUP)
 
 
 
@@ -98,7 +101,7 @@ class TestAuthView(unittest.TestCase):
         }), content_type="application/json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.data).get(
-            "message"), RESP_INVALID_USER_INPUT)
+            "message"), RESP_ERROR_MSG_SIGNUP)
 
         # test register user with an invalid email
         response = self.client.post(URL_REGISTER, data=json.dumps({
@@ -112,7 +115,7 @@ class TestAuthView(unittest.TestCase):
         }), content_type="application/json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.data).get(
-            "message"), RESP_EMPTY_INVALID_EMAIL_PASSWORD_PHONE)
+            "message"), RESP_ERROR_MSG_SIGNUP_FAIL_WRONG_FORMAT)
 
         # test register user with an invalid phonenumber
         response = self.client.post(URL_REGISTER, data=json.dumps({
@@ -126,7 +129,7 @@ class TestAuthView(unittest.TestCase):
         }), content_type="application/json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.data).get(
-            "message"), RESP_EMPTY_INVALID_EMAIL_PASSWORD_PHONE)
+            "message"), RESP_ERROR_MSG_SIGNUP_FAIL_WRONG_FORMAT)
 
         # test register with an invalid password
         response = self.client.post(URL_REGISTER, data=json.dumps({
@@ -140,9 +143,9 @@ class TestAuthView(unittest.TestCase):
         }), content_type="application/json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.data).get(
-            "message"), RESP_EMPTY_INVALID_EMAIL_PASSWORD_PHONE)
+            "message"), RESP_ERROR_MSG_SIGNUP_FAIL_WRONG_FORMAT)
 
-        # test register with an invalid other name
+        # test register with an invalid othername
         response = self.client.post(URL_REGISTER, data=json.dumps({
             "firstname": "ann",
             "lastname": "pjoth",
@@ -154,7 +157,7 @@ class TestAuthView(unittest.TestCase):
         }), content_type="application/json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.data).get(
-            "message"), RESP_INVALID_USER_INPUT)
+            "message"), RESP_ERROR_MSG_SIGNUP)
 
         # test register with an invalid firstname
         response = self.client.post(URL_REGISTER, data=json.dumps({
@@ -168,8 +171,8 @@ class TestAuthView(unittest.TestCase):
         }), content_type="application/json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.data).get(
-            "message"), RESP_INVALID_USER_INPUT)
-        
+            "message"), RESP_ERROR_MSG_SIGNUP)
+
         # test register with an invalid username
         response = self.client.post(URL_REGISTER, data=json.dumps({
             "firstname": "edward",
@@ -182,7 +185,7 @@ class TestAuthView(unittest.TestCase):
         }), content_type="application/json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.data).get(
-            "message"), RESP_INVALID_USER_INPUT)
+            "message"), RESP_ERROR_MSG_SIGNUP)
 
         # test register user successifully
         response = self.client.post(URL_REGISTER, data=json.dumps({
@@ -196,7 +199,7 @@ class TestAuthView(unittest.TestCase):
         }), content_type="application/json")
         self.assertEqual(response.status_code, 201)
         self.assertEqual(json.loads(response.data).get(
-            "message"), RESP_REGISTRATION_SUCCESS)
+            "message"), RESP_SUCCESS_MSG_REGISTRATION)
 
         # test register user successifully without othernames
         response = self.client.post(URL_REGISTER, data=json.dumps({
@@ -209,7 +212,7 @@ class TestAuthView(unittest.TestCase):
         }), content_type="application/json")
         self.assertEqual(response.status_code, 201)
         self.assertEqual(json.loads(response.data).get(
-            "message"), RESP_REGISTRATION_SUCCESS)
+            "message"), RESP_SUCCESS_MSG_REGISTRATION)
 
         # test register user with username already taken
         response = self.client.post(URL_REGISTER, data=json.dumps({
@@ -223,7 +226,7 @@ class TestAuthView(unittest.TestCase):
         }), content_type="application/json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.data).get(
-            "message"), RESP_ALREADY_TAKEN)
+            "message"), RESP_ERROR_MSG_SIGNUP_FAIL_USER_EXISTS)
 
         # test register user with email already taken
         response = self.client.post(URL_REGISTER, data=json.dumps({
@@ -237,7 +240,7 @@ class TestAuthView(unittest.TestCase):
         }), content_type="application/json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.data).get(
-            "message"), RESP_ALREADY_TAKEN)
+            "message"), RESP_ERROR_MSG_SIGNUP_FAIL_USER_EXISTS)
 
         # test register user with phone already taken
         response = self.client.post(URL_REGISTER, data=json.dumps({
@@ -251,7 +254,7 @@ class TestAuthView(unittest.TestCase):
         }), content_type="application/json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.data).get(
-            "message"), RESP_ALREADY_TAKEN)
+            "message"), RESP_ERROR_MSG_SIGNUP_FAIL_USER_EXISTS)
 
     def test_signin(self):
         """unit tests for signing in"""
@@ -263,7 +266,7 @@ class TestAuthView(unittest.TestCase):
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 403)
         self.assertEqual(response_data.get("message"),
-                         RESP_REGISTRATION_FAILED)
+                         RESP_ERROR_MSG_REGISTRATION_FAILED)
 
         # test sign in with an empty field
         response = self.client.post(URL_LOGIN, data=json.dumps({
@@ -272,4 +275,13 @@ class TestAuthView(unittest.TestCase):
         }), content_type="application/json")
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response_data.get("message"), RESP_EMPTY_STRING)
+        self.assertEqual(response_data.get("message"), RESP_ERROR_MSG_EMPTY_STRING)
+
+        # test sign in successfully
+        response = self.client.post(URL_LOGIN, data=json.dumps({
+            "username": "allengarcia",
+            "password": "passworD1#"
+        }), content_type="application/json")
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(json.loads(response.data).get(
+            "message"), RESP_SUCCESS_MSG_AUTH_LOGIN)

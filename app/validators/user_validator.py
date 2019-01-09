@@ -92,7 +92,8 @@ class UserValidator():
         return False
 
     def invalid_othername(self, request_info):
-        word_letters = []
+        """method checks if othernames is provided by the user and if \
+        provided it checks if it is a valid name"""
         if "othernames" in request_info \
         and self.invalid_name(request_info.get("othernames")):
             return True
@@ -100,6 +101,7 @@ class UserValidator():
 
     @staticmethod
     def invalid_username(username):
+        """method checks if a provided username is valid"""
         word_letters = re.sub('[^a-zA-Z-0-9]+', '', str(username))
         if any(item.isalpha() for item in word_letters):
             return False
@@ -107,6 +109,7 @@ class UserValidator():
 
     @staticmethod
     def invalid_name(name):
+        """method checks if a provided name is valid"""
         if any(not item.isalpha() for item in str(name)):
             return True
         return False

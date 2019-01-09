@@ -9,14 +9,19 @@ from flask import json
 from app import create_app
 from app.utilitiez.static_strings import (
     URL_LOGIN,
-    RESP_INCIDENT_DUPLICATE,
-    RESP_INCIDENT_UPDATE_SUCCESS,
-    RESP_INCIDENT_DELETE_SUCCESS,
-    RESP_INCIDENT_STATUS_UPDATE_SUCCESS,
-    RESP_INCIDENT_NOT_FOUND, URL_REGISTER,
-    URL_INTERVENTIONS, RESP_EMPTY_STRING,
-    RESP_CREATE_INCIDENT_SUCCESS,
-    RESP_INVALID_INCIDENT_INPUT
+    URL_REGISTER,
+    URL_INTERVENTIONS,
+
+    RESP_SUCCESS_MSG_CREATE_INCIDENT,
+    RESP_SUCCESS_MSG_INCIDENT_UPDATE,
+    RESP_SUCCESS_MSG_INCIDENT_DELETE,
+    RESP_SUCCESS_MSG_INCIDENT_STATUS_UPDATE,
+
+    RESP_ERROR_MSG_POST_INCIDENT_WRONG_DATA,
+    RESP_ERROR_MSG_UDATE_WRONG_LOCATION,
+    RESP_ERROR_MSG_INCIDENT_NOT_FOUND,
+    RESP_ERROR_MSG_INCIDENT_DUPLICATE,
+    RESP_ERROR_MSG_EMPTY_STRING
 )
 
 
@@ -96,7 +101,7 @@ class TestInterventionView(unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 201)
         self.assertEqual(data.get("message"),
-                         RESP_CREATE_INCIDENT_SUCCESS)
+                         RESP_SUCCESS_MSG_CREATE_INCIDENT)
 
         # Test for creating a duplicate intervention
         response = self.client.post(
@@ -114,7 +119,7 @@ class TestInterventionView(unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 403)
         self.assertEqual(data.get("message"),
-                         RESP_INCIDENT_DUPLICATE)
+                         RESP_ERROR_MSG_INCIDENT_DUPLICATE)
 
         # Test for creating an invalid intervention missing one required parameter
         response = self.client.post(
@@ -130,7 +135,7 @@ class TestInterventionView(unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data.get("message"),
-                         RESP_INVALID_INCIDENT_INPUT)
+                         RESP_ERROR_MSG_POST_INCIDENT_WRONG_DATA)
 
         # Test for creating an invalid intervention with more parameters than needed
         response = self.client.post(
@@ -149,7 +154,7 @@ class TestInterventionView(unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data.get("message"),
-                         RESP_INVALID_INCIDENT_INPUT)
+                         RESP_ERROR_MSG_POST_INCIDENT_WRONG_DATA)
 
         #Test for creating an invalid intervention with string of vidoes instead of list
         response = self.client.post(
@@ -167,7 +172,7 @@ class TestInterventionView(unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data.get("message"),
-                         RESP_INVALID_INCIDENT_INPUT)
+                         RESP_ERROR_MSG_POST_INCIDENT_WRONG_DATA)
 
         # Test for creating an invalid intervention with an empty string
         response = self.client.post(
@@ -185,7 +190,7 @@ class TestInterventionView(unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data.get("message"),
-                         RESP_EMPTY_STRING)
+                         RESP_ERROR_MSG_EMPTY_STRING)
 
     def test_get_interventions(self):
         """unit test for getting all interventions"""
@@ -217,7 +222,7 @@ class TestInterventionView(unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 404)
         self.assertEqual(data.get("message"),
-                         RESP_INCIDENT_NOT_FOUND)
+                         RESP_ERROR_MSG_INCIDENT_NOT_FOUND)
 
     def test_update_intervention(self):
         """unit tests for updating the location of an intervention"""
@@ -243,7 +248,7 @@ class TestInterventionView(unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 404)
         self.assertEqual(data.get("message"),
-                         RESP_INCIDENT_NOT_FOUND)
+                         RESP_ERROR_MSG_INCIDENT_NOT_FOUND)
 
         # Test update intervention with the right id
         response = self.client.patch(
@@ -256,7 +261,7 @@ class TestInterventionView(unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 201)
         self.assertEqual(data.get("message"),
-                         RESP_INCIDENT_UPDATE_SUCCESS)
+                         RESP_SUCCESS_MSG_INCIDENT_UPDATE)
 
         # Test update intervention with empty string
         new_location = {"location": " "}
@@ -269,7 +274,7 @@ class TestInterventionView(unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data.get("message"),
-                         RESP_EMPTY_STRING)
+                         RESP_ERROR_MSG_EMPTY_STRING)
 
         # Test update intervention with wrong data type
         new_location = {"location": 67}
@@ -282,7 +287,7 @@ class TestInterventionView(unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data.get("message"),
-                         RESP_INVALID_INCIDENT_INPUT)
+                         RESP_ERROR_MSG_UDATE_WRONG_LOCATION)
 
     def test_update_intervention_status(self):
         """unit test for uodating the status of an intervention incident"""
@@ -305,7 +310,7 @@ class TestInterventionView(unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 201)
         self.assertEqual(data.get("message"),
-                         RESP_INCIDENT_STATUS_UPDATE_SUCCESS)
+                         RESP_SUCCESS_MSG_INCIDENT_STATUS_UPDATE)
 
     def test_delete_intervention(self):
         """unit tests for deleting an instance"""
@@ -319,7 +324,7 @@ class TestInterventionView(unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 404)
         self.assertEqual(data.get("message"),
-                         RESP_INCIDENT_NOT_FOUND)
+                         RESP_ERROR_MSG_INCIDENT_NOT_FOUND)
 
         # Test delete intervention with available id
         response = self.client.delete(
@@ -330,4 +335,4 @@ class TestInterventionView(unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 201)
         self.assertEqual(data.get("message"),
-                         RESP_INCIDENT_DELETE_SUCCESS)
+                         RESP_SUCCESS_MSG_INCIDENT_DELETE)

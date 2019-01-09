@@ -6,21 +6,26 @@ from flask import json
 
 from app import create_app
 from app.utilitiez.static_strings import (
-    RESP_UNAUTHORIZED_VIEW,
-    RESP_INCIDENT_WROND_STATUS,
-    RESP_USER_STATUS_NORIGHTS,
-    RESP_INCIDENT_STATUS_UPDATE_SUCCESS,
-    RESP_UNAUTHORIZED_DELETE,
-    RESP_INCIDENT_DELETE_SUCCESS,
-    RESP_INCIDENT_UPDATE_SUCCESS,
-    RESP_ADMIN_ONLY,
-    RESP_INCIDENT_NOT_FOUND,
     URL_REDFLAGS,
-    RESP_INVALID_INCIDENT_INPUT,
-    RESP_UNAUTHORIZED_EDIT,
-    URL_LOGIN, URL_REGISTER,
-    RESP_EMPTY_STRING,
-    RESP_CREATE_INCIDENT_SUCCESS)
+    URL_LOGIN,
+    URL_REGISTER,
+
+    RESP_SUCCESS_MSG_INCIDENT_STATUS_UPDATE,
+    RESP_SUCCESS_MSG_INCIDENT_DELETE,
+    RESP_SUCCESS_MSG_INCIDENT_UPDATE,
+    RESP_SUCCESS_MSG_CREATE_INCIDENT,
+
+    RESP_ERROR_MSG_UNAUTHORIZED_EDIT,
+    RESP_ERROR_MSG_UNAUTHORIZED_VIEW,
+    RESP_ERROR_MSG_USER_STATUS_NORIGHTS,
+    RESP_EEROR_MSG_UNAUTHORIZED_DELETE,
+    RESP_ERROR_MSG_UNACCEPTABLE_INPUT,
+    RESP_ERROR_MSG_POST_INCIDENT_WRONG_DATA,
+    RESP_ERROR_MSG_UDATE_WRONG_LOCATION,
+    RESP_ERROR_MSG_UPDATE_STATUS,
+    RESP_ERROR_MSG_INCIDENT_NOT_FOUND,
+    RESP_ERROR_MSG_EMPTY_STRING
+)
 
 
 class TestRedflagView(unittest.TestCase):
@@ -67,9 +72,8 @@ class TestRedflagView(unittest.TestCase):
             content_type="application/json"
         )
         self.assertEqual(response.status_code, 200)
-
+        # post a redflag to ensure that the list is not empty when one
         # item is deleted during testing for deleting
-        # jwt_token = json.loads(self.login_response.data)["access_token"]
         self.client.post(
             URL_REDFLAGS,
             headers=dict(Authorization='Bearer ' + jwt_token),
@@ -85,21 +89,8 @@ class TestRedflagView(unittest.TestCase):
 
     def test_create_redflag(self):
         """unit tests for creating redflags"""
-        # redflag to ensure that the list is not empty when one
-        # # item is deleted during testing for deleting
+        
         jwt_token = json.loads(self.login_response.data)["access_token"]
-        # self.client.post(
-        #     URL_REDFLAGS,
-        #     headers=dict(Authorization='Bearer ' + jwt_token),
-        #     data=json.dumps({
-        #         "location": "34, -115",
-        #         "videos": ["Video url"],
-        #         "images": ["images urls"],
-        #         "title": "Cop taking a bribe",
-        #         "comment": "He was caught red handed 1"
-        #     }),
-        #     content_type="application/json"
-        # )
 
         # Test for creating a valid red-flag
         response = self.client.post(
@@ -116,7 +107,7 @@ class TestRedflagView(unittest.TestCase):
         )
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(data.get("message"), RESP_CREATE_INCIDENT_SUCCESS)
+        self.assertEqual(data.get("message"), RESP_SUCCESS_MSG_CREATE_INCIDENT)
 
         # Test for creating an invalid red-flag missing one required parameter
         response = self.client.post(
@@ -132,7 +123,7 @@ class TestRedflagView(unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data.get("message"),
-                         RESP_INVALID_INCIDENT_INPUT)
+                         RESP_ERROR_MSG_POST_INCIDENT_WRONG_DATA)
 
         # Test for creating an invalid red-flag with more parameters than needed
         response = self.client.post(
@@ -151,7 +142,7 @@ class TestRedflagView(unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data.get("message"),
-                         RESP_INVALID_INCIDENT_INPUT)
+                         RESP_ERROR_MSG_POST_INCIDENT_WRONG_DATA)
 
         # Test for creating an invalid red-flag with string of vidoes instead of list
         response = self.client.post(
@@ -169,7 +160,7 @@ class TestRedflagView(unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data.get("message"),
-                         RESP_INVALID_INCIDENT_INPUT)
+                         RESP_ERROR_MSG_POST_INCIDENT_WRONG_DATA)
 
         # Test for creating an invalid red-flag with an empty string
         response = self.client.post(
@@ -187,7 +178,7 @@ class TestRedflagView(unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data.get("message"),
-                         RESP_EMPTY_STRING)
+                         RESP_ERROR_MSG_EMPTY_STRING)
 
         # test add redflag with location with only one coordinate
         response = self.client.post(
@@ -204,7 +195,7 @@ class TestRedflagView(unittest.TestCase):
         )
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(data.get("message"), RESP_INVALID_INCIDENT_INPUT)
+        self.assertEqual(data.get("message"), RESP_ERROR_MSG_POST_INCIDENT_WRONG_DATA)
 
         # test add redflag with location with coordinate not in range
         response = self.client.post(
@@ -221,7 +212,7 @@ class TestRedflagView(unittest.TestCase):
         )
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(data.get("message"), RESP_INVALID_INCIDENT_INPUT)
+        self.assertEqual(data.get("message"), RESP_ERROR_MSG_POST_INCIDENT_WRONG_DATA)
 
         # test add redflag with location with coordinate not in range
         response = self.client.post(
@@ -238,7 +229,7 @@ class TestRedflagView(unittest.TestCase):
         )
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(data.get("message"), RESP_INVALID_INCIDENT_INPUT)
+        self.assertEqual(data.get("message"), RESP_ERROR_MSG_POST_INCIDENT_WRONG_DATA)
 
     def test_get_redflags(self):
         """unit tests for getting all redflags"""
@@ -268,7 +259,7 @@ class TestRedflagView(unittest.TestCase):
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 403)
         self.assertEqual(response_data.get("message"),
-                         RESP_UNAUTHORIZED_VIEW)
+                         RESP_ERROR_MSG_UNAUTHORIZED_VIEW)
 
     def test_get_redflag(self):
         """unit tests for getting red-flags"""
@@ -290,7 +281,7 @@ class TestRedflagView(unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 404)
         self.assertEqual(data.get("message"),
-                         RESP_INCIDENT_NOT_FOUND)
+                         RESP_ERROR_MSG_INCIDENT_NOT_FOUND)
 
     def test_update_redflag(self):
         """unit tests for updating a redflag's location"""
@@ -315,7 +306,7 @@ class TestRedflagView(unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 404)
         self.assertEqual(data.get("message"),
-                         RESP_INCIDENT_NOT_FOUND)
+                         RESP_ERROR_MSG_INCIDENT_NOT_FOUND)
 
         # Test update redflag with empty string
         response = self.client.patch(
@@ -327,7 +318,7 @@ class TestRedflagView(unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data.get("message"),
-                         RESP_EMPTY_STRING)
+                         RESP_ERROR_MSG_EMPTY_STRING)
 
         # Test update redflag with the wrong data type
         response = self.client.patch(
@@ -340,7 +331,7 @@ class TestRedflagView(unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data.get("message"),
-                         RESP_INVALID_INCIDENT_INPUT)
+                         RESP_ERROR_MSG_UDATE_WRONG_LOCATION)
 
         # test update redflag which one never created
         response = self.client.patch(
@@ -354,7 +345,7 @@ class TestRedflagView(unittest.TestCase):
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response_data.get("message"),
-                         RESP_UNAUTHORIZED_EDIT)
+                         RESP_ERROR_MSG_UNAUTHORIZED_EDIT)
 
         # test updated red-flag whose status isnt equal to
         # 'pending investigation'
@@ -368,22 +359,22 @@ class TestRedflagView(unittest.TestCase):
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response_data.get("message"),
-                         RESP_UNAUTHORIZED_EDIT)
+                         RESP_ERROR_MSG_UNAUTHORIZED_EDIT)
 
         # test update red-flag with fields other than location'
         response = self.client.patch(
             URL_REDFLAGS + "/3/location",
             headers=dict(Authorization='Bearer ' + jwt_token),
             data=json.dumps({
-                    "location": "1.500, 0.3000",
-                    "title": "no a chance"
-                }),
+                "location": "1.500, 0.3000",
+                "title": "no a chance"
+            }),
             content_type="application/json"
         )
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response_data.get("message"),
-                         RESP_INVALID_INCIDENT_INPUT)
+                         RESP_ERROR_MSG_UNACCEPTABLE_INPUT)
 
         # Test update redflag with the right id
         response = self.client.patch(
@@ -396,7 +387,7 @@ class TestRedflagView(unittest.TestCase):
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response_data.get("message"),
-                         RESP_INCIDENT_UPDATE_SUCCESS)
+                         RESP_SUCCESS_MSG_INCIDENT_UPDATE)
 
         # test update red-flag's status as a concerned citzen
         response = self.client.patch(
@@ -410,7 +401,7 @@ class TestRedflagView(unittest.TestCase):
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 403)
         self.assertEqual(response_data.get("message"),
-                         RESP_ADMIN_ONLY)
+                         RESP_ERROR_MSG_UNAUTHORIZED_VIEW)
 
     def test_delete_redflag(self):
         """unit tests for deleting a red-flag"""
@@ -424,7 +415,7 @@ class TestRedflagView(unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 404)
         self.assertEqual(data.get("message"),
-                         RESP_INCIDENT_NOT_FOUND)
+                         RESP_ERROR_MSG_INCIDENT_NOT_FOUND)
 
         # Test delete red-flag with unavailable id
         response = self.client.delete(
@@ -434,7 +425,7 @@ class TestRedflagView(unittest.TestCase):
         )
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(data.get("message"), RESP_INCIDENT_DELETE_SUCCESS)
+        self.assertEqual(data.get("message"), RESP_SUCCESS_MSG_INCIDENT_DELETE)
 
         # test delete a red-flag by a user who didn't create it
         response = self.client.delete(
@@ -445,7 +436,7 @@ class TestRedflagView(unittest.TestCase):
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response_data.get("message"),
-                         RESP_UNAUTHORIZED_DELETE)
+                         RESP_EEROR_MSG_UNAUTHORIZED_DELETE)
 
         # test delete red-flag whose status isnt equal to
         # 'pending investigation'
@@ -457,7 +448,7 @@ class TestRedflagView(unittest.TestCase):
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response_data.get("message"),
-                         RESP_UNAUTHORIZED_DELETE)
+                         RESP_EEROR_MSG_UNAUTHORIZED_DELETE)
 
     def test_update_redflag_status(self):
         """unit tests for updating status of redflag"""
@@ -478,7 +469,7 @@ class TestRedflagView(unittest.TestCase):
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response_data.get("message"),
-                         RESP_INCIDENT_STATUS_UPDATE_SUCCESS)
+                         RESP_SUCCESS_MSG_INCIDENT_STATUS_UPDATE)
 
         # test update red-flag with more than just the status as an admin
         response = self.client.patch(
@@ -494,7 +485,7 @@ class TestRedflagView(unittest.TestCase):
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response_data.get("message"),
-                         RESP_USER_STATUS_NORIGHTS)
+                         RESP_ERROR_MSG_USER_STATUS_NORIGHTS)
 
         # test update the status of an incident which doesn't exist
         response = self.client.patch(
@@ -507,7 +498,7 @@ class TestRedflagView(unittest.TestCase):
         )
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 404)
-        self.assertEqual(response_data.get("message"), RESP_INCIDENT_NOT_FOUND)
+        self.assertEqual(response_data.get("message"), RESP_ERROR_MSG_INCIDENT_NOT_FOUND)
 
         # test update redflag with a wrong status value
         response = self.client.patch(
@@ -521,7 +512,7 @@ class TestRedflagView(unittest.TestCase):
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response_data.get("message"),
-                         RESP_INCIDENT_WROND_STATUS)
+                         RESP_ERROR_MSG_UPDATE_STATUS)
 
         # test try to create an incident as an admin
         response = self.client.post(
@@ -539,4 +530,4 @@ class TestRedflagView(unittest.TestCase):
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 403)
         self.assertEqual(response_data.get("message"),
-                         RESP_UNAUTHORIZED_VIEW)
+                         RESP_ERROR_MSG_UNAUTHORIZED_VIEW)

@@ -8,9 +8,14 @@ from app import create_app
 from app.utilitiez.static_strings import (
     URL_LOGIN,
     URL_REGISTER,
-    RESP_INTERNAL_SERVER_ERROR,
     URL_BASE,
-    WELCOME_MSG
+
+    WELCOME_MSG,
+
+    RESP_ERROR_MSG_PAGE_NOT,
+    RESP_ERROR_MSG_METHOD_NOT_ALLOWED,
+    RESP_ERROR_MSG_BAD_REQUEST,
+    RESP_ERROR_MSG_INTERNAL_SERVER_ERROR
 )
 
 
@@ -32,7 +37,7 @@ class TestErroHandlersView(unittest.TestCase):
         response_data = json.loads(login_reponse.data.decode())
         self.assertEqual(login_reponse.status_code, 400)
         self.assertEqual(response_data.get("message"),
-                         "Bad request, check your input and try again")
+                         RESP_ERROR_MSG_BAD_REQUEST)
 
     def test_page_not_found(self):
         """unit test for page not found error"""
@@ -41,7 +46,7 @@ class TestErroHandlersView(unittest.TestCase):
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response_data.get("message"),
-                         "No such page on this site")
+                         RESP_ERROR_MSG_PAGE_NOT)
 
     def test_method_not_allowed(self):
         """unit test for method not allowed error"""
@@ -51,7 +56,8 @@ class TestErroHandlersView(unittest.TestCase):
         }), content_type="application/json")
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 405)
-        self.assertEqual(response_data.get("message"), "method not allowed")
+        self.assertEqual(response_data.get("message"),
+                         RESP_ERROR_MSG_METHOD_NOT_ALLOWED)
 
     def test_internal_server_error(self):
         """unit test for internal servel error"""
@@ -61,7 +67,7 @@ class TestErroHandlersView(unittest.TestCase):
         }), content_type="text")
         self.assertEqual(response.status_code, 500)
         self.assertEqual(json.loads(response.data).get(
-            "message"), RESP_INTERNAL_SERVER_ERROR)
+            "message"), RESP_ERROR_MSG_INTERNAL_SERVER_ERROR)
 
     def test_index_page(self):
         """unit test for success to index endpoint"""

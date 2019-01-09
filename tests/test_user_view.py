@@ -8,10 +8,12 @@ from app import create_app
 from app.utilitiez.static_strings import (
     URL_LOGIN,
     URL_USERS,
-    RESP_ADMIN_RIGHTS_SUCCESS,
-    RESP_ROLE_NO_RIGHTS,
-    RESP_ROLE_INVALID,
-    RESP_USER_NOT_FOUND
+
+    RESP_SUCCESS_MSG_ADMIN_RIGHTS,
+
+    RESP_ERROR_MSG_USER_STATUS_NORIGHTS,
+    RESP_ERROR_MSG_INVALID_ROLE,
+    RESP_ERROR_MSG_USER_NOT_FOUND
 )
 
 
@@ -51,7 +53,7 @@ class TestUserView(unittest.TestCase):
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response_data.get("message"),
-                         RESP_ADMIN_RIGHTS_SUCCESS)
+                         RESP_SUCCESS_MSG_ADMIN_RIGHTS)
 
         # test update user status with more fields than required
         response = self.client.patch(
@@ -65,7 +67,7 @@ class TestUserView(unittest.TestCase):
         )
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 401)
-        self.assertEqual(response_data.get("message"), RESP_ROLE_NO_RIGHTS)
+        self.assertEqual(response_data.get("message"), RESP_ERROR_MSG_USER_STATUS_NORIGHTS)
 
         # test update user's role with an invalid value
         response = self.client.patch(
@@ -78,7 +80,7 @@ class TestUserView(unittest.TestCase):
         )
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response_data.get("message"), RESP_ROLE_INVALID)
+        self.assertEqual(response_data.get("message"), RESP_ERROR_MSG_INVALID_ROLE)
 
         # test update a user who doesnt exist on the system
         response = self.client.patch(
@@ -91,7 +93,7 @@ class TestUserView(unittest.TestCase):
         )
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 404)
-        self.assertEqual(response_data.get("message"), RESP_USER_NOT_FOUND)
+        self.assertEqual(response_data.get("message"), RESP_ERROR_MSG_USER_NOT_FOUND)
 
         # test update a primary admin
         response = self.client.patch(
@@ -104,4 +106,4 @@ class TestUserView(unittest.TestCase):
         )
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 401)
-        self.assertEqual(response_data.get("message"), RESP_ROLE_NO_RIGHTS)
+        self.assertEqual(response_data.get("message"), RESP_ERROR_MSG_USER_STATUS_NORIGHTS)
