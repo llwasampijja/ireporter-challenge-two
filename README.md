@@ -38,7 +38,7 @@ This project is about a set of endpoints for the ireporter App. The data used is
 - [Documentation](#api-documentation)
 
 ## Project Planning
-Project planing and management was accomplished using PivotalTracker. You can find the PivotalTracker Board [here](https://www.pivotaltracker.com/n/projects/2232126 "iReporter on PivotalTracker")
+Project planning and management was accomplished using PivotalTracker. You can find this project's PivotalTracker Board [here](https://www.pivotaltracker.com/n/projects/2232126 "iReporter on PivotalTracker")
 
 ## Language and Tools Used
 ### Tools used include:
@@ -60,8 +60,8 @@ Project planing and management was accomplished using PivotalTracker. You can fi
 Head to the python's 0fficial [website](https://www.python.org) and download python3.
 After downloading it, double click the executable file and follow the prompts to install python on your machine.
 ##### Git Installation on Windows PC
-You also need to install git so as to be able to switch between the different branches of this project. Head to [Git ](https://git-scm.com/downloads "Official Git Download Site")  and the executable file.
-Double click the executable file to run the installer and follow the prompts to install it on your windows PC. The process of installing git installs two tools which you can use, that is, the Git Bash and Git GUI. For this project, you are going to use Git Bash for all the command-line prompt /terminal commands.
+You also need to install git so as to be able to switch between the different branches of this project. Head to [Git ](https://git-scm.com/downloads "Official Git Download Site")  and download the executable file.
+Double click the executable file to run the installer and follow the prompts to install it on your windows PC. The process of installing git on a windows PC installs two tools which you can use, that is, the Git Bash and Git GUI. For this project, you are going to use Git Bash for all the command-line prompt /terminal commands. (NB: It is recommended to use the Git bash tool so as to get yourself acquainted with the different git commandline commands.
 ##### Postman installation On Windows PC
 You will need to install postman (or any of its alternatives) so as to test the different endpoints in this application. You won’t be able to test the endpoints in the browser since they use other HTTP methods other than the “GET” method.
 Postman is available as a Google Chrome extention (getting outdated) and as a native application. Any one of the options you choose will work just fine.
@@ -74,12 +74,12 @@ Postman is available as a Google Chrome extention (getting outdated) and as a na
 
     This will copy the entire project onto your local machine. Project name should be “ireporter-challenge-two”
 - Navigate to the root folder of the project in git bash cmd using the command below.
-- 
+
     `cd ireporter-challenge-two`
 
 - Step 4: Switch to the "develop" branch using the command below.
 
-`git checkout feature`
+    `git checkout develop`
 
 ##### Set Up the Virtual Environment
 Inorder to set up the virtual environment, you need to install the python package called virtualenv using pip. Run the command below to install it.
@@ -105,27 +105,27 @@ On running that command, the application server will be launched and the URL to 
 #### Endpoints included
 |Endpoint|Endpoint Purpose|Allowed HTTP Method|Requirements|
 |---|---|---|---|
-| [/](https://ireporter-challenge-two.herokuapp.com/api/v1)  | Index Endpointr  |GET  | None  |
+| [/](https://ireporter-challenge-two.herokuapp.com/api/v1)  | Index Endpoint  |GET  | None  |
 | [/auth/register](https://ireporter-challenge-two.herokuapp.com/api/v1/auth/register)  | Register/signup a user  |POST  | firstname (String), lastname (String), othernames (String), email (String), phonenumber (String), username (String), password (String)  |
 | [/auth/login](https://ireporter-challenge-two.herokuapp.com/api/v1/auth/login)  | Login/sign-in a user  |POST, GET  | username (String), password (String)  |
 | [/red-flags](https://ireporter-challenge-two.herokuapp.com/api/v1/red-flags) | Create a red-flag  |POST  |	location (String), images ([String, String]), videos ([String, String]), title (String), comment (String) |
 | [/red-flags](https://ireporter-challenge-two.herokuapp.com/api/v1/red-flags)  | Get red-flags  |GET  | None |
 | [/red-flags/redflag_id](https://ireporter-challenge-two.herokuapp.com/api/v1/red-flags/3) | Get red-flag of the specified id  |GET  |None  |
-| [/red-flags/redflag_id/location](https://ireporter-challenge-two.herokuapp.com/api/v1/red-flags/3/location)  | Edit location of a red-flag of specicif id  |PATCH  |	location(String) |
-| [/red-flags/redflag_id/status](https://ireporter-challenge-two.herokuapp.com/api/v1/red-flags/3/status)  | Edit status of a red-flag of specific id  |PATCH  | status (String)  |
-| [/red-flags/redflag_id](https://ireporter-challenge-two.herokuapp.com/api/v1/red-flags/3)  | Delete a red-flag of specific id  |DELETE  |None  |
+| [/red-flags/redflag_id/location](https://ireporter-challenge-two.herokuapp.com/api/v1/red-flags/3/location)  | Edit location of a red-flag of the specified id  |PATCH  |	location(String) |
+| [/red-flags/redflag_id/status](https://ireporter-challenge-two.herokuapp.com/api/v1/red-flags/3/status)  | Edit status of a red-flag of the specified id  |PATCH  | status (String)  |
+| [/red-flags/redflag_id](https://ireporter-challenge-two.herokuapp.com/api/v1/red-flags/3)  | Delete a red-flag of the specified id  |DELETE  |None  |
 | [/interventions](https://ireporter-challenge-two.herokuapp.com/api/v1/interventions) | Create a intervention  |POST  |	location (String), images ([String, String]), videos ([String, String]), title (String), comment (String) |
 | [/interventions](https://ireporter-challenge-two.herokuapp.com/api/v1/interventions)  | Get interventions  |GET  | None |
-| [/interventions/intervention_id](https://ireporter-challenge-two.herokuapp.com/api/v1/interventions/5) | Get intervention of the specified id  |GET  |None  |
-| [/interventions/intervention_id/location](https://ireporter-challenge-two.herokuapp.com/api/v1/interventions/5/location)  | Edit location of a intervention of specicif id  |PATCH  |•	location(String) |
-| [/interventions/intervention_id/status](https://ireporter-challenge-two.herokuapp.com/api/v1/interventions/5/status)  | Edit status of a intervention of specific id  |PATCH  |• status (String)  |
-| [/interventions/intervention_id](https://ireporter-challenge-two.herokuapp.com/api/v1/interventions/5)  | Delete a intervention of specific id  |DELETE  |None  |
+| [/interventions/intervention_id](https://ireporter-challenge-two.herokuapp.com/api/v1/interventions/5) | Get an intervention of the specified id  |GET  |None  |
+| [/interventions/intervention_id/location](https://ireporter-challenge-two.herokuapp.com/api/v1/interventions/5/location)  | Edit location of an intervention of the specified id  |PATCH  |•	location(String) |
+| [/interventions/intervention_id/status](https://ireporter-challenge-two.herokuapp.com/api/v1/interventions/5/status)  | Edit status of an intervention of the specified id  |PATCH  |• status (String)  |
+| [/interventions/intervention_id](https://ireporter-challenge-two.herokuapp.com/api/v1/interventions/5)  | Delete an intervention of the specified id  |DELETE  |None  |
 | [/users](https://ireporter-challenge-two.herokuapp.com/api/v1/users)  | Ge all users  |GET  | None  |
-| [/users/user_id](https://ireporter-challenge-two.herokuapp.com/api/v1/users/10)  | Edit user's role  |PATCH  | is_admin (Boolean)  |
+| [/users/user_id](https://ireporter-challenge-two.herokuapp.com/api/v1/users/10)  | Edit a user's role of the specified |PATCH  | is_admin (Boolean)  |
 
 
 ## Unit Testing the Application
-* In order to run unit tests for this application, you must install pytest, pytest-cov and coverage installed on your pc or virtual environment.
+* In order to run unit tests for this application, you must install pytest, pytest-cov and coverage on your pc or in your virtual environment.
 * While in the root of the project, run the command below to run the unit tests and also generate a coverage report.
 - `pytest --cov`
 
@@ -140,6 +140,6 @@ The endpoints of this application have been versioned. The current version is on
 This API is deployed on heroku. Find it [here](https://ireporter-challenge-two.herokuapp.com/api/v1 "iReporter on Heroku")
 
 ## API Documentation
-The API Endpoints of this project have been documented using Swagger UI and postman.
+The API Endpoints of this project have been documented using Swagger UI and Postman.
 * The Swagger-UI documentation can be found [here](https://ireporter-challenge-two.herokuapp.com/api/v1/docs "iReporter Swagger-UI Documentation")
 * The Postman documentation can be found [here](https://documenter.getpostman.com/view/5689256/Rzn8QMm9 "IReporter Documentation")
