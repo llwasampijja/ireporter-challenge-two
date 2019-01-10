@@ -1,5 +1,6 @@
 """module including routes for the red-flags incidents"""
 from flask import Blueprint, request
+from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
 
 from app.controllers.incident_controller import IncidentController
 from app.utilitiez.authenticator import Authenticator
@@ -36,9 +37,9 @@ def get_flag(redflag_id):
 def update_redflag(redflag_id):
     """method for updating location of red-flag incident by id"""
     request_data = request.get_json()
-    username_cookie = request.cookies.get('username')
+    verify_jwt_in_request()
     return redflag_controller.update_incident(
-        redflag_id, request_data, "redflag", username_cookie
+        redflag_id, request_data, "redflag", get_jwt_identity()["username"]
     )
 
 
@@ -56,7 +57,7 @@ def update_redflag_status(redflag_id):
 @authenticator.concerned_citzen
 def delete_redflag(redflag_id):
     """method and route for deleting a red-flag incident by id"""
-    username_cookie = request.cookies.get('username')
+    verify_jwt_in_request()
     return redflag_controller.delete_incident(
-        redflag_id, "redflag", username_cookie
+        redflag_id, "redflag", get_jwt_identity()["username"]
     )

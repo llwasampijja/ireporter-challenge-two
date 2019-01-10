@@ -119,7 +119,7 @@ class UsersController():
                     identity=user_details,
                     expires_delta=datetime.timedelta(
                         days=30))
-                response = Response(json.dumps({
+                return Response(json.dumps({
                     "status": 201,
                     "data": [
                         {
@@ -136,9 +136,6 @@ class UsersController():
                     "access_token": access_token,
                     "message": RESP_SUCCESS_MSG_AUTH_LOGIN
                 }), content_type="application/json", status=201)
-                response.set_cookie("username", user.get("username"))
-                return response
-        # else:
         return RESP_ERROR_LOGIN_FAILED
 
     def update_user_role(self, user_id, request_info):

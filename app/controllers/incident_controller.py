@@ -3,6 +3,7 @@ of incidents to models"""
 import datetime
 
 from flask import request, Response, json
+from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
 
 from app.models.incident_model import Incident, IncidentData
 from app.validators.general_validator import GeneralValidator
@@ -35,8 +36,10 @@ class IncidentController:
 
     def create_incident(self, request_data, keyword):
         """method for creating red-flags"""
+        verify_jwt_in_request()
+        user_identity = get_jwt_identity()
         created_on = datetime.datetime.now()
-        created_by = request.cookies.get('username')
+        created_by = user_identity["username"]
         location = request_data.get("location")
         status = "pending investigation"
         videos = request_data.get("videos")
