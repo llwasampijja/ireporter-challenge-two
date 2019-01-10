@@ -68,28 +68,29 @@ make sure you are submitting the correct and allowed format of data"
 
 # string constants for various error messages
 RESP_ERROR_MSG_POST_INCIDENT_WRONG_DATA = {
-    "ERROR": "There was a problem with your input, ensure that it abides by the\
-     following requirements and try again",
+    "ERROR": "Failed to post the incident: There was a problem with your input, ensure that it abides by the\
+    following requirements and try again",
     "Requirement 1": "An incident must contain all required fields, i.e: comment,\
         title, images, and videos. It should not contain any other field except these.",
     "Requirement 2": "The title, comment and location fields must be of String type.",
-    "Requirement 3": "The location field must be a string of two floating values \
-    separated by a comma ',', i.e: A latitude and longitude. The latitude must be in \
+    "Requirement 3": "The location field must be a string of two floating values\
+    separated by a comma ',', i.e: A latitude and longitude. The latitude must be in\
     the ranges 0 to 90 or -90 to 0. The longitude must be in the ranges 0 to 180 or -180 to 0",
     "Requirement 4": "The images and videos fields must be lists of strings (urls)"
 }
 RESP_ERROR_MSG_SIGNUP = {
-    "ERROR": "The signup process failed. Ensure that you have fulfilled all the \
+    "ERROR": "Failed to signup. Ensure that all your input values fulfill all the\
     requirements listed below",
-    "Requirement 1": "The username, firstname, lastname and othernames \
+    "Requirement 1": "You must provide firstname, lastname, othernames (optional), email, phonenumber, username, and password",
+    "Requirement 2": "The username, firstname, lastname and othernames\
     (if provided) must be of String type",
-    "Requirement 2": "firstname, lastname and othernames (if provided) \
+    "Requirement 3": "firstname, lastname and othernames (if provided)\
     must be strings with only alphabets",
-    "Requirement 3": "The username may contain numbers but must contain \
+    "Requirement 4": "The username may contain numbers but must contain\
     atleast one letter of the alphabet"
 }
 RESP_ERROR_MSG_SIGNUP_FAIL_WRONG_FORMAT = {
-    "ERROR": "The signup process failed. Ensure that you have fulfilled \
+    "ERROR": "Failed to signup. Ensure that all your input values fulfill\
     all the requirements listed below",
     "Requirement 1": "The email address must be in a valid format, i.e, name@company.domain",
     "Requirement 2": "You must provide a valid password, i.e., password length must\
@@ -99,35 +100,30 @@ RESP_ERROR_MSG_SIGNUP_FAIL_WRONG_FORMAT = {
 
 RESP_ERROR_MSG_UNAUTHORIZED_VIEW = "You are not authorised to access this content"
 RESP_ERROR_MSG_EMPTY_STRING = "Empty fields are not allowed"
-# RESP_ERROR_MSG_ADMIN_ONLY = "This feature is only available to adminitrators"
-RESP_ERROR_MSG_REGISTRATION_FAILED = "Failed to login, username or password is incorrect"
-RESP_ERROR_MSG_UNACCEPTABLE_INPUT = "You entered an unacceptable value for the operation"
-
-
-RESP_ERROR_MSG_UDATE_WRONG_LOCATION = "Failed to update the location of the incident\
- because you provided wrong values.The location field must be a string of two floating values \
-separated by a comma ',', i.e: A latitude and longitude. The latitude must be in \
+RESP_ERROR_MSG_UNACCEPTABLE_INPUT = "Operation failed. You entered an unacceptable value for the operation"
+RESP_ERROR_MSG_UDATE_WRONG_LOCATION = "Failed to update the incident's location.\
+You provided wrong values.The location field must be a string of two floating values\
+separated by a comma ',', i.e: A latitude and longitude. The latitude must be in\
 the ranges 0 to 90 or -90 to 0. The longitude must be in the ranges 0 to 180 or -180 to 0"
-
 RESP_EEROR_MSG_UNAUTHORIZED_DELETE = "You are not authorised to delete this incident"
 RESP_ERROR_MSG_UNAUTHORIZED_EDIT = "You are not authorised to edit this incident"
 RESP_ERROR_MSG_USER_NOT_FOUND = "That specified user wasn't found on the system"
-RESP_ERROR_MSG_INVALID_ROLE = "Entered an invalid value. A valid value must either be true (admin) or false (not admin)"
+RESP_ERROR_MSG_INVALID_ROLE = "Failed to update user's role. Entered an invalid value.\
+A valid value must either be true (admin) or false (not admin)"
 RESP_ERROR_MSG_ROLE_NO_RIGHTS = "An administrator can only edit a user's role"
-RESP_ERROR_MSG_LOGIN_FAILED = "Failed to login, username or password is incorrect"
-RESP_ERROR_MSG_UPDATE_STATUS = "Failed to update the status of the incident because\
- you provided an invalid value. A valid value must either be 'pending investigation',\
-  'under investigation', 'resolved' or 'rejected'"
+RESP_ERROR_MSG_LOGIN_FAILED = "Failed to login. username or password is incorrect"
+RESP_ERROR_MSG_UPDATE_STATUS = "Failed to update the incident's status.\
+You provided an invalid value. A valid value must either be 'pending investigation',\
+'under investigation', 'resolved' or 'rejected'"
 RESP_ERROR_MSG_INCIDENT_NOT_FOUND = "No incident of that specific id was found on the system"
-RESP_ERROR_MSG_INCIDENT_DUPLICATE = "It appears this incident already exists on the system. \
-Creating a duplicate of an incident isn't allowed"
-RESP_ERROR_MSG_USER_STATUS_NORIGHTS = "An admin can only edit the status of an incident, \
- and nothing more. The only accepted values include: 'pending investigation', \
-'under investigation', 'resolved' and 'rejected'"
-RESP_ERROR_MSG_SIGNUP_FAIL_USER_EXISTS = "Attempting to register with an Email address, \
+RESP_ERROR_MSG_INCIDENT_DUPLICATE = "Failed to add incident. An incident similar to this\
+already exists on the system. Creating a duplicate of an incident isn't allowed"
+RESP_ERROR_MSG_USER_STATUS_NORIGHTS = "Failed to update the incident's status.\
+An admin can only edit the status of an incident, and nothing more. The only\
+accepted values include: 'pending investigation','under investigation', 'resolved' and 'rejected'"
+RESP_ERROR_MSG_SIGNUP_FAIL_USER_EXISTS = "Failed to Signup. Attempting to sign-up with an Email address,\
 phonenumber or username  which is/are already registered on the system"
-
-
+RESP_ERROR_MSG_ADMIN_NO_RIGHTS = "Operation failed: An admin can't edit any other field of an incident except the status"
 
 # string constants for various responses
 RESP_ERROR_UNACCEPTABLE_INPUT = Response(json.dumps({
@@ -167,7 +163,7 @@ RESP_ERROR_POST_DUPLICATE = Response(json.dumps({
 
 RESP_ERROR_ADMIN_NO_RIGHTS = Response(json.dumps({
     "status": 401,
-    "message": RESP_ERROR_MSG_USER_STATUS_NORIGHTS
+    "message": RESP_ERROR_MSG_ADMIN_NO_RIGHTS
 }), content_type="application/json", status=401)
 
 RESP_ERROR_SIGNUP_FAIL_INVALID_DATA = Response(json.dumps({

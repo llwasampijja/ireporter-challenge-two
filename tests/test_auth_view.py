@@ -11,7 +11,7 @@ from app.utilitiez.static_strings import (
     RESP_SUCCESS_MSG_REGISTRATION,
     RESP_SUCCESS_MSG_AUTH_LOGIN,
 
-    RESP_ERROR_MSG_REGISTRATION_FAILED,
+    RESP_ERROR_MSG_LOGIN_FAILED,
     RESP_ERROR_MSG_SIGNUP,
     RESP_ERROR_MSG_SIGNUP_FAIL_WRONG_FORMAT,
     RESP_ERROR_MSG_SIGNUP_FAIL_USER_EXISTS,
@@ -266,7 +266,7 @@ class TestAuthView(unittest.TestCase):
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 403)
         self.assertEqual(response_data.get("message"),
-                         RESP_ERROR_MSG_REGISTRATION_FAILED)
+                         RESP_ERROR_MSG_LOGIN_FAILED)
 
         # test sign in with an empty field
         response = self.client.post(URL_LOGIN, data=json.dumps({

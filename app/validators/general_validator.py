@@ -3,21 +3,21 @@ class GeneralValidator():
     """this class includes methods used to validate incident fields and users"""
 
     @staticmethod
-    def check_empty_string(user_input):
+    def empty_string(user_input):
         """this method checks for empty incident and user fields"""
         if str(user_input).replace(" ", "") == "":
             return True
         return False
 
     @staticmethod
-    def check_str_datatype(string_value):
+    def invalid_str_datatype(string_value):
         """this method checks if input is a string"""
         if isinstance(string_value, str):
             return False
         return True
 
     @staticmethod
-    def check_list_datatype(list_value):
+    def invalid_list_datatype(list_value):
         """this method checks is field is a list of strings"""
         if not isinstance(list_value, list) \
         or any(not isinstance(item, str) for item in list_value) or not list_value:
@@ -25,7 +25,7 @@ class GeneralValidator():
         return False
 
     @staticmethod
-    def check_status_value(status):
+    def invalid_status_value(status):
         """this methods checks is incidents status is among the given values"""
         status = str(status).lower()
         if status in ("resolved", "pending investigation", "rejected", "under investigation"):

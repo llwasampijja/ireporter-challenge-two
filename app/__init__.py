@@ -10,7 +10,7 @@ from app.views.redflag_view import redflag_blueprint
 from app.views.users_view import user_blueprint
 from app.views.auth_view import auth_blueprint
 from app.views.intervention_view import intervention_blueprint
-from app.views.index_view import index_blueprint
+from app.views.index_view import index_blueprint, base_url_blueprint
 from app.views.error_handlers_view import (
     page_not_found,
     method_not_allowed,
@@ -41,6 +41,7 @@ def create_app():
     app.register_blueprint(intervention_blueprint, url_prefix="/api/v1/interventions")
     app.register_blueprint(auth_blueprint, url_prefix="/api/v1/auth")
     app.register_blueprint(index_blueprint, url_prefix="/api/v1")
+    app.register_blueprint(base_url_blueprint, url_prefix="/")
 
     app.register_error_handler(400, bad_request_error)
     app.register_error_handler(404, page_not_found)

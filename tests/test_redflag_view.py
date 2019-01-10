@@ -24,7 +24,8 @@ from app.utilitiez.static_strings import (
     RESP_ERROR_MSG_UDATE_WRONG_LOCATION,
     RESP_ERROR_MSG_UPDATE_STATUS,
     RESP_ERROR_MSG_INCIDENT_NOT_FOUND,
-    RESP_ERROR_MSG_EMPTY_STRING
+    RESP_ERROR_MSG_EMPTY_STRING,
+    RESP_ERROR_MSG_ADMIN_NO_RIGHTS
 )
 
 
@@ -485,7 +486,7 @@ class TestRedflagView(unittest.TestCase):
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response_data.get("message"),
-                         RESP_ERROR_MSG_USER_STATUS_NORIGHTS)
+                         RESP_ERROR_MSG_ADMIN_NO_RIGHTS)
 
         # test update the status of an incident which doesn't exist
         response = self.client.patch(

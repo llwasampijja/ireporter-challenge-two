@@ -56,15 +56,15 @@ class UsersController():
         user_properties = [firstname, lastname, username]
 
         if self.user_validator.invalid_user(request_info) \
-        or any(self.my_validator.check_str_datatype(item) for item in user_properties)\
+        or any(self.my_validator.invalid_str_datatype(item) for item in user_properties)\
         or self.user_validator.invalid_othername(request_info)\
         or any(self.user_validator.invalid_name(item) for item in (firstname, lastname))\
         or self.user_validator.invalid_username(username):
             return RESP_ERROR_SIGNUP_FAIL_INVALID_DATA
 
-        if self.user_validator.valid_email(email)\
-        or self.user_validator.validate_phone_numbers(str(phonenumber))\
-        or not self.user_validator.valid_password(password):
+        if self.user_validator.invalid_email(email)\
+        or self.user_validator.invalid_phone_number(str(phonenumber))\
+        or self.user_validator.invalid_password(password):
             return RESP_ERROR_SIGNUP_FAIL_WRONG_FORMAT
 
         if self.user_validator.username_in_db(username, self.usersdata.get_users())\
@@ -99,7 +99,7 @@ class UsersController():
     def signin(self, request_info):
         """method for signing in a user"""
         for login_key, login_val in request_info.items():
-            if self.my_validator.check_empty_string(login_val):
+            if self.my_validator.empty_string(login_val):
                 return RESP_ERROR_POST_EMPTY_DATA
 
         username = request_info.get("username")
@@ -118,7 +118,7 @@ class UsersController():
                 access_token = create_access_token(
                     identity=user_details,
                     expires_delta=datetime.timedelta(
-                        days=30))
+                        hours=1))
                 return Response(json.dumps({
                     "status": 201,
                     "data": [

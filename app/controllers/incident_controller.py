@@ -55,13 +55,13 @@ class IncidentController:
         incident_id = self.validator.create_id(
             get_incidents_instance, "incident_id")
 
-        if any(self.validator.check_empty_string(item) for item in
+        if any(self.validator.empty_string(item) for item in
                args_strings):
             return RESP_ERROR_POST_EMPTY_DATA
 
-        if any(self.validator.check_str_datatype(item) for item in args_strings)\
+        if any(self.validator.invalid_str_datatype(item) for item in args_strings)\
                 or self.validator.invalid_incident(request_data)\
-                or any(self.validator.check_list_datatype(item) for item in args_list)\
+                or any(self.validator.invalid_list_datatype(item) for item in args_list)\
                 or self.validator.invalid_coordinates(location):
             return RESP_ERROR_POST_INCIDENT_WRONG_DATA
 
@@ -120,18 +120,20 @@ class IncidentController:
         """method for editing the location of an incident"""
         location = request_data.get("location")
 
-        if self.validator.check_empty_string(location):
+        for input_value in request_data:
+            if input_value not in ["location"]:
+                return RESP_ERROR_UNACCEPTABLE_INPUT
+
+        if self.validator.empty_string(location):
             return RESP_ERROR_POST_EMPTY_DATA
 
-        if self.validator.check_str_datatype(location) \
+        if self.validator.invalid_str_datatype(location) \
         or self.validator.invalid_coordinates(location):
             return RESP_ERROR_UPDATE_INCIDENT_WRONG_DATA
 
         # if self.validator.invalid_coordinates(location)
 
-        for input_value in request_data:
-            if input_value not in ["location"]:
-                return RESP_ERROR_UNACCEPTABLE_INPUT
+        
 
         update_incident_instance = self.incident_data.update_incident(
             incident_id, request_data, keyword, username)
@@ -149,7 +151,7 @@ class IncidentController:
         if "status" not in request_data or len(request_data) != 1:
             return RESP_ERROR_ADMIN_NO_RIGHTS
 
-        if self.validator.check_status_value(request_data.get("status")):
+        if self.validator.invalid_status_value(request_data.get("status")):
             return RESP_ERROR_UPDATE_STATUS
 
         update_incident_instance = self.incident_data.update_incident(

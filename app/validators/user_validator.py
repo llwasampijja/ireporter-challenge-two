@@ -27,7 +27,7 @@ class UserValidator():
         return self.user_in_db(phonenumber, users_list, "phonenumber")
 
     @staticmethod
-    def validate_phone_numbers(phonenumber):
+    def invalid_phone_number(phonenumber):
         """check if phonenumber has the correct number of digits for uganda"""
         if all(digit.isdigit() for digit in phonenumber) \
                 and len(phonenumber) <= 10 and phonenumber.startswith("0"):
@@ -35,7 +35,7 @@ class UserValidator():
         return True
 
     @staticmethod
-    def valid_email(email):
+    def invalid_email(email):
         """method checks if the email is in the correct format"""
         email_pattern = re.compile(r"[^@]+@[^@]+\.[^@]+")
         if email_pattern.match(email):
@@ -50,7 +50,7 @@ class UserValidator():
         return True
 
     @staticmethod
-    def valid_password(password):
+    def invalid_password(password):
         """method checks for an unacceptable password"""
         special_characters = ['$', '#', '@']
         password = password.replace(" ", "")
@@ -62,8 +62,8 @@ class UserValidator():
              and any(y.isdigit() for y in password))
         ]
         if all(condition is True for condition in test_conditions):
-            return True
-        return False
+            return False
+        return True
 
     @staticmethod
     def invalid_user(request_info):
