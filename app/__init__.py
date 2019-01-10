@@ -5,6 +5,7 @@ import os
 from flask import Flask, Response, json
 from flask_jwt_extended import JWTManager
 from flask_swagger_ui import get_swaggerui_blueprint
+from flask_cors import CORS
 
 from app.views.redflag_view import redflag_blueprint
 from app.views.users_view import user_blueprint
@@ -35,6 +36,8 @@ def create_app():
     app.secret_key = os.urandom(12)
     jwt_manager = JWTManager()
     jwt_manager.init_app(app)
+
+    CORS(app)
 
     app.register_blueprint(redflag_blueprint, url_prefix="/api/v1/red-flags")
     app.register_blueprint(user_blueprint, url_prefix="/api/v1/users")
