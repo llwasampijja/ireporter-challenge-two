@@ -90,10 +90,22 @@ class UsersController():
         newuser_dict = (new_user.user_dict())
         newuser_dict.pop("password")
 
+        user_details = {
+            "user_id": user_id,
+            "username": username,
+            "is_admin": is_admin
+        }
+
+        access_token = create_access_token(
+            user_details,
+            expires_delta=datetime.timedelta(hours=1)
+        )
+
         return Response(json.dumps({
             "status": 201,
             "data": [newuser_dict],
-            "message": RESP_SUCCESS_MSG_REGISTRATION
+            "message": RESP_SUCCESS_MSG_REGISTRATION,
+            "access_token": access_token
         }), content_type="application/json", status=201)
 
     def signin(self, request_info):

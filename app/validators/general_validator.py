@@ -31,10 +31,6 @@ class GeneralValidator():
         if status in ("resolved", "pending investigation", "rejected", "under investigation"):
             return False
         return True
-        # if status == "resolved" or status == "pending investigation" \
-        # or status == "rejected" or status == "under investigation":
-        #     return False
-        # return True
 
     @staticmethod
     def invalid_incident(request_data):
@@ -62,7 +58,6 @@ class GeneralValidator():
         """method for creating an id for every new item created"""
         if not get_incidents_instance:
             return 1
-        # else:
         return 1 + get_incidents_instance[-1].get(key_id)
 
     def invalid_coordinates(self, geolocation):
