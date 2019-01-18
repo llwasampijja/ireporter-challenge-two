@@ -96,6 +96,7 @@ class IncidentController:
         if not get_incidents_instance:
             return Response(json.dumps({
                 "status": 200,
+                "data":[],
                 "message": RESP_SUCCESS_MSG_INCIDENT_LIST_EMPTY
             }), content_type="application/json", status=200)
         else:
@@ -201,3 +202,4 @@ class IncidentController:
             "data": [return_data],
             "message": message
         }), content_type="application/json", status=201)
+

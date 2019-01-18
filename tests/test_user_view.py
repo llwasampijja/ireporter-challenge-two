@@ -39,8 +39,7 @@ class TestUserView(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_update_user(self):
-        """unit tests for updating user"""
-        # test update user's role by admin
+        """test update user's role by admin"""
         jwt_token = json.loads(self.admin_login_response.data)["access_token"]
         response = self.client.patch(
             URL_USERS + "/2",
@@ -55,7 +54,9 @@ class TestUserView(unittest.TestCase):
         self.assertEqual(response_data.get("message"),
                          RESP_SUCCESS_MSG_ADMIN_RIGHTS)
 
-        # test update user status with more fields than required
+    def test_update_morefields(self):
+        """test update user status with more fields than required"""
+        jwt_token = json.loads(self.admin_login_response.data)["access_token"]
         response = self.client.patch(
             URL_USERS + "/2",
             headers=dict(Authorization='Bearer ' + jwt_token),
@@ -69,7 +70,9 @@ class TestUserView(unittest.TestCase):
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response_data.get("message"), RESP_ERROR_MSG_USER_STATUS_NORIGHTS)
 
-        # test update user's role with an invalid value
+    def test_update_roleinvalid(self):
+        """test update user's role with an invalid value"""
+        jwt_token = json.loads(self.admin_login_response.data)["access_token"]
         response = self.client.patch(
             URL_USERS + "/2",
             headers=dict(Authorization='Bearer ' + jwt_token),
@@ -82,7 +85,9 @@ class TestUserView(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response_data.get("message"), RESP_ERROR_MSG_INVALID_ROLE)
 
-        # test update a user who doesnt exist on the system
+    def test_update_nonexist(self):
+        """test update a user who doesnt exist on the system"""
+        jwt_token = json.loads(self.admin_login_response.data)["access_token"]
         response = self.client.patch(
             URL_USERS + "/45",
             headers=dict(Authorization='Bearer ' + jwt_token),
@@ -95,7 +100,9 @@ class TestUserView(unittest.TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response_data.get("message"), RESP_ERROR_MSG_USER_NOT_FOUND)
 
-        # test update a primary admin
+    def test_update_primaryadmin(self):
+        """test update a primary admin"""
+        jwt_token = json.loads(self.admin_login_response.data)["access_token"]
         response = self.client.patch(
             URL_USERS + "/1",
             headers=dict(Authorization='Bearer ' + jwt_token),

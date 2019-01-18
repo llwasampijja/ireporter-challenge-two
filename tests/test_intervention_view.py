@@ -42,6 +42,12 @@ class TestInterventionView(unittest.TestCase):
             "username": "dallkased",
             "password": "ABd1234@1"
         }
+        # get list of interventions before logging in
+        response = self.client.get(
+            URL_INTERVENTIONS,
+            content_type="application/json"
+        )
+        self.assertEqual(response.status_code, 401)
         self.client.post(URL_REGISTER, data=json.dumps(test_user),
                          content_type="application/json")
         self.login_response = self.client.post(URL_LOGIN, data=json.dumps({
@@ -49,29 +55,18 @@ class TestInterventionView(unittest.TestCase):
             "password": "ABd1234@1"
         }), content_type="application/json")
 
-        # """try to get list of interventions without logging in first"""
-        # response = self.client.get(
-        #     URL_INTERVENTIONS, content_type="application/json")
-        # data = json.loads(response.data.decode())
-        # self.assertEqual(response.status_code, 401)
-        # self.assertEqual(data.get("message"),None)
+        jwt_token = json.loads(self.login_response.data)["access_token"]
 
         # get list of interventions after logging in
-        jwt_token = json.loads(self.login_response.data)["access_token"]
         response = self.client.get(
             URL_INTERVENTIONS,
             headers=dict(Authorization='Bearer ' + jwt_token),
             content_type="application/json"
         )
-        # data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 200)
-        # self.assertEqual(data.get("message"),"incidents list is empty")
 
-    def test_create_intervention(self):
-        """create an intervention unit tests"""
         # intervention to ensure that the list is not empty when one item is
         #  deleted during testing for deleting
-        jwt_token = json.loads(self.login_response.data)["access_token"]
         self.client.post(
             URL_INTERVENTIONS,
             headers=dict(Authorization='Bearer ' + jwt_token),
@@ -85,7 +80,9 @@ class TestInterventionView(unittest.TestCase):
             content_type="application/json"
         )
 
-        # Test for creating a valid intervention
+    def test_create_intervention(self):
+        """Test for creating a valid intervention"""
+        jwt_token = json.loads(self.login_response.data)["access_token"]
         response = self.client.post(
             URL_INTERVENTIONS,
             headers=dict(Authorization='Bearer ' + jwt_token),
@@ -102,17 +99,18 @@ class TestInterventionView(unittest.TestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(data.get("message"),
                          RESP_SUCCESS_MSG_CREATE_INCIDENT)
-
-        # Test for creating a duplicate intervention
+    def test_create_duplicate(self):
+        """Test for creating a duplicate intervention"""
+        jwt_token = json.loads(self.login_response.data)["access_token"]
         response = self.client.post(
             URL_INTERVENTIONS,
             headers=dict(Authorization='Bearer ' + jwt_token),
             data=json.dumps({
-                "location": "2.00, 3.222",
+                 "location": "2.00, 3.222",
                 "videos": ["Video url"],
                 "images": ["images urls"],
-                "title": "we need a market",
-                "comment": "This Hospital's sanitation is really worrying"
+                "title": "this road is bad",
+                "comment": "The road has very bif potholes"
             }),
             content_type="application/json"
         )
@@ -121,7 +119,9 @@ class TestInterventionView(unittest.TestCase):
         self.assertEqual(data.get("message"),
                          RESP_ERROR_MSG_INCIDENT_DUPLICATE)
 
-        # Test for creating an invalid intervention missing one required parameter
+    def test_create_lessattributes(self):
+        """Test for creating an invalid intervention missing one required parameter"""
+        jwt_token = json.loads(self.login_response.data)["access_token"]
         response = self.client.post(
             URL_INTERVENTIONS,
             headers=dict(Authorization='Bearer ' + jwt_token),
@@ -137,7 +137,9 @@ class TestInterventionView(unittest.TestCase):
         self.assertEqual(data.get("message"),
                          RESP_ERROR_MSG_POST_INCIDENT_WRONG_DATA)
 
-        # Test for creating an invalid intervention with more parameters than needed
+    def test_create_moreattributes(self):
+        """Test for creating an invalid intervention with more parameters than needed"""
+        jwt_token = json.loads(self.login_response.data)["access_token"]
         response = self.client.post(
             URL_INTERVENTIONS,
             headers=dict(Authorization='Bearer ' + jwt_token),
@@ -156,7 +158,9 @@ class TestInterventionView(unittest.TestCase):
         self.assertEqual(data.get("message"),
                          RESP_ERROR_MSG_POST_INCIDENT_WRONG_DATA)
 
-        #Test for creating an invalid intervention with string of vidoes instead of list
+    def test_create_stringvideos(self):
+        """Test for creating an invalid intervention with string of vidoes instead of list"""
+        jwt_token = json.loads(self.login_response.data)["access_token"]
         response = self.client.post(
             URL_INTERVENTIONS,
             headers=dict(Authorization='Bearer ' + jwt_token),
@@ -174,7 +178,9 @@ class TestInterventionView(unittest.TestCase):
         self.assertEqual(data.get("message"),
                          RESP_ERROR_MSG_POST_INCIDENT_WRONG_DATA)
 
-        # Test for creating an invalid intervention with an empty string
+    def test_create_emptystring(self):
+        """Test for creating an invalid intervention with an empty string"""
+        jwt_token = json.loads(self.login_response.data)["access_token"]
         response = self.client.post(
             URL_INTERVENTIONS,
             headers=dict(Authorization='Bearer ' + jwt_token),
@@ -203,8 +209,7 @@ class TestInterventionView(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_get_intervention(self):
-        """unit tests for getting an inintervention by id"""
-        # Test get intervention with available id
+        """ Test get intervention with available id"""
         jwt_token = json.loads(self.login_response.data)["access_token"]
         response = self.client.get(
             URL_INTERVENTIONS + "/1",
@@ -213,7 +218,10 @@ class TestInterventionView(unittest.TestCase):
         )
         self.assertEqual(response.status_code, 200)
 
-        # Test get intervention with with id not available
+        
+    def test_get_intervention_noid(self):
+        """Test get intervention with with id not available"""
+        jwt_token = json.loads(self.login_response.data)["access_token"]
         response = self.client.get(
             URL_INTERVENTIONS + "/19",
             headers=dict(Authorization='Bearer ' + jwt_token),
@@ -224,21 +232,10 @@ class TestInterventionView(unittest.TestCase):
         self.assertEqual(data.get("message"),
                          RESP_ERROR_MSG_INCIDENT_NOT_FOUND)
 
-    def test_update_intervention(self):
-        """unit tests for updating the location of an intervention"""
-        new_location = {"location": "1.500, 0.3000"}
+    def test_update_noid(self):
+        """Test update intervention with unavailable id"""
         jwt_token = json.loads(self.login_response.data)["access_token"]
-
-        # Test update intervention with wrong url
-        response = self.client.patch(
-            URL_INTERVENTIONS + "/4/wrong",
-            headers=dict(Authorization='Bearer ' + jwt_token),
-            data=json.dumps(new_location),
-            content_type="application/json"
-        )
-        self.assertEqual(response.status_code, 404)
-
-        # Test update intervention with unavailable id
+        new_location = {"location": "1.500, 0.3000"}
         response = self.client.patch(
             URL_INTERVENTIONS + "/4/location",
             data=json.dumps(new_location),
@@ -250,12 +247,14 @@ class TestInterventionView(unittest.TestCase):
         self.assertEqual(data.get("message"),
                          RESP_ERROR_MSG_INCIDENT_NOT_FOUND)
 
-        # Test update intervention with the right id
+    def test_update_intervention(self):
+        """Test update intervention with the right id"""
+        new_location = {"location": "1.500, 0.3000"}
+        jwt_token = json.loads(self.login_response.data)["access_token"]
         response = self.client.patch(
             URL_INTERVENTIONS + "/1/location",
             headers=dict(Authorization='Bearer ' + jwt_token),
-            data=json.dumps(
-                {"location": "1.500, 0.3000"}),
+            data=json.dumps(new_location),
             content_type="application/json"
         )
         data = json.loads(response.data.decode())
@@ -263,7 +262,21 @@ class TestInterventionView(unittest.TestCase):
         self.assertEqual(data.get("message"),
                          RESP_SUCCESS_MSG_INCIDENT_UPDATE)
 
-        # Test update intervention with empty string
+    def test_update_wrongurl(self):
+        """Test update intervention with wrong url"""  
+        jwt_token = json.loads(self.login_response.data)["access_token"]
+        new_location = {"location": "1.500, 0.3000"}
+        response = self.client.patch(
+            URL_INTERVENTIONS + "/4/wrong",
+            headers=dict(Authorization='Bearer ' + jwt_token),
+            data=json.dumps(new_location),
+            content_type="application/json"
+        )
+        self.assertEqual(response.status_code, 404)
+
+    def test_update_emptystring(self):
+        """Test update intervention with empty string"""
+        jwt_token = json.loads(self.login_response.data)["access_token"]
         new_location = {"location": " "}
         response = self.client.patch(
             URL_INTERVENTIONS + "/1/location",
@@ -276,7 +289,9 @@ class TestInterventionView(unittest.TestCase):
         self.assertEqual(data.get("message"),
                          RESP_ERROR_MSG_EMPTY_STRING)
 
-        # Test update intervention with wrong data type
+    def test_update_wrongtype(self):
+        """Test update intervention with wrong data type"""
+        jwt_token = json.loads(self.login_response.data)["access_token"]
         new_location = {"location": 67}
         response = self.client.patch(
             URL_INTERVENTIONS + "/1/location",
@@ -312,9 +327,8 @@ class TestInterventionView(unittest.TestCase):
         self.assertEqual(data.get("message"),
                          RESP_SUCCESS_MSG_INCIDENT_STATUS_UPDATE)
 
-    def test_delete_intervention(self):
-        """unit tests for deleting an instance"""
-        # Test delete intervention with unavailable id
+    def test_delete_intervention_noid(self):
+        """Test delete intervention with unavailable id"""
         jwt_token = json.loads(self.login_response.data)["access_token"]
         response = self.client.delete(
             URL_INTERVENTIONS + "/3",
@@ -326,7 +340,9 @@ class TestInterventionView(unittest.TestCase):
         self.assertEqual(data.get("message"),
                          RESP_ERROR_MSG_INCIDENT_NOT_FOUND)
 
-        # Test delete intervention with available id
+    def test_delete_intervention_success(self):
+        """Test delete intervention with available id"""
+        jwt_token = json.loads(self.login_response.data)["access_token"]
         response = self.client.delete(
             URL_INTERVENTIONS + "/2",
             headers=dict(Authorization='Bearer ' + jwt_token),

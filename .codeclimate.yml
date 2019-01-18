@@ -16,5 +16,5 @@ exclude_patterns:
 - "**/vendor/"
 - "**/*_test.go"
 - "**/*.d.ts"
-- "app/views"
-- "app/models"
+- "app/views" 
+- "app/models" #

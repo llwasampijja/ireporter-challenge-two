@@ -27,9 +27,8 @@ class TestAuthView(unittest.TestCase):
         self.app = create_app()
         self.client = self.app.test_client()
 
-    def test_register_user(self):
-        """unit tests for registering users"""
-        # test register with an empty field
+    def test_register_user_emptyfield(self):
+        """test register with an empty field"""
         response = self.client.post(URL_REGISTER, data=json.dumps({
             "firstname": "edward",
             "lastname": "smith",
@@ -45,7 +44,8 @@ class TestAuthView(unittest.TestCase):
             RESP_ERROR_MSG_SIGNUP_FAIL_WRONG_FORMAT
         )
 
-        #test register an invalid user with less fields
+    def test_register_lessfields(self):
+        """test register an invalid user with less fields"""
         response = self.client.post(URL_REGISTER, data=json.dumps({
             "firstname": "edward",
             "othernames": "eddy",
@@ -58,7 +58,8 @@ class TestAuthView(unittest.TestCase):
         self.assertEqual(json.loads(response.data).get(
             "message"), RESP_ERROR_MSG_SIGNUP)
 
-        # test register with a field which isnt supposed to be their
+    def test_register_wrongfield(self):
+        """test register with a field which isnt supposed to be their"""
         response = self.client.post(URL_REGISTER, data=json.dumps({
             "firstnamef": "edward",
             "lastname": "pjoth",
@@ -72,7 +73,8 @@ class TestAuthView(unittest.TestCase):
         self.assertEqual(json.loads(response.data).get(
             "message"), RESP_ERROR_MSG_SIGNUP)
 
-        # test register with more fields than necessary
+    def test_register_morefields(self): 
+        """test register with more fields than necessary"""
         response = self.client.post(URL_REGISTER, data=json.dumps({
             "firstname": "edward",
             "lastname": "pjoth",
@@ -87,9 +89,8 @@ class TestAuthView(unittest.TestCase):
         self.assertEqual(json.loads(response.data).get(
             "message"), RESP_ERROR_MSG_SIGNUP)
 
-
-
-        # test register user with a  field of wrong datatype
+    def test_register_wrongtype(self):
+        """test register user with a  field of wrong datatype"""
         response = self.client.post(URL_REGISTER, data=json.dumps({
             "firstname": "edward",
             "lastname": 67,
@@ -103,7 +104,8 @@ class TestAuthView(unittest.TestCase):
         self.assertEqual(json.loads(response.data).get(
             "message"), RESP_ERROR_MSG_SIGNUP)
 
-        # test register user with an invalid email
+    def test_register_invalidmail(self):
+        """test register user with an invalid email"""
         response = self.client.post(URL_REGISTER, data=json.dumps({
             "firstname": "edward",
             "lastname": "pjoth",
@@ -117,7 +119,8 @@ class TestAuthView(unittest.TestCase):
         self.assertEqual(json.loads(response.data).get(
             "message"), RESP_ERROR_MSG_SIGNUP_FAIL_WRONG_FORMAT)
 
-        # test register user with an invalid phonenumber
+    def test_register_invaliphone(self):
+        """test register user with an invalid phonenumber"""
         response = self.client.post(URL_REGISTER, data=json.dumps({
             "firstname": "edward",
             "lastname": "pjoth",
@@ -131,7 +134,8 @@ class TestAuthView(unittest.TestCase):
         self.assertEqual(json.loads(response.data).get(
             "message"), RESP_ERROR_MSG_SIGNUP_FAIL_WRONG_FORMAT)
 
-        # test register with an invalid password
+    def test_register_invalidpass(self):
+        """test register with an invalid password"""
         response = self.client.post(URL_REGISTER, data=json.dumps({
             "firstname": "ann",
             "lastname": "pjoth",
@@ -145,7 +149,8 @@ class TestAuthView(unittest.TestCase):
         self.assertEqual(json.loads(response.data).get(
             "message"), RESP_ERROR_MSG_SIGNUP_FAIL_WRONG_FORMAT)
 
-        # test register with an invalid othername
+    def test_register_invalidothername(self):
+        """test register with an invalid othername"""
         response = self.client.post(URL_REGISTER, data=json.dumps({
             "firstname": "ann",
             "lastname": "pjoth",
@@ -159,7 +164,8 @@ class TestAuthView(unittest.TestCase):
         self.assertEqual(json.loads(response.data).get(
             "message"), RESP_ERROR_MSG_SIGNUP)
 
-        # test register with an invalid firstname
+    def test_register_invalidfirstname(self):
+        """test register with an invalid firstname"""
         response = self.client.post(URL_REGISTER, data=json.dumps({
             "firstname": "7gdhu",
             "lastname": "pjoth",
@@ -173,7 +179,8 @@ class TestAuthView(unittest.TestCase):
         self.assertEqual(json.loads(response.data).get(
             "message"), RESP_ERROR_MSG_SIGNUP)
 
-        # test register with an invalid username
+    def test_register_invalidusername(self):
+        """test register with an invalid username"""
         response = self.client.post(URL_REGISTER, data=json.dumps({
             "firstname": "edward",
             "lastname": "pjoth",
@@ -187,7 +194,8 @@ class TestAuthView(unittest.TestCase):
         self.assertEqual(json.loads(response.data).get(
             "message"), RESP_ERROR_MSG_SIGNUP)
 
-        # test register user successifully
+    def test_register_successfully(self):
+        """test register user successifully"""
         response = self.client.post(URL_REGISTER, data=json.dumps({
             "firstname": "edward",
             "lastname": "pjoth",
@@ -201,7 +209,8 @@ class TestAuthView(unittest.TestCase):
         self.assertEqual(json.loads(response.data).get(
             "message"), RESP_SUCCESS_MSG_REGISTRATION)
 
-        # test register user successifully without othernames
+    def test_register_withoutothernames(self):
+        """test register user successifully without othernames"""
         response = self.client.post(URL_REGISTER, data=json.dumps({
             "firstname": "allen",
             "lastname": "garcia",
@@ -214,7 +223,8 @@ class TestAuthView(unittest.TestCase):
         self.assertEqual(json.loads(response.data).get(
             "message"), RESP_SUCCESS_MSG_REGISTRATION)
 
-        # test register user with username already taken
+    def test_register_takenusername(self):
+        """test register user with username already taken"""
         response = self.client.post(URL_REGISTER, data=json.dumps({
             "firstname": "edward",
             "lastname": "pjoth",
@@ -228,7 +238,8 @@ class TestAuthView(unittest.TestCase):
         self.assertEqual(json.loads(response.data).get(
             "message"), RESP_ERROR_MSG_SIGNUP_FAIL_USER_EXISTS)
 
-        # test register user with email already taken
+    def test_register_takenemail(self):
+        """test register user with email already taken"""
         response = self.client.post(URL_REGISTER, data=json.dumps({
             "firstname": "edward",
             "lastname": "pjoth",
@@ -242,7 +253,8 @@ class TestAuthView(unittest.TestCase):
         self.assertEqual(json.loads(response.data).get(
             "message"), RESP_ERROR_MSG_SIGNUP_FAIL_USER_EXISTS)
 
-        # test register user with phone already taken
+    def test_register_takenphone(self):
+        """test register user with phone already taken"""
         response = self.client.post(URL_REGISTER, data=json.dumps({
             "firstname": "edward",
             "lastname": "pjoth",
@@ -256,9 +268,8 @@ class TestAuthView(unittest.TestCase):
         self.assertEqual(json.loads(response.data).get(
             "message"), RESP_ERROR_MSG_SIGNUP_FAIL_USER_EXISTS)
 
-    def test_signin(self):
-        """unit tests for signing in"""
-        # test sign-in with wrong password
+    def test_signin_wrongpassword(self):
+        """test sign-in with wrong password"""
         response = self.client.post(URL_LOGIN, data=json.dumps({
             "username": "edward5",
             "password": "wrongpassword"
@@ -268,7 +279,8 @@ class TestAuthView(unittest.TestCase):
         self.assertEqual(response_data.get("message"),
                          RESP_ERROR_MSG_LOGIN_FAILED)
 
-        # test sign in with an empty field
+    def test_signin_emptyfield(self):
+        """test sign in with an empty field"""
         response = self.client.post(URL_LOGIN, data=json.dumps({
             "username": "edward6",
             "password": ""
@@ -277,7 +289,8 @@ class TestAuthView(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response_data.get("message"), RESP_ERROR_MSG_EMPTY_STRING)
 
-        # test sign in successfully
+    def test_signin_successfully(self):
+        """test sign in successfully"""
         response = self.client.post(URL_LOGIN, data=json.dumps({
             "username": "allengarcia",
             "password": "passworD1#"
