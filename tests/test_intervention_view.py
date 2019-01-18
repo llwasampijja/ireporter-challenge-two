@@ -115,7 +115,7 @@ class TestInterventionView(unittest.TestCase):
             content_type="application/json"
         )
         data = json.loads(response.data.decode())
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
         self.assertEqual(data.get("message"),
                          RESP_ERROR_MSG_INCIDENT_DUPLICATE)
 

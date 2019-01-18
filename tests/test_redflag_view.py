@@ -270,7 +270,7 @@ class TestRedflagView(unittest.TestCase):
             content_type="application/json"
         )
         response_data = json.loads(response.data.decode())
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
         self.assertEqual(response_data.get("message"),
                          RESP_ERROR_MSG_UNAUTHORIZED_VIEW)
 
@@ -429,7 +429,7 @@ class TestRedflagView(unittest.TestCase):
             content_type="application/json"
         )
         response_data = json.loads(response.data.decode())
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
         self.assertEqual(response_data.get("message"),
                          RESP_ERROR_MSG_UNAUTHORIZED_VIEW)
 
@@ -588,6 +588,6 @@ class TestRedflagView(unittest.TestCase):
             content_type="application/json"
         )
         response_data = json.loads(response.data.decode())
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
         self.assertEqual(response_data.get("message"),
                          RESP_ERROR_MSG_UNAUTHORIZED_VIEW)

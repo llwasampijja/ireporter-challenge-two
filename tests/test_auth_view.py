@@ -282,7 +282,7 @@ class TestAuthView(unittest.TestCase):
             "password": "wrongpassword"
         }), content_type="application/json")
         response_data = json.loads(response.data.decode())
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
         self.assertEqual(response_data.get("message"),
                          RESP_ERROR_MSG_LOGIN_FAILED)
 

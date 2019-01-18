@@ -154,9 +154,9 @@ RESP_ERROR_INCIDENT_NOT_FOUND = Response(json.dumps({
 }), content_type="application/json", status=404)
 
 RESP_ERROR_POST_DUPLICATE = Response(json.dumps({
-    "status": 403,
+    "status": 401,
     "message": RESP_ERROR_MSG_INCIDENT_DUPLICATE
-}), content_type="application/json", status=403)
+}), content_type="application/json", status=401)
 
 RESP_ERROR_ADMIN_NO_RIGHTS = Response(json.dumps({
     "status": 401,
@@ -199,9 +199,9 @@ RESP_ERROR_INTERNAL_SERVER_ERROR = Response(json.dumps({
 }), content_type="application/json", status=500)
 
 RESP_ERROR_LOGIN_FAILED = Response(json.dumps({
-    "status": 403,
+    "status": 401,
     "message": RESP_ERROR_MSG_LOGIN_FAILED
-}), content_type="application/json", status=403)
+}), content_type="application/json", status=401)
 
 RESP_ERROR_UPDATE_ROLE_FAILED = Response(json.dumps({
     "status": 401,
@@ -219,14 +219,14 @@ RESP_ERROR_USER_NOT_FOUND = Response(json.dumps({
 }), content_type="application/json", status=404)
 
 RESP_ERROR_UNAUTHORIZED_VIEW = Response(json.dumps({
-    "status": 403,
+    "status": 401,
     "message": RESP_ERROR_MSG_UNAUTHORIZED_VIEW
-}), content_type="application/json", status=403)
+}), content_type="application/json", status=401)
 
 RESP_ERROR_ADMIN_ONLY = Response(json.dumps({
-    "status": 403,
+    "status": 401,
     "message": RESP_ERROR_MSG_UNAUTHORIZED_VIEW
-}), content_type="application/json", status=403)
+}), content_type="application/json", status=401)
 
 RESP_ERROR_INVALID_USER = Response(json.dumps({
     "status": 400,
