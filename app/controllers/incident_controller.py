@@ -18,13 +18,16 @@ from app.utilitiez.static_strings import (
     RESP_ERROR_MSG_UNAUTHORIZED_EDIT,
     
     RESP_ERROR_UNACCEPTABLE_INPUT,
-    RESP_ERROR_POST_INCIDENT_WRONG_DATA,
     RESP_ERROR_POST_EMPTY_DATA,
     RESP_ERROR_UPDATE_INCIDENT_WRONG_DATA,
     RESP_ERROR_UPDATE_STATUS,
     RESP_ERROR_INCIDENT_NOT_FOUND,
     RESP_ERROR_POST_DUPLICATE,
     RESP_ERROR_ADMIN_NO_RIGHTS,
+    RESP_ERROR_INVALID_STRING_TYPE,
+    RESP_ERROR_INVALID_LIST_TYPE,
+    RESP_ERROR_INVALID_LOCATION,
+    RESP_ERROR_INVALID_INCIDENT
 )
 
 
@@ -47,29 +50,22 @@ class IncidentController:
         title = request_data.get("title")
         comment = request_data.get("comment")
 
-        args_strings = [created_by, location, title, comment]
-        args_list = [videos, images]
+        strings_turple = (created_by, location, title, comment)
+        media_turple = (videos, images)
 
         get_incidents_instance = self.incident_data.get_incidents(keyword)
 
         incident_id = self.validator.create_id(
             get_incidents_instance, "incident_id")
 
-        if any(self.validator.empty_string(item) for item in
-               args_strings):
-            return RESP_ERROR_POST_EMPTY_DATA
-
-        if any(self.validator.invalid_str_datatype(item) for item in args_strings)\
-                or self.validator.invalid_incident(request_data)\
-                or any(self.validator.invalid_list_datatype(item) for item in args_list)\
-                or self.validator.invalid_coordinates(location):
-            return RESP_ERROR_POST_INCIDENT_WRONG_DATA
+        
+        if self.response_create_incident_failed(request_data, strings_turple, media_turple):
+            return self.response_create_incident_failed(request_data, strings_turple, media_turple)
+        elif self.response_invalid_location(location):
+            return self.response_invalid_location(location)
 
         if self.validator.incident_duplicate(comment, get_incidents_instance):
             return RESP_ERROR_POST_DUPLICATE
-
-        # if self.validator.check_status_value(status):
-        #     return self.response_unaccepted("status")
 
         new_incident = Incident(
             incident_id=incident_id,
@@ -131,9 +127,6 @@ class IncidentController:
         if self.validator.invalid_str_datatype(location) \
         or self.validator.invalid_coordinates(location):
             return RESP_ERROR_UPDATE_INCIDENT_WRONG_DATA
-
-        # if self.validator.invalid_coordinates(location)
-
         
 
         update_incident_instance = self.incident_data.update_incident(
@@ -147,8 +140,6 @@ class IncidentController:
 
     def update_incident_status(self, incident_id, request_data, keyword):
         """method for updating the status of an incident"""
-        # if "status" not in request_data or len(request_data) != 1 or
-        # self.validator.check_status_value(request_data.get("status")):
         if "status" not in request_data or len(request_data) != 1:
             return RESP_ERROR_ADMIN_NO_RIGHTS
 
@@ -202,4 +193,25 @@ class IncidentController:
             "data": [return_data],
             "message": message
         }), content_type="application/json", status=201)
+
+    @staticmethod
+    def response_create_incident_failed(request_data, strings_turple, media_turple):
+        valid_incidents = (
+            "location",
+            "videos",
+            "images",
+            "title",
+            "comment")
+        if GeneralValidator.invalid_item(request_data, valid_incidents, valid_incidents):
+            return RESP_ERROR_INVALID_INCIDENT
+        elif any(GeneralValidator.empty_string(item) for item in strings_turple):
+            return RESP_ERROR_POST_EMPTY_DATA
+        elif any(GeneralValidator.invalid_str_datatype(item) for item in strings_turple):
+            return RESP_ERROR_INVALID_STRING_TYPE
+        elif any(GeneralValidator.invalid_list_datatype(item) for item in media_turple):
+            return RESP_ERROR_INVALID_LIST_TYPE
+
+    def response_invalid_location(self, location):
+        if self.validator.invalid_coordinates(location):
+            return RESP_ERROR_INVALID_LOCATION
 

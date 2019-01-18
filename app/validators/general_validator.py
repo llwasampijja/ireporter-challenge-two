@@ -33,15 +33,10 @@ class GeneralValidator():
         return True
 
     @staticmethod
-    def invalid_incident(request_data):
-        """this method checks if an incident contains all and only required fields"""
-        valid_incidents = [
-            "location",
-            "videos",
-            "images",
-            "title",
-            "comment"]
-        if any((item not in valid_incidents) for item in request_data):
+    def invalid_item(request_data, minimum_turple, maximum_turple):
+        """this method checks if a request contains all and only required fields"""
+        if any(item not in request_data for item in minimum_turple) \
+        or any(item not in maximum_turple for item in request_data):
             return True
         return False
 
@@ -76,7 +71,7 @@ class GeneralValidator():
 
     @staticmethod
     def geo_coordinate_not_inrange(coordinate, bound):
-        """method to determin whether a particulr coordinate is within an acceptable range"""
+        """method to determin whether a particular coordinate is within an acceptable range"""
         if bound >= coordinate >= 0:
             return False
         if -bound <= coordinate <= 0:
