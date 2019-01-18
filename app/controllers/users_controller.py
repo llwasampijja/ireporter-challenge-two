@@ -173,7 +173,24 @@ class UsersController():
             }), content_type="application/json", status=201)
 
     def response_signupfail(self, request_info, names_turple, username):
-        if UserValidator.invalid_user(request_info):
+        minimum_user_properties = (
+            "firstname",
+            "lastname",
+            "email",
+            "phonenumber",
+            "username",
+            "password"
+        )
+        all_user_fields = (
+            "firstname",
+            "lastname",
+            "othernames",
+            "email",
+            "phonenumber",
+            "username",
+            "password"
+            )
+        if GeneralValidator.invalid_item(request_info, minimum_user_properties, all_user_fields):
             return RESP_ERROR_INVALID_USER
         elif any(UserValidator.invalid_name(item) for item in names_turple):
             return RESP_ERROR_INVALID_NAME

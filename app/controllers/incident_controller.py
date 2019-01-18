@@ -59,8 +59,11 @@ class IncidentController:
         incident_id = self.validator.create_id(
             get_incidents_instance, "incident_id")
 
-        if self.response_create_incident_failed(request_data, strings_turple, media_turple, location):
-            return self.response_create_incident_failed(request_data, strings_turple, media_turple, location)
+        
+        if self.response_create_incident_failed(request_data, strings_turple, media_turple):
+            return self.response_create_incident_failed(request_data, strings_turple, media_turple)
+        elif self.response_invalid_location(location):
+            return self.response_invalid_location(location)
 
         if self.validator.incident_duplicate(comment, get_incidents_instance):
             return RESP_ERROR_POST_DUPLICATE
@@ -192,8 +195,15 @@ class IncidentController:
             "message": message
         }), content_type="application/json", status=201)
 
-    def response_create_incident_failed(self, request_data, strings_turple, media_turple, location):
-        if GeneralValidator.invalid_incident(request_data):
+    @staticmethod
+    def response_create_incident_failed(request_data, strings_turple, media_turple):
+        valid_incidents = (
+            "location",
+            "videos",
+            "images",
+            "title",
+            "comment")
+        if GeneralValidator.invalid_item(request_data, valid_incidents, valid_incidents):
             return RESP_ERROR_INVALID_INCIDENT
         elif any(GeneralValidator.empty_string(item) for item in strings_turple):
             return RESP_ERROR_POST_EMPTY_DATA
@@ -201,6 +211,8 @@ class IncidentController:
             return RESP_ERROR_INVALID_STRING_TYPE
         elif any(GeneralValidator.invalid_list_datatype(item) for item in media_turple):
             return RESP_ERROR_INVALID_LIST_TYPE
-        elif self.validator.invalid_coordinates(location):
+
+    def response_invalid_location(self, location):
+        if self.validator.invalid_coordinates(location):
             return RESP_ERROR_INVALID_LOCATION
 

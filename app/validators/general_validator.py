@@ -32,17 +32,25 @@ class GeneralValidator():
             return False
         return True
 
+    # @staticmethod
+    # def invalid_incident(request_data):
+    #     """this method checks if an incident contains all and only required fields"""
+    #     valid_incidents = (
+    #         "location",
+    #         "videos",
+    #         "images",
+    #         "title",
+    #         "comment")
+    #     if any(item not in request_data for item in valid_incidents) \
+    #     or any(item not in valid_incidents for item in request_data):
+    #         return True
+    #     return False
+
     @staticmethod
-    def invalid_incident(request_data):
-        """this method checks if an incident contains all and only required fields"""
-        valid_incidents = (
-            "location",
-            "videos",
-            "images",
-            "title",
-            "comment")
-        if any(item not in request_data for item in valid_incidents) \
-        or any(item not in valid_incidents for item in request_data):
+    def invalid_item(request_data, minimum_turple, maximum_turple):
+        """this method checks if a request contains all and only required fields"""
+        if any(item not in request_data for item in minimum_turple) \
+        or any(item not in maximum_turple for item in request_data):
             return True
         return False
 

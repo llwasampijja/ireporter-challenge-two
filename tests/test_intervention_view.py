@@ -242,7 +242,7 @@ class TestInterventionView(unittest.TestCase):
         jwt_token = json.loads(self.login_response.data)["access_token"]
         new_location = {"location": "1.500, 0.3000"}
         response = self.client.patch(
-            URL_INTERVENTIONS + "/4/location",
+            URL_INTERVENTIONS + "/40/location",
             data=json.dumps(new_location),
             headers=dict(Authorization='Bearer ' + jwt_token),
             content_type="application/json"
@@ -336,7 +336,7 @@ class TestInterventionView(unittest.TestCase):
         """Test delete intervention with unavailable id"""
         jwt_token = json.loads(self.login_response.data)["access_token"]
         response = self.client.delete(
-            URL_INTERVENTIONS + "/3",
+            URL_INTERVENTIONS + "/300",
             headers=dict(Authorization='Bearer ' + jwt_token),
             content_type="application/json"
         )

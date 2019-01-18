@@ -65,31 +65,31 @@ class UserValidator():
             return False
         return True
 
-    @staticmethod
-    def invalid_user(request_info):
-        """method checks if a user has all and only the acceptable fields"""
-        minimum_user_properties = (
-            "firstname",
-            "lastname",
-            "email",
-            "phonenumber",
-            "username",
-            "password"
-        )
-        all_user_fields = (
-            "firstname",
-            "lastname",
-            "othernames",
-            "email",
-            "phonenumber",
-            "username",
-            "password"
-            )
+    # @staticmethod
+    # def invalid_user(request_info):
+    #     """method checks if a user has all and only the acceptable fields"""
+    #     minimum_user_properties = (
+    #         "firstname",
+    #         "lastname",
+    #         "email",
+    #         "phonenumber",
+    #         "username",
+    #         "password"
+    #     )
+    #     all_user_fields = (
+    #         "firstname",
+    #         "lastname",
+    #         "othernames",
+    #         "email",
+    #         "phonenumber",
+    #         "username",
+    #         "password"
+    #         )
 
-        if any(item not in request_info for item in minimum_user_properties)\
-        or any(item not in all_user_fields for item in request_info):#\
-            return True
-        return False
+    #     if any(item not in request_info for item in minimum_user_properties)\
+    #     or any(item not in all_user_fields for item in request_info):#\
+    #         return True
+    #     return False
 
     def invalid_othername(self, request_info):
         """method checks if othernames is provided by the user and if \
