@@ -21,7 +21,14 @@ from app.utilitiez.static_strings import (
     RESP_ERROR_LOGIN_FAILED,
     RESP_ERROR_UPDATE_ROLE_FAILED,
     RESP_ERROR_INVALID_ROLE,
-    RESP_ERROR_USER_NOT_FOUND
+    RESP_ERROR_USER_NOT_FOUND,
+    RESP_ERROR_INVALID_USER,
+    RESP_ERROR_INVALID_OTHERNAME,
+    RESP_ERROR_INVALID_NAME ,
+    RESP_ERROR_INVALID_USERNAME,
+    RESP_ERROR_INVALID_EMAIL,
+    RESP_ERROR_INVALID_PHONE,
+    RESP_ERROR_INVALID_PASSWORD
 )
 
 
@@ -53,19 +60,21 @@ class UsersController():
         user_id = self.my_validator.create_id(
             self.usersdata.get_users(), "user_id")
 
-        user_properties = [firstname, lastname, username]
+        if self.user_validator.invalid_user(request_info):
+            return RESP_ERROR_INVALID_USER
+        elif any(self.user_validator.invalid_name(item) for item in (firstname, lastname)):
+            return RESP_ERROR_INVALID_NAME
+        elif self.user_validator.invalid_othername(request_info):
+            return RESP_ERROR_INVALID_OTHERNAME
+        elif self.user_validator.invalid_username(username):
+            return RESP_ERROR_INVALID_USERNAME
 
-        if self.user_validator.invalid_user(request_info) \
-        or any(self.my_validator.invalid_str_datatype(item) for item in user_properties)\
-        or self.user_validator.invalid_othername(request_info)\
-        or any(self.user_validator.invalid_name(item) for item in (firstname, lastname))\
-        or self.user_validator.invalid_username(username):
-            return RESP_ERROR_SIGNUP_FAIL_INVALID_DATA
-
-        if self.user_validator.invalid_email(email)\
-        or self.user_validator.invalid_phone_number(str(phonenumber))\
-        or self.user_validator.invalid_password(password):
-            return RESP_ERROR_SIGNUP_FAIL_WRONG_FORMAT
+        if self.user_validator.invalid_email(email):
+            return RESP_ERROR_INVALID_EMAIL
+        elif self.user_validator.invalid_phone_number(str(phonenumber)):
+            return RESP_ERROR_INVALID_PHONE
+        elif self.user_validator.invalid_password(password):
+            return RESP_ERROR_INVALID_PASSWORD
 
         if self.user_validator.username_in_db(username, self.usersdata.get_users())\
             or self.user_validator.email_in_db(email, self.usersdata.get_users())\

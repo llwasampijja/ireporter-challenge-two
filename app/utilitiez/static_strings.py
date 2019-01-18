@@ -18,8 +18,6 @@ URL_INTERVENTIONS = "/api/v1/interventions"
 SWAGGER_UI_URL = "/api/v1/docs"
 # remote API documenation url
 API_URL = "https://llwasampijja.github.io/ireporter-challenge-two/ireporter_challenge_two.json"
-#local API documentation url
-# API_URL = "http://localhost/swagger-ui/dist/ireporter_challenge_two.json" 
 
 # dictionary for routes
 MY_ROUTES = {
@@ -101,8 +99,30 @@ RESP_ERROR_MSG_INCIDENT_DUPLICATE = "Failed to add incident. An incident similar
 RESP_ERROR_MSG_USER_STATUS_NORIGHTS = "Failed to update the incident's status. An admin can only edit the status of an incident, and nothing more. The only accepted values include: 'pending investigation','under investigation', 'resolved' and 'rejected'"
 RESP_ERROR_MSG_SIGNUP_FAIL_USER_EXISTS = "Failed to Signup. Attempting to sign-up with an Email address, phonenumber or username  which is/are already registered on the system"
 RESP_ERROR_MSG_ADMIN_NO_RIGHTS = "Operation failed: An admin can't edit any other field of an incident except the status"
+RESP_ERROR_MSG_INVALID_USER = "ERROR: You have less or more fields than the required number. They must include: firstname, lastname, othernames, email, phonenumber, username, password."
+RESP_ERROR_MSG_INVALID_OTHERNAME = "ERROR: You have entered an invalid othername. Must be from a-z or A-Z"
+RESP_ERROR_MSG_INVALID_NAME = "ERROR: You have entered an invalid firstname or lastname. Must be from a-z or A-Z"
+RESP_ERROR_MSG_INVALID_USERNAME = "ERROR: You have entered an invalid username. May contain numbers but must contain at least one letter"
+RESP_ERROR_MSG_INVALID_EMAIL = "ERROR: Entered an invalid email. Email must be in the format 'username@company.doman'"
+RESP_ERROR_MSG_INVALID_PHONE = "ERROR: Entered an invalid phonenumber. Phonenumber must start with 0 and iinclude 0 other digits."
+RESP_ERROR_MSG_INVALID_PASSWORD = "ERROR: Entered an invalid password. Password string must have a length of atleast 8 characters and atmost 12 characters; include at list one uppercase letter, lowercase lettter and number; and must contain atleast a '$', '#' or '@'"
 
 # string constants for various responses
+RESP_ERROR_INVALID_EMAIL = Response(json.dumps({
+    "status": 400,
+    "message": RESP_ERROR_MSG_INVALID_EMAIL
+}), content_type="application/json", status=400)
+
+RESP_ERROR_INVALID_PHONE = Response(json.dumps({
+    "status": 400,
+    "message": RESP_ERROR_MSG_INVALID_PHONE
+}), content_type="application/json", status=400)
+
+RESP_ERROR_INVALID_PASSWORD = Response(json.dumps({
+    "status": 400,
+    "message": RESP_ERROR_MSG_INVALID_PASSWORD
+}), content_type="application/json", status=400)
+
 RESP_ERROR_UNACCEPTABLE_INPUT = Response(json.dumps({
     "status": 400,
     "message": RESP_ERROR_MSG_UNACCEPTABLE_INPUT
@@ -207,3 +227,28 @@ RESP_ERROR_ADMIN_ONLY = Response(json.dumps({
     "status": 403,
     "message": RESP_ERROR_MSG_UNAUTHORIZED_VIEW
 }), content_type="application/json", status=403)
+
+RESP_ERROR_INVALID_USER = Response(json.dumps({
+    "status": 400,
+    "message": RESP_ERROR_MSG_INVALID_USER
+}), content_type="application/json", status=400)
+
+# RESP_ERROR_STRING_TYPE_NAME = Response(json.dumps({
+#     "status": 404,
+#     "message": RESP_ERROR_MSG_STRING_TYPE_NAME
+# }), content_type="application/json", status=404)
+
+RESP_ERROR_INVALID_OTHERNAME = Response(json.dumps({
+    "status": 400,
+    "message": RESP_ERROR_MSG_INVALID_OTHERNAME
+}), content_type="application/json", status=400)
+
+RESP_ERROR_INVALID_NAME = Response(json.dumps({
+    "status": 400,
+    "message": RESP_ERROR_MSG_INVALID_NAME
+}), content_type="application/json", status=400)
+
+RESP_ERROR_INVALID_USERNAME = Response(json.dumps({
+    "status": 400,
+    "message": RESP_ERROR_MSG_INVALID_USERNAME
+}), content_type="application/json", status=400)
