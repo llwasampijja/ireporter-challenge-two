@@ -59,22 +59,14 @@ class UsersController():
 
         user_id = self.my_validator.create_id(
             self.usersdata.get_users(), "user_id")
+        
+        if self.response_signupfail(request_info, (firstname, lastname), username):
+            return self.response_signupfail(request_info, (firstname, lastname), username)
 
-        if self.user_validator.invalid_user(request_info):
-            return RESP_ERROR_INVALID_USER
-        elif any(self.user_validator.invalid_name(item) for item in (firstname, lastname)):
-            return RESP_ERROR_INVALID_NAME
-        elif self.user_validator.invalid_othername(request_info):
-            return RESP_ERROR_INVALID_OTHERNAME
-        elif self.user_validator.invalid_username(username):
-            return RESP_ERROR_INVALID_USERNAME
+        if self.response_invalid_values(email, phonenumber, password):
+            return self.response_invalid_values(email, phonenumber, password)
 
-        if self.user_validator.invalid_email(email):
-            return RESP_ERROR_INVALID_EMAIL
-        elif self.user_validator.invalid_phone_number(str(phonenumber)):
-            return RESP_ERROR_INVALID_PHONE
-        elif self.user_validator.invalid_password(password):
-            return RESP_ERROR_INVALID_PASSWORD
+
 
         if self.user_validator.username_in_db(username, self.usersdata.get_users())\
             or self.user_validator.email_in_db(email, self.usersdata.get_users())\
@@ -179,3 +171,22 @@ class UsersController():
                 "data": [user_modified],
                 "message": RESP_SUCCESS_MSG_ADMIN_RIGHTS
             }), content_type="application/json", status=201)
+
+    def response_signupfail(self, request_info, names_turple, username):
+        if UserValidator.invalid_user(request_info):
+            return RESP_ERROR_INVALID_USER
+        elif any(UserValidator.invalid_name(item) for item in names_turple):
+            return RESP_ERROR_INVALID_NAME
+        elif self.user_validator.invalid_othername(request_info):
+            return RESP_ERROR_INVALID_OTHERNAME
+        elif UserValidator.invalid_username(username):
+            return RESP_ERROR_INVALID_USERNAME
+
+    def response_invalid_values(self, email, phone, password):
+        if self.user_validator.invalid_email(email):
+            return RESP_ERROR_INVALID_EMAIL
+        elif self.user_validator.invalid_phone_number(str(phone)):
+            return RESP_ERROR_INVALID_PHONE
+        elif self.user_validator.invalid_password(password):
+            return RESP_ERROR_INVALID_PASSWORD
+
