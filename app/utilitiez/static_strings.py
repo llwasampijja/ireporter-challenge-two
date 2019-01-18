@@ -62,27 +62,6 @@ RESP_ERROR_MSG_PAGE_NOT = "No such page exists on this site"
 RESP_ERROR_MSG_METHOD_NOT_ALLOWED = "Method not allowed"
 RESP_ERROR_MSG_INTERNAL_SERVER_ERROR = "An internal server error occured. Try again later when this issue is resolved by the site administrators or make sure you are submitting the correct and allowed format of data"
 
-# string constants for various error messages
-RESP_ERROR_MSG_POST_INCIDENT_WRONG_DATA = {
-    "ERROR": "Failed to post the incident: There was a problem with your input, ensure that it abides by the following requirements and try again",
-    "Requirement 1": "An incident must contain all required fields, i.e: comment,title, images, and videos. It should not contain any other field except these.",
-    "Requirement 2": "The title, comment and location fields must be of String type.",
-    "Requirement 3": "The location field must be a string of two floating values separated by a comma ',', i.e: A latitude and longitude. The latitude must be in the ranges 0 to 90 or -90 to 0. The longitude must be in the ranges 0 to 180 or -180 to 0",
-    "Requirement 4": "The images and videos fields must be lists of strings (urls)"
-}
-RESP_ERROR_MSG_SIGNUP = {
-    "ERROR": "Failed to signup. Ensure that all your input values fulfill all the requirements listed below",
-    "Requirement 1": "You must provide firstname, lastname, othernames (optional), email, phonenumber, username, and password",
-    "Requirement 2": "The username, firstname, lastname and othernames (if provided) must be of String type",
-    "Requirement 3": "firstname, lastname and othernames (if provided) must be strings with only alphabets",
-    "Requirement 4": "The username may contain numbers but must contain atleast one letter of the alphabet"
-}
-RESP_ERROR_MSG_SIGNUP_FAIL_WRONG_FORMAT = {
-    "ERROR": "Failed to signup. Ensure that all your input values fulfill all the requirements listed below",
-    "Requirement 1": "The email address must be in a valid format, i.e, name@company.domain",
-    "Requirement 2": "You must provide a valid password, i.e., password length must be atleast 8 characters and atmost 12 characters; include at list one uppercase letter, lowercase lettter and number; and must contain atleast a '$', '#' or '@'"
-}
-
 RESP_ERROR_MSG_UNAUTHORIZED_VIEW = "You are not authorised to access this content"
 RESP_ERROR_MSG_EMPTY_STRING = "Empty fields are not allowed"
 RESP_ERROR_MSG_UNACCEPTABLE_INPUT = "Operation failed. You entered an unacceptable value for the operation"
@@ -153,11 +132,6 @@ RESP_ERROR_UNACCEPTABLE_INPUT = Response(json.dumps({
     "message": RESP_ERROR_MSG_UNACCEPTABLE_INPUT
 }), content_type="application/json", status=400)
 
-RESP_ERROR_POST_INCIDENT_WRONG_DATA = Response(json.dumps({
-    "status": 400,
-    "message": RESP_ERROR_MSG_POST_INCIDENT_WRONG_DATA
-}), content_type="application/json", status=400)
-
 RESP_ERROR_POST_EMPTY_DATA = Response(json.dumps({
     "status": 400,
     "message": RESP_ERROR_MSG_EMPTY_STRING
@@ -187,16 +161,6 @@ RESP_ERROR_ADMIN_NO_RIGHTS = Response(json.dumps({
     "status": 401,
     "message": RESP_ERROR_MSG_ADMIN_NO_RIGHTS
 }), content_type="application/json", status=401)
-
-RESP_ERROR_SIGNUP_FAIL_INVALID_DATA = Response(json.dumps({
-    "status": 400,
-    "message": RESP_ERROR_MSG_SIGNUP
-}), content_type="application/json", status=400)
-
-RESP_ERROR_SIGNUP_FAIL_WRONG_FORMAT = Response(json.dumps({
-    "status": 400,
-    "message": RESP_ERROR_MSG_SIGNUP_FAIL_WRONG_FORMAT
-}), content_type="application/json", status=400)
 
 RESP_ERROR_SIGNUP_FAIL_USER_EXISTS = Response(json.dumps({
     "status": 400,
