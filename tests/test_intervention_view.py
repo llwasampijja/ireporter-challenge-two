@@ -21,7 +21,11 @@ from app.utilitiez.static_strings import (
     RESP_ERROR_MSG_UDATE_WRONG_LOCATION,
     RESP_ERROR_MSG_INCIDENT_NOT_FOUND,
     RESP_ERROR_MSG_INCIDENT_DUPLICATE,
-    RESP_ERROR_MSG_EMPTY_STRING
+    RESP_ERROR_MSG_EMPTY_STRING,
+    RESP_ERROR_MSG_INVALID_STRING_TYPE,
+    RESP_ERROR_MSG_INVALID_LIST_TYPE,
+    RESP_ERROR_MSG_INVALID_LOCATION,
+    RESP_ERROR_MSG_INVALID_INCIDENT
 )
 
 
@@ -128,14 +132,15 @@ class TestInterventionView(unittest.TestCase):
             data=json.dumps({
                 "location": "2.00, 3.222",
                 "videos": ["Video url"],
-                "comment": "Schoo;l is bad"
+                "images": ["image.jpg"],
+                "comment": "School is bad"
             }),
             content_type="application/json"
         )
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data.get("message"),
-                         RESP_ERROR_MSG_POST_INCIDENT_WRONG_DATA)
+                         RESP_ERROR_MSG_INVALID_INCIDENT)
 
     def test_create_moreattributes(self):
         """Test for creating an invalid intervention with more parameters than needed"""
@@ -156,7 +161,7 @@ class TestInterventionView(unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data.get("message"),
-                         RESP_ERROR_MSG_POST_INCIDENT_WRONG_DATA)
+                         RESP_ERROR_MSG_INVALID_INCIDENT)
 
     def test_create_stringvideos(self):
         """Test for creating an invalid intervention with string of vidoes instead of list"""
@@ -176,7 +181,7 @@ class TestInterventionView(unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data.get("message"),
-                         RESP_ERROR_MSG_POST_INCIDENT_WRONG_DATA)
+                         RESP_ERROR_MSG_INVALID_LIST_TYPE)
 
     def test_create_emptystring(self):
         """Test for creating an invalid intervention with an empty string"""

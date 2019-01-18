@@ -106,8 +106,33 @@ RESP_ERROR_MSG_INVALID_USERNAME = "ERROR: You have entered an invalid username. 
 RESP_ERROR_MSG_INVALID_EMAIL = "ERROR: Entered an invalid email. Email must be in the format 'username@company.doman'"
 RESP_ERROR_MSG_INVALID_PHONE = "ERROR: Entered an invalid phonenumber. Phonenumber must start with 0 and iinclude 0 other digits."
 RESP_ERROR_MSG_INVALID_PASSWORD = "ERROR: Entered an invalid password. Password string must have a length of atleast 8 characters and atmost 12 characters; include at list one uppercase letter, lowercase lettter and number; and must contain atleast a '$', '#' or '@'"
+RESP_ERROR_MSG_INVALID_STRING_TYPE = "ERROR: Entered a non string value  for either location, title or comment"
+RESP_ERROR_MSG_INVALID_LIST_TYPE = "ERROR: Entered a non list of strings value  for either videos or images"
+RESP_ERROR_MSG_INVALID_LOCATION = "ERROR: Entered a latitude or logitude which is out of range"
+RESP_ERROR_MSG_INVALID_INCIDENT = "ERROR: Entered more or less fields than the required: Required fields include: location, videos, images, title, and comment"
 
 # string constants for various responses
+RESP_ERROR_INVALID_STRING_TYPE = Response(json.dumps({
+    "status": 400,
+    "message": RESP_ERROR_MSG_INVALID_STRING_TYPE
+}), content_type="application/json", status=400)
+
+RESP_ERROR_INVALID_LIST_TYPE = Response(json.dumps({
+    "status": 400,
+    "message": RESP_ERROR_MSG_INVALID_LIST_TYPE
+}), content_type="application/json", status=400)
+
+RESP_ERROR_INVALID_LOCATION = Response(json.dumps({
+    "status": 400,
+    "message": RESP_ERROR_MSG_INVALID_LOCATION
+}), content_type="application/json", status=400)
+
+RESP_ERROR_INVALID_INCIDENT = Response(json.dumps({
+    "status": 400,
+    "message": RESP_ERROR_MSG_INVALID_INCIDENT
+}), content_type="application/json", status=400)
+
+
 RESP_ERROR_INVALID_EMAIL = Response(json.dumps({
     "status": 400,
     "message": RESP_ERROR_MSG_INVALID_EMAIL

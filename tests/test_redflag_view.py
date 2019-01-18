@@ -25,7 +25,11 @@ from app.utilitiez.static_strings import (
     RESP_ERROR_MSG_UPDATE_STATUS,
     RESP_ERROR_MSG_INCIDENT_NOT_FOUND,
     RESP_ERROR_MSG_EMPTY_STRING,
-    RESP_ERROR_MSG_ADMIN_NO_RIGHTS
+    RESP_ERROR_MSG_ADMIN_NO_RIGHTS,
+    RESP_ERROR_MSG_INVALID_STRING_TYPE,
+    RESP_ERROR_MSG_INVALID_LIST_TYPE,
+    RESP_ERROR_MSG_INVALID_LOCATION,
+    RESP_ERROR_MSG_INVALID_INCIDENT
 )
 
 
@@ -124,7 +128,7 @@ class TestRedflagView(unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data.get("message"),
-                         RESP_ERROR_MSG_POST_INCIDENT_WRONG_DATA)
+                         RESP_ERROR_MSG_INVALID_INCIDENT)
 
     def test_create_redflag_more(self):
         """Test for creating an invalid red-flag with more parameters than needed"""
@@ -145,7 +149,7 @@ class TestRedflagView(unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data.get("message"),
-                         RESP_ERROR_MSG_POST_INCIDENT_WRONG_DATA)
+                         RESP_ERROR_MSG_INVALID_INCIDENT)
 
     def test_create_redflag_videosstring(self):    
         """Test for creating an invalid red-flag with string of vidoes instead of list"""
@@ -165,7 +169,7 @@ class TestRedflagView(unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data.get("message"),
-                         RESP_ERROR_MSG_POST_INCIDENT_WRONG_DATA)
+                         RESP_ERROR_MSG_INVALID_LIST_TYPE)
 
     def test_create_redflag_emptystring(self):    
         """Test for creating an invalid red-flag with an empty string"""
@@ -187,6 +191,26 @@ class TestRedflagView(unittest.TestCase):
         self.assertEqual(data.get("message"),
                          RESP_ERROR_MSG_EMPTY_STRING)
 
+    def test_create_redflag_invalid_string_type(self):    
+        """Test for creating an invalid red-flag with an empty string"""
+        jwt_token = json.loads(self.login_response.data)["access_token"]
+        response = self.client.post(
+            URL_REDFLAGS,
+            headers=dict(Authorization='Bearer ' + jwt_token),
+            data=json.dumps({
+                "location": "0.342, 143",
+                "videos": ["Video url"],
+                "images": "images urls",
+                "title": 67,
+                "comment": "He was caught red handed empty string"
+            }),
+            content_type="application/json"
+        )
+        data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(data.get("message"),
+                         RESP_ERROR_MSG_INVALID_STRING_TYPE)
+
     def test_create_redflag_onecoordinate(self):     
         """test add redflag with location with only one coordinate"""
         jwt_token = json.loads(self.login_response.data)["access_token"]
@@ -204,7 +228,7 @@ class TestRedflagView(unittest.TestCase):
         )
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(data.get("message"), RESP_ERROR_MSG_POST_INCIDENT_WRONG_DATA)
+        self.assertEqual(data.get("message"), RESP_ERROR_MSG_INVALID_LOCATION)
 
     def test_create_redflag_outofrangecoordinate(self):     
         """test add redflag with location with coordinate not in range"""
@@ -223,7 +247,7 @@ class TestRedflagView(unittest.TestCase):
         )
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(data.get("message"), RESP_ERROR_MSG_POST_INCIDENT_WRONG_DATA)
+        self.assertEqual(data.get("message"), RESP_ERROR_MSG_INVALID_LOCATION)
 
     def test_create_redflag_wrongcordinatetype(self):     
         """test add redflag with location with coordinate not in range"""
@@ -242,7 +266,7 @@ class TestRedflagView(unittest.TestCase):
         )
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(data.get("message"), RESP_ERROR_MSG_POST_INCIDENT_WRONG_DATA)
+        self.assertEqual(data.get("message"), RESP_ERROR_MSG_INVALID_LOCATION)
 
     def test_get_redflags(self):
         """unit test for getting all redflags"""
