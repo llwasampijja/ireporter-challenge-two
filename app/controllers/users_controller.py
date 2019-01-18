@@ -14,8 +14,6 @@ from app.utilitiez.static_strings import (
     RESP_SUCCESS_MSG_ADMIN_RIGHTS,
     RESP_SUCCESS_MSG_AUTH_LOGIN,
 
-    RESP_ERROR_SIGNUP_FAIL_INVALID_DATA,
-    RESP_ERROR_SIGNUP_FAIL_WRONG_FORMAT,
     RESP_ERROR_SIGNUP_FAIL_USER_EXISTS,
     RESP_ERROR_POST_EMPTY_DATA,
     RESP_ERROR_LOGIN_FAILED,
@@ -173,7 +171,24 @@ class UsersController():
             }), content_type="application/json", status=201)
 
     def response_signupfail(self, request_info, names_turple, username):
-        if UserValidator.invalid_user(request_info):
+        minimum_user_properties = (
+            "firstname",
+            "lastname",
+            "email",
+            "phonenumber",
+            "username",
+            "password"
+        )
+        all_user_fields = (
+            "firstname",
+            "lastname",
+            "othernames",
+            "email",
+            "phonenumber",
+            "username",
+            "password"
+            )
+        if GeneralValidator.invalid_item(request_info, minimum_user_properties, all_user_fields):
             return RESP_ERROR_INVALID_USER
         elif any(UserValidator.invalid_name(item) for item in names_turple):
             return RESP_ERROR_INVALID_NAME
