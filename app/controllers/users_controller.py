@@ -42,6 +42,9 @@ class UsersController():
             json.dumps(self.usersdata.get_users()),
             content_type="application/json",
             status=200)
+    
+    def export_users(self):
+        return self.usersdata.get_users()
 
     def adduser(self, request_info):
         """method for registering a user (signing up)"""
@@ -89,14 +92,8 @@ class UsersController():
         newuser_dict = (new_user.user_dict())
         newuser_dict.pop("password")
 
-        user_details = {
-            "user_id": user_id,
-            "username": username,
-            "is_admin": is_admin
-        }
-
         access_token = create_access_token(
-            user_details,
+            newuser_dict,
             expires_delta=datetime.timedelta(hours=1)
         )
 

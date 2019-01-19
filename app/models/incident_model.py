@@ -1,4 +1,5 @@
 """module containing models and data methods for incidents"""
+from app.models.user_model import UsersData
 
 class Incident:
     """incident model"""
@@ -37,33 +38,9 @@ class Incident:
 
 class IncidentData:
     """class for managing data of incidents"""
+    users_data = UsersData()
     def __init__(self):
-        self.redflags_list = [
-            {
-                "incident_id": 1,
-                "incident_type": "red-flag",
-                "created_on": "10/10/2018",
-                "created_by": "annsmith",
-                "location": "2.0000, 0.3019",
-                "status": "pending investigation",
-                "videos": ['stole.mp4', 'corrupe.mp4'],
-                "images": ['stole.jpg', 'corrupt.jpg'],
-                "title": "cop thief",
-                "comment": "I saw him steal"
-            },
-            {
-                "incident_id": 2,
-                "incident_type": "red-flag",
-                "created_on": "30/10/2018",
-                "created_by": "dallkased",
-                "location": "2.0000, 90.3019",
-                "status": "resolved",
-                "videos": ['stole.mp4', 'corrupe.mp4'],
-                "images": ['stole.jpg', 'corrupt.jpg'],
-                "title": "cop thief",
-                "comment": "Every one saw him stealing money"
-            }
-        ]
+        self.redflags_list = []
         self.interventions_list = []
 
     def create_incident(self, incident, keyword):
@@ -79,6 +56,19 @@ class IncidentData:
             return self.redflags_list
         else:
             return self.interventions_list
+
+    def get_incidents_specific_user(self, user_id, incidents_list, users_list):
+        """method for getting all incidents for a particular user"""
+        incidents_specific_user = []
+        username = None
+        
+        for user in users_list:
+            if user_id == user.get("user_id"):
+                username = user.get("username")
+        for incident in incidents_list:
+            if username == incident.get("created_by"):
+                incidents_specific_user.append(incident)
+        return (username, incidents_specific_user)
 
     def update_incident(self, incident_id, new_update, keyword, username):
         """method for updating the an incident in the incidents list"""
@@ -129,6 +119,7 @@ class IncidentData:
     @staticmethod
     def my_get_incident(incidents_list, incident_id):
         """method for retrieving an incident from the incidents list"""
+        print("Unknown cause of error: " + str(incidents_list))
         for incident in incidents_list:
             if incident.get("incident_id") == incident_id:
                 return incident

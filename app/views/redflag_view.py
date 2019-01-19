@@ -24,7 +24,6 @@ def get_redflags():
     """method and route for getting all red-flag incidents"""
     return redflag_controller.get_incidents("redflag")
 
-
 @redflag_blueprint.route("/<int:redflag_id>", methods=["GET"])
 @authenticator.authorized
 def get_flag(redflag_id):
@@ -41,7 +40,6 @@ def update_redflag(redflag_id):
     return redflag_controller.update_incident(
         redflag_id, request_data, "redflag", get_jwt_identity()["username"]
     )
-
 
 @redflag_blueprint.route("/<int:redflag_id>/status", methods=["PATCH"])
 @authenticator.admin_only

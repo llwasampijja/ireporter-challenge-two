@@ -24,7 +24,8 @@ from app.utilitiez.static_strings import (
     RESP_ERROR_MSG_INVALID_STRING_TYPE,
     RESP_ERROR_MSG_INVALID_LIST_TYPE,
     RESP_ERROR_MSG_INVALID_LOCATION,
-    RESP_ERROR_MSG_INVALID_INCIDENT
+    RESP_ERROR_MSG_INVALID_INCIDENT,
+    RESP_ERROR_MSG_USER_NOT_FOUND
 )
 
 
@@ -68,7 +69,7 @@ class TestInterventionView(unittest.TestCase):
         )
         self.assertEqual(response.status_code, 200)
 
-        # intervention to ensure that the list is not empty when one item is
+        # add intervention to ensure that the list is not empty when one item is
         #  deleted during testing for deleting
         self.client.post(
             URL_INTERVENTIONS,
@@ -102,6 +103,7 @@ class TestInterventionView(unittest.TestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(data.get("message"),
                          RESP_SUCCESS_MSG_CREATE_INCIDENT)
+
     def test_create_duplicate(self):
         """Test for creating a duplicate intervention"""
         jwt_token = json.loads(self.login_response.data)["access_token"]
@@ -309,8 +311,7 @@ class TestInterventionView(unittest.TestCase):
                          RESP_ERROR_MSG_UDATE_WRONG_LOCATION)
 
     def test_update_intervention_status(self):
-        """unit test for uodating the status of an intervention incident"""
-        # Test update intervention status by admin
+        """Test update intervention status by admin"""
         new_status = {"status": "resolved"}
         admin_login_response = self.client.post(
             URL_LOGIN, data=json.dumps({
@@ -353,6 +354,6 @@ class TestInterventionView(unittest.TestCase):
             content_type="application/json"
         )
         data = json.loads(response.data.decode())
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(data.get("message"),
                          RESP_SUCCESS_MSG_INCIDENT_DELETE)
