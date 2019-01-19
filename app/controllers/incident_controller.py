@@ -110,19 +110,23 @@ class IncidentController:
             self.incident_data.get_incidents(keyword),
             self.users_controller.export_users()
         )
+        print("keyword is :" + keyword)
+        return self.refactor_get_incident_spec_user(get_incidents_instance[0], get_incidents_instance[1])
 
-        if get_incidents_instance[0] is None:
+    @staticmethod
+    def refactor_get_incident_spec_user(username, incident_lists):
+        data = []
+        message = ""
+        if username is None:
             return RESP_ERROR_USER_NOT_FOUND
-        elif not get_incidents_instance[1]:
-            return Response(json.dumps({
-                "status": 200,
-                "data": [],
-                "mesage": RESP_SUCCESS_MSG_INCIDENT_LIST_EMPTY
-            }), content_type="application/json", status=200)
+        elif  len(incident_lists) == 0:
+            message = RESP_SUCCESS_MSG_INCIDENT_LIST_EMPTY
         else:
-            return Response(json.dumps({
+            data = incident_lists
+        return Response(json.dumps({
                 "status": 200,
-                "data": get_incidents_instance[1]
+                "data": data,
+                "message": message
             }), content_type="application/json", status=200)
 
 

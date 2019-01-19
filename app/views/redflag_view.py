@@ -25,7 +25,7 @@ def get_redflags():
     return redflag_controller.get_incidents("redflag")
 
 @redflag_blueprint.route("/user/<int:user_id>", methods=["GET"])
-# @authenticator.authorized
+@authenticator.authorized
 def get_redflags_user(user_id):
     """method and route for getting all red-flag incidents"""
     return redflag_controller.get_incidents_specific_user("redflag", user_id)

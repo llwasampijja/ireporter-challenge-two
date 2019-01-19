@@ -21,8 +21,8 @@ class Authenticator():
             if str(user_identity["is_admin"]).lower() == "true" \
                     or str(user_identity["is_admin"]).lower() == "false":
                 return fxn(*args, **kwargs)
-            else:
-                return RESP_ERROR_UNAUTHORIZED_VIEW
+            # else:
+            #     return RESP_ERROR_UNAUTHORIZED_VIEW
 
         return wrapper
 
