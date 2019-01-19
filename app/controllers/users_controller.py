@@ -42,6 +42,9 @@ class UsersController():
             json.dumps(self.usersdata.get_users()),
             content_type="application/json",
             status=200)
+    
+    def export_users(self):
+        return self.usersdata.get_users()
 
     def adduser(self, request_info):
         """method for registering a user (signing up)"""
