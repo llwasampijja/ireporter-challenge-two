@@ -29,7 +29,8 @@ from app.utilitiez.static_strings import (
     RESP_ERROR_INVALID_LIST_TYPE,
     RESP_ERROR_INVALID_LOCATION,
     RESP_ERROR_INVALID_INCIDENT,
-    RESP_ERROR_USER_NOT_FOUND
+    RESP_ERROR_USER_NOT_FOUND,
+    RESP_ERROR_UNAUTHORIZED_VIEW
 )
 
 
@@ -44,6 +45,7 @@ class IncidentController:
         """method for creating red-flags"""
         verify_jwt_in_request()
         user_identity = get_jwt_identity()
+
         created_on = datetime.datetime.now()
         created_by = user_identity["username"]
         location = request_data.get("location")
@@ -105,20 +107,29 @@ class IncidentController:
             }), content_type="application/json", status=200)
 
     def get_incidents_specific_user(self, keyword, user_id):
+      
         get_incidents_instance = self.incident_data.get_incidents_specific_user(
             user_id,
             self.incident_data.get_incidents(keyword),
             self.users_controller.export_users()
         )
         print("keyword is :" + keyword)
-        return self.refactor_get_incident_spec_user(get_incidents_instance[0], get_incidents_instance[1])
+        return self.refactor_get_incident_spec_user(
+            get_incidents_instance[0],
+            get_incidents_instance[1],
+            user_id
+        )
 
     @staticmethod
-    def refactor_get_incident_spec_user(username, incident_lists):
+    def refactor_get_incident_spec_user(username, incident_lists, user_id):
+        verify_jwt_in_request()
+        user_identity = get_jwt_identity()
         data = []
         message = ""
         if username is None:
             return RESP_ERROR_USER_NOT_FOUND
+        elif user_identity["user_id"] != user_id and  not user_identity["is_admin"]:
+            return RESP_ERROR_UNAUTHORIZED_VIEW
         elif  len(incident_lists) == 0:
             message = RESP_SUCCESS_MSG_INCIDENT_LIST_EMPTY
         else:

@@ -228,11 +228,6 @@ RESP_ERROR_INVALID_USER = Response(json.dumps({
     "message": RESP_ERROR_MSG_INVALID_USER
 }), content_type="application/json", status=400)
 
-# RESP_ERROR_STRING_TYPE_NAME = Response(json.dumps({
-#     "status": 404,
-#     "message": RESP_ERROR_MSG_STRING_TYPE_NAME
-# }), content_type="application/json", status=404)
-
 RESP_ERROR_INVALID_OTHERNAME = Response(json.dumps({
     "status": 400,
     "message": RESP_ERROR_MSG_INVALID_OTHERNAME

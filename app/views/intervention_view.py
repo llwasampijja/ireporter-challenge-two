@@ -25,11 +25,6 @@ def get_interventions():
     """method with route for getting all the intervention incidents"""
     return intervention_controller.get_incidents("intervention")
 
-@intervention_blueprint.route("/user/<int:user_id>", methods=["GET"])
-@authenticator.authorized
-def get_interventions_for_user(user_id):
-    return intervention_controller.get_incidents_specific_user("intervention", user_id)
-
 @intervention_blueprint.route("/<int:intervention_id>", methods=["GET"])
 @authenticator.authorized
 def get_intervention(intervention_id):

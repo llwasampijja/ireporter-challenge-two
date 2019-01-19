@@ -92,14 +92,8 @@ class UsersController():
         newuser_dict = (new_user.user_dict())
         newuser_dict.pop("password")
 
-        user_details = {
-            "user_id": user_id,
-            "username": username,
-            "is_admin": is_admin
-        }
-
         access_token = create_access_token(
-            user_details,
+            newuser_dict,
             expires_delta=datetime.timedelta(hours=1)
         )
 
