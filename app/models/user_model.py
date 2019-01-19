@@ -52,18 +52,6 @@ class UsersData():
                 "password": hashlib.sha224(
                     b"{}").hexdigest().format("i@mG8t##")
             },
-            {
-                "user_id": 2,
-                "firstname": "Jet",
-                "lastname": "Li",
-                "othernames": "The Real Li",
-                "email": "jetli@bolon.com",
-                "phonenumber": "0775961853",
-                "username": "jetli",
-                "is_admin": "admin",
-                "password": hashlib.sha224(
-                    b"{}").hexdigest().format("i@mG8t##")
-            }
         ]
         self.username_current = {"username":None}
 
@@ -83,6 +71,4 @@ class UsersData():
                 user.pop("password")
                 return user
         return None
-
-    # def get_logged_user(self, username):
-    #     return self.username_current.update({"username":username})
+        
