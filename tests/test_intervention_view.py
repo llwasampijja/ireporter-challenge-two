@@ -214,16 +214,6 @@ class TestInterventionView(unittest.TestCase):
         )
         self.assertEqual(response.status_code, 200)
 
-    def test_get_interventions_specific_user_listempty(self):
-        """unit test for getting all redflags for spefic user"""
-        jwt_token = json.loads(self.login_response.data)["access_token"]
-        response = self.client.get(
-            URL_INTERVENTIONS + "/user/2",
-            headers=dict(Authorization='Bearer ' + jwt_token),
-            content_type="application/json"
-        )
-        self.assertEqual(response.status_code, 200)
-
     def test_get_intervention(self):
         """ Test get intervention with available id"""
         jwt_token = json.loads(self.login_response.data)["access_token"]
