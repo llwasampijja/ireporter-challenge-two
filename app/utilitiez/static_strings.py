@@ -91,6 +91,12 @@ RESP_ERROR_MSG_INVALID_LOCATION = "ERROR: Entered a latitude or logitude which i
 RESP_ERROR_MSG_INVALID_INCIDENT = "ERROR: Entered more or less fields than the required: Required fields include: location, videos, images, title, and comment"
 
 # string constants for various responses
+
+RESP_ERROR_USER_NOT_FOUND = Response(json.dumps({
+    "status": 400,
+    "message": RESP_ERROR_MSG_USER_NOT_FOUND
+}), content_type="application/json", status=400)
+
 RESP_ERROR_INVALID_STRING_TYPE = Response(json.dumps({
     "status": 400,
     "message": RESP_ERROR_MSG_INVALID_STRING_TYPE

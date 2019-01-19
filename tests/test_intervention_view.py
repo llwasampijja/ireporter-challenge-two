@@ -353,6 +353,6 @@ class TestInterventionView(unittest.TestCase):
             content_type="application/json"
         )
         data = json.loads(response.data.decode())
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(data.get("message"),
                          RESP_SUCCESS_MSG_INCIDENT_DELETE)

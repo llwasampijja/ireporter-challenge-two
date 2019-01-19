@@ -6,6 +6,7 @@ from flask import request, Response, json
 from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
 
 from app.models.incident_model import Incident, IncidentData
+from app.controllers.users_controller import UsersController
 from app.validators.general_validator import GeneralValidator
 from app.utilitiez.static_strings import (
     RESP_SUCCESS_MSG_INCIDENT_STATUS_UPDATE,
@@ -27,7 +28,8 @@ from app.utilitiez.static_strings import (
     RESP_ERROR_INVALID_STRING_TYPE,
     RESP_ERROR_INVALID_LIST_TYPE,
     RESP_ERROR_INVALID_LOCATION,
-    RESP_ERROR_INVALID_INCIDENT
+    RESP_ERROR_INVALID_INCIDENT,
+    RESP_ERROR_USER_NOT_FOUND
 )
 
 
@@ -36,6 +38,7 @@ class IncidentController:
 
     validator = GeneralValidator()
     incident_data = IncidentData()
+    users_controller = UsersController()
 
     def create_incident(self, request_data, keyword):
         """method for creating red-flags"""
@@ -101,6 +104,28 @@ class IncidentController:
                 "data": get_incidents_instance
             }), content_type="application/json", status=200)
 
+    def get_incidents_specific_user(self, keyword, user_id):
+        get_incidents_instance = self.incident_data.get_incidents_specific_user(
+            user_id,
+            self.incident_data.get_incidents(keyword),
+            self.users_controller.export_users()
+        )
+
+        if get_incidents_instance[0] is None:
+            return RESP_ERROR_USER_NOT_FOUND
+        elif not get_incidents_instance[1]:
+            return Response(json.dumps({
+                "status": 200,
+                "data": [],
+                "mesage": RESP_SUCCESS_MSG_INCIDENT_LIST_EMPTY
+            }), content_type="application/json", status=200)
+        else:
+            return Response(json.dumps({
+                "status": 200,
+                "data": get_incidents_instance[1]
+            }), content_type="application/json", status=200)
+
+
     def get_incident(self, incident_id, keyword):
         """method for getting a single incident by id"""
         get_incident_instance = self.incident_data.get_incident(
@@ -111,8 +136,8 @@ class IncidentController:
             return Response(json.dumps({
                 "status": 200,
                 "data": [get_incident_instance]
-            }), content_type="application/json", status=200)
-
+            }), content_type="application/json", status=200)          
+        
     def update_incident(self, incident_id, request_data, keyword, username):
         """method for editing the location of an incident"""
         location = request_data.get("location")
@@ -183,7 +208,11 @@ class IncidentController:
     def response_submission_success(return_data, keyword):
         """refactored method for returning right response for successful delete and update"""
         if keyword == "delete":
-            message = RESP_SUCCESS_MSG_INCIDENT_DELETE
+            return Response(json.dumps({
+                "status": 200,
+                "message": RESP_SUCCESS_MSG_INCIDENT_DELETE
+            }), content_type="application/json", status=200)
+            
         elif keyword == "incident_status":
             message = RESP_SUCCESS_MSG_INCIDENT_STATUS_UPDATE
         else:
