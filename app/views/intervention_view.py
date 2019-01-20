@@ -45,6 +45,16 @@ def update_intervention_location(intervention_id):
         "edit_location"
     )
 
+@intervention_blueprint.route("/<int:intervention_id>/location", methods=["PATCH"])
+@authenticator.concerned_citzen
+def updated_intervention_comment(intervention_id):
+    request_data = request.get_json()
+    verify_jwt_in_request()
+    return intervention_controller.update_incident(
+        intervention_id, request_data, "intervention", get_jwt_identity()["username"],
+        "edit_comment"
+    ) 
+
 
 @intervention_blueprint.route("/<int:intervention_id>/status", methods=["PATCH"])
 @authenticator.admin_only
