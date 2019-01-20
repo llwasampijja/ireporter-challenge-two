@@ -6,15 +6,15 @@ class Incident:
     def __init__(self, **kwargs):
         self.incident_id = kwargs.get("incident_id")
         self.incident_type = kwargs.get("incident_type")
-        self.created_on = kwargs.get("created_on")
-        self.created_by = kwargs.get("created_by")
         self.location = kwargs.get("location")
-        self.status = kwargs.get("status")
-        self.videos = kwargs.get("videos")
-        self.images = kwargs.get("images")
         self.title = kwargs.get("title")
         self.comment = kwargs.get("comment")
-
+        self.images = kwargs.get("images")
+        self.videos = kwargs.get("videos")
+        self.created_on = kwargs.get("created_on")
+        self.created_by = kwargs.get("created_by")
+        self.status = kwargs.get("status")
+        
     def incident_dict(self, keyword):
         """method to return a dictionary of an incident"""
         if keyword == "redflag":
@@ -25,16 +25,15 @@ class Incident:
         return {
             "incident_id": self.incident_id,
             "incident_type": self.incident_type,
+            "location": self.location,
+            "title": self.title,
+            "comment": self.comment,
+            "images": self.images,
+            "videos": self.videos,
             "created_on": self.created_on,
             "created_by": self.created_by,
-            "location": self.location,
-            "status": self.status,
-            "videos": self.videos,
-            "images": self.images,
-            "title": self.title,
-            "comment": self.comment
+            "status": self.status
         }
-
 
 class IncidentData:
     """class for managing data of incidents"""

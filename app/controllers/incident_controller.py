@@ -45,15 +45,15 @@ class IncidentController:
         """method for creating red-flags"""
         verify_jwt_in_request()
         user_identity = get_jwt_identity()
-
-        created_on = datetime.datetime.now()
-        created_by = user_identity["username"]
+        
         location = request_data.get("location")
-        status = "pending investigation"
-        videos = request_data.get("videos")
-        images = request_data.get("images")
         title = request_data.get("title")
         comment = request_data.get("comment")
+        images = request_data.get("images")
+        videos = request_data.get("videos")
+        created_on = datetime.datetime.now()
+        created_by = user_identity["username"]
+        status = "pending investigation"
 
         strings_turple = (created_by, location, title, comment)
         media_turple = (videos, images)
@@ -74,14 +74,15 @@ class IncidentController:
 
         new_incident = Incident(
             incident_id=incident_id,
+            location=location,
+            title=title,
+            comment=comment,
+            images=images,
+            videos=videos,
             created_on=created_on,
             created_by=created_by,
-            location=location,
-            status=status,
-            videos=videos,
-            images=images,
-            title=title,
-            comment=comment)
+            status=status      
+        )
         self.incident_data.create_incident(
             new_incident.incident_dict(keyword), keyword)
 

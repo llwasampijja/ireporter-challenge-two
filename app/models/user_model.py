@@ -11,12 +11,12 @@ class User():
         self.firstname = kwargs.get("firstname")
         self.lastname = kwargs.get("lastname")
         self.othernames = "ANN"
+        self.username = kwargs.get("username")
         self.email = kwargs.get("email")
         self.phonenumber = kwargs.get("phonenumber")
-        self.username = kwargs.get("username")
-        self.registered_on = kwargs.get("registered_on")
         self.is_admin = kwargs.get("is_admin")
         self.password = kwargs.get("password")
+        self.registered_on = kwargs.get("registered_on")
 
     def user_dict(self):
         """method to return the dictionary of a user item"""
@@ -25,12 +25,12 @@ class User():
             "firstname": self.firstname,
             "lastname": self.lastname,
             "othernames": self.othernames,
+            "username": self.username,
             "email": self.email,
             "phonenumber": self.phonenumber,
-            "username": self.username,
-            "registered_on": self.registered_on,
             "is_admin": self.is_admin,
-            "password": self.password
+            "password": self.password,
+            "registered_on": self.registered_on
         }
 
 
@@ -45,9 +45,9 @@ class UsersData():
                 "firstname": "Edward",
                 "lastname": "Army",
                 "othernames": "eddy",
-                "email": "edward@bolon.com",
-                "phonenumber": "0775961853",
                 "username": "edward",
+                "email": "edward@bolon.com",
+                "phonenumber": "0775961853",  
                 "is_admin": True,
                 "password": hashlib.sha224(
                     b"{}").hexdigest().format("i@mG8t##")
