@@ -51,12 +51,12 @@ class UsersController():
         firstname = request_info.get("firstname")
         lastname = request_info.get("lastname")
         othernames = request_info.get("othernames")
+        username = request_info.get("username")
         email = request_info.get("email")
         phonenumber = request_info.get("phonenumber")
-        username = request_info.get("username")
-        registered_on = datetime.datetime.now()
         is_admin = False
         password = request_info.get("password")
+        registered_on = datetime.datetime.now()
 
         user_id = self.my_validator.create_id(
             self.usersdata.get_users(), "user_id")
@@ -81,12 +81,13 @@ class UsersController():
             firstname=firstname,
             lastname=lastname,
             othernames=othernames,
+            username=username,
             email=email,
             phonenumber=phonenumber,
-            username=username,
-            registered_on=registered_on,
             is_admin=is_admin,
-            password=hashed_password)
+            password=hashed_password,
+            registered_on=registered_on
+        )
 
         self.usersdata.add_user(new_user.user_dict())
         newuser_dict = (new_user.user_dict())
