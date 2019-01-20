@@ -89,8 +89,26 @@ RESP_ERROR_MSG_INVALID_STRING_TYPE = "ERROR: Entered a non string value  for eit
 RESP_ERROR_MSG_INVALID_LIST_TYPE = "ERROR: Entered a non list of strings value  for either videos or images"
 RESP_ERROR_MSG_INVALID_LOCATION = "ERROR: Entered a latitude or logitude which is out of range"
 RESP_ERROR_MSG_INVALID_INCIDENT = "ERROR: Entered more or less fields than the required: Required fields include: location, videos, images, title, and comment"
+RESP_ERROR_MSG_FORBIDDEN_INCIDENT_UPDATE = "Action is forbidden: Attempting to edit a comment on an edit location endpoint or vice versa"
+RESP_ERROR_MSG_ENTERED_NOTHING = "The request body is empty"
+RESP_ERROR_MSG_INVALID_COMMENT_STRING_TYPE = "The value must be of string type"
 
 # string constants for various responses
+
+RESP_ERROR_INVALID_COMMENT_STRING_TYPE = Response(json.dumps({
+    "status": 400,
+    "error": RESP_ERROR_MSG_INVALID_COMMENT_STRING_TYPE
+}), content_type="application/json", status=400)
+
+RESP_ERROR_ENTERED_NOTHING = Response(json.dumps({
+    "status": 400,
+    "error": RESP_ERROR_MSG_ENTERED_NOTHING
+}), content_type="application/json", status=400)
+
+RESP_ERROR_FORBIDDEN_INCIDENT_UPDATE = Response(json.dumps({
+    "status": 403,
+    "error": RESP_ERROR_MSG_FORBIDDEN_INCIDENT_UPDATE
+}), content_type="application/json", status=403)
 
 RESP_ERROR_USER_NOT_FOUND = Response(json.dumps({
     "status": 400,
@@ -159,9 +177,9 @@ RESP_ERROR_INCIDENT_NOT_FOUND = Response(json.dumps({
 }), content_type="application/json", status=404)
 
 RESP_ERROR_POST_DUPLICATE = Response(json.dumps({
-    "status": 401,
+    "status": 400,
     "message": RESP_ERROR_MSG_INCIDENT_DUPLICATE
-}), content_type="application/json", status=401)
+}), content_type="application/json", status=400)
 
 RESP_ERROR_ADMIN_NO_RIGHTS = Response(json.dumps({
     "status": 401,

@@ -368,20 +368,20 @@ class TestRedflagView(unittest.TestCase):
         self.assertEqual(data.get("message"),
                          RESP_ERROR_MSG_EMPTY_STRING)
 
-    def test_update_redflag_location_wrongtype(self):
-        """Test update redflag with the wrong data type"""
-        jwt_token = json.loads(self.login_response.data)["access_token"]
-        response = self.client.patch(
-            URL_REDFLAGS + "/2/location",
-            headers=dict(Authorization='Bearer ' + jwt_token),
-            data=json.dumps(
-                {"location": 334}),
-            content_type="application/json"
-        )
-        data = json.loads(response.data.decode())
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(data.get("message"),
-                         RESP_ERROR_MSG_UDATE_WRONG_LOCATION)
+    # def test_update_redflag_location_wrongtype(self):
+    #     """Test update redflag with the wrong data type"""
+    #     jwt_token = json.loads(self.login_response.data)["access_token"]
+    #     response = self.client.patch(
+    #         URL_REDFLAGS + "/2/location",
+    #         headers=dict(Authorization='Bearer ' + jwt_token),
+    #         data=json.dumps(
+    #             {"location": 334}),
+    #         content_type="application/json"
+    #     )
+    #     data = json.loads(response.data.decode())
+    #     self.assertEqual(response.status_code, 400)
+    #     self.assertEqual(data.get("message"),
+    #                      RESP_ERROR_MSG_UDATE_WRONG_LOCATION)
 
     def test_update_redflag_location_noncreater(self):
         """test update redflag which one never created"""
