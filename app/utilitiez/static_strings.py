@@ -91,13 +91,13 @@ RESP_ERROR_MSG_INVALID_LOCATION = "ERROR: Entered a latitude or logitude which i
 RESP_ERROR_MSG_INVALID_INCIDENT = "ERROR: Entered more or less fields than the required: Required fields include: location, videos, images, title, and comment"
 RESP_ERROR_MSG_FORBIDDEN_INCIDENT_UPDATE = "Action is forbidden: Attempting to edit a comment on an edit location endpoint or vice versa"
 RESP_ERROR_MSG_ENTERED_NOTHING = "The request body is empty"
-RESP_ERROR_MSG_INVALID_COMMENT_STRING_TYPE = "The value must be of string type"
+RESP_ERROR_MSG_INVALID_EDIT_STRING_TYPE = "The value must be of string type"
 
 # string constants for various responses
 
 RESP_ERROR_INVALID_COMMENT_STRING_TYPE = Response(json.dumps({
     "status": 400,
-    "error": RESP_ERROR_MSG_INVALID_COMMENT_STRING_TYPE
+    "error": RESP_ERROR_MSG_INVALID_EDIT_STRING_TYPE
 }), content_type="application/json", status=400)
 
 RESP_ERROR_ENTERED_NOTHING = Response(json.dumps({
