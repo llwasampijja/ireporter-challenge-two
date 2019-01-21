@@ -30,7 +30,10 @@ from app.utilitiez.static_strings import (
     RESP_ERROR_MSG_INVALID_LOCATION,
     RESP_ERROR_MSG_INVALID_INCIDENT,
     RESP_ERROR_MSG_USER_NOT_FOUND,
-    RESP_ERROR_MSG_INVALID_EDIT_STRING_TYPE
+    RESP_ERROR_MSG_INVALID_EDIT_STRING_TYPE,
+    RESP_ERROR_MSG_FORBIDDEN_INCIDENT_UPDATE,
+    RESP_ERROR_MSG_BAD_REQUEST,
+    RESP_ERROR_MSG_INCIDENT_DUPLICATE
 )
 
 
@@ -472,6 +475,21 @@ class TestRedflagView(unittest.TestCase):
         self.assertEqual(response_data.get("message"),
                          RESP_SUCCESS_MSG_INCIDENT_UPDATE)
 
+    def test_update_redflag_location_wrong_data(self):
+        """Test update redflag with the right id"""
+        jwt_token = json.loads(self.login_response.data)["access_token"]
+        response = self.client.patch(
+            URL_REDFLAGS + "/3/location",
+            headers=dict(Authorization='Bearer ' + jwt_token),
+            data=json.dumps(
+                {"location": "0.3000"}),
+            content_type="application/json"
+        )
+        response_data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response_data.get("message"),
+                         RESP_ERROR_MSG_UDATE_WRONG_LOCATION)
+
     def test_update_redflag_status_nonadmin(self):
         """test update red-flag's status as a concerned citzen"""
         jwt_token = json.loads(self.login_response.data)["access_token"]
@@ -487,6 +505,65 @@ class TestRedflagView(unittest.TestCase):
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response_data.get("message"),
                          RESP_ERROR_MSG_UNAUTHORIZED_VIEW)
+
+    def test_update_redflag_comment_asuccess(self):
+        """unit test for updating the redflag's comment successfully"""
+        jwt_token = json.loads(self.login_response.data)["access_token"]
+        response = self.client.patch(
+            URL_REDFLAGS + "/3/comment",
+            headers=dict(Authorization='Bearer ' + jwt_token),
+            data=json.dumps(
+                {"comment": "Every one say that man taking money from a poor shop keeper"}),
+            content_type="application/json"
+        )
+        response_data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response_data.get("message"),
+                         RESP_SUCCESS_MSG_INCIDENT_UPDATE)
+
+    def test_update_redflag_comment_duplicate(self):
+        """unit test for updating the redflag's comment successfully"""
+        jwt_token = json.loads(self.login_response.data)["access_token"]
+        response = self.client.patch(
+            URL_REDFLAGS + "/3/comment",
+            headers=dict(Authorization='Bearer ' + jwt_token),
+            data=json.dumps(
+                {"comment": "Every one say that man taking money from a poor shop keeper"}),
+            content_type="application/json"
+        )
+        response_data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response_data.get("message"),
+                         RESP_ERROR_MSG_INCIDENT_DUPLICATE)
+
+    def test_update_redflag_comment_empty(self):
+        """unit test for updating the redflag's comment successfully"""
+        jwt_token = json.loads(self.login_response.data)["access_token"]
+        response = self.client.patch(
+            URL_REDFLAGS + "/3/comment",
+            headers=dict(Authorization='Bearer ' + jwt_token),
+            
+            content_type="application/json"
+        )
+        response_data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response_data.get("message"),
+                         RESP_ERROR_MSG_BAD_REQUEST)
+
+    def test_update_redflag_comment_wrong_route(self):
+        """unit test for updating the redflag's comment successfully"""
+        jwt_token = json.loads(self.login_response.data)["access_token"]
+        response = self.client.patch(
+            URL_REDFLAGS + "/3/comment",
+            headers=dict(Authorization='Bearer ' + jwt_token),
+            data=json.dumps(
+                {"location": "1.500, 0.3000"}),
+            content_type="application/json"
+        )
+        response_data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response_data.get("error"),
+                         RESP_ERROR_MSG_FORBIDDEN_INCIDENT_UPDATE)
 
     def test_delete_redflag_noid(self):
         """Test delete red-flag with unavailable id"""

@@ -45,7 +45,7 @@ def update_intervention_location(intervention_id):
         "edit_location"
     )
 
-@intervention_blueprint.route("/<int:intervention_id>/location", methods=["PATCH"])
+@intervention_blueprint.route("/<int:intervention_id>/comment", methods=["PATCH"])
 @authenticator.concerned_citzen
 def updated_intervention_comment(intervention_id):
     request_data = request.get_json()

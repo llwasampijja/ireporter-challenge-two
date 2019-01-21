@@ -158,13 +158,11 @@ class IncidentController:
         
     def update_incident(self, incident_id, request_data, keyword, username, edit_attribute):
         """method for editing the location of an incident"""
-        if not request_data:
-            return RESP_ERROR_ENTERED_NOTHING
+
         for input_value in request_data:
             if input_value not in ("comment", "location"):
                 return RESP_ERROR_UNACCEPTABLE_INPUT
 
-       
         if any(self.validator.empty_string(input_value) for input_key, input_value in request_data.items()):
             return RESP_ERROR_POST_EMPTY_DATA
         if any(self.validator.invalid_str_datatype(input_value) for input_key, input_value in request_data.items()):
@@ -197,7 +195,7 @@ class IncidentController:
             RESP_ERROR_MSG_UNAUTHORIZED_EDIT,
             self.response_submission_success(
                 update_incident_instance,
-                "update"))
+                "update", incident_id))
 
     def update_incident_status(self, incident_id, request_data, keyword):
         """method for updating the status of an incident"""
@@ -213,7 +211,7 @@ class IncidentController:
             return RESP_ERROR_INCIDENT_NOT_FOUND
         else:
             return self.response_submission_success(update_incident_instance,
-                                                    "incident_status")
+                                                    "incident_status", incident_id)
 
     def delete_incident(self, incident_id, keyword, username):
         """method for deleing an incident basing on its id"""
@@ -224,7 +222,7 @@ class IncidentController:
             RESP_EEROR_MSG_UNAUTHORIZED_DELETE,
             self.response_submission_success(
                 delete_incident_instance,
-                "delete"))
+                "delete", incident_id))
 
     @staticmethod
     def delete_update(action_instance, message_fail, message_success):
@@ -241,11 +239,12 @@ class IncidentController:
             return message_success
 
     @staticmethod
-    def response_submission_success(return_data, keyword):
+    def response_submission_success(return_data, keyword, incident_id):
         """refactored method for returning right response for successful delete and update"""
         if keyword == "delete":
             return Response(json.dumps({
                 "status": 200,
+                "data": [{"incident_id":incident_id}],
                 "message": RESP_SUCCESS_MSG_INCIDENT_DELETE
             }), content_type="application/json", status=200)
             
