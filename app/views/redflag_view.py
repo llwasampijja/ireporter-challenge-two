@@ -33,12 +33,24 @@ def get_flag(redflag_id):
 
 @redflag_blueprint.route("/<int:redflag_id>/location", methods=["PATCH"])
 @authenticator.concerned_citzen
-def update_redflag(redflag_id):
+def update_redflag_location(redflag_id):
     """method for updating location of red-flag incident by id"""
     request_data = request.get_json()
     verify_jwt_in_request()
     return redflag_controller.update_incident(
-        redflag_id, request_data, "redflag", get_jwt_identity()["username"]
+        redflag_id, request_data, "redflag", get_jwt_identity()["username"],
+        "edit_location"
+    )
+
+@redflag_blueprint.route("<int:redflag_id>/comment", methods=["PATCH"])
+@authenticator.concerned_citzen
+def update_redflag_comment(redflag_id):
+    """method for updating the comment of a redflag"""
+    request_data = request.get_json()
+    verify_jwt_in_request()
+    return redflag_controller.update_incident(
+        redflag_id, request_data, "redflag", get_jwt_identity()["username"],
+        "edit_comment"
     )
 
 @redflag_blueprint.route("/<int:redflag_id>/status", methods=["PATCH"])
