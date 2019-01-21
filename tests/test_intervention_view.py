@@ -25,7 +25,8 @@ from app.utilitiez.static_strings import (
     RESP_ERROR_MSG_INVALID_LIST_TYPE,
     RESP_ERROR_MSG_INVALID_LOCATION,
     RESP_ERROR_MSG_INVALID_INCIDENT,
-    RESP_ERROR_MSG_USER_NOT_FOUND
+    RESP_ERROR_MSG_USER_NOT_FOUND,
+    RESP_ERROR_MSG_INVALID_EDIT_STRING_TYPE
 )
 
 
@@ -120,7 +121,7 @@ class TestInterventionView(unittest.TestCase):
             content_type="application/json"
         )
         data = json.loads(response.data.decode())
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 400)
         self.assertEqual(data.get("message"),
                          RESP_ERROR_MSG_INCIDENT_DUPLICATE)
 
@@ -307,8 +308,23 @@ class TestInterventionView(unittest.TestCase):
         )
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
+        self.assertEqual(data.get("error"),
+                         RESP_ERROR_MSG_INVALID_EDIT_STRING_TYPE)
+
+    def test_update_intervention_comment_success(self):
+        """Test update intervention's comment with the right id"""
+        new_location = {"comment": "1.500, 0.3000"}
+        jwt_token = json.loads(self.login_response.data)["access_token"]
+        response = self.client.patch(
+            URL_INTERVENTIONS + "/1/comment",
+            headers=dict(Authorization='Bearer ' + jwt_token),
+            data=json.dumps(new_location),
+            content_type="application/json"
+        )
+        data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 201)
         self.assertEqual(data.get("message"),
-                         RESP_ERROR_MSG_UDATE_WRONG_LOCATION)
+                         RESP_SUCCESS_MSG_INCIDENT_UPDATE)
 
     def test_update_intervention_status(self):
         """Test update intervention status by admin"""

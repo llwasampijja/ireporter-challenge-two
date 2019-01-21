@@ -30,9 +30,11 @@ from app.utilitiez.static_strings import (
     RESP_ERROR_INVALID_LOCATION,
     RESP_ERROR_INVALID_INCIDENT,
     RESP_ERROR_USER_NOT_FOUND,
-    RESP_ERROR_UNAUTHORIZED_VIEW
+    RESP_ERROR_UNAUTHORIZED_VIEW,
+    RESP_ERROR_FORBIDDEN_INCIDENT_UPDATE,
+    RESP_ERROR_ENTERED_NOTHING,
+    RESP_ERROR_INVALID_COMMENT_STRING_TYPE
 )
-
 
 class IncidentController:
     "controller class"
@@ -154,30 +156,46 @@ class IncidentController:
                 "data": [get_incident_instance]
             }), content_type="application/json", status=200)          
         
-    def update_incident(self, incident_id, request_data, keyword, username):
+    def update_incident(self, incident_id, request_data, keyword, username, edit_attribute):
         """method for editing the location of an incident"""
-        location = request_data.get("location")
 
         for input_value in request_data:
-            if input_value not in ["location"]:
+            if input_value not in ("comment", "location"):
                 return RESP_ERROR_UNACCEPTABLE_INPUT
 
-        if self.validator.empty_string(location):
+        if any(self.validator.empty_string(input_value) for input_key, input_value in request_data.items()):
             return RESP_ERROR_POST_EMPTY_DATA
+        if any(self.validator.invalid_str_datatype(input_value) for input_key, input_value in request_data.items()):
+            return RESP_ERROR_INVALID_COMMENT_STRING_TYPE
 
-        if self.validator.invalid_str_datatype(location) \
-        or self.validator.invalid_coordinates(location):
-            return RESP_ERROR_UPDATE_INCIDENT_WRONG_DATA
+
+        location = request_data.get("location")
+
+
+        if "location" in request_data:
+            if edit_attribute == "edit_location" \
+                and self.validator.invalid_str_datatype(location) \
+                or self.validator.invalid_coordinates(request_data.get("location")):
+                return RESP_ERROR_UPDATE_INCIDENT_WRONG_DATA
+        if "comment" in request_data:
+            comment = request_data.get("comment")
+            if self.validator.incident_duplicate(comment, self.incident_data.get_incidents(keyword)):
+                return RESP_ERROR_POST_DUPLICATE
         
-
-        update_incident_instance = self.incident_data.update_incident(
-            incident_id, request_data, keyword, username)
+        if edit_attribute == "edit_location" and "location" in request_data:
+            update_incident_instance = self.incident_data.update_incident(
+                incident_id, request_data, keyword, username)
+        elif edit_attribute == "edit_comment" and "comment" in request_data:
+            update_incident_instance = self.incident_data.update_incident(
+                incident_id, request_data, keyword, username)
+        else:
+            return RESP_ERROR_FORBIDDEN_INCIDENT_UPDATE
         return self.delete_update(
             update_incident_instance,
             RESP_ERROR_MSG_UNAUTHORIZED_EDIT,
             self.response_submission_success(
                 update_incident_instance,
-                "update"))
+                "update", incident_id))
 
     def update_incident_status(self, incident_id, request_data, keyword):
         """method for updating the status of an incident"""
@@ -193,7 +211,7 @@ class IncidentController:
             return RESP_ERROR_INCIDENT_NOT_FOUND
         else:
             return self.response_submission_success(update_incident_instance,
-                                                    "incident_status")
+                                                    "incident_status", incident_id)
 
     def delete_incident(self, incident_id, keyword, username):
         """method for deleing an incident basing on its id"""
@@ -204,7 +222,7 @@ class IncidentController:
             RESP_EEROR_MSG_UNAUTHORIZED_DELETE,
             self.response_submission_success(
                 delete_incident_instance,
-                "delete"))
+                "delete", incident_id))
 
     @staticmethod
     def delete_update(action_instance, message_fail, message_success):
@@ -221,11 +239,12 @@ class IncidentController:
             return message_success
 
     @staticmethod
-    def response_submission_success(return_data, keyword):
+    def response_submission_success(return_data, keyword, incident_id):
         """refactored method for returning right response for successful delete and update"""
         if keyword == "delete":
             return Response(json.dumps({
                 "status": 200,
+                "data": [{"incident_id":incident_id}],
                 "message": RESP_SUCCESS_MSG_INCIDENT_DELETE
             }), content_type="application/json", status=200)
             
