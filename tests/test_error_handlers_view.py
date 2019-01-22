@@ -5,7 +5,7 @@ import unittest
 from flask import json
 
 from app import create_app
-from app.utilitiez.static_strings import (
+from app.utilities.static_strings import (
     URL_LOGIN,
     URL_REGISTER,
     URL_BASE,

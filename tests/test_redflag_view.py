@@ -4,8 +4,11 @@ import unittest
 
 from flask import json
 
+from databases.ireporter_db import IreporterDb
+from databases.database_helper import DatabaseHelper
+
 from app import create_app
-from app.utilitiez.static_strings import (
+from app.utilities.static_strings import (
     URL_REDFLAGS,
     URL_LOGIN,
     URL_REGISTER,
@@ -44,6 +47,13 @@ class TestRedflagView(unittest.TestCase):
         """initializing method for a unit test"""
         self.app = create_app()
         self.client = self.app.test_client(self)
+
+        self.ireporter_db = IreporterDb()
+        self.database_helper = DatabaseHelper()
+        self.ireporter_db.drop_tables()
+        self.ireporter_db.create_tables()
+        self.database_helper.create_incident_types()
+
         test_user = {
             "firstname": "Dall",
             "lastname": "Kased",
@@ -86,6 +96,11 @@ class TestRedflagView(unittest.TestCase):
             URL_REDFLAGS, content_type="application/json")
         self.assertEqual(response.status_code, 401)
         self.assertEqual(json.loads(response.data).get("message"), None)
+
+        self.admin_login_response = self.client.post(URL_LOGIN, data=json.dumps({
+            "username": "edward",
+            "password": "i@mG8t##"
+        }), content_type="application/json")
 
         # get redflags after logging in
         jwt_token = json.loads(self.login_response.data)["access_token"]
@@ -414,6 +429,7 @@ class TestRedflagView(unittest.TestCase):
     def test_update_redflag_location_nonpending(self):
         """test updated red-flag whose status isnt equal to
          'pending investigation'"""
+        self.database_helper.create_admin()
         self.test_admin_login_response = self.client.post(
             URL_LOGIN,
             data=json.dumps({
@@ -464,7 +480,7 @@ class TestRedflagView(unittest.TestCase):
         """Test update redflag with the right id"""
         jwt_token = json.loads(self.login_response.data)["access_token"]
         response = self.client.patch(
-            URL_REDFLAGS + "/3/location",
+            URL_REDFLAGS + "/1/location",
             headers=dict(Authorization='Bearer ' + jwt_token),
             data=json.dumps(
                 {"location": "1.500, 0.3000"}),
@@ -510,7 +526,7 @@ class TestRedflagView(unittest.TestCase):
         """unit test for updating the redflag's comment successfully"""
         jwt_token = json.loads(self.login_response.data)["access_token"]
         response = self.client.patch(
-            URL_REDFLAGS + "/3/comment",
+            URL_REDFLAGS + "/1/comment",
             headers=dict(Authorization='Bearer ' + jwt_token),
             data=json.dumps(
                 {"comment": "Every one say that man taking money from a poor shop keeper"}),
@@ -522,13 +538,13 @@ class TestRedflagView(unittest.TestCase):
                          RESP_SUCCESS_MSG_INCIDENT_UPDATE)
 
     def test_update_redflag_comment_duplicate(self):
-        """unit test for updating the redflag's comment successfully"""
+        """unit test for updating the redflag's comment as a duplicated"""
         jwt_token = json.loads(self.login_response.data)["access_token"]
         response = self.client.patch(
-            URL_REDFLAGS + "/3/comment",
+            URL_REDFLAGS + "/1/comment",
             headers=dict(Authorization='Bearer ' + jwt_token),
             data=json.dumps(
-                {"comment": "Every one say that man taking money from a poor shop keeper"}),
+                {"comment": "He was caught red handed 1"}),
             content_type="application/json"
         )
         response_data = json.loads(response.data.decode())
@@ -613,6 +629,7 @@ class TestRedflagView(unittest.TestCase):
 
     def test_delete_redflag_nonpending(self):
         """Test delete redflag which whose status is nolonger pending investigation"""
+        self.database_helper.create_admin()
         self.test_admin_login_response = self.client.post(
             URL_LOGIN,
             data=json.dumps({
@@ -642,13 +659,14 @@ class TestRedflagView(unittest.TestCase):
 
     def test_update_redflag_status(self):
         """Test update status of redflag by admin"""
+        self.database_helper.create_admin()
         admin_login_response = self.client.post(URL_LOGIN, data=json.dumps({
             "username": "edward",
             "password": "i@mG8t##"
         }), content_type="application/json")
         admin_jwt_token = json.loads(admin_login_response.data)["access_token"]
         response = self.client.patch(
-            URL_REDFLAGS + "/3/status",
+            URL_REDFLAGS + "/1/status",
             headers=dict(Authorization='Bearer ' + admin_jwt_token),
             data=json.dumps({
                 "status": "rejected"
@@ -662,6 +680,7 @@ class TestRedflagView(unittest.TestCase):
 
     def test_update_redflag_status_morefields(self):
         """test update red-flag with more than just the status as an admin"""
+        self.database_helper.create_admin()
         admin_login_response = self.client.post(URL_LOGIN, data=json.dumps({
             "username": "edward",
             "password": "i@mG8t##"
@@ -685,6 +704,7 @@ class TestRedflagView(unittest.TestCase):
 
     def test_update_status_none(self):
         """test update the status of an incident which doesn't exist"""
+        self.database_helper.create_admin()
         admin_login_response = self.client.post(URL_LOGIN, data=json.dumps({
             "username": "edward",
             "password": "i@mG8t##"
@@ -703,11 +723,14 @@ class TestRedflagView(unittest.TestCase):
         self.assertEqual(response_data.get("message"), RESP_ERROR_MSG_INCIDENT_NOT_FOUND)
 
     def test_update_status_wrong(self):
+        self.database_helper.create_admin()
         """test update redflag with a wrong status value"""
+
         admin_login_response = self.client.post(URL_LOGIN, data=json.dumps({
             "username": "edward",
             "password": "i@mG8t##"
         }), content_type="application/json")
+        
         admin_jwt_token = json.loads(admin_login_response.data)["access_token"]
         
         response = self.client.patch(
@@ -726,6 +749,7 @@ class TestRedflagView(unittest.TestCase):
         
     def test_admin_create_redflag(self):
         """test try to create an incident as an admin"""
+        self.database_helper.create_admin()
         admin_login_response = self.client.post(URL_LOGIN, data=json.dumps({
             "username": "edward",
             "password": "i@mG8t##"

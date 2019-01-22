@@ -9,7 +9,7 @@ from flask_jwt_extended import create_access_token
 from app.models.user_model import User, UsersData
 from app.validators.general_validator import GeneralValidator
 from app.validators.user_validator import UserValidator
-from app.utilitiez.static_strings import (
+from app.utilities.static_strings import (
     RESP_SUCCESS_MSG_REGISTRATION,
     RESP_SUCCESS_MSG_ADMIN_RIGHTS,
     RESP_SUCCESS_MSG_AUTH_LOGIN,
@@ -118,14 +118,9 @@ class UsersController():
         for user in self.usersdata.get_users():
             if user.get("username") == username and user.get(
                     "password") == hashed_password:
-                user_details = {
-                    "user_id": user.get("user_id"),
-                    "username": user.get("username"),
-                    "is_admin": user.get("is_admin")
-                }
 
                 access_token = create_access_token(
-                    identity=user_details,
+                    identity=user,
                     expires_delta=datetime.timedelta(
                         hours=1))
                 return Response(json.dumps({

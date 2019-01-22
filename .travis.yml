@@ -5,6 +5,12 @@ python:
 install:
   - "pip install -r requirements.txt"
 
+before_script:
+  - psql -c 'create database ireporter_db;' -U postgres
+  - psql -c 'create database testing_db;' -U postgres
+  - psql -c "CREATE USER andela WITH PASSWORD 'bootcamp';" -U postgres
+  - python virt_db_installer.py
+
 script:
   - python3 -m pytest --cov=app/
   
