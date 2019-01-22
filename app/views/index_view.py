@@ -1,7 +1,7 @@
 
 """module with route for the index page"""
 from flask import Blueprint, Response, json
-from app.utilitiez.static_strings import RESP_SUCCESS_MSG_INDEX_MESSAGE, WELCOME_MSG
+from app.utilities.static_strings import RESP_SUCCESS_MSG_INDEX_MESSAGE, WELCOME_MSG
 
 index_blueprint = Blueprint("index blueprint", __name__)
 base_url_blueprint = Blueprint("base url", __name__)

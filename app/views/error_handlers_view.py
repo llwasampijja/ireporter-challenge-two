@@ -1,6 +1,6 @@
 """module with routes or views for error handling"""
 
-from app.utilitiez.static_strings import (
+from app.utilities.static_strings import (
     RESP_ERROR_PAGE_NOT,
     RESP_ERROR_BAD_REQUEST,
     RESP_ERROR_METHOD_NOT_ALLOWED,
