@@ -9,7 +9,7 @@ before_script:
   - psql -c 'create database ireporter_db;' -U postgres
   - psql -c 'create database testing_db;' -U postgres
   - psql -c "CREATE USER andela WITH PASSWORD 'bootcamp';" -U postgres
-  - python databases/ireporter_db.py
+  - python virt_db_installer.py
 
 script:
   - python3 -m pytest --cov=app/
