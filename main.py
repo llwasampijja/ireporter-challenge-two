@@ -2,8 +2,9 @@
 from app import create_app
 from databases.database_helper import DatabaseHelper
 from databases.ireporter_db import IreporterDb
+from config import environment_config, runtime_mode
 
-app = create_app()
+app = create_app(environment_config.get("{}".format(runtime_mode)))
 ireporter_db = IreporterDb()
 database_helper = DatabaseHelper()
 

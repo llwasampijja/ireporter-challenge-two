@@ -29,9 +29,10 @@ from app.utilities.static_strings import (
     URL_BASE
 )
 
-def create_app():
+def create_app(config_name):
     """this is the application factory function, configuration, registering, etc happen here"""
-    app = Flask(__name__)
+    app =  Flask(__name__, instance_relative_config=True)
+    app.config.from_object(config_name)
 
     app.secret_key = os.urandom(12)
     jwt_manager = JWTManager()

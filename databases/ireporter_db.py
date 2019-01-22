@@ -1,7 +1,7 @@
 import psycopg2
 import os
 
-from config import runtime_mode
+from config import environment_config, runtime_mode
 
 class IreporterDb():
 
