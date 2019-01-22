@@ -204,3 +204,7 @@ class IreporterDb():
         self.cursor_database.execute(sql_query2)
         self.cursor_database.execute(sql_query3)
 
+
+if __name__=="__main__":
+    ireporter_db = IreporterDb()
+    ireporter_db.create_tables()
