@@ -18,7 +18,7 @@ from app.views.error_handlers_view import (
     bad_request_error,
     internal_server_error
 )
-from app.utilitiez.static_strings import (
+from app.utilities.static_strings import (
     SWAGGER_UI_URL,
     API_URL,
     URL_LOGIN,

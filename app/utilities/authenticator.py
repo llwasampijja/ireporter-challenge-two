@@ -2,7 +2,7 @@
 from functools import wraps
 from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
 
-from app.utilitiez.static_strings import (
+from app.utilities.static_strings import (
     RESP_ERROR_UNAUTHORIZED_VIEW,
     RESP_ERROR_ADMIN_ONLY
 )

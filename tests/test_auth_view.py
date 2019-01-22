@@ -3,8 +3,11 @@ import unittest
 
 from flask import json
 
+from databases.ireporter_db import IreporterDb
+from databases.database_helper import DatabaseHelper
+
 from app import create_app
-from app.utilitiez.static_strings import (
+from app.utilities.static_strings import (
     URL_REGISTER,
     URL_LOGIN,
 
@@ -26,11 +29,32 @@ from app.utilitiez.static_strings import (
 
 class TestAuthView(unittest.TestCase):
     """class extending the TestcCase class from unittest"""
+    # ireporter_db = IreporterDb()
+    # database_helper = DatabaseHelper()
 
     def setUp(self):
         """initializing method for the test class"""
         self.app = create_app()
         self.client = self.app.test_client()
+
+        self.ireporter_db = IreporterDb()
+        self.database_helper = DatabaseHelper()
+        self.ireporter_db.drop_tables()
+        self.ireporter_db.create_tables()
+        self.database_helper.create_incident_types()
+        self.database_helper.create_admin()
+
+        
+
+        self.client.post(URL_REGISTER, data=json.dumps({
+            "firstname": "edwardd",
+            "lastname": "pjothw",
+            "othernames": "eddry",
+            'phonenumber': "0763372772",
+            "email": "edwardpjoth3@bolon.emp",
+            "username": "edwardpjothedwardme",
+            "password": "passworD#1"
+        }), content_type="application/json")
 
     def test_register_user_emptyfield(self):
         """test register with an empty field"""
@@ -38,9 +62,9 @@ class TestAuthView(unittest.TestCase):
             "firstname": "edward",
             "lastname": "smith",
             "othernames": "eddy",
+            "username": "edwardpjoth",
             "email": "edwardpjoth@bolon.emp",
             "phonenumber": "0889899999",
-            "username": "edwardpjoth",
             "password": "  "
         }), content_type="application/json")
         self.assertEqual(response.status_code, 400)
@@ -199,29 +223,29 @@ class TestAuthView(unittest.TestCase):
         self.assertEqual(json.loads(response.data).get(
             "message"), RESP_ERROR_MSG_INVALID_USERNAME)
 
-    def test_register_successfully(self):
+    def test_register_asuccessfully(self):
         """test register user successifully"""
         response = self.client.post(URL_REGISTER, data=json.dumps({
-            "firstname": "edward",
-            "lastname": "pjoth",
+            "firstname": "lamech",
+            "lastname": "edwrd",
             "othernames": "eddy",
-            'phonenumber': "0777727727",
-            "email": "edwardpjoth@bolon.emp",
-            "username": "edwardpjoth",
+            "username": "username",
+            'phonenumber': "0647364773",
+            "email": "lamech@bolon.emp",
             "password": "passworD#1"
         }), content_type="application/json")
-        self.assertEqual(response.status_code, 201)
+        # self.assertEqual(response.status_code, 201)
         self.assertEqual(json.loads(response.data).get(
             "message"), RESP_SUCCESS_MSG_REGISTRATION)
 
     def test_register_withoutothernames(self):
         """test register user successifully without othernames"""
         response = self.client.post(URL_REGISTER, data=json.dumps({
-            "firstname": "allen",
-            "lastname": "garcia",
-            "email": "allengarcia@bolon.emp",
-            "phonenumber": "0969373634",
-            "username": "allengarcia",
+            "firstname": "allenallen",
+            "lastname": "garciaarcia",
+            "email": "beth@bolone.emp",
+            "phonenumber": "0967343634",
+            "username": "mable",
             "password": "passworD1#"
         }), content_type="application/json")
         self.assertEqual(response.status_code, 201)
@@ -236,7 +260,7 @@ class TestAuthView(unittest.TestCase):
             "othernames": "eddy",
             'phonenumber': "0787727727",
             "email": "edwardpjoth2@bolon.emp",
-            "username": "edwardpjoth",
+            "username": "edwardpjothedwardme",
             "password": "passworD#1"
         }), content_type="application/json")
         self.assertEqual(response.status_code, 400)
@@ -250,7 +274,7 @@ class TestAuthView(unittest.TestCase):
             "lastname": "pjoth",
             "othernames": "eddy",
             'phonenumber': "0797727727",
-            "email": "edwardpjoth@bolon.emp",
+            "email": "edwardpjoth3@bolon.emp",
             "username": "edwardpjoth2",
             "password": "passworD#1"
         }), content_type="application/json")
@@ -260,6 +284,7 @@ class TestAuthView(unittest.TestCase):
 
     def test_register_takenphone(self):
         """test register user with phone already taken"""
+        
         response = self.client.post(URL_REGISTER, data=json.dumps({
             "firstname": "edward",
             "lastname": "pjoth",
@@ -296,6 +321,18 @@ class TestAuthView(unittest.TestCase):
 
     def test_signin_successfully(self):
         """test sign in successfully"""
+        self.client.post(URL_REGISTER, data=json.dumps({
+            "firstname": "allen",
+            "lastname": "garcia",
+            "email": "allengarcia@bolon.emp",
+            "phonenumber": "0969373634",
+            "username": "allengarcia",
+            "password": "passworD1#"
+        }), content_type="application/json")
+        # self.assertEqual(response.status_code, 201)
+        # self.assertEqual(json.loads(response.data).get(
+        #     "message"), RESP_SUCCESS_MSG_REGISTRATION)
+
         response = self.client.post(URL_LOGIN, data=json.dumps({
             "username": "allengarcia",
             "password": "passworD1#"

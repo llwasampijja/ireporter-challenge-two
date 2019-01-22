@@ -4,8 +4,8 @@ from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
 
 from app.controllers.users_controller import UsersController
 from app.controllers.incident_controller import IncidentController
-from app.utilitiez.authenticator import Authenticator
-from app.utilitiez.static_strings import RESP_ERROR_UNAUTHORIZED_VIEW
+from app.utilities.authenticator import Authenticator
+from app.utilities.static_strings import RESP_ERROR_UNAUTHORIZED_VIEW
 
 
 user_blueprint = Blueprint("user blueprint", __name__)
@@ -30,10 +30,10 @@ def update_user(user_id):
 @authenticator.authorized
 def get_interventions_for_user(user_id):
     """method and route for getting all intervention incidents for a particular user"""
-    return incident_controller.get_incidents_specific_user("intervention", user_id)
+    return incident_controller.get_incidents_specific_user(user_id, "interventions")
 
 @user_blueprint.route("<int:user_id>/red-flags", methods=["GET"])
 @authenticator.authorized
 def get_redflags_user(user_id):
     """method and route for getting all red-flag incidents for a particular user"""
-    return incident_controller.get_incidents_specific_user("redflag", user_id)
+    return incident_controller.get_incidents_specific_user(user_id, "redflags")
