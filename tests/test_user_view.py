@@ -4,8 +4,11 @@ import unittest
 
 from flask import json
 
+from databases.ireporter_db import IreporterDb
+from databases.database_helper import DatabaseHelper
+
 from app import create_app
-from app.utilitiez.static_strings import (
+from app.utilities.static_strings import (
     URL_LOGIN,
     URL_REGISTER,
     URL_USERS,
@@ -27,6 +30,23 @@ class TestUserView(unittest.TestCase):
         self.app = create_app()
         self.client = self.app.test_client()
 
+        self.ireporter_db = IreporterDb()
+        self.database_helper = DatabaseHelper()
+        self.ireporter_db.drop_tables()
+        self.ireporter_db.create_tables()
+        self.database_helper.create_admin()
+        self.database_helper.create_incident_types()
+
+        self.client.post(URL_REGISTER, data=json.dumps({
+            "firstname": "edwardd",
+            "lastname": "pjothw",
+            "othernames": "eddry",
+            'phonenumber': "0763372772",
+            "email": "edwardpjoth3@bolon.emp",
+            "username": "edwardpjothedwardme",
+            "password": "passworD#1"
+        }), content_type="application/json")
+
         self.admin_login_response = self.client.post(URL_LOGIN, data=json.dumps({
             "username": "edward",
             "password": "i@mG8t##"
@@ -42,6 +62,7 @@ class TestUserView(unittest.TestCase):
 
     def test_update_user(self):
         """test update user's role by admin"""
+        
         jwt_token = json.loads(self.admin_login_response.data)["access_token"]
         response = self.client.patch(
             URL_USERS + "/2",
@@ -180,25 +201,10 @@ class TestUserView(unittest.TestCase):
 
     def test_get_interventions_specific_user_noright(self):
         """unit test for getting all redflags for spefic user"""
-        test_user_three = {
-            "firstname": "jet",
-            "lastname": "li",
-            "othernames": "realli",
-            "email": "jet@bolon.com",
-            "phonenumber": "0761857597",
-            "username": "jetli",
-            "password": "ABd1234@1"
-        }
-        self.client.post(
-            URL_REGISTER, data=json.dumps(
-                test_user_three
-            ),
-            content_type="application/json"
-        )
 
         test_login_response = self.client.post(
             URL_LOGIN, data=json.dumps({
-                "username": "jetli",
+                "username": "edwardpjothedwardme",
                 "password": "ABd1234@1"
             }),
             content_type="application/json"
@@ -206,7 +212,7 @@ class TestUserView(unittest.TestCase):
 
         jwt_token = json.loads(test_login_response.data)["access_token"]
         response = self.client.get(
-            URL_USERS + "/2/interventions",
+            URL_USERS + "/1/interventions",
             headers=dict(Authorization='Bearer ' + jwt_token),
             content_type="application/json"
         )
@@ -254,7 +260,7 @@ class TestUserView(unittest.TestCase):
         
         self.assertEqual(post_response.status_code, 201)
         response = self.client.get(
-            URL_USERS + "/4/red-flags",
+            URL_USERS + "/3/red-flags",
             headers=dict(Authorization='Bearer ' + admin_jwt_token),
             content_type="application/json"
         )

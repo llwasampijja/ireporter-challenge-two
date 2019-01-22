@@ -3,11 +3,16 @@
  incident are covered by the unit tests for the redflags"""
 
 import unittest
+import hashlib
+import datetime
 
 from flask import json
 
+from databases.ireporter_db import IreporterDb
+from databases.database_helper import DatabaseHelper
+
 from app import create_app
-from app.utilitiez.static_strings import (
+from app.utilities.static_strings import (
     URL_LOGIN,
     URL_REGISTER,
     URL_INTERVENTIONS,
@@ -35,8 +40,15 @@ class TestInterventionView(unittest.TestCase):
 
     def setUp(self):
         """initializing method for every unit test"""
+        
         self.app = create_app()
         self.client = self.app.test_client(self)
+
+        self.ireporter_db = IreporterDb()
+        self.database_helper = DatabaseHelper()
+        self.ireporter_db.drop_tables()
+        self.ireporter_db.create_tables()
+        self.database_helper.create_incident_types()
 
         test_user = {
             "firstname": "Dall",
@@ -47,6 +59,9 @@ class TestInterventionView(unittest.TestCase):
             "username": "dallkased",
             "password": "ABd1234@1"
         }
+
+        self.database_helper.create_admin()
+
         # get list of interventions before logging in
         response = self.client.get(
             URL_INTERVENTIONS,
@@ -84,6 +99,9 @@ class TestInterventionView(unittest.TestCase):
             }),
             content_type="application/json"
         )
+
+    def tearDown(self):
+        self.ireporter_db.drop_tables()
 
     def test_create_intervention(self):
         """Test for creating a valid intervention"""
@@ -365,7 +383,7 @@ class TestInterventionView(unittest.TestCase):
         """Test delete intervention with available id"""
         jwt_token = json.loads(self.login_response.data)["access_token"]
         response = self.client.delete(
-            URL_INTERVENTIONS + "/2",
+            URL_INTERVENTIONS + "/1",
             headers=dict(Authorization='Bearer ' + jwt_token),
             content_type="application/json"
         )

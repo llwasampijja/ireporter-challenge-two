@@ -2,13 +2,13 @@
 of incidents to models"""
 import datetime
 
-from flask import request, Response, json
+from flask import request, Response, json, jsonify
 from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
 
 from app.models.incident_model import Incident, IncidentData
 from app.controllers.users_controller import UsersController
 from app.validators.general_validator import GeneralValidator
-from app.utilitiez.static_strings import (
+from app.utilities.static_strings import (
     RESP_SUCCESS_MSG_INCIDENT_STATUS_UPDATE,
     RESP_SUCCESS_MSG_INCIDENT_DELETE,
     RESP_SUCCESS_MSG_CREATE_INCIDENT,
@@ -43,7 +43,7 @@ class IncidentController:
     incident_data = IncidentData()
     users_controller = UsersController()
 
-    def create_incident(self, request_data, keyword):
+    def create_incident(self, request_data, keyword, table_name):
         """method for creating red-flags"""
         verify_jwt_in_request()
         user_identity = get_jwt_identity()
@@ -54,28 +54,23 @@ class IncidentController:
         images = request_data.get("images")
         videos = request_data.get("videos")
         created_on = datetime.datetime.now()
-        created_by = user_identity["username"]
+        created_by = user_identity["user_id"]
         status = "pending investigation"
 
-        strings_turple = (created_by, location, title, comment)
+        strings_turple = (location, title, comment)
         media_turple = (videos, images)
-
-        get_incidents_instance = self.incident_data.get_incidents(keyword)
-
-        incident_id = self.validator.create_id(
-            get_incidents_instance, "incident_id")
-
-        
+     
         if self.response_create_incident_failed(request_data, strings_turple, media_turple):
             return self.response_create_incident_failed(request_data, strings_turple, media_turple)
         elif self.response_invalid_location(location):
             return self.response_invalid_location(location)
 
-        if self.validator.incident_duplicate(comment, get_incidents_instance):
+        if self.validator.incident_duplicate(comment, self.incident_data.get_incidents(keyword, table_name)):
             return RESP_ERROR_POST_DUPLICATE
 
+        print("list is: " + str(self.incident_data.get_incidents(keyword, table_name)))
+
         new_incident = Incident(
-            incident_id=incident_id,
             location=location,
             title=title,
             comment=comment,
@@ -94,9 +89,9 @@ class IncidentController:
             "message": RESP_SUCCESS_MSG_CREATE_INCIDENT
         }), content_type="application/json", status=201)
 
-    def get_incidents(self, keyword):
+    def get_incidents(self, keyword, table_name):
         """method for getting all incidents"""
-        get_incidents_instance = self.incident_data.get_incidents(keyword)
+        get_incidents_instance = self.incident_data.get_incidents(keyword, table_name)
         if not get_incidents_instance:
             return Response(json.dumps({
                 "status": 200,
@@ -109,27 +104,24 @@ class IncidentController:
                 "data": get_incidents_instance
             }), content_type="application/json", status=200)
 
-    def get_incidents_specific_user(self, keyword, user_id):
+    def get_incidents_specific_user(self, user_id, table_name):
       
         get_incidents_instance = self.incident_data.get_incidents_specific_user(
             user_id,
-            self.incident_data.get_incidents(keyword),
-            self.users_controller.export_users()
+            table_name
         )
-        print("keyword is :" + keyword)
+
         return self.refactor_get_incident_spec_user(
-            get_incidents_instance[0],
-            get_incidents_instance[1],
+            get_incidents_instance,
             user_id
         )
 
-    @staticmethod
-    def refactor_get_incident_spec_user(username, incident_lists, user_id):
+    def refactor_get_incident_spec_user(self, incident_lists, user_id):
         verify_jwt_in_request()
         user_identity = get_jwt_identity()
         data = []
         message = ""
-        if username is None:
+        if all(user.get("user_id") != user_id for user in self.users_controller.export_users()):
             return RESP_ERROR_USER_NOT_FOUND
         elif user_identity["user_id"] != user_id and  not user_identity["is_admin"]:
             return RESP_ERROR_UNAUTHORIZED_VIEW
@@ -144,10 +136,10 @@ class IncidentController:
             }), content_type="application/json", status=200)
 
 
-    def get_incident(self, incident_id, keyword):
+    def get_incident(self, incident_id, keyword, table_name):
         """method for getting a single incident by id"""
         get_incident_instance = self.incident_data.get_incident(
-            incident_id, keyword)
+            incident_id, keyword, table_name)
         if get_incident_instance is None:
             return RESP_ERROR_INCIDENT_NOT_FOUND
         else:
@@ -156,7 +148,7 @@ class IncidentController:
                 "data": [get_incident_instance]
             }), content_type="application/json", status=200)          
         
-    def update_incident(self, incident_id, request_data, keyword, username, edit_attribute):
+    def update_incident(self, incident_id, request_data, keyword, username, edit_attribute, table_name):
         """method for editing the location of an incident"""
 
         for input_value in request_data:
@@ -179,15 +171,15 @@ class IncidentController:
                 return RESP_ERROR_UPDATE_INCIDENT_WRONG_DATA
         if "comment" in request_data:
             comment = request_data.get("comment")
-            if self.validator.incident_duplicate(comment, self.incident_data.get_incidents(keyword)):
+            if self.validator.incident_duplicate(comment, self.incident_data.get_incidents(keyword, table_name)):
                 return RESP_ERROR_POST_DUPLICATE
         
         if edit_attribute == "edit_location" and "location" in request_data:
             update_incident_instance = self.incident_data.update_incident(
-                incident_id, request_data, keyword, username)
+                incident_id, request_data, keyword, username, table_name)
         elif edit_attribute == "edit_comment" and "comment" in request_data:
             update_incident_instance = self.incident_data.update_incident(
-                incident_id, request_data, keyword, username)
+                incident_id, request_data, keyword, username, table_name)
         else:
             return RESP_ERROR_FORBIDDEN_INCIDENT_UPDATE
         return self.delete_update(
@@ -197,7 +189,7 @@ class IncidentController:
                 update_incident_instance,
                 "update", incident_id))
 
-    def update_incident_status(self, incident_id, request_data, keyword):
+    def update_incident_status(self, incident_id, request_data, keyword, table_name):
         """method for updating the status of an incident"""
         if "status" not in request_data or len(request_data) != 1:
             return RESP_ERROR_ADMIN_NO_RIGHTS
@@ -206,17 +198,17 @@ class IncidentController:
             return RESP_ERROR_UPDATE_STATUS
 
         update_incident_instance = self.incident_data.update_incident(
-            incident_id, request_data, keyword, None)
+            incident_id, request_data, keyword, None, table_name)
         if update_incident_instance is None:
             return RESP_ERROR_INCIDENT_NOT_FOUND
         else:
             return self.response_submission_success(update_incident_instance,
                                                     "incident_status", incident_id)
 
-    def delete_incident(self, incident_id, keyword, username):
+    def delete_incident(self, incident_id, keyword, username, table_name):
         """method for deleing an incident basing on its id"""
         delete_incident_instance = self.incident_data.delete_incident(
-            incident_id, keyword, username)
+            incident_id, keyword, username, table_name)
         return self.delete_update(
             delete_incident_instance,
             RESP_EEROR_MSG_UNAUTHORIZED_DELETE,

@@ -1,7 +1,9 @@
 """this module includes the usermodel obkect and the
 userdata class with moethods for manipulating user data"""
-
 import hashlib
+
+from databases.ireporter_db import IreporterDb
+
 class User():
     """user model"""
 
@@ -37,6 +39,8 @@ class User():
 class UsersData():
     """class includeing methods for manipulating user items in users list"""
 
+    ireporter_db = IreporterDb()
+
     def __init__(self):
         """users data initialiser"""
         self.users_list = [
@@ -57,18 +61,48 @@ class UsersData():
 
     def add_user(self, user):
         """method for adding a user item in the users list"""
-        return self.users_list.append(user)
+        return self.ireporter_db.insert_data_users(
+            user.get("firstname"),
+            user.get("lastname"),
+            user.get("othernames"),
+            user.get("username"),
+            user.get("email"),
+            user.get("phonenumber"),
+            user.get("is_admin"),
+            user.get("password"),
+            user.get("registered_on")
+        )
 
     def get_users(self):
         """method for getting user items in the users list"""
-        return self.users_list
+        return self.get_all_dbusers()
 
     def update_user(self, user_id, new_user_info):
         """method for updating a user item in the users list"""
-        for user in self.users_list:
+        for user in self.get_all_dbusers():
             if user.get("user_id") == user_id:
-                user.update(new_user_info)
-                user.pop("password")
+                self.ireporter_db.update_data_user_role(user_id, new_user_info.get("is_admin"))
                 return user
         return None
+
+    def get_all_dbusers(self):
+        data_from_db = self.ireporter_db.fetch_data_users("app_users")
+        dict_user = {}
+        list_users = []
+        for user in data_from_db:
+            dict_user = {
+                "user_id": user[0],
+                "firstname": user[1],
+                "lastname": user[2],
+                "othernames": user[3],
+                "username": user[4],
+                "email": user[5],
+                "phonenumber": user[6],
+                "is_admin": user[7],
+                "password":user[8],
+                "registered_on": user[9]
+            }
+            list_users.append(dict_user)
+        return list_users
+
         
