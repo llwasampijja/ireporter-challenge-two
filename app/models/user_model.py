@@ -10,7 +10,7 @@ from flask_jwt_extended import create_access_token
 from databases.ireporter_db import IreporterDb
 from flask import Response, json
 
-from app.utilities.static_strings import (
+from app.utilities.static_stringsnew import (
     RESP_SUCCESS_MSG_REGISTRATION,
 
     RESP_ERROR_INVALID_FIRSTNAME,
@@ -36,19 +36,19 @@ class User():
         if self.validate_name(request_data.get("lastname")):
             return RESP_ERROR_INVALID_LASTNAME
 
-        if self.validate_name(request_data.get("othernames")):
+        if self.validate_othernames(request_data.get("othernames"), request_data):
             return RESP_ERROR_INVALID_OTHERNAMES
 
-        if self.validate_name(request_data.get("username")):
+        if self.validate_username(request_data.get("username")):
             return RESP_ERROR_INVALID_USERNAME
 
-        if self.validate_name(request_data.get("email")):
+        if self.validate_email(request_data.get("email")):
             return RESP_ERROR_INVALID_EMAIL
 
-        if self.validate_name(request_data.get("phonenumber")):
+        if self.validate_phonenumber(request_data.get("phonenumber")):
             return RESP_ERROR_INVALID_PHONENUMBER
 
-        if self.validate_name(request_data.get("password")):
+        if self.validate_password(request_data.get("password")):
             return RESP_ERROR_INVALID_PASSWORD
 
 
