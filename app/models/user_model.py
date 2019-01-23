@@ -2,18 +2,90 @@
 userdata class with moethods for manipulating user data"""
 import hashlib
 import re
+import datetime
+
+
+from flask_jwt_extended import create_access_token
 
 from databases.ireporter_db import IreporterDb
+from flask import Response, json
+
+from app.utilities.static_strings import (
+    RESP_SUCCESS_MSG_REGISTRATION,
+
+    RESP_ERROR_INVALID_FIRSTNAME,
+    RESP_ERROR_INVALID_LASTNAME,
+    RESP_ERROR_INVALID_EMAIL,
+    RESP_ERROR_INVALID_OTHERNAMES,
+    RESP_ERROR_INVALID_EMAIL,
+    RESP_ERROR_INVALID_PHONENUMBER,
+    RESP_ERROR_INVALID_PASSWORD,
+    RESP_ERROR_INVALID_USERNAME
+)
+
 
 class User():
     """user model"""
 
+    ireporter_db = IreporterDb()
+
     def create_user(self, request_data):
-        if validate_name(request_data.get("firstname")):
-            return RESP_
+        if self.validate_name(request_data.get("firstname")):
+            return RESP_ERROR_INVALID_FIRSTNAME
+
+        if self.validate_name(request_data.get("lastname")):
+            return RESP_ERROR_INVALID_LASTNAME
+
+        if self.validate_name(request_data.get("othernames")):
+            return RESP_ERROR_INVALID_OTHERNAMES
+
+        if self.validate_name(request_data.get("username")):
+            return RESP_ERROR_INVALID_USERNAME
+
+        if self.validate_name(request_data.get("email")):
+            return RESP_ERROR_INVALID_EMAIL
+
+        if self.validate_name(request_data.get("phonenumber")):
+            return RESP_ERROR_INVALID_PHONENUMBER
+
+        if self.validate_name(request_data.get("password")):
+            return RESP_ERROR_INVALID_PASSWORD
+
+
+        self.ireporter_db.insert_data_users(
+            request_data.get("firstname"),
+            request_data.get("lastname"),
+            request_data.get("othernames"),
+            request_data.get("username"),
+            request_data.get("email"),
+            request_data.get("phonenumber"),
+            False,
+            request_data.get("password"),
+            datetime.datetime.now()
+        )
+
+        # if self.duplicate_user():
+        #     pass
+
+        # self.add_user(new_user.user_dict())
+        # newuser_dict = (new_user.user_dict())
+        # newuser_dict.pop("password")
+
+        access_token = create_access_token(
+            request_data,
+            expires_delta=datetime.timedelta(hours=1)
+        )
+
+        return Response(json.dumps({
+            "status": 201,
+            # "data": [re],
+            "message": RESP_SUCCESS_MSG_REGISTRATION,
+            "access_token": access_token
+        }), content_type="application/json", status=201)
+
     
     def login_user(self, request_data):
-        pass
+        return
 
     def edit_userrole(self, request_data):
         pass
@@ -21,6 +93,30 @@ class User():
     def validate_name(self, name):
         """method checks if a provided name is valid"""
         if any(not item.isalpha() for item in str(name)):
+            return True
+        return False
+
+    def validate_userobj(self, request_data):
+        minimum_user_properties = (
+            "firstname",
+            "lastname",
+            "email",
+            "phonenumber",
+            "username",
+            "password"
+        )
+        all_user_fields = (
+            "firstname",
+            "lastname",
+            "othernames",
+            "email",
+            "phonenumber",
+            "username",
+            "password"
+            )
+
+        if any(item not in request_data for item in minimum_user_properties) \
+        or any(item not in all_user_fields for item in request_data):
             return True
         return False
 
