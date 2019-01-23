@@ -3,6 +3,8 @@ userdata class with moethods for manipulating user data"""
 import hashlib
 import re
 import datetime
+# import bcrypt
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 from flask_jwt_extended import create_access_token
@@ -67,6 +69,7 @@ class User():
             request_data.get("email"),
             request_data.get("phonenumber"),
             False,
+            # generate_password_hash(kwargs["password"]),
             hashlib.sha224(
             b"{}").hexdigest().format(request_data.get("password")),
             datetime.datetime.now()
@@ -118,11 +121,14 @@ class User():
         username = request_info.get("username")
         hashed_password = hashlib.sha224(
             b"{}").hexdigest().format(request_info.get("password"))
+        # hashed_password = bcrypt.hashpw(password.encode('utf8'), bcrypt.gensalt())
 
         for user in UsersData.get_all_dbusers(UsersData):
-            if user.get("username") == username and user.get(
-                    "password") == hashed_password:
+            if user.get("password") != hashed_password:
+                print("valid password")
 
+            if user.get("username") == username and not check_password_hash(
+                user.get("password"), request_info.get("password")):
                 access_token = create_access_token(
                     identity=user,
                     expires_delta=datetime.timedelta(
