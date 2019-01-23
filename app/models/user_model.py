@@ -1,39 +1,96 @@
 """this module includes the usermodel obkect and the
 userdata class with moethods for manipulating user data"""
 import hashlib
+import re
 
 from databases.ireporter_db import IreporterDb
 
 class User():
     """user model"""
 
-    def __init__(self, **kwargs):
-        """initialising the parameters of the user object"""
-        self.user_id = kwargs.get("user_id")
-        self.firstname = kwargs.get("firstname")
-        self.lastname = kwargs.get("lastname")
-        self.othernames = "ANN"
-        self.username = kwargs.get("username")
-        self.email = kwargs.get("email")
-        self.phonenumber = kwargs.get("phonenumber")
-        self.is_admin = kwargs.get("is_admin")
-        self.password = kwargs.get("password")
-        self.registered_on = kwargs.get("registered_on")
+    def create_user(self, request_data):
+        if validate_name(request_data.get("firstname")):
+            return RESP_
+    
+    def login_user(self, request_data):
+        pass
 
-    def user_dict(self):
-        """method to return the dictionary of a user item"""
-        return {
-            "user_id": self.user_id,
-            "firstname": self.firstname,
-            "lastname": self.lastname,
-            "othernames": self.othernames,
-            "username": self.username,
-            "email": self.email,
-            "phonenumber": self.phonenumber,
-            "is_admin": self.is_admin,
-            "password": self.password,
-            "registered_on": self.registered_on
-        }
+    def edit_userrole(self, request_data):
+        pass
+
+    def validate_name(self, name):
+        """method checks if a provided name is valid"""
+        if any(not item.isalpha() for item in str(name)):
+            return True
+        return False
+
+    def validate_password(self, password):
+        """method checks for an unacceptable password"""
+        special_characters = ['$', '#', '@']
+        password = password.replace(" ", "")
+        test_conditions = [
+            (len(password) >= 8 and len(password) <= 12),
+            (any(x.isupper() for x in password) and any(x.islower()
+                                                        for x in password)),
+            (any(y in password for y in special_characters)
+             and any(y.isdigit() for y in password))
+        ]
+        if all(condition is True for condition in test_conditions):
+            return False
+        return True
+
+    def user_in_db(self, user_field, users_list, user_key):
+        """refactored method to check if a user is already in the system"""
+        if any(user.get(user_key) == user_field for user in users_list):
+            return True
+        return False
+
+    def invalid_admin_state(self, isadmin):
+        """method checks is is_admin as a valid value"""
+        if isinstance(isadmin, bool):
+            return False
+        return True
+
+    def validate_email(self, email):
+        """method checks if the email is in the correct format"""
+        email_pattern = re.compile(r"[^@]+@[^@]+\.[^@]+")
+        if email_pattern.match(email):
+            return False
+        return True
+
+    def validate_phonenumber(self, phonenumber):
+        """check if phonenumber has the correct number of digits for uganda"""
+        if all(digit.isdigit() for digit in phonenumber) \
+                and len(phonenumber) <= 10 and phonenumber.startswith("0"):
+            return False
+        return True
+
+    def validate_othernames(self, othernames, request_data):
+        """method checks if othernames is provided by the user and if \
+        provided it checks if it is a valid name"""
+        if "othernames" in request_data \
+        and self.validate_name(request_data.get("othernames")):
+            return True
+        return False
+        
+    def validate_username(self, username):
+        """method checks if a provided username is valid"""
+        word_letters = re.sub('[^a-zA-Z-0-9]+', '', str(username))
+        if any(item.isalpha() for item in word_letters):
+            return False
+        return True
+
+    def username_in_db(self, username, users_list):
+        """method checks if a username is already in the system"""
+        return self.user_in_db(username, users_list, "username")
+
+    def email_in_db(self, email, users_list):
+        """method checks if email already in the system"""
+        return self.user_in_db(email, users_list, "email")
+
+    def phonenumber_in_db(self, phonenumber, users_list):
+        """method checks if phonenumber already in the system"""
+        return self.user_in_db(phonenumber, users_list, "phonenumber")
 
 
 class UsersData():
