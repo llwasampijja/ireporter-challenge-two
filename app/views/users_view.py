@@ -1,7 +1,8 @@
 """module with methods and routes for users"""
-from flask import Blueprint, request
+from flask import Blueprint, request, Response, json
 from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
 
+from app.models.user_model import UsersData
 from app.controllers.users_controller import UsersController
 from app.controllers.incident_controller import IncidentController
 from app.utilities.authenticator import Authenticator
@@ -12,12 +13,16 @@ user_blueprint = Blueprint("user blueprint", __name__)
 users_controller = UsersController()
 incident_controller = IncidentController()
 authenticator = Authenticator()
+users_data = UsersData()
 
 @user_blueprint.route("", methods=["GET"])
 @authenticator.admin_only
 def get_users():
     """method and route for getting all users"""
-    return users_controller.get_users()
+    return Response(json.dumps({
+        "status": 200,
+        "data": users_data.get_all_dbusers()
+    }), content_type="application/json", status=200)
 
 @user_blueprint.route("/<int:user_id>", methods=["PATCH"])
 @authenticator.admin_only

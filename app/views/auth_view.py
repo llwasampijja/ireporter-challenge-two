@@ -16,8 +16,9 @@ def register():
     # return users_controller.adduser(request_info)
     # return 
 
-# @auth_blueprint.route("/login", methods=["GET", "POST"])
-# def login_user():
-#     """method for logging in a user"""
-#     request_info = request.get_json()
-#     return users_controller.signin(request_info)
+@auth_blueprint.route("/login", methods=["GET", "POST"])
+def login_user():
+    """method for logging in a user"""
+    request_info = request.get_json()
+    # return users_controller.signin(request_info)
+    return user_instance.login_user(request_info)

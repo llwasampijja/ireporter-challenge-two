@@ -12,6 +12,7 @@ from flask import Response, json
 
 from app.utilities.static_stringsnew import (
     RESP_SUCCESS_MSG_REGISTRATION,
+    RESP_SUCCESS_MSG_AUTH_LOGIN,
 
     RESP_ERROR_INVALID_FIRSTNAME,
     RESP_ERROR_INVALID_LASTNAME,
@@ -20,7 +21,11 @@ from app.utilities.static_stringsnew import (
     RESP_ERROR_INVALID_EMAIL,
     RESP_ERROR_INVALID_PHONENUMBER,
     RESP_ERROR_INVALID_PASSWORD,
-    RESP_ERROR_INVALID_USERNAME
+    RESP_ERROR_INVALID_USERNAME,
+    RESP_ERROR_INVALID_LOGIN_CREDS,
+    RESP_ERROR_EMPTY_USERNAME,
+    RESP_ERROR_EMPTY_PASSWORD,
+    RESP_ERROR_LOGIN_FAILED
 )
 
 
@@ -30,6 +35,7 @@ class User():
     ireporter_db = IreporterDb()
 
     def create_user(self, request_data):
+        othernames = ""
         if self.validate_name(request_data.get("firstname")):
             return RESP_ERROR_INVALID_FIRSTNAME
 
@@ -38,6 +44,7 @@ class User():
 
         if self.validate_othernames(request_data.get("othernames"), request_data):
             return RESP_ERROR_INVALID_OTHERNAMES
+        othernames = self.validate_othernames(request_data.get("othernames"), request_data)
 
         if self.validate_username(request_data.get("username")):
             return RESP_ERROR_INVALID_USERNAME
@@ -55,12 +62,13 @@ class User():
         self.ireporter_db.insert_data_users(
             request_data.get("firstname"),
             request_data.get("lastname"),
-            request_data.get("othernames"),
+            othernames,
             request_data.get("username"),
             request_data.get("email"),
             request_data.get("phonenumber"),
             False,
-            request_data.get("password"),
+            hashlib.sha224(
+            b"{}").hexdigest().format(request_data.get("password")),
             datetime.datetime.now()
         )
 
@@ -83,9 +91,60 @@ class User():
             "access_token": access_token
         }), content_type="application/json", status=201)
 
-    
-    def login_user(self, request_data):
-        return
+    def check_empty_str(self, test_string):
+        """this method checks for empty incident and user fields"""
+        if str(test_string).replace(" ", "") == "":
+            return True
+        return False
+
+    def login_user(self, request_info):
+        """method for signing in a user"""
+        login_creds = ("username", "password")
+        
+        if self.check_empty_str(request_info.get("username")):
+            return RESP_ERROR_EMPTY_USERNAME
+
+        if self.check_empty_str(request_info.get("password")):
+            return RESP_ERROR_EMPTY_PASSWORD
+
+        if any(item not in request_info for item in login_creds) \
+        or any(item not in login_creds for item in request_info):
+            return RESP_ERROR_INVALID_LOGIN_CREDS
+
+        # for login_key, login_val in request_info.items():
+        #     if self.my_validator.empty_string(login_val):
+        #         return RESP_ERROR_POST_EMPTY_DATA
+
+        username = request_info.get("username")
+        hashed_password = hashlib.sha224(
+            b"{}").hexdigest().format(request_info.get("password"))
+
+        for user in UsersData.get_all_dbusers(UsersData):
+            if user.get("username") == username and user.get(
+                    "password") == hashed_password:
+
+                access_token = create_access_token(
+                    identity=user,
+                    expires_delta=datetime.timedelta(
+                        hours=1))
+                return Response(json.dumps({
+                    "status": 201,
+                    "data": [
+                        {
+                            "user_id": user.get("user_id"),
+                            "firstname": user.get("firstname"),
+                            "lastname": user.get("lastname"),
+                            "othernames": user.get("othernames"),
+                            "email": user.get("email"),
+                            "phonenumber": user.get("phonenumber"),
+                            "username": user.get("username"),
+                            "is_admin": user.get("is_admin")
+                        }
+                    ],
+                    "access_token": access_token,
+                    "message": RESP_SUCCESS_MSG_AUTH_LOGIN
+                }), content_type="application/json", status=201)
+        return RESP_ERROR_LOGIN_FAILED
 
     def edit_userrole(self, request_data):
         pass
@@ -194,41 +253,41 @@ class UsersData():
 
     ireporter_db = IreporterDb()
 
-    def __init__(self):
-        """users data initialiser"""
-        self.users_list = [
-            {
-                "user_id": 1,
-                "firstname": "Edward",
-                "lastname": "Army",
-                "othernames": "eddy",
-                "username": "edward",
-                "email": "edward@bolon.com",
-                "phonenumber": "0775961853",  
-                "is_admin": True,
-                "password": hashlib.sha224(
-                    b"{}").hexdigest().format("i@mG8t##")
-            },
-        ]
-        self.username_current = {"username":None}
+    # def __init__(self):
+    #     """users data initialiser"""
+    #     self.users_list = [
+    #         {
+    #             "user_id": 1,
+    #             "firstname": "Edward",
+    #             "lastname": "Army",
+    #             "othernames": "eddy",
+    #             "username": "edward",
+    #             "email": "edward@bolon.com",
+    #             "phonenumber": "0775961853",  
+    #             "is_admin": True,
+    #             "password": hashlib.sha224(
+    #                 b"{}").hexdigest().format("i@mG8t##")
+    #         },
+    #     ]
+    #     self.username_current = {"username":None}
 
-    def add_user(self, user):
-        """method for adding a user item in the users list"""
-        return self.ireporter_db.insert_data_users(
-            user.get("firstname"),
-            user.get("lastname"),
-            user.get("othernames"),
-            user.get("username"),
-            user.get("email"),
-            user.get("phonenumber"),
-            user.get("is_admin"),
-            user.get("password"),
-            user.get("registered_on")
-        )
+    # def add_user(self, user):
+    #     """method for adding a user item in the users list"""
+    #     return self.ireporter_db.insert_data_users(
+    #         user.get("firstname"),
+    #         user.get("lastname"),
+    #         user.get("othernames"),
+    #         user.get("username"),
+    #         user.get("email"),
+    #         user.get("phonenumber"),
+    #         user.get("is_admin"),
+    #         user.get("password"),
+    #         user.get("registered_on")
+    #     )
 
-    def get_users(self):
-        """method for getting user items in the users list"""
-        return self.get_all_dbusers()
+    # def get_users(self):
+    #     """method for getting user items in the users list"""
+    #     return self.get_all_dbusers()
 
     def update_user(self, user_id, new_user_info):
         """method for updating a user item in the users list"""
