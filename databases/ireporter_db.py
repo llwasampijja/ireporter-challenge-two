@@ -113,8 +113,26 @@ class IreporterDb():
             '{is_admin}',
             '{password}',
             '{registered_on}'
-        )"""
+        ) RETURNING user_id"""
         self.cursor_database.execute(sql_query)
+        return self.cursor_database.fetchall()
+
+    def insert_data_redflags(self, incident_type, location, title, comment, images, videos, created_on, created_by,  status):
+        sql_query = """INSERT INTO redflags (
+            incident_type,
+            location,
+            title,
+            comment,
+            images,
+            videos,
+            created_on,
+            created_by,
+            status
+        ) VALUES  (%s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING incident_id;"""
+
+        data = (incident_type, location, title, comment, images, videos, created_on, created_by,  status)
+        self.cursor_database.execute(sql_query, data)
+        return self.cursor_database.fetchall()
 
     def insert_data_interventions(self, incident_type, location, title, comment, images, videos, created_on, created_by,  status):
         sql_query = """INSERT INTO interventions(
@@ -127,26 +145,27 @@ class IreporterDb():
             created_on,
             created_by,
             status
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);"""
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING incident_id;"""
 
         data = (incident_type, location, title, comment, images, videos, created_on, created_by,  status)
         self.cursor_database.execute(sql_query, data)
+        return self.cursor_database.fetchall()
 
-    def insert_data_redflags(self, incident_type, location, title, comment, images, videos, created_on, created_by,  status):
-        sql_query = """INSERT INTO redflags(
-            incident_type,
-            location,
-            title,
-            comment,
-            images,
-            videos,
-            created_on,
-            created_by,
-            status
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);"""
+    # def insert_data_incidents(self, table_name, incident_type, location, title, comment, images, videos, created_on, created_by,  status):
+    #     sql_query = """INSERT INTO redflags(
+    #         incident_type,
+    #         location,
+    #         title,
+    #         comment,
+    #         images,
+    #         videos,
+    #         created_on,
+    #         created_by,
+    #         status
+    #     ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);"""
 
-        data = (incident_type, location, title, comment, images, videos, created_on, created_by,  status)
-        self.cursor_database.execute(sql_query, data)
+    #     data = (incident_type, location, title, comment, images, videos, created_on, created_by,  status)
+    #     self.cursor_database.execute(sql_query, data)
 
     def fetch_data_users(self, app_users):
         sql_query = f"""SELECT * FROM {app_users}"""

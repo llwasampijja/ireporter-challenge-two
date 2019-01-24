@@ -23,7 +23,7 @@ RESP_ERROR_EMPTY_USERNAME = "Enter a empty username"
 RESP_ERROR_EMPTY_PASSWORD = "Enter a empty password"
 RESP_ERROR_MSG_LOGIN_FAILED = "Failed to login. username or password is incorrect"
 RESP_ERROR_MSG_SIGNUP_FAIL_USER_EXISTS = "Failed to Signup. Attempting to sign-up with an Email address, phonenumber or username  which is/are already registered on the system"
-
+RESP_ERROR_MSG_NO_ACCESS = "You have no rights to view this content"
 
 
 RESP_ERROR_SIGNUP_FAIL_USER_EXISTS = Response(json.dumps({

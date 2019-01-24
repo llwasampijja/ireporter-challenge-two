@@ -7,8 +7,20 @@ from app.models.user_model import UsersData
 from databases.ireporter_db import IreporterDb
 from app.utilities.static_stringsnew import (
     RESP_SUCCESS_MSG_CREATE_INCIDENT,
-
+    RESP_ERROR_MSG_NO_ACCESS,
     RESP_ERROR_INVALID_EMAIL
+)
+from app.utilities.static_strings import (
+    RESP_SUCCESS_INCIDENT_LIST_EMPTY,
+    RESP_ERROR_INCIDENT_NOT_FOUND,
+    RESP_SUCCESS_MSG_INCIDENT_DELETE,
+    RESP_ERROR_INVALID_COMMENT_STRING_TYPE,
+    RESP_ERROR_POST_DUPLICATE,
+    RESP_SUCCESS_MSG_INCIDENT_UPDATE_COMMENT,
+    RESP_ERROR_INVALID_LOCATION,
+    RESP_ERROR_UPDATE_STATUS,
+    RESP_SUCCESS_MSG_INCIDENT_UPDATE_STATUS,
+    RESP_SUCCESS_MSG_INCIDENT_UPDATE_LOCATION
 )
 
 from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
@@ -20,61 +32,177 @@ class Incident:
         verify_jwt_in_request()
         user_identity = get_jwt_identity()
 
-        # if self.validate_incident(request_info):
-        #     return RESP_ERROR_INVALID_EMAIL
+        if self.validate_incident(request_info):
+            return RESP_ERROR_INVALID_EMAIL
 
-        # if self.validate_images_videos(request_info.get("images")):
-        #     return RESP_ERROR_INVALID_EMAIL
+        if self.validate_images_videos(request_info.get("images")):
+            return RESP_ERROR_INVALID_EMAIL
 
-        # if self.validate_images_videos(request_info.get("videos")):
-        #     return RESP_ERROR_INVALID_EMAIL
+        if self.validate_images_videos(request_info.get("videos")):
+            return RESP_ERROR_INVALID_EMAIL
 
-        # if self.validate_comment(request_info.get("comment")):
-        #     return RESP_ERROR_INVALID_EMAIL
+        if self.validate_comment(request_info.get("comment")):
+            return RESP_ERROR_INVALID_EMAIL
 
-        # if self.validate_title(request_info.get("title")):
-        #     return RESP_ERROR_INVALID_EMAIL
+        if self.validate_title(request_info.get("title")):
+            return RESP_ERROR_INVALID_EMAIL
 
-        # if self.validate_title(request_info.get("location")):
-        #     return RESP_ERROR_INVALID_EMAIL
+        if self.validate_location(request_info.get("location")):
+            return RESP_ERROR_INVALID_EMAIL
 
-        # if self.incident_duplicate(request_info.get("comment"), IncidentData.get_all_dbincidents(IncidentData, keyword, table_name)):
-        #     return RESP_ERROR_INVALID_EMAIL
+        if self.incident_duplicate(request_info.get("comment"), IncidentData.get_all_dbincidents(IncidentData, table_name)):
+            return RESP_ERROR_INVALID_EMAIL
+        # last_incidents = IncidentData.get_all_dbincidents(IncidentData, table_name)#[-1].get("incident_id")
+        # last_incident_id = self.get_created_id(table_name)
+        # incident_id = 0
+        if table_name == "redflags":
+            incident_type = 1
+            incident_id = self.ireporter_db.insert_data_redflags(
+                    1,
+                    request_info.get("location"),
+                    request_info.get("title"),
+                    request_info.get("comment"),
+                    request_info.get("images"),
+                    request_info.get("videos"),
+                    datetime.datetime.now(),
+                    user_identity.get("user_id"),
+                    request_info.get("status")    
+                )
 
-        # self.ireporter_db.insert_data_redflags(
-        #         1,
-        #         request_info.get("location"),
-        #         request_info.get("title"),
-        #         request_info.get("comment"),
-        #         request_info.get("images"),
-        #         request_info.get("videos"),
-        #         datetime.datetime.now(),
-        #         user_identity["user_id"],
-        #         request_info.get("status")    
-        #     )
+        if table_name == "interventions":
+            incident_type = 2
+            incident_id = self.ireporter_db.insert_data_interventions(
+                    incident_type,
+                    request_info.get("location"),
+                    request_info.get("title"),
+                    request_info.get("comment"),
+                    request_info.get("images"),
+                    request_info.get("videos"),
+                    datetime.datetime.now(),
+                    user_identity["user_id"],
+                    request_info.get("status")    
+                )
+        created_incident = {
+            "incident_id": incident_id[0][0],
+            "incident_type": incident_type,
+            "title": request_info.get("title"),
+            "comment": request_info.get("comment"),
+            "images": request_info.get("images"),
+            "videos": request_info.get("videos"),
+            "created_on": datetime.datetime.now(),
+            "created_by": user_identity["user_id"],
+            "status":"pending investigation"
 
-        # return Response(json.dumps({
-        #     "status": 201,
-        #     "data": [request_info],
-        #     "message": RESP_SUCCESS_MSG_CREATE_INCIDENT
-        # }), content_type="application/json", status=201)
+        }
+
+        return Response(json.dumps({
+            "status": 201,
+            "data": [created_incident],
+            "message": RESP_SUCCESS_MSG_CREATE_INCIDENT
+        }), content_type="application/json", status=201)
+
+    # def get_created_id(self, table_name):
+    #     if len(IncidentData.get_all_dbincidents(IncidentData, table_name)) > 0:
+    #         return IncidentData.get_all_dbincidents(IncidentData, table_name)[-1].get("incident_id") + 1
+    #     return 1
+
+        # lastIncident_id = last_incident
+
+    def edit_incident_comment(self, request_info, incident_id, incident_type, user_id, table_name):
+        if "comment" not in request_info or len(request_info) != 1:
+            return RESP_ERROR_INVALID_COMMENT_STRING_TYPE
+
+        for incident in IncidentData.get_all_dbincidents(IncidentData, table_name):
+            if incident.get("incident_id")==incident_id and incident.get("created_by")!=user_id:
+                return RESP_ERROR_MSG_NO_ACCESS
+            elif incident.get("comment")==request_info.get("comment"):
+                return RESP_ERROR_POST_DUPLICATE
+            else:
+                self.ireporter_db.update_data_incident_comment(incident_id, request_info.get("comment"), table_name)
+                return Response(json.dumps({
+                    "status": 201,
+                    "data": incident,
+                    "message": RESP_SUCCESS_MSG_INCIDENT_UPDATE_COMMENT
+                }))
+        return RESP_ERROR_INCIDENT_NOT_FOUND
 
 
+    def edit_incident_location(self, request_info, incident_id, incident_type, user_id, table_name):
+        if "location" not in request_info or len(request_info) != 1:
+            return RESP_ERROR_INVALID_COMMENT_STRING_TYPE
 
-    def edit_incident_location(self):
-        pass
+        if self.validate_location(request_info.get("location")):
+            return RESP_ERROR_INVALID_LOCATION
 
-    def edit_incident_comment(self):
-        pass
+        for incident in IncidentData.get_all_dbincidents(IncidentData, table_name):
+            if incident.get("incident_id")==incident_id and incident.get("created_by")!=user_id:
+                return RESP_ERROR_MSG_NO_ACCESS
+            elif incident.get("location")==request_info.get("location"):
+                return RESP_ERROR_POST_DUPLICATE
+            else:
+                self.ireporter_db.update_data_incident_comment(incident_id, request_info.get("location"), table_name)
+                return Response(json.dumps({
+                    "status": 201,
+                    "data": incident,
+                    "message": RESP_SUCCESS_MSG_INCIDENT_UPDATE_LOCATION
+                }))
+        return RESP_ERROR_INCIDENT_NOT_FOUND
+
+    def edit_incident_status(self, request_info, incident_id, incident_type, user_id, table_name):
+        if "status" not in request_info or len(request_info) != 1:
+            return RESP_ERROR_INVALID_COMMENT_STRING_TYPE
+
+        if self.validate_status (request_info.get("status")):
+            return RESP_ERROR_UPDATE_STATUS
+
+        for incident in IncidentData.get_all_dbincidents(IncidentData, table_name):
+            if user_id != 1:
+                return RESP_ERROR_MSG_NO_ACCESS
+            else:
+                self.ireporter_db.update_data_incident_status(incident_id, request_info.get("status"), table_name)
+                return Response(json.dumps({
+                    "status": 201,
+                    "data": incident,
+                    "message": RESP_SUCCESS_MSG_INCIDENT_UPDATE_STATUS
+                }))
+        return RESP_ERROR_INCIDENT_NOT_FOUND
+
 
     def get_incident(self, incident_id, keyword, action_keyword, username, table_name):
-        return IncidentData.get_or_delete(IncidentData, incident_id, keyword, action_keyword, username, table_name)
+        for incident in IncidentData.get_all_dbincidents(IncidentData, table_name):
+            if incident.get("incident_id") == incident_id and username == incident.get("created_by"):
+                return Response( json.dumps({
+                    "status": 200,
+                    "data": incident
+                }), content_type="application/json", status=200)
+            elif incident.get("incident_id") == incident_id and username != incident.get("created_by"):
+                return Response( json.dumps({
+                    "status": 200,
+                    "data": "incident",
+                    "error": RESP_ERROR_MSG_NO_ACCESS
+                }), content_type="application/json", status=200)
 
-    def get_user_incidents(self):
-        pass
+        return RESP_ERROR_INCIDENT_NOT_FOUND
 
-    def delete_incident(self):
-        pass
+    def delete_incident(self, incident_id, keyword, username, table_name):
+        for incident in IncidentData.get_all_dbincidents(IncidentData, table_name):
+            if incident.get("incident_id") == incident_id and username == incident.get("created_by")\
+            and incident.get("status") == "pending investigation":
+                self.ireporter_db.delete_data_incident(incident_id, table_name)
+                return Response( json.dumps({
+                    "status": 200,
+                    "data": [{"incident_id": incident_id}],
+                    "message": RESP_SUCCESS_MSG_INCIDENT_DELETE
+                }), content_type="application/json", status=200)
+            elif incident.get("incident_id") == incident_id and username != incident.get("created_by") or \
+            incident.get("status") != "pending investigation":
+                return Response( json.dumps({
+                    "status": 200,
+                    "data": "incident",
+                    "error": RESP_ERROR_MSG_NO_ACCESS
+                }), content_type="application/json", status=200)
+
+        return RESP_ERROR_INCIDENT_NOT_FOUND
 
     def validate_incident(self, request_data):
         """this method checks if a request contains all and only required fields"""
@@ -91,7 +219,10 @@ class Incident:
             return True
         return False
 
-    
+    def validate_status(self, status):
+        if not status or status not in ("pending investigation", "under investigation", "resolved", "rejected"):
+            return True
+        return False 
     def incident_duplicate(self, comment, incidents_list):
         """method to check is an incident exists on the system"""
         if any((incident.get("comment")).lower() == comment.lower()
@@ -161,122 +292,30 @@ class Incident:
 
 class IncidentData:
     """class for managing data of incidents"""
-    users_data = UsersData()
     ireporter_db = IreporterDb()
-    def __init__(self):
-        self.redflags_list = []
-        self.interventions_list = []
+    def get_incidents(self, table_name):
+        incidents = self.get_all_dbincidents(table_name)
+        if not incidents:
+            return RESP_SUCCESS_INCIDENT_LIST_EMPTY
+        return Response(
+            json.dumps({
+                "status": 200,
+                "data": incidents
+            }), content_type="application/json", status=200
+        )
 
-    def create_incident(self, incident, keyword):
-        """method for addind an incident to a list of incidents"""
-        if keyword == "redflag":
-            return self.ireporter_db.insert_data_redflags(
-                1,
-                incident.get("location"),
-                incident.get("title"),
-                incident.get("comment"),
-                incident.get("images"),
-                incident.get("videos"),
-                incident.get("created_on"),
-                incident.get("created_by"),
-                incident.get("status")    
-            )
-        else:
-            return self.ireporter_db.insert_data_interventions(
-                2,
-                incident.get("location"),
-                incident.get("title"),
-                incident.get("comment"),
-                incident.get("images"),
-                incident.get("videos"),
-                incident.get("created_on"),
-                incident.get("created_by"),
-                incident.get("status")
-            )
+    def get_user_incidents(self, user_id, table_name):
+        incidents = self.get_incidents_specific_user(user_id, table_name)
+        if not incidents:
+            return RESP_SUCCESS_INCIDENT_LIST_EMPTY
+        return Response(
+            json.dumps({
+                "status": 200,
+                "data": incidents
+            }), content_type="application/json", status=200
+        )
 
-    def get_incidents(self, keyword, table_name):
-        """method for reading the incidents list"""
-        return self.get_all_dbincidents(keyword, table_name)
-
-    def get_incidents_specific_user(self, user_id, table_name):
-        """method for getting all incidents for a particular user"""
-        return self.get_all_suer_dbincidents(user_id, table_name)
-
-    def update_incident(self, incident_id, new_update, keyword, username, table_name):
-        """method for updating the an incident in the incidents list"""
-        return self.update(self.get_all_dbincidents(keyword, table_name), incident_id, new_update, username, table_name)
- 
-    def update(self, incidednts_list, incident_id, new_update, username, table_name):
-        """method with logic to update an incident in the incidents list"""
-        for incident in incidednts_list:
-            print("test this" + str(username) + incident.get("created_by"))
-            if incident.get("incident_id") == incident_id \
-            and username == incident.get("created_by") \
-            and incident.get("status") == "pending investigation":
-                self.ireporter_db.update_data_incident(incident_id, new_update, table_name)
-                return incident
-            elif incident.get("incident_id") == incident_id \
-            and username == incident.get("created_by") \
-            and incident.get("status") != "pending investigation":
-                return "revoked"
-            elif incident.get("incident_id") == incident_id and not username:
-                self.ireporter_db.update_data_incident_status(incident_id, new_update.get("status"), table_name)
-                return incident
-            elif incident.get("incident_id") == incident_id \
-            and username != incident.get("created_by"):
-                return "non_author"
-        return None
-
-    def my_get_incident(self, incidents_list, incident_id):
-        """method for retrieving an incident from the incidents list"""
-        for incident in incidents_list:
-            if incident.get("incident_id") == incident_id:
-                return incident
-        return None
-
-    def delete_incident(self, incident_id, keyword, username, table_name):
-        """helper method for deleting or updaing incident"""
-        return self.get_or_delete(incident_id, keyword, "delete", username, table_name)
-
-    # def get_incident(self, incident_id, keyword, table_name):
-    #     """helper method for geing an incident"""
-    #     return self.get_or_delete(incident_id, keyword, "get", None, table_name)
-
-    def delete(self, incidednts_list, incident_id, username, table_name):
-        """method with the logic to delete an incident in the incidents list"""
-        for incident in incidednts_list:
-            if incident.get("incident_id") == incident_id \
-            and username == incident.get("created_by") \
-            and incident.get("status") == "pending investigation":
-                self.ireporter_db.delete_data_incident(incident_id, table_name)
-                return incident
-            elif incident.get("incident_id") == incident_id \
-            and username == incident.get("created_by") \
-            and incident.get("status") != "pending investigation":
-                return "revoked"
-            elif incident.get("incident_id") == incident_id \
-            and username != incident.get("created_by"):
-                return "non_author"
-        return None
-
-    def get_or_delete(self, incident_id, keyword, action_keyword, username, table_name):
-        """helper method for getting or deleting an incident"""
-        if keyword == "redflag" and action_keyword == "delete":
-            print("jy ruf dkag " + keyword)
-            return self.delete(self.get_all_dbincidents("redflag", table_name), incident_id, username, table_name)
-        elif keyword == "intervention" and action_keyword == "delete":
-            return self.delete(self.get_all_dbincidents("intervention", table_name), incident_id, username, table_name)
-        elif keyword == "redflag" and action_keyword == "get":
-            return self.my_get_incident(self.get_all_dbincidents("redflag", table_name), incident_id)
-        else:
-            return self.my_get_incident(self.get_all_dbincidents("intervention", table_name), incident_id)
-
-    def get_all_dbincidents(self, incident_type, table_name):
-        data_from_db = None
-        if incident_type == "redflag":
-            table_name = "redflags"
-        else:
-            table_name = "interventions"
+    def get_all_dbincidents(self, table_name):
         data_from_db = self.ireporter_db.fetch_data_incidents(table_name)
         print(data_from_db)
         dict_incident = {}
@@ -298,9 +337,8 @@ class IncidentData:
             list_incidents.append(dict_incident)
         return list_incidents
 
-
-    def get_all_suer_dbincidents(self, user_id, table_name):
-       
+    def get_incidents_specific_user(self, user_id, table_name):
+        """method for getting all incidents for a particular user"""
         data_from_db = self.ireporter_db.fetch_data_user_incidents(user_id, table_name)
         print(data_from_db)
         dict_incident = {}
