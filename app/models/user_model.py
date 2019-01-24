@@ -68,7 +68,7 @@ class User():
             return RESP_ERROR_SIGNUP_FAIL_USER_EXISTS
 
 
-        self.ireporter_db.insert_data_users(
+        user_id = self.ireporter_db.insert_data_users(
             request_data.get("firstname"),
             request_data.get("lastname"),
             othernames,
@@ -81,20 +81,25 @@ class User():
             datetime.datetime.now()
         )
 
-        
-
-        # self.add_user(new_user.user_dict())
-        # newuser_dict = (new_user.user_dict())
-        # newuser_dict.pop("password")
+        new_user = {
+            "user_id": user_id[0][0],
+            "firstname": request_data.get("firstname"),
+            "lastname": request_data.get("lastname"),
+            "othernames": othernames,
+            "username": request_data.get("username"),
+            "email": request_data.get("email"),
+            "phonenumber": request_data.get("phonenumber"),
+            "is_admin": False,
+            "rgistered_on": datetime.datetime.now()
+        }
 
         access_token = create_access_token(
-            request_data,
+            new_user,
             expires_delta=datetime.timedelta(hours=1)
         )
 
         return Response(json.dumps({
-            "status": 201,
-            # "data": [re],
+            "status": new_user,
             "message": RESP_SUCCESS_MSG_REGISTRATION,
             "access_token": access_token
         }), content_type="application/json", status=201)
@@ -126,10 +131,6 @@ class User():
         if any(item not in request_info for item in login_creds) \
         or any(item not in login_creds for item in request_info):
             return RESP_ERROR_INVALID_LOGIN_CREDS
-
-        # for login_key, login_val in request_info.items():
-        #     if self.my_validator.empty_string(login_val):
-        #         return RESP_ERROR_POST_EMPTY_DATA
 
         username = request_info.get("username")
         hashed_password = hashlib.sha224(
@@ -288,42 +289,6 @@ class UsersData():
     """class includeing methods for manipulating user items in users list"""
 
     ireporter_db = IreporterDb()
-
-    # def __init__(self):
-    #     """users data initialiser"""
-    #     self.users_list = [
-    #         {
-    #             "user_id": 1,
-    #             "firstname": "Edward",
-    #             "lastname": "Army",
-    #             "othernames": "eddy",
-    #             "username": "edward",
-    #             "email": "edward@bolon.com",
-    #             "phonenumber": "0775961853",  
-    #             "is_admin": True,
-    #             "password": hashlib.sha224(
-    #                 b"{}").hexdigest().format("i@mG8t##")
-    #         },
-    #     ]
-    #     self.username_current = {"username":None}
-
-    # def add_user(self, user):
-    #     """method for adding a user item in the users list"""
-    #     return self.ireporter_db.insert_data_users(
-    #         user.get("firstname"),
-    #         user.get("lastname"),
-    #         user.get("othernames"),
-    #         user.get("username"),
-    #         user.get("email"),
-    #         user.get("phonenumber"),
-    #         user.get("is_admin"),
-    #         user.get("password"),
-    #         user.get("registered_on")
-    #     )
-
-    # def get_users(self):
-    #     """method for getting user items in the users list"""
-    #     return self.get_all_dbusers()
 
     def update_user(self, user_id, new_user_info):
         """method for updating a user item in the users list"""

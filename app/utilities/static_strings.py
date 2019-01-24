@@ -45,7 +45,10 @@ RESP_SUCCESS_MSG_REGISTRATION = "User account created and logged in successfully
 RESP_SUCCESS_MSG_ADMIN_RIGHTS = "The admin rights of the user have been updated successfully"
 RESP_SUCCESS_MSG_CREATE_INCIDENT = "Incident created successfully"
 RESP_SUCCESS_MSG_INCIDENT_DELETE = "Incident was deleted successfully"
-RESP_SUCCESS_MSG_INCIDENT_UPDATE = "Updated the incident record’s location successfully"
+RESP_SUCCESS_MSG_INCIDENT_UPDATE_COMMENT = "Updated the incident record’s comment successfully"
+RESP_SUCCESS_MSG_INCIDENT_UPDATE_STATUS = "Updated the incident record’s status successfully"
+RESP_SUCCESS_MSG_INCIDENT_UPDATE_LOCATION = "Updated the incident record’s location successfully"
+
 RESP_SUCCESS_MSG_INCIDENT_LIST_EMPTY = "Incidents list is empty"
 RESP_SUCCESS_MSG_INCIDENT_STATUS_UPDATE = "Updated the incident record’s status successfully"
 RESP_SUCCESS_MSG_AUTH_LOGIN = "Logged in successfully"
@@ -88,16 +91,29 @@ RESP_ERROR_MSG_INVALID_PASSWORD = "ERROR: Entered an invalid password. Password 
 RESP_ERROR_MSG_INVALID_STRING_TYPE = "ERROR: Entered a non string value  for either location, title or comment"
 RESP_ERROR_MSG_INVALID_LIST_TYPE = "ERROR: Entered a non list of strings value  for either videos or images"
 RESP_ERROR_MSG_INVALID_LOCATION = "ERROR: Entered a latitude or logitude which is out of range"
+RESP_ERROR_MSG_INVALID_STATUS = ""
 RESP_ERROR_MSG_INVALID_INCIDENT = "ERROR: Entered more or less fields than the required: Required fields include: location, videos, images, title, and comment"
 RESP_ERROR_MSG_FORBIDDEN_INCIDENT_UPDATE = "Action is forbidden: Attempting to edit a comment on an edit location endpoint or vice versa"
 RESP_ERROR_MSG_ENTERED_NOTHING = "The request body is empty"
 RESP_ERROR_MSG_INVALID_EDIT_STRING_TYPE = "The value must be of string type"
+RESP_ERROR_MSG_INVALID_EDIT_COMMENT = "Editting comment requires you to input only the comment value"
 
 # string constants for various responses
+RESP_SUCCESS_INCIDENT_LIST_EMPTY = Response(json.dumps({
+    "status": 400,
+    "data": [],
+    "error": RESP_SUCCESS_MSG_INCIDENT_LIST_EMPTY
+}), content_type="application/json", status=400)
+
 
 RESP_ERROR_INVALID_COMMENT_STRING_TYPE = Response(json.dumps({
     "status": 400,
     "error": RESP_ERROR_MSG_INVALID_EDIT_STRING_TYPE
+}), content_type="application/json", status=400)
+
+RESP_ERROR_INVALID_EDIT_COMMENT = Response(json.dumps({
+    "status": 400,
+    "error": RESP_ERROR_MSG_INVALID_EDIT_COMMENT
 }), content_type="application/json", status=400)
 
 RESP_ERROR_ENTERED_NOTHING = Response(json.dumps({

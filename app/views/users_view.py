@@ -3,15 +3,15 @@ from flask import Blueprint, request, Response, json
 from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
 
 from app.models.user_model import UsersData, User
-from app.controllers.users_controller import UsersController
-from app.controllers.incident_controller import IncidentController
+# from app.controllers.users_controller import UsersController
+# from app.controllers.incident_controller import IncidentController
 from app.utilities.authenticator import Authenticator
 from app.utilities.static_strings import RESP_ERROR_UNAUTHORIZED_VIEW
 
 
 user_blueprint = Blueprint("user blueprint", __name__)
-users_controller = UsersController()
-incident_controller = IncidentController()
+# users_controller = UsersController()
+# incident_controller = IncidentController()
 authenticator = Authenticator()
 users_data = UsersData()
 user_instance = User()
