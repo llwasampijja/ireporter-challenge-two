@@ -17,7 +17,14 @@ RESP_ERROR_MSG_INVALID_LOGIN_CREDS = "Entered an invalid password"
 RESP_ERROR_EMPTY_USERNAME = "Enter a empty username"
 RESP_ERROR_EMPTY_PASSWORD = "Enter a empty password"
 RESP_ERROR_MSG_LOGIN_FAILED = "Failed to login. username or password is incorrect"
+RESP_ERROR_MSG_SIGNUP_FAIL_USER_EXISTS = "Failed to Signup. Attempting to sign-up with an Email address, phonenumber or username  which is/are already registered on the system"
 
+
+
+RESP_ERROR_SIGNUP_FAIL_USER_EXISTS = Response(json.dumps({
+    "status": 400,
+    "message": RESP_ERROR_MSG_SIGNUP_FAIL_USER_EXISTS
+}), content_type="application/json", status=400)
 
 RESP_ERROR_UPDATE_ROLE_FAILED = Response(json.dumps({
     "status": 400,

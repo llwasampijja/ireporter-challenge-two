@@ -29,7 +29,8 @@ from app.utilities.static_stringsnew import (
     RESP_ERROR_LOGIN_FAILED,
     RESP_ERROR_UPDATE_ROLE_FAILED,
     RESP_ERROR_INVALID_ROLE,
-    RESP_ERROR_USER_NOT_FOUND
+    RESP_ERROR_USER_NOT_FOUND,
+    RESP_ERROR_SIGNUP_FAIL_USER_EXISTS
 
 )
 
@@ -63,6 +64,9 @@ class User():
         if self.validate_password(request_data.get("password")):
             return RESP_ERROR_INVALID_PASSWORD
 
+        if self.duplicate_user(request_data.get("username"), request_data.get("email"), request_data.get("phonenumber")):
+            return RESP_ERROR_SIGNUP_FAIL_USER_EXISTS
+
 
         self.ireporter_db.insert_data_users(
             request_data.get("firstname"),
@@ -77,8 +81,7 @@ class User():
             datetime.datetime.now()
         )
 
-        if self.duplicate_user():
-            pass
+        
 
         # self.add_user(new_user.user_dict())
         # newuser_dict = (new_user.user_dict())
@@ -95,6 +98,14 @@ class User():
             "message": RESP_SUCCESS_MSG_REGISTRATION,
             "access_token": access_token
         }), content_type="application/json", status=201)
+
+
+    def duplicate_user(self, username, email, phonenumber):
+        if self.username_in_db(username, UsersData.get_all_dbusers(UsersData))\
+            or self.email_in_db(email, UsersData.get_all_dbusers(UsersData))\
+            or self.phonenumber_in_db(phonenumber, UsersData.get_all_dbusers(UsersData)):
+            return True
+        return False
 
     def check_empty_str(self, test_string):
         """this method checks for empty incident and user fields"""
