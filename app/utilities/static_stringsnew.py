@@ -4,6 +4,11 @@ from flask import Response, json
 RESP_SUCCESS_MSG_REGISTRATION = "User successfully signed up"
 RESP_SUCCESS_MSG_AUTH_LOGIN = "User successfully logged in"
 RESP_SUCCESS_MSG_ADMIN_RIGHTS = "The admin rights of the user have been updated successfully"
+RESP_SUCCESS_MSG_CREATE_INCIDENT = "Incident created successfully"
+RESP_SUCCESS_MSG_INCIDENT_DELETE = "Incident was deleted successfully"
+RESP_SUCCESS_MSG_INCIDENT_UPDATE = "Updated the incident record’s location successfully"
+RESP_SUCCESS_MSG_INCIDENT_LIST_EMPTY = "Incidents list is empty"
+RESP_SUCCESS_MSG_INCIDENT_STATUS_UPDATE = "Updated the incident record’s status successfully"
 
 
 RESP_ERROR_MSG_FIRSTNAME = "Entered an invalid firstname"

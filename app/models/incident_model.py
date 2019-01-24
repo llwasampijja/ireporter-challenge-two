@@ -1,40 +1,163 @@
 """module containing models and data methods for incidents"""
+import datetime
+
+from flask import json, Response
+
 from app.models.user_model import UsersData
 from databases.ireporter_db import IreporterDb
+from app.utilities.static_stringsnew import (
+    RESP_SUCCESS_MSG_CREATE_INCIDENT,
+
+    RESP_ERROR_INVALID_EMAIL
+)
+
+from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
 
 class Incident:
-    """incident model"""
-    def __init__(self, **kwargs):
-        self.incident_id = kwargs.get("incident_id")
-        self.incident_type = kwargs.get("incident_type")
-        self.location = kwargs.get("location")
-        self.title = kwargs.get("title")
-        self.comment = kwargs.get("comment")
-        self.images = kwargs.get("images")
-        self.videos = kwargs.get("videos")
-        self.created_on = kwargs.get("created_on")
-        self.created_by = kwargs.get("created_by")
-        self.status = kwargs.get("status")
-        
-    def incident_dict(self, keyword):
-        """method to return a dictionary of an incident"""
-        if keyword == "redflag":
-            self.incident_type = "redflag"
-        else:
-            self.incident_type = "intervention"
+    ireporter_db = IreporterDb()
 
-        return {
-            "incident_id": self.incident_id,
-            "incident_type": self.incident_type,
-            "location": self.location,
-            "title": self.title,
-            "comment": self.comment,
-            "images": self.images,
-            "videos": self.videos,
-            "created_on": self.created_on,
-            "created_by": self.created_by,
-            "status": self.status
-        }
+    def create_incident(self, request_info, keyword, table_name):
+        verify_jwt_in_request()
+        user_identity = get_jwt_identity()
+
+        # if self.validate_incident(request_info):
+        #     return RESP_ERROR_INVALID_EMAIL
+
+        # if self.validate_images_videos(request_info.get("images")):
+        #     return RESP_ERROR_INVALID_EMAIL
+
+        # if self.validate_images_videos(request_info.get("videos")):
+        #     return RESP_ERROR_INVALID_EMAIL
+
+        # if self.validate_comment(request_info.get("comment")):
+        #     return RESP_ERROR_INVALID_EMAIL
+
+        # if self.validate_title(request_info.get("title")):
+        #     return RESP_ERROR_INVALID_EMAIL
+
+        # if self.validate_title(request_info.get("location")):
+        #     return RESP_ERROR_INVALID_EMAIL
+
+        # if self.incident_duplicate(request_info.get("comment"), IncidentData.get_all_dbincidents(IncidentData, keyword, table_name)):
+        #     return RESP_ERROR_INVALID_EMAIL
+
+        # self.ireporter_db.insert_data_redflags(
+        #         1,
+        #         request_info.get("location"),
+        #         request_info.get("title"),
+        #         request_info.get("comment"),
+        #         request_info.get("images"),
+        #         request_info.get("videos"),
+        #         datetime.datetime.now(),
+        #         user_identity["user_id"],
+        #         request_info.get("status")    
+        #     )
+
+        # return Response(json.dumps({
+        #     "status": 201,
+        #     "data": [request_info],
+        #     "message": RESP_SUCCESS_MSG_CREATE_INCIDENT
+        # }), content_type="application/json", status=201)
+
+
+
+    def edit_incident_location(self):
+        pass
+
+    def edit_incident_comment(self):
+        pass
+
+    def get_incident(self, incident_id, keyword, action_keyword, username, table_name):
+        return IncidentData.get_or_delete(IncidentData, incident_id, keyword, action_keyword, username, table_name)
+
+    def get_user_incidents(self):
+        pass
+
+    def delete_incident(self):
+        pass
+
+    def validate_incident(self, request_data):
+        """this method checks if a request contains all and only required fields"""
+        minimum_turple = (
+            "location",
+            "videos",
+            "images",
+            "title",
+            "comment"
+        )
+
+        if any(item not in request_data for item in minimum_turple) \
+        or any(item not in minimum_turple for item in request_data):
+            return True
+        return False
+
+    
+    def incident_duplicate(self, comment, incidents_list):
+        """method to check is an incident exists on the system"""
+        if any((incident.get("comment")).lower() == comment.lower()
+               for incident in incidents_list):
+            return True
+        return False
+    
+    def validate_location(self, geolocation):
+        """method checks if a given string includes valid coordinates"""
+        geolocation = geolocation.replace(" ", "")
+        cordinates = geolocation.split(",")
+        for cordinate in cordinates:
+            try:
+                float(cordinate)
+            except ValueError:
+                return True
+        if len(cordinates) != 2 or self.geo_coordinate_not_inrange(float(cordinates[0]), 90) \
+        or self.geo_coordinate_not_inrange(float(cordinates[1]), 180):
+            return True
+        return False
+
+    def geo_coordinate_not_inrange(self, coordinate, bound):
+        """method to determin whether a particular coordinate is within an acceptable range"""
+        if bound >= coordinate >= 0:
+            return False
+        if -bound <= coordinate <= 0:
+            return False
+        return True
+
+    def validate_title(self, title):
+        if self.empty_string(title):
+            return RESP_ERROR_INVALID_EMAIL
+
+        if self.invalid_str_datatype(title):
+            return RESP_ERROR_INVALID_EMAIL
+        
+        return False
+
+    def validate_comment(self, comment):
+        if self.empty_string(comment):
+            return RESP_ERROR_INVALID_EMAIL
+
+        if self.invalid_str_datatype(comment):
+            return RESP_ERROR_INVALID_EMAIL
+        
+        return False
+
+    def empty_string(self, user_input):
+        """this method checks for empty incident and user fields"""
+        if str(user_input).replace(" ", "") == "":
+            return True
+        return False
+
+    def invalid_str_datatype(self, string_value):
+        """this method checks if input is a string"""
+        if isinstance(string_value, str):
+            return False
+        return True
+
+    def validate_images_videos(self, list_value):
+        """this method checks is field is a list of strings"""
+        if not isinstance(list_value, list) \
+        or any(not isinstance(item, str) for item in list_value) or not list_value:
+            return True
+        return False
+    
 
 class IncidentData:
     """class for managing data of incidents"""
@@ -104,8 +227,7 @@ class IncidentData:
                 return "non_author"
         return None
 
-    @staticmethod
-    def my_get_incident(incidents_list, incident_id):
+    def my_get_incident(self, incidents_list, incident_id):
         """method for retrieving an incident from the incidents list"""
         for incident in incidents_list:
             if incident.get("incident_id") == incident_id:
@@ -116,9 +238,9 @@ class IncidentData:
         """helper method for deleting or updaing incident"""
         return self.get_or_delete(incident_id, keyword, "delete", username, table_name)
 
-    def get_incident(self, incident_id, keyword, table_name):
-        """helper method for geing an incident"""
-        return self.get_or_delete(incident_id, keyword, "get", None, table_name)
+    # def get_incident(self, incident_id, keyword, table_name):
+    #     """helper method for geing an incident"""
+    #     return self.get_or_delete(incident_id, keyword, "get", None, table_name)
 
     def delete(self, incidednts_list, incident_id, username, table_name):
         """method with the logic to delete an incident in the incidents list"""
