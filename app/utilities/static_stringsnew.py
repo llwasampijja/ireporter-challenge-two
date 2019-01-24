@@ -3,6 +3,7 @@ from flask import Response, json
 
 RESP_SUCCESS_MSG_REGISTRATION = "User successfully signed up"
 RESP_SUCCESS_MSG_AUTH_LOGIN = "User successfully logged in"
+RESP_SUCCESS_MSG_ADMIN_RIGHTS = "The admin rights of the user have been updated successfully"
 
 
 RESP_ERROR_MSG_FIRSTNAME = "Entered an invalid firstname"
@@ -17,6 +18,20 @@ RESP_ERROR_EMPTY_USERNAME = "Enter a empty username"
 RESP_ERROR_EMPTY_PASSWORD = "Enter a empty password"
 RESP_ERROR_MSG_LOGIN_FAILED = "Failed to login. username or password is incorrect"
 
+
+RESP_ERROR_UPDATE_ROLE_FAILED = Response(json.dumps({
+    "status": 400,
+    "error": RESP_ERROR_MSG_LOGIN_FAILED
+}), content_type="application/json", status=400)
+
+RESP_ERROR_INVALID_ROLE = Response(json.dumps({
+    "status": 400,
+    "error": RESP_ERROR_MSG_LOGIN_FAILED
+}), content_type="application/json", status=400)
+RESP_ERROR_USER_NOT_FOUND = Response(json.dumps({
+    "status": 400,
+    "error": RESP_ERROR_MSG_LOGIN_FAILED
+}), content_type="application/json", status=400)
 
 RESP_ERROR_LOGIN_FAILED = Response(json.dumps({
     "status": 400,

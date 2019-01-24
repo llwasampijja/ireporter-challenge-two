@@ -3,8 +3,6 @@ userdata class with moethods for manipulating user data"""
 import hashlib
 import re
 import datetime
-# import bcrypt
-from werkzeug.security import generate_password_hash, check_password_hash
 
 
 from flask_jwt_extended import create_access_token
@@ -15,6 +13,7 @@ from flask import Response, json
 from app.utilities.static_stringsnew import (
     RESP_SUCCESS_MSG_REGISTRATION,
     RESP_SUCCESS_MSG_AUTH_LOGIN,
+    RESP_SUCCESS_MSG_ADMIN_RIGHTS,
 
     RESP_ERROR_INVALID_FIRSTNAME,
     RESP_ERROR_INVALID_LASTNAME,
@@ -27,7 +26,11 @@ from app.utilities.static_stringsnew import (
     RESP_ERROR_INVALID_LOGIN_CREDS,
     RESP_ERROR_EMPTY_USERNAME,
     RESP_ERROR_EMPTY_PASSWORD,
-    RESP_ERROR_LOGIN_FAILED
+    RESP_ERROR_LOGIN_FAILED,
+    RESP_ERROR_UPDATE_ROLE_FAILED,
+    RESP_ERROR_INVALID_ROLE,
+    RESP_ERROR_USER_NOT_FOUND
+
 )
 
 
@@ -69,14 +72,13 @@ class User():
             request_data.get("email"),
             request_data.get("phonenumber"),
             False,
-            # generate_password_hash(kwargs["password"]),
             hashlib.sha224(
             b"{}").hexdigest().format(request_data.get("password")),
             datetime.datetime.now()
         )
 
-        # if self.duplicate_user():
-        #     pass
+        if self.duplicate_user():
+            pass
 
         # self.add_user(new_user.user_dict())
         # newuser_dict = (new_user.user_dict())
@@ -121,14 +123,12 @@ class User():
         username = request_info.get("username")
         hashed_password = hashlib.sha224(
             b"{}").hexdigest().format(request_info.get("password"))
-        # hashed_password = bcrypt.hashpw(password.encode('utf8'), bcrypt.gensalt())
 
         for user in UsersData.get_all_dbusers(UsersData):
             if user.get("password") != hashed_password:
                 print("valid password")
 
-            if user.get("username") == username and not check_password_hash(
-                user.get("password"), request_info.get("password")):
+            if user.get("username") == username and request_info.get("password") == user.get("password"):
                 access_token = create_access_token(
                     identity=user,
                     expires_delta=datetime.timedelta(
@@ -152,8 +152,33 @@ class User():
                 }), content_type="application/json", status=201)
         return RESP_ERROR_LOGIN_FAILED
 
-    def edit_userrole(self, request_data):
-        pass
+    def edit_userrole(self, user_id, request_info):
+        """method for updating a user's role"""
+        if request_info is None or "is_admin" not in request_info or len(
+                request_info) != 1 or user_id == 1:
+            return RESP_ERROR_UPDATE_ROLE_FAILED
+
+        if self.invalid_admin_state(
+                request_info.get("is_admin")):
+            return RESP_ERROR_INVALID_ROLE
+
+        user_modified = UsersData.update_user(UsersData, user_id, request_info)
+
+        if user_modified is None:
+            return RESP_ERROR_USER_NOT_FOUND
+        else:
+            return Response(json.dumps({
+                "status": 201,
+                "data": [user_modified],
+                "message": RESP_SUCCESS_MSG_ADMIN_RIGHTS
+            }), content_type="application/json", status=201)
+
+    
+    def invalid_admin_state(self, isadmin):
+        """method checks is is_admin as a valid value"""
+        if isinstance(isadmin, bool):
+            return False
+        return True
 
     def validate_name(self, name):
         """method checks if a provided name is valid"""
@@ -205,12 +230,6 @@ class User():
         if any(user.get(user_key) == user_field for user in users_list):
             return True
         return False
-
-    def invalid_admin_state(self, isadmin):
-        """method checks is is_admin as a valid value"""
-        if isinstance(isadmin, bool):
-            return False
-        return True
 
     def validate_email(self, email):
         """method checks if the email is in the correct format"""
