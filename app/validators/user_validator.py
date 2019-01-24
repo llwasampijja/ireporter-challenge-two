@@ -73,17 +73,17 @@ class UserValidator():
             return True
         return False
 
-    @staticmethod
-    def invalid_username(username):
-        """method checks if a provided username is valid"""
-        word_letters = re.sub('[^a-zA-Z-0-9]+', '', str(username))
-        if any(item.isalpha() for item in word_letters):
-            return False
-        return True
+    # @staticmethod
+    # def invalid_username(username):
+    #     """method checks if a provided username is valid"""
+    #     word_letters = re.sub('[^a-zA-Z-0-9]+', '', str(username))
+    #     if any(item.isalpha() for item in word_letters):
+    #         return False
+    #     return True
 
-    @staticmethod
-    def invalid_name(name):
-        """method checks if a provided name is valid"""
-        if any(not item.isalpha() for item in str(name)):
-            return True
-        return False
+    # @staticmethod
+    # def invalid_name(name):
+    #     """method checks if a provided name is valid"""
+    #     if any(not item.isalpha() for item in str(name)):
+    #         return True
+    #     return False

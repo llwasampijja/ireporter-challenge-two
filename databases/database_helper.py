@@ -15,8 +15,9 @@ class DatabaseHelper():
             "edward@bolon.com",
             "0775961853",
             True,
-            hashlib.sha224(
-                    b"{}").hexdigest().format("i@mG8t##"),
+            "i@mG8t##",
+            # hashlib.sha224(
+            #         b"{}").hexdigest().format("i@mG8t##"),
             datetime.datetime.now()
         )
 
