@@ -4,6 +4,7 @@ import datetime
 from flask import json, Response
 
 from app.models.user_model import UsersData
+from app.utilities.authenticator import Authenticator
 from databases.ireporter_db import IreporterDb
 
 from app.utilities.static_strings import (
@@ -30,14 +31,12 @@ from app.utilities.static_strings import (
     
 )
 
-from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
-
 class Incident:
     ireporter_db = IreporterDb()
+    authenticator = Authenticator()
 
     def create_incident(self, request_info, keyword, table_name):
-        verify_jwt_in_request()
-        user_identity = get_jwt_identity()
+        user_identity = self.authenticator.get_identity(self.authenticator.get_token())
         if any(self.empty_string(user_input) for key_, user_input in request_info.items()):
             return RESP_ERROR_MSG_EMPTY_STRING
 

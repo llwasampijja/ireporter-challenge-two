@@ -1,6 +1,5 @@
 """module including routes for the red-flags incidents"""
 from flask import Blueprint, request, Response, json
-from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
 
 from app.utilities.authenticator import Authenticator
 from app.models.incident_model import Incident, IncidentData
@@ -34,8 +33,7 @@ def get_redflags():
 def get_flag(redflag_id):
     """method and route for getting a red-flag inciden by id"""
     # request_data = request.get_json()
-    verify_jwt_in_request()
-    user_identity = get_jwt_identity()
+    user_identity = Authenticator.get_identity(Authenticator, Authenticator.get_token(Authenticator))
     return incident_instance.get_incident(redflag_id, "redflag", "get", user_identity["user_id"], "redflags")
 
 
@@ -44,8 +42,7 @@ def get_flag(redflag_id):
 def update_redflag_location(redflag_id):
     """method for updating location of red-flag incident by id"""
     request_data = request.get_json()
-    verify_jwt_in_request()
-    user_identity = get_jwt_identity()
+    user_identity = Authenticator.get_identity(Authenticator, Authenticator.get_token(Authenticator))
     return incident_instance.edit_incident_location(request_data, redflag_id, "redflag", user_identity["user_id"], "redflags")
 
 @redflag_blueprint.route("<int:redflag_id>/comment", methods=["PATCH"])
@@ -53,8 +50,7 @@ def update_redflag_location(redflag_id):
 def update_redflag_comment(redflag_id):
     """method for updating the comment of a redflag"""
     request_info = request.get_json()
-    verify_jwt_in_request()
-    user_identity = get_jwt_identity()
+    user_identity = Authenticator.get_identity(Authenticator, Authenticator.get_token(Authenticator))
     return incident_instance.edit_incident_comment(request_info, redflag_id, "redflag",user_identity["user_id"], "redflags")
 
 @redflag_blueprint.route("/<int:redflag_id>/status", methods=["PATCH"])
@@ -62,8 +58,7 @@ def update_redflag_comment(redflag_id):
 def update_redflag_status(redflag_id):
     """method and route for updating the status a red-flag incident by id"""
     request_data = request.get_json()
-    verify_jwt_in_request()
-    user_identity = get_jwt_identity()
+    user_identity = Authenticator.get_identity(Authenticator, Authenticator.get_token(Authenticator))
     return incident_instance.edit_incident_status(request_data, redflag_id, "redflag", user_identity["user_id"], "redflags")
 
 
@@ -71,7 +66,6 @@ def update_redflag_status(redflag_id):
 @authenticator.concerned_citzen
 def delete_redflag(redflag_id):
     """method and route for deleting a red-flag incident by id"""
-    verify_jwt_in_request()
-    user_identity = get_jwt_identity()
+    user_identity = Authenticator.get_identity(Authenticator, Authenticator.get_token(Authenticator))
     return incident_instance.delete_incident( redflag_id, "redflag", user_identity["user_id"], "redflags")
 

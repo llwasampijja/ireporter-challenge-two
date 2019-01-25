@@ -3,14 +3,17 @@ userdata class with moethods for manipulating user data"""
 import hashlib
 import re
 import datetime
+import jwt
 
-
-from flask_jwt_extended import create_access_token
 
 from databases.ireporter_db import IreporterDb
 from flask import Response, json
 
 from app.utilities.static_strings import (
+    JWT_SECRET,
+    JWT_ALGORITHM,
+    JWT_EXP_DELTA_SECONDS,
+
     RESP_ERROR_POST_EMPTY_DATA,
     RESP_ERROR_INVALID_USER,
     RESP_ERROR_INVALID_EMAIL,
@@ -102,18 +105,22 @@ class User():
             "email": request_data.get("email"),
             "phonenumber": request_data.get("phonenumber"),
             "is_admin": False,
-            "rgistered_on": datetime.datetime.now()
+            "registered_on":datetime.datetime.now()
         }
 
-        access_token = create_access_token(
-            new_user,
-            expires_delta=datetime.timedelta(hours=1)
-        )
+        payload = {
+                'user_identity': {
+                    "user_id":user_id[0][0],
+                    "is_admin":False
+                },
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=JWT_EXP_DELTA_SECONDS)
+                }
+        jwt_token = jwt.encode(payload, JWT_SECRET, JWT_ALGORITHM)
 
         return Response(json.dumps({
             "status": new_user,
             "message": RESP_SUCCESS_MSG_REGISTRATION,
-            "access_token": access_token
+            "access_token": str(jwt_token)[2:-1]
         }), content_type="application/json", status=201)
 
 
@@ -159,6 +166,10 @@ class User():
     def login_user(self, request_info):
         """method for signing in a user"""
         login_creds = ("username", "password")
+
+        if not request_info or any(item not in request_info for item in login_creds) \
+        or any(item not in login_creds for item in request_info):
+            return RESP_ERROR_INVALID_LOGIN_CREDS
         
         if self.check_empty_str(request_info.get("username")):
             return RESP_ERROR_EMPTY_USERNAME
@@ -166,9 +177,7 @@ class User():
         if self.check_empty_str(request_info.get("password")):
             return RESP_ERROR_MSG_EMPTY_PASSWORD
 
-        if any(item not in request_info for item in login_creds) \
-        or any(item not in login_creds for item in request_info):
-            return RESP_ERROR_INVALID_LOGIN_CREDS
+        
 
         username = request_info.get("username")
         hashed_password = hashlib.sha224(
@@ -179,10 +188,16 @@ class User():
                 print("valid password")
 
             if user.get("username") == username and user.get("password")== user.get("password"):
-                access_token = create_access_token(
-                    identity=user,
-                    expires_delta=datetime.timedelta(
-                        hours=1))
+                user_details = {
+                    "user_id": user.get("user_id"),
+                    "username": user.get("username"),
+                    "is_admin": user.get("is_admin")
+                }
+                payload = {
+                        'user_identity': user_details,
+                        'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=JWT_EXP_DELTA_SECONDS)
+                        }
+                jwt_token = jwt.encode(payload, JWT_SECRET, JWT_ALGORITHM)
                 return Response(json.dumps({
                     "status": 201,
                     "data": [
@@ -197,7 +212,7 @@ class User():
                             "is_admin": user.get("is_admin")
                         }
                     ],
-                    "access_token": access_token,
+                    "access_token": str(jwt_token)[2:-1],
                     "message": RESP_SUCCESS_MSG_AUTH_LOGIN
                 }), content_type="application/json", status=201)
         return RESP_ERROR_LOGIN_FAILED
