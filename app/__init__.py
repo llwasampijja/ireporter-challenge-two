@@ -3,7 +3,7 @@ and also as an application factory"""
 import os
 
 from flask import Flask, Response, json
-from flask_jwt_extended import JWTManager
+# from flask_jwt_extended import JWTManager
 from flask_swagger_ui import get_swaggerui_blueprint
 from flask_cors import CORS
 
@@ -33,9 +33,9 @@ def create_app():
     """this is the application factory function, configuration, registering, etc happen here"""
     app =  Flask(__name__)
 
-    app.secret_key = os.urandom(12)
-    jwt_manager = JWTManager()
-    jwt_manager.init_app(app)
+    # app.secret_key = os.urandom(12)
+    # jwt_manager = JWTManager()
+    # jwt_manager.init_app(app)
 
     CORS(app)
 

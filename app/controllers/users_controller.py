@@ -2,14 +2,19 @@
 """controller module for users includes methods to connect the user models and views"""
 import datetime
 import hashlib
+import jwt
 
 from flask import Response, json
-from flask_jwt_extended import create_access_token
 
 from app.models.user_model import User, UsersData
 from app.validators.general_validator import GeneralValidator
 from app.validators.user_validator import UserValidator
 from app.utilities.static_strings import (
+
+    JWT_SECRET,
+    JWT_ALGORITHM,
+    JWT_EXP_DELTA_SECONDS,
+
     RESP_SUCCESS_MSG_REGISTRATION,
     RESP_SUCCESS_MSG_ADMIN_RIGHTS,
     RESP_SUCCESS_MSG_AUTH_LOGIN,
@@ -93,16 +98,22 @@ class UsersController():
         newuser_dict = (new_user.user_dict())
         newuser_dict.pop("password")
 
-        access_token = create_access_token(
-            newuser_dict,
-            expires_delta=datetime.timedelta(hours=1)
-        )
+        user_details = {
+                    "user_id": newuser_dict.get("user_id"),
+                    "username": newuser_dict.get("username"),
+                    "is_admin": newuser_dict.get("is_admin")
+                }
+        payload = {
+                'user_identity': user_details,
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=JWT_EXP_DELTA_SECONDS)
+                }
+        jwt_token = jwt.encode(payload, JWT_SECRET, JWT_ALGORITHM)
 
         return Response(json.dumps({
             "status": 201,
             "data": [newuser_dict],
             "message": RESP_SUCCESS_MSG_REGISTRATION,
-            "access_token": access_token
+            "access_token": str(jwt_token)[2:-1]
         }), content_type="application/json", status=201)
 
     def signin(self, request_info):
@@ -118,11 +129,17 @@ class UsersController():
         for user in self.usersdata.get_users():
             if user.get("username") == username and user.get(
                     "password") == hashed_password:
+                user_details = {
+                    "user_id": user.get("user_id"),
+                    "username": user.get("username"),
+                    "is_admin": user.get("is_admin")
+                }
+                payload = {
+                        'user_identity': user_details,
+                        'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=JWT_EXP_DELTA_SECONDS)
+                        }
+                jwt_token = jwt.encode(payload, JWT_SECRET, JWT_ALGORITHM)
 
-                access_token = create_access_token(
-                    identity=user,
-                    expires_delta=datetime.timedelta(
-                        hours=1))
                 return Response(json.dumps({
                     "status": 201,
                     "data": [
@@ -137,7 +154,7 @@ class UsersController():
                             "is_admin": user.get("is_admin")
                         }
                     ],
-                    "access_token": access_token,
+                    "access_token": str(jwt_token)[2:-1],
                     "message": RESP_SUCCESS_MSG_AUTH_LOGIN
                 }), content_type="application/json", status=201)
         return RESP_ERROR_LOGIN_FAILED

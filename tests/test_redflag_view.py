@@ -91,12 +91,6 @@ class TestRedflagView(unittest.TestCase):
             content_type="application/json"
         )
 
-        # get redflags before logging in
-        response = self.client.get(
-            URL_REDFLAGS, content_type="application/json")
-        self.assertEqual(response.status_code, 401)
-        self.assertEqual(json.loads(response.data).get("message"), None)
-
         self.admin_login_response = self.client.post(URL_LOGIN, data=json.dumps({
             "username": "edward",
             "password": "i@mG8t##"

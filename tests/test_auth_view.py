@@ -29,8 +29,6 @@ from app.utilities.static_strings import (
 
 class TestAuthView(unittest.TestCase):
     """class extending the TestcCase class from unittest"""
-    # ireporter_db = IreporterDb()
-    # database_helper = DatabaseHelper()
 
     def setUp(self):
         """initializing method for the test class"""
@@ -329,9 +327,13 @@ class TestAuthView(unittest.TestCase):
             "username": "allengarcia",
             "password": "passworD1#"
         }), content_type="application/json")
-        # self.assertEqual(response.status_code, 201)
-        # self.assertEqual(json.loads(response.data).get(
-        #     "message"), RESP_SUCCESS_MSG_REGISTRATION)
+        response = self.client.post(URL_LOGIN, data=json.dumps({
+            "username": "allengarcia",
+            "password": "passworD1#"
+        }), content_type="application/json")
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(json.loads(response.data).get(
+            "message"), RESP_SUCCESS_MSG_AUTH_LOGIN)
 
         response = self.client.post(URL_LOGIN, data=json.dumps({
             "username": "allengarcia",

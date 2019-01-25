@@ -1,6 +1,5 @@
 """module includes routes for the intervention incidents"""
 from flask import Blueprint, request
-from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
 
 from app.controllers.incident_controller import IncidentController
 from app.utilities.authenticator import Authenticator
@@ -39,9 +38,9 @@ def get_intervention(intervention_id):
 def update_intervention_location(intervention_id):
     """method with route for updating the location of an intervention incident"""
     request_data = request.get_json()
-    verify_jwt_in_request()
+    user_identity = Authenticator.get_identity(Authenticator, Authenticator.get_token(Authenticator))
     return intervention_controller.update_incident(
-        intervention_id, request_data, "intervention", get_jwt_identity()["username"],
+        intervention_id, request_data, "intervention", user_identity["username"],
         "edit_location", "interventions"
     )
 
@@ -49,9 +48,9 @@ def update_intervention_location(intervention_id):
 @authenticator.concerned_citzen
 def update_intervention_comment(intervention_id):
     request_data = request.get_json()
-    verify_jwt_in_request()
+    user_identity = Authenticator.get_identity(Authenticator, Authenticator.get_token(Authenticator))
     return intervention_controller.update_incident(
-        intervention_id, request_data, "intervention", get_jwt_identity()["username"],
+        intervention_id, request_data, "intervention", user_identity["username"],
         "edit_comment", "interventions"
     ) 
 
@@ -69,7 +68,7 @@ def update_intervention_status(intervention_id):
 @authenticator.concerned_citzen
 def delete_intervention(intervention_id):
     """method with route for deleting an intervention incident"""
-    verify_jwt_in_request()
+    user_identity = Authenticator.get_identity(Authenticator, Authenticator.get_token(Authenticator))
     return intervention_controller.delete_incident(
-        intervention_id, "intervention", get_jwt_identity()["username"], "interventions"
+        intervention_id, "intervention", user_identity["username"], "interventions"
     )

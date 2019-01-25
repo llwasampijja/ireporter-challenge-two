@@ -3,7 +3,8 @@ of incidents to models"""
 import datetime
 
 from flask import request, Response, json, jsonify
-from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
+
+from app.utilities.authenticator import Authenticator
 
 from app.models.incident_model import Incident, IncidentData
 from app.controllers.users_controller import UsersController
@@ -42,12 +43,11 @@ class IncidentController:
     validator = GeneralValidator()
     incident_data = IncidentData()
     users_controller = UsersController()
+    authenticator = Authenticator()
 
     def create_incident(self, request_data, keyword, table_name):
         """method for creating red-flags"""
-        verify_jwt_in_request()
-        user_identity = get_jwt_identity()
-        
+        user_identity = self.authenticator.get_identity(self.authenticator.get_token())
         location = request_data.get("location")
         title = request_data.get("title")
         comment = request_data.get("comment")
@@ -117,8 +117,7 @@ class IncidentController:
         )
 
     def refactor_get_incident_spec_user(self, incident_lists, user_id):
-        verify_jwt_in_request()
-        user_identity = get_jwt_identity()
+        user_identity = Authenticator.get_identity(Authenticator, Authenticator.get_token(Authenticator))
         data = []
         message = ""
         if all(user.get("user_id") != user_id for user in self.users_controller.export_users()):

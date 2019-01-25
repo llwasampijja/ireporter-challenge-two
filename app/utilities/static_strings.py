@@ -14,6 +14,10 @@ URL_BASE = "/api/v1"
 URL_REDFLAGS = "/api/v1/red-flags"
 URL_INTERVENTIONS = "/api/v1/interventions"
 
+JWT_SECRET = "thereisgoodintheworld"
+JWT_ALGORITHM = 'HS256'
+JWT_EXP_DELTA_SECONDS = 20000
+
 # swagger url string constants
 SWAGGER_UI_URL = "/api/v1/docs"
 # remote API documenation url

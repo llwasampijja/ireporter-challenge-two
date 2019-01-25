@@ -41,7 +41,7 @@ class TestUserView(unittest.TestCase):
             "firstname": "edwardd",
             "lastname": "pjothw",
             "othernames": "eddry",
-            'phonenumber': "0763372772",
+            "phonenumber": "0763372772",
             "email": "edwardpjoth3@bolon.emp",
             "username": "edwardpjothedwardme",
             "password": "passworD#1"

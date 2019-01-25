@@ -1,6 +1,5 @@
 """module with methods and routes for users"""
 from flask import Blueprint, request
-from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
 
 from app.controllers.users_controller import UsersController
 from app.controllers.incident_controller import IncidentController

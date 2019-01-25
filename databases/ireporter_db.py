@@ -113,8 +113,9 @@ class IreporterDb():
             '{is_admin}',
             '{password}',
             '{registered_on}'
-        )"""
+        ) RETURNING user_id"""
         self.cursor_database.execute(sql_query)
+        print(self.cursor_database.fetchall()) 
 
     def insert_data_interventions(self, incident_type, location, title, comment, images, videos, created_on, created_by,  status):
         sql_query = """INSERT INTO interventions(
@@ -203,8 +204,3 @@ class IreporterDb():
         self.cursor_database.execute(sql_query1)
         self.cursor_database.execute(sql_query2)
         self.cursor_database.execute(sql_query3)
-
-
-if __name__=="__main__":
-    ireporter_db = IreporterDb()
-    ireporter_db.create_tables()
