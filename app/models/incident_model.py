@@ -5,11 +5,7 @@ from flask import json, Response
 
 from app.models.user_model import UsersData
 from databases.ireporter_db import IreporterDb
-from app.utilities.static_stringsnew import (
-    RESP_SUCCESS_MSG_CREATE_INCIDENT,
-    RESP_ERROR_MSG_NO_ACCESS,
-    RESP_ERROR_INVALID_EMAIL
-)
+
 from app.utilities.static_strings import (
     RESP_SUCCESS_INCIDENT_LIST_EMPTY,
     RESP_ERROR_INCIDENT_NOT_FOUND,
@@ -20,7 +16,18 @@ from app.utilities.static_strings import (
     RESP_ERROR_INVALID_LOCATION,
     RESP_ERROR_UPDATE_STATUS,
     RESP_SUCCESS_MSG_INCIDENT_UPDATE_STATUS,
-    RESP_SUCCESS_MSG_INCIDENT_UPDATE_LOCATION
+    RESP_SUCCESS_MSG_INCIDENT_UPDATE_LOCATION,
+    RESP_SUCCESS_MSG_CREATE_INCIDENT,
+    RESP_ERROR_MSG_NO_ACCESS,
+    RESP_ERROR_INVALID_EMAIL,
+    RESP_ERROR_INVALID_INCIDENT,
+    RESP_ERROR_INVALID_TITLE,
+    RESP_ERROR_INVALID_IMAGES,
+    RESP_ERROR_INVALID_VIDEOS,
+    RESP_ERROR_INVALID_COMMENT,
+    RESP_ERROR_NO_ACCESS,
+    RESP_ERROR_MSG_EMPTY_STRING
+    
 )
 
 from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
@@ -31,27 +38,29 @@ class Incident:
     def create_incident(self, request_info, keyword, table_name):
         verify_jwt_in_request()
         user_identity = get_jwt_identity()
+        if any(self.empty_string(user_input) for key_, user_input in request_info.items()):
+            return RESP_ERROR_MSG_EMPTY_STRING
 
         if self.validate_incident(request_info):
-            return RESP_ERROR_INVALID_EMAIL
+            return RESP_ERROR_INVALID_INCIDENT
 
         if self.validate_images_videos(request_info.get("images")):
-            return RESP_ERROR_INVALID_EMAIL
+            return RESP_ERROR_INVALID_IMAGES
 
         if self.validate_images_videos(request_info.get("videos")):
-            return RESP_ERROR_INVALID_EMAIL
+            return RESP_ERROR_INVALID_VIDEOS
 
         if self.validate_comment(request_info.get("comment")):
-            return RESP_ERROR_INVALID_EMAIL
+            return RESP_ERROR_INVALID_COMMENT
 
         if self.validate_title(request_info.get("title")):
-            return RESP_ERROR_INVALID_EMAIL
+            return RESP_ERROR_INVALID_TITLE
 
         if self.validate_location(request_info.get("location")):
-            return RESP_ERROR_INVALID_EMAIL
+            return RESP_ERROR_INVALID_LOCATION
 
         if self.incident_duplicate(request_info.get("comment"), IncidentData.get_all_dbincidents(IncidentData, table_name)):
-            return RESP_ERROR_INVALID_EMAIL
+            return RESP_ERROR_POST_DUPLICATE
         # last_incidents = IncidentData.get_all_dbincidents(IncidentData, table_name)#[-1].get("incident_id")
         # last_incident_id = self.get_created_id(table_name)
         # incident_id = 0
@@ -114,7 +123,7 @@ class Incident:
 
         for incident in IncidentData.get_all_dbincidents(IncidentData, table_name):
             if incident.get("incident_id")==incident_id and incident.get("created_by")!=user_id:
-                return RESP_ERROR_MSG_NO_ACCESS
+                return RESP_ERROR_NO_ACCESS
             elif incident.get("comment")==request_info.get("comment"):
                 return RESP_ERROR_POST_DUPLICATE
             else:
@@ -123,7 +132,7 @@ class Incident:
                     "status": 201,
                     "data": incident,
                     "message": RESP_SUCCESS_MSG_INCIDENT_UPDATE_COMMENT
-                }))
+                }), content_type="application/json", status=200)
         return RESP_ERROR_INCIDENT_NOT_FOUND
 
 
@@ -145,7 +154,7 @@ class Incident:
                     "status": 201,
                     "data": incident,
                     "message": RESP_SUCCESS_MSG_INCIDENT_UPDATE_LOCATION
-                }))
+                }), content_type="application/json", status=201)
         return RESP_ERROR_INCIDENT_NOT_FOUND
 
     def edit_incident_status(self, request_info, incident_id, incident_type, user_id, table_name):
@@ -164,7 +173,7 @@ class Incident:
                     "status": 201,
                     "data": incident,
                     "message": RESP_SUCCESS_MSG_INCIDENT_UPDATE_STATUS
-                }))
+                }), content_type="application/json", status=200)
         return RESP_ERROR_INCIDENT_NOT_FOUND
 
 
