@@ -190,7 +190,6 @@ class User():
             if user.get("username") == username and user.get("password")== user.get("password"):
                 user_details = {
                     "user_id": user.get("user_id"),
-                    "username": user.get("username"),
                     "is_admin": user.get("is_admin")
                 }
                 payload = {

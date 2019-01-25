@@ -31,9 +31,9 @@ class Authenticator():
         @wraps(fxn)
         def wrapper(*args, **kwargs):
             user_identity = Authenticator.get_identity(Authenticator, Authenticator.get_token(Authenticator))
-            if "Authorization" not in request.headers:
-                return RESP_ERROR_UNAUTHORIZED_VIEW
-            elif not user_identity["is_admin"]:
+            # if "Authorization" not in request.headers:
+                # return RESP_ERROR_UNAUTHORIZED_VIEW
+            if not user_identity["is_admin"]:
                 return fxn(*args, **kwargs)
             else:
                 return RESP_ERROR_UNAUTHORIZED_VIEW
@@ -56,8 +56,9 @@ class Authenticator():
         # if "Authorization" not in request.headers:
         #     return RESP_ERROR_UNAUTHORIZED_VIEW
         header = request.headers.get("Authorization")
-        # if not header:
-        #     return RESP_ERROR_UNAUTHORIZED_VIEW
+        if not header:
+            return RESP_ERROR_UNAUTHORIZED_VIEW
+        print(str(header))
         token = str(header).split(" ")[1]
         return token
 

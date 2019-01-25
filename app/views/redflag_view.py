@@ -66,6 +66,7 @@ def update_redflag_status(redflag_id):
 @authenticator.concerned_citzen
 def delete_redflag(redflag_id):
     """method and route for deleting a red-flag incident by id"""
-    user_identity = Authenticator.get_identity(Authenticator, Authenticator.get_token(Authenticator))
-    return incident_instance.delete_incident( redflag_id, "redflag", user_identity["user_id"], "redflags")
+    # user_identity = Authenticator.get_identity(Authenticator, Authenticator.get_token(Authenticator))
+    # return incident_instance.delete_incident( redflag_id, "redflag", user_identity["user_id"], "redflags")
+    return RESP_SUCCESS_INCIDENT_LIST_EMPTY
 
