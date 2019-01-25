@@ -81,22 +81,128 @@ RESP_ERROR_MSG_INCIDENT_DUPLICATE = "Failed to add incident. An incident similar
 RESP_ERROR_MSG_USER_STATUS_NORIGHTS = "Failed to update the incident's status. An admin can only edit the status of an incident, and nothing more. The only accepted values include: 'pending investigation','under investigation', 'resolved' and 'rejected'"
 RESP_ERROR_MSG_SIGNUP_FAIL_USER_EXISTS = "Failed to Signup. Attempting to sign-up with an Email address, phonenumber or username  which is/are already registered on the system"
 RESP_ERROR_MSG_ADMIN_NO_RIGHTS = "Operation failed: An admin can't edit any other field of an incident except the status"
-RESP_ERROR_MSG_INVALID_USER = "ERROR: You have less or more fields than the required number. They must include: firstname, lastname, othernames, email, phonenumber, username, password."
-RESP_ERROR_MSG_INVALID_OTHERNAME = "ERROR: You have entered an invalid othername. Must be from a-z or A-Z"
-RESP_ERROR_MSG_INVALID_NAME = "ERROR: You have entered an invalid firstname or lastname. Must be from a-z or A-Z"
+RESP_ERROR_MSG_INVALID_USER = "You have less or more fields than the required number. They must include: firstname, lastname, othernames, email, phonenumber, username, password."
 RESP_ERROR_MSG_INVALID_USERNAME = "ERROR: You have entered an invalid username. May contain numbers but must contain at least one letter"
 RESP_ERROR_MSG_INVALID_EMAIL = "ERROR: Entered an invalid email. Email must be in the format 'username@company.doman'"
 RESP_ERROR_MSG_INVALID_PHONE = "ERROR: Entered an invalid phonenumber. Phonenumber must start with 0 and iinclude 0 other digits."
 RESP_ERROR_MSG_INVALID_PASSWORD = "ERROR: Entered an invalid password. Password string must have a length of atleast 8 characters and atmost 12 characters; include at list one uppercase letter, lowercase lettter and number; and must contain atleast a '$', '#' or '@'"
 RESP_ERROR_MSG_INVALID_STRING_TYPE = "ERROR: Entered a non string value  for either location, title or comment"
-RESP_ERROR_MSG_INVALID_LIST_TYPE = "ERROR: Entered a non list of strings value  for either videos or images"
-RESP_ERROR_MSG_INVALID_LOCATION = "ERROR: Entered a latitude or logitude which is out of range"
+RESP_ERROR_MSG_INVALID_LOCATION = "Failed to update the incident's location. You provided wrong values.The location field must be a string of two floating values separated by a comma ',', i.e: A latitude and longitude. The latitude must be in the ranges 0 to 90 or -90 to 0. The longitude must be in the ranges 0 to 180 or -180 to 0"
 RESP_ERROR_MSG_INVALID_STATUS = ""
-RESP_ERROR_MSG_INVALID_INCIDENT = "ERROR: Entered more or less fields than the required: Required fields include: location, videos, images, title, and comment"
+RESP_ERROR_MSG_INVALID_INCIDENT = "Entered more or less fields than the required: Required fields include: location, videos, images, title, and comment"
 RESP_ERROR_MSG_FORBIDDEN_INCIDENT_UPDATE = "Action is forbidden: Attempting to edit a comment on an edit location endpoint or vice versa"
 RESP_ERROR_MSG_ENTERED_NOTHING = "The request body is empty"
 RESP_ERROR_MSG_INVALID_EDIT_STRING_TYPE = "The value must be of string type"
 RESP_ERROR_MSG_INVALID_EDIT_COMMENT = "Editting comment requires you to input only the comment value"
+RESP_SUCCESS_MSG_REGISTRATION = "User successfully signed up"
+RESP_SUCCESS_MSG_AUTH_LOGIN = "User successfully logged in"
+RESP_SUCCESS_MSG_ADMIN_RIGHTS = "The admin rights of the user have been updated successfully"
+RESP_SUCCESS_MSG_CREATE_INCIDENT = "Incident created successfully"
+RESP_SUCCESS_MSG_INCIDENT_DELETE = "Incident was deleted successfully"
+RESP_SUCCESS_MSG_INCIDENT_UPDATE = "Updated the incident record’s location successfully"
+RESP_SUCCESS_MSG_INCIDENT_LIST_EMPTY = "Incidents list is empty"
+RESP_SUCCESS_MSG_INCIDENT_STATUS_UPDATE = "Updated the incident record’s status successfully"
+
+
+RESP_ERROR_MSG_INVALID_NAME_FIRSTNAME = "You have entered an invalid firstname. Must be from a-z or A-Z"
+RESP_ERROR_MSG_INVALID_LASTNAME = "You have entered an invalid lastname. Must be from a-z or A-Z"
+RESP_ERROR_MSG_INVALID_OTHERNAMES = "You have entered an invalid other name. Must be from a-z or A-Z"
+RESP_ERROR_MSG_INVALID_USERNAME = "Entered an invalid username"
+RESP_ERROR_MSG_INVALID_EMAIL = "Entered an invalid email"
+RESP_ERROR_MSG_INVALID_LOGIN_CREDS = "Entered an invalid password"
+RESP_ERROR_EMPTY_USERNAME = "Enter a empty username"
+RESP_ERROR_MSG_EMPTY_PASSWORD = "Enter a empty password"
+RESP_ERROR_MSG_LOGIN_FAILED = "Failed to login. username or password is incorrect"
+RESP_ERROR_MSG_NO_ACCESS = "You have no rights to view this content"
+RESP_ERROR_MSG_INVALID_TITLE = "You entered an invalid title. The minimum number of characters is 20"
+RESP_ERROR_MSG_INVALID_IMAGES = "Entered a non list of strings value  for either images"
+RESP_ERROR_MSG_INVALID_VIDEOS = "Entered a non list of strings value  for either videos"
+RESP_ERROR_MSG_INVALID_COMMENT = "You entered an invalid comment. The minimum number of characters is 100"
+
+
+RESP_ERROR_NO_ACCESS = Response(json.dumps({
+    "status": 400,
+    "error": RESP_ERROR_MSG_INVALID_IMAGES
+}), content_type="application/json", status=400)
+
+RESP_ERROR_INVALID_IMAGES = Response(json.dumps({
+    "status": 400,
+    "error": RESP_ERROR_MSG_INVALID_IMAGES
+}), content_type="application/json", status=400)
+
+RESP_ERROR_INVALID_VIDEOS = Response(json.dumps({
+    "status": 400,
+    "error": RESP_ERROR_MSG_INVALID_VIDEOS
+}), content_type="application/json", status=400)
+
+RESP_ERROR_INVALID_COMMENT = Response(json.dumps({
+    "status": 400,
+    "error": RESP_ERROR_MSG_INVALID_COMMENT
+}), content_type="application/json", status=400)
+
+RESP_ERROR_SIGNUP_FAIL_USER_EXISTS = Response(json.dumps({
+    "status": 400,
+    "message": RESP_ERROR_MSG_SIGNUP_FAIL_USER_EXISTS
+}), content_type="application/json", status=400)
+
+RESP_ERROR_UPDATE_ROLE_FAILED = Response(json.dumps({
+    "status": 400,
+    "error": RESP_ERROR_MSG_LOGIN_FAILED
+}), content_type="application/json", status=400)
+
+RESP_ERROR_INVALID_ROLE = Response(json.dumps({
+    "status": 400,
+    "error": RESP_ERROR_MSG_LOGIN_FAILED
+}), content_type="application/json", status=400)
+RESP_ERROR_USER_NOT_FOUND = Response(json.dumps({
+    "status": 400,
+    "error": RESP_ERROR_MSG_LOGIN_FAILED
+}), content_type="application/json", status=400)
+
+RESP_ERROR_LOGIN_FAILED = Response(json.dumps({
+    "status": 400,
+    "error": RESP_ERROR_MSG_LOGIN_FAILED
+}), content_type="application/json", status=400)
+
+RESP_ERROR_EMPTY_USERNAME = Response(json.dumps({
+    "status": 400,
+    "error": RESP_ERROR_EMPTY_USERNAME
+}), content_type="application/json", status=400)
+
+RESP_ERROR_EMPTY_PASSWORD = Response(json.dumps({
+    "status": 400,
+    "error": RESP_ERROR_MSG_EMPTY_PASSWORD
+}), content_type="application/json", status=400)
+
+RESP_ERROR_INVALID_LOGIN_CREDS = Response(json.dumps({
+    "status": 400,
+    "error": RESP_ERROR_MSG_INVALID_LOGIN_CREDS
+}), content_type="application/json", status=400)
+
+RESP_ERROR_INVALID_FIRSTNAME = Response(json.dumps({
+    "status": 400,
+    "error": RESP_ERROR_MSG_INVALID_NAME_FIRSTNAME
+}), content_type="application/json", status=400)
+
+RESP_ERROR_INVALID_LASTNAME = Response(json.dumps({
+    "status": 400,
+    "error": RESP_ERROR_MSG_INVALID_LASTNAME
+}), content_type="application/json", status=400)
+
+RESP_ERROR_INVALID_OTHERNAMES = Response(json.dumps({
+    "status": 400,
+    "error": RESP_ERROR_MSG_INVALID_OTHERNAMES
+}), content_type="application/json", status=400)
+
+RESP_ERROR_INVALID_PASSWORD = Response(json.dumps({
+    "status": 400,
+    "error": RESP_ERROR_MSG_INVALID_PASSWORD
+}), content_type="application/json", status=400)
+
+RESP_ERROR_INVALID_USERNAME = Response(json.dumps({
+    "status": 400,
+    "error": RESP_ERROR_MSG_INVALID_USERNAME
+}), content_type="application/json", status=400)
 
 # string constants for various responses
 RESP_SUCCESS_INCIDENT_LIST_EMPTY = Response(json.dumps({
@@ -128,151 +234,146 @@ RESP_ERROR_FORBIDDEN_INCIDENT_UPDATE = Response(json.dumps({
 
 RESP_ERROR_USER_NOT_FOUND = Response(json.dumps({
     "status": 400,
-    "message": RESP_ERROR_MSG_USER_NOT_FOUND
+    "error": RESP_ERROR_MSG_USER_NOT_FOUND
 }), content_type="application/json", status=400)
 
 RESP_ERROR_INVALID_STRING_TYPE = Response(json.dumps({
     "status": 400,
-    "message": RESP_ERROR_MSG_INVALID_STRING_TYPE
+    "error": RESP_ERROR_MSG_INVALID_STRING_TYPE
 }), content_type="application/json", status=400)
 
-RESP_ERROR_INVALID_LIST_TYPE = Response(json.dumps({
-    "status": 400,
-    "message": RESP_ERROR_MSG_INVALID_LIST_TYPE
-}), content_type="application/json", status=400)
+# RESP_ERROR_INVALID_LIST_TYPE = Response(json.dumps({
+#     "status": 400,
+#     "error": RESP_ERROR_MSG_INVALID_LIST_TYPE
+# }), content_type="application/json", status=400)
 
 RESP_ERROR_INVALID_LOCATION = Response(json.dumps({
     "status": 400,
-    "message": RESP_ERROR_MSG_INVALID_LOCATION
+    "error": RESP_ERROR_MSG_INVALID_LOCATION
+}), content_type="application/json", status=400)
+
+RESP_ERROR_INVALID_TITLE = Response(json.dumps({
+    "status": 400,
+    "error": RESP_ERROR_MSG_INVALID_TITLE
 }), content_type="application/json", status=400)
 
 RESP_ERROR_INVALID_INCIDENT = Response(json.dumps({
     "status": 400,
-    "message": RESP_ERROR_MSG_INVALID_INCIDENT
+    "error": RESP_ERROR_MSG_INVALID_INCIDENT
 }), content_type="application/json", status=400)
 
 
 RESP_ERROR_INVALID_EMAIL = Response(json.dumps({
     "status": 400,
-    "message": RESP_ERROR_MSG_INVALID_EMAIL
+    "error": RESP_ERROR_MSG_INVALID_EMAIL
 }), content_type="application/json", status=400)
 
 RESP_ERROR_INVALID_PHONE = Response(json.dumps({
     "status": 400,
-    "message": RESP_ERROR_MSG_INVALID_PHONE
-}), content_type="application/json", status=400)
-
-RESP_ERROR_INVALID_PASSWORD = Response(json.dumps({
-    "status": 400,
-    "message": RESP_ERROR_MSG_INVALID_PASSWORD
+    "error": RESP_ERROR_MSG_INVALID_PHONE
 }), content_type="application/json", status=400)
 
 RESP_ERROR_UNACCEPTABLE_INPUT = Response(json.dumps({
     "status": 400,
-    "message": RESP_ERROR_MSG_UNACCEPTABLE_INPUT
+    "error": RESP_ERROR_MSG_UNACCEPTABLE_INPUT
 }), content_type="application/json", status=400)
 
 RESP_ERROR_POST_EMPTY_DATA = Response(json.dumps({
     "status": 400,
-    "message": RESP_ERROR_MSG_EMPTY_STRING
+    "error": RESP_ERROR_MSG_EMPTY_STRING
 }), content_type="application/json", status=400)
 
 RESP_ERROR_UPDATE_INCIDENT_WRONG_DATA = Response(json.dumps({
     "status": 400,
-    "message": RESP_ERROR_MSG_UDATE_WRONG_LOCATION
+    "error": RESP_ERROR_MSG_UDATE_WRONG_LOCATION
 }), content_type="application/json", status=400)
 
 RESP_ERROR_UPDATE_STATUS = Response(json.dumps({
     "status": 400,
-    "message": RESP_ERROR_MSG_UPDATE_STATUS
+    "error": RESP_ERROR_MSG_UPDATE_STATUS
 }), content_type="application/json", status=400)
 
 RESP_ERROR_INCIDENT_NOT_FOUND = Response(json.dumps({
     "status": 404,
-    "message": RESP_ERROR_MSG_INCIDENT_NOT_FOUND
+    "error": RESP_ERROR_MSG_INCIDENT_NOT_FOUND
 }), content_type="application/json", status=404)
 
 RESP_ERROR_POST_DUPLICATE = Response(json.dumps({
     "status": 400,
-    "message": RESP_ERROR_MSG_INCIDENT_DUPLICATE
+    "error": RESP_ERROR_MSG_INCIDENT_DUPLICATE
 }), content_type="application/json", status=400)
 
 RESP_ERROR_ADMIN_NO_RIGHTS = Response(json.dumps({
     "status": 401,
-    "message": RESP_ERROR_MSG_ADMIN_NO_RIGHTS
+    "error": RESP_ERROR_MSG_ADMIN_NO_RIGHTS
 }), content_type="application/json", status=401)
 
 RESP_ERROR_SIGNUP_FAIL_USER_EXISTS = Response(json.dumps({
     "status": 400,
-    "message": RESP_ERROR_MSG_SIGNUP_FAIL_USER_EXISTS
+    "error": RESP_ERROR_MSG_SIGNUP_FAIL_USER_EXISTS
 }), content_type="application/json", status=400)
 
 RESP_ERROR_BAD_REQUEST = Response(json.dumps({
     "status": 400,
-    "message": RESP_ERROR_MSG_BAD_REQUEST
+    "error": RESP_ERROR_MSG_BAD_REQUEST
 }), content_type="application/json", status=400)
 
 RESP_ERROR_PAGE_NOT = Response(json.dumps({
     "status": 404,
-    "message": RESP_ERROR_MSG_PAGE_NOT
+    "error": RESP_ERROR_MSG_PAGE_NOT
 }), content_type="application/json", status=404)
 
 RESP_ERROR_METHOD_NOT_ALLOWED = Response(json.dumps({
     "status": 405,
-    "message": RESP_ERROR_MSG_METHOD_NOT_ALLOWED
+    "error": RESP_ERROR_MSG_METHOD_NOT_ALLOWED
 }), content_type="application/json", status=405)
 
 RESP_ERROR_INTERNAL_SERVER_ERROR = Response(json.dumps({
     "status": 500,
-    "message": RESP_ERROR_MSG_INTERNAL_SERVER_ERROR
+    "error": RESP_ERROR_MSG_INTERNAL_SERVER_ERROR
 }), content_type="application/json", status=500)
 
 RESP_ERROR_LOGIN_FAILED = Response(json.dumps({
     "status": 401,
-    "message": RESP_ERROR_MSG_LOGIN_FAILED
+    "error": RESP_ERROR_MSG_LOGIN_FAILED
 }), content_type="application/json", status=401)
 
 RESP_ERROR_UPDATE_ROLE_FAILED = Response(json.dumps({
     "status": 401,
-    "message": RESP_ERROR_MSG_USER_STATUS_NORIGHTS
+    "error": RESP_ERROR_MSG_USER_STATUS_NORIGHTS
 }), content_type="application/json", status=401)
 
 RESP_ERROR_INVALID_ROLE = Response(json.dumps({
     "status": 400,
-    "message": RESP_ERROR_MSG_INVALID_ROLE
+    "error": RESP_ERROR_MSG_INVALID_ROLE
 }), content_type="application/json", status=400)
 
 RESP_ERROR_USER_NOT_FOUND = Response(json.dumps({
     "status": 404,
-    "message": RESP_ERROR_MSG_USER_NOT_FOUND
+    "error": RESP_ERROR_MSG_USER_NOT_FOUND
 }), content_type="application/json", status=404)
 
 RESP_ERROR_UNAUTHORIZED_VIEW = Response(json.dumps({
     "status": 401,
-    "message": RESP_ERROR_MSG_UNAUTHORIZED_VIEW
+    "error": RESP_ERROR_MSG_UNAUTHORIZED_VIEW
 }), content_type="application/json", status=401)
 
 RESP_ERROR_ADMIN_ONLY = Response(json.dumps({
     "status": 401,
-    "message": RESP_ERROR_MSG_UNAUTHORIZED_VIEW
+    "error": RESP_ERROR_MSG_UNAUTHORIZED_VIEW
 }), content_type="application/json", status=401)
 
 RESP_ERROR_INVALID_USER = Response(json.dumps({
     "status": 400,
-    "message": RESP_ERROR_MSG_INVALID_USER
+    "error": RESP_ERROR_MSG_INVALID_USER
 }), content_type="application/json", status=400)
 
 RESP_ERROR_INVALID_OTHERNAME = Response(json.dumps({
     "status": 400,
-    "message": RESP_ERROR_MSG_INVALID_OTHERNAME
+    "error": RESP_ERROR_MSG_INVALID_OTHERNAMES
 }), content_type="application/json", status=400)
 
-RESP_ERROR_INVALID_NAME = Response(json.dumps({
-    "status": 400,
-    "message": RESP_ERROR_MSG_INVALID_NAME
-}), content_type="application/json", status=400)
-
-RESP_ERROR_INVALID_USERNAME = Response(json.dumps({
-    "status": 400,
-    "message": RESP_ERROR_MSG_INVALID_USERNAME
-}), content_type="application/json", status=400)
+# RESP_ERROR_INVALID_NAME = Response(json.dumps({
+#     "status": 400,
+#     "error": RESP_ERROR_MSG_INVALID_NAME
+# }), content_type="application/json", status=400)

@@ -10,18 +10,24 @@ from flask_jwt_extended import create_access_token
 from databases.ireporter_db import IreporterDb
 from flask import Response, json
 
-from app.utilities.static_stringsnew import (
+from app.utilities.static_strings import (
+    RESP_ERROR_POST_EMPTY_DATA,
+    RESP_ERROR_INVALID_USER,
+    RESP_ERROR_INVALID_EMAIL,
+    RESP_ERROR_INVALID_PHONE,
+    RESP_ERROR_INVALID_PASSWORD,
+    RESP_ERROR_SIGNUP_FAIL_USER_EXISTS,
     RESP_SUCCESS_MSG_REGISTRATION,
     RESP_SUCCESS_MSG_AUTH_LOGIN,
     RESP_SUCCESS_MSG_ADMIN_RIGHTS,
 
     RESP_ERROR_INVALID_FIRSTNAME,
     RESP_ERROR_INVALID_LASTNAME,
-    RESP_ERROR_INVALID_EMAIL,
+    # RESP_ERROR_INVALID_EMAIL,
     RESP_ERROR_INVALID_OTHERNAMES,
     RESP_ERROR_INVALID_EMAIL,
-    RESP_ERROR_INVALID_PHONENUMBER,
-    RESP_ERROR_INVALID_PASSWORD,
+    # RESP_ERROR_INVALID_PHONENUMBER,
+    # RESP_ERROR_INVALID_PASSWORD,
     RESP_ERROR_INVALID_USERNAME,
     RESP_ERROR_INVALID_LOGIN_CREDS,
     RESP_ERROR_EMPTY_USERNAME,
@@ -30,8 +36,8 @@ from app.utilities.static_stringsnew import (
     RESP_ERROR_UPDATE_ROLE_FAILED,
     RESP_ERROR_INVALID_ROLE,
     RESP_ERROR_USER_NOT_FOUND,
-    RESP_ERROR_SIGNUP_FAIL_USER_EXISTS
-
+    RESP_ERROR_MSG_EMPTY_PASSWORD,
+    RESP_ERROR_MSG_INVALID_OTHERNAMES
 )
 
 
@@ -42,6 +48,12 @@ class User():
 
     def create_user(self, request_data):
         othernames = ""
+        if any(self.check_empty_str(user_field) for  key_vale, user_field in request_data.items()):
+            return RESP_ERROR_POST_EMPTY_DATA
+
+        if self.validate_user(request_data):
+            return RESP_ERROR_INVALID_USER
+
         if self.validate_name(request_data.get("firstname")):
             return RESP_ERROR_INVALID_FIRSTNAME
 
@@ -49,7 +61,7 @@ class User():
             return RESP_ERROR_INVALID_LASTNAME
 
         if self.validate_othernames(request_data.get("othernames"), request_data):
-            return RESP_ERROR_INVALID_OTHERNAMES
+            return RESP_ERROR_MSG_INVALID_OTHERNAMES
         othernames = self.validate_othernames(request_data.get("othernames"), request_data)
 
         if self.validate_username(request_data.get("username")):
@@ -59,7 +71,7 @@ class User():
             return RESP_ERROR_INVALID_EMAIL
 
         if self.validate_phonenumber(request_data.get("phonenumber")):
-            return RESP_ERROR_INVALID_PHONENUMBER
+            return RESP_ERROR_INVALID_PHONE
 
         if self.validate_password(request_data.get("password")):
             return RESP_ERROR_INVALID_PASSWORD
@@ -105,6 +117,32 @@ class User():
         }), content_type="application/json", status=201)
 
 
+    def validate_user(self, request_info):
+        """this method checks if a request contains all and only required fields"""
+        minimum_turple = (
+            "firstname",
+            "lastname",
+            "phonenumber",
+            "email",
+            "username",
+            "password"
+        )
+
+        maxmmum_tuple = (
+            "firstname",
+            "lastname",
+            "othernames",
+            "phonenumber",
+            "email",
+            "username",
+            "password"
+        )
+
+        if any(item not in request_info for item in minimum_turple) \
+        or any(item not in maxmmum_tuple for item in request_info):
+            return True
+        return False
+
     def duplicate_user(self, username, email, phonenumber):
         if self.username_in_db(username, UsersData.get_all_dbusers(UsersData))\
             or self.email_in_db(email, UsersData.get_all_dbusers(UsersData))\
@@ -126,7 +164,7 @@ class User():
             return RESP_ERROR_EMPTY_USERNAME
 
         if self.check_empty_str(request_info.get("password")):
-            return RESP_ERROR_EMPTY_PASSWORD
+            return RESP_ERROR_MSG_EMPTY_PASSWORD
 
         if any(item not in request_info for item in login_creds) \
         or any(item not in login_creds for item in request_info):
@@ -140,7 +178,7 @@ class User():
             if user.get("password") != hashed_password:
                 print("valid password")
 
-            if user.get("username") == username and request_info.get("password") == user.get("password"):
+            if user.get("username") == username and user.get("password")== user.get("password"):
                 access_token = create_access_token(
                     identity=user,
                     expires_delta=datetime.timedelta(
@@ -174,9 +212,10 @@ class User():
                 request_info.get("is_admin")):
             return RESP_ERROR_INVALID_ROLE
 
-        user_modified = UsersData.update_user(UsersData, user_id, request_info)
+        user_modified = self.ireporter_db.update_data_user_role(user_id, request_info.get("is_admin"))
 
-        if user_modified is None:
+
+        if not user_modified:
             return RESP_ERROR_USER_NOT_FOUND
         else:
             return Response(json.dumps({
@@ -290,13 +329,13 @@ class UsersData():
 
     ireporter_db = IreporterDb()
 
-    def update_user(self, user_id, new_user_info):
-        """method for updating a user item in the users list"""
-        for user in self.get_all_dbusers():
-            if user.get("user_id") == user_id:
-                self.ireporter_db.update_data_user_role(user_id, new_user_info.get("is_admin"))
-                return user
-        return None
+    # def update_user(self, user_id, new_user_info):
+    #     """method for updating a user item in the users list"""
+    #     for user in self.get_all_dbusers():
+    #         if user.get("user_id") == user_id:
+    #             self.ireporter_db.update_data_user_role(user_id, new_user_info.get("is_admin"))
+    #             return user
+    #     return None
 
     def get_all_dbusers(self):
         data_from_db = self.ireporter_db.fetch_data_users("app_users")

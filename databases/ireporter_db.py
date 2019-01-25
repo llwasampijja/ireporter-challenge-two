@@ -206,8 +206,9 @@ class IreporterDb():
         self.cursor_database.execute(sql_query)
 
     def update_data_user_role(self, user_id, is_admin):
-        sql_query = f"""UPDATE app_users SET is_admin = '{is_admin}' WHERE user_id = '{user_id}'"""
+        sql_query = f"""UPDATE app_users SET is_admin = '{is_admin}' WHERE user_id = '{user_id}' RETURNING user_id"""
         self.cursor_database.execute(sql_query)
+        return self.cursor_database.fetchall()
 
     def delete_data_incident(self, incident_id, table_name):
         sql_query = f"""DELETE FROM {table_name} WHERE incident_id = '{incident_id}'"""

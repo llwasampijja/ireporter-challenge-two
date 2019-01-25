@@ -36,7 +36,7 @@ class TestErroHandlersView(unittest.TestCase):
         )
         response_data = json.loads(login_reponse.data.decode())
         self.assertEqual(login_reponse.status_code, 400)
-        self.assertEqual(response_data.get("message"),
+        self.assertEqual(response_data.get("error"),
                          RESP_ERROR_MSG_BAD_REQUEST)
 
     def test_page_not_found(self):
@@ -45,7 +45,7 @@ class TestErroHandlersView(unittest.TestCase):
             "url/not/exist", content_type="application/json")
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 404)
-        self.assertEqual(response_data.get("message"),
+        self.assertEqual(response_data.get("error"),
                          RESP_ERROR_MSG_PAGE_NOT)
 
     def test_method_not_allowed(self):
@@ -56,7 +56,7 @@ class TestErroHandlersView(unittest.TestCase):
         }), content_type="application/json")
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 405)
-        self.assertEqual(response_data.get("message"),
+        self.assertEqual(response_data.get("error"),
                          RESP_ERROR_MSG_METHOD_NOT_ALLOWED)
 
     def test_internal_server_error(self):
@@ -67,7 +67,7 @@ class TestErroHandlersView(unittest.TestCase):
         }), content_type="text")
         self.assertEqual(response.status_code, 500)
         self.assertEqual(json.loads(response.data).get(
-            "message"), RESP_ERROR_MSG_INTERNAL_SERVER_ERROR)
+            "error"), RESP_ERROR_MSG_INTERNAL_SERVER_ERROR)
 
     def test_index_page(self):
         """unit test for success to index endpoint"""

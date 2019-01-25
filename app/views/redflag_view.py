@@ -33,7 +33,10 @@ def get_redflags():
 @authenticator.authorized
 def get_flag(redflag_id):
     """method and route for getting a red-flag inciden by id"""
-    return incident_instance.get_incident(redflag_id, "redflag", "get", "edward", "redflags")
+    # request_data = request.get_json()
+    verify_jwt_in_request()
+    user_identity = get_jwt_identity()
+    return incident_instance.get_incident(redflag_id, "redflag", "get", user_identity["user_id"], "redflags")
 
 
 @redflag_blueprint.route("/<int:redflag_id>/location", methods=["PATCH"])
@@ -42,7 +45,8 @@ def update_redflag_location(redflag_id):
     """method for updating location of red-flag incident by id"""
     request_data = request.get_json()
     verify_jwt_in_request()
-    return incident_instance.edit_incident_location(request_data, redflag_id, "redflag", 2, "redflags")
+    user_identity = get_jwt_identity()
+    return incident_instance.edit_incident_location(request_data, redflag_id, "redflag", user_identity["user_id"], "redflags")
 
 @redflag_blueprint.route("<int:redflag_id>/comment", methods=["PATCH"])
 @authenticator.concerned_citzen
@@ -50,14 +54,17 @@ def update_redflag_comment(redflag_id):
     """method for updating the comment of a redflag"""
     request_info = request.get_json()
     verify_jwt_in_request()
-    return incident_instance.edit_incident_comment(request_info, redflag_id, "redflag", 2, "redflags")
+    user_identity = get_jwt_identity()
+    return incident_instance.edit_incident_comment(request_info, redflag_id, "redflag",user_identity["user_id"], "redflags")
 
 @redflag_blueprint.route("/<int:redflag_id>/status", methods=["PATCH"])
 @authenticator.admin_only
 def update_redflag_status(redflag_id):
     """method and route for updating the status a red-flag incident by id"""
     request_data = request.get_json()
-    return incident_instance.edit_incident_status(request_data, redflag_id, "redflag", 2, "redflags")
+    verify_jwt_in_request()
+    user_identity = get_jwt_identity()
+    return incident_instance.edit_incident_status(request_data, redflag_id, "redflag", user_identity["user_id"], "redflags")
 
 
 @redflag_blueprint.route("/<int:redflag_id>", methods=["DELETE"])
@@ -66,5 +73,5 @@ def delete_redflag(redflag_id):
     """method and route for deleting a red-flag incident by id"""
     verify_jwt_in_request()
     user_identity = get_jwt_identity()
-    return incident_instance.delete_incident( redflag_id, "redflag", 2, "redflags")
+    return incident_instance.delete_incident( redflag_id, "redflag", user_identity["user_id"], "redflags")
 
