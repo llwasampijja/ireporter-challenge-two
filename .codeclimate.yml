@@ -1,0 +1,20 @@
+## other configuration excluded from example...
+exclude_patterns:
+- "tests/"
+- "spec/"
+- "**/vendor/"
+- "config/"
+- "db/"
+- "dist/"
+- "features/"
+- "**/node_modules/"
+- "script/"
+- "**/spec/"
+- "**/test/"
+- "**/tests/"
+- "Tests/"
+- "**/vendor/"
+- "**/*_test.go"
+- "**/*.d.ts"
+- "app/views" 
+- "app/models" #
