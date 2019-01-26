@@ -46,7 +46,6 @@ class TestInterventionView(unittest.TestCase):
 
         self.ireporter_db = IreporterDb()
         self.database_helper = DatabaseHelper()
-        self.ireporter_db.drop_tables()
         self.ireporter_db.create_tables()
         self.database_helper.create_incident_types()
 
@@ -101,6 +100,7 @@ class TestInterventionView(unittest.TestCase):
         )
 
     def tearDown(self):
+        self.ireporter_db = IreporterDb()
         self.ireporter_db.drop_tables()
 
     def test_create_intervention(self):
@@ -140,7 +140,7 @@ class TestInterventionView(unittest.TestCase):
         )
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(data.get("message"),
+        self.assertEqual(data.get("error"),
                          RESP_ERROR_MSG_INCIDENT_DUPLICATE)
 
     def test_create_lessattributes(self):
@@ -159,7 +159,7 @@ class TestInterventionView(unittest.TestCase):
         )
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(data.get("message"),
+        self.assertEqual(data.get("error"),
                          RESP_ERROR_MSG_INVALID_INCIDENT)
 
     def test_create_moreattributes(self):
@@ -180,7 +180,7 @@ class TestInterventionView(unittest.TestCase):
         )
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(data.get("message"),
+        self.assertEqual(data.get("error"),
                          RESP_ERROR_MSG_INVALID_INCIDENT)
 
     def test_create_stringvideos(self):
@@ -200,7 +200,7 @@ class TestInterventionView(unittest.TestCase):
         )
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(data.get("message"),
+        self.assertEqual(data.get("error"),
                          RESP_ERROR_MSG_INVALID_LIST_TYPE)
 
     def test_create_emptystring(self):
@@ -220,7 +220,7 @@ class TestInterventionView(unittest.TestCase):
         )
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(data.get("message"),
+        self.assertEqual(data.get("error"),
                          RESP_ERROR_MSG_EMPTY_STRING)
 
     def test_get_interventions(self):
@@ -254,7 +254,7 @@ class TestInterventionView(unittest.TestCase):
         )
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 404)
-        self.assertEqual(data.get("message"),
+        self.assertEqual(data.get("error"),
                          RESP_ERROR_MSG_INCIDENT_NOT_FOUND)
 
     def test_update_noid(self):
@@ -269,7 +269,7 @@ class TestInterventionView(unittest.TestCase):
         )
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 404)
-        self.assertEqual(data.get("message"),
+        self.assertEqual(data.get("error"),
                          RESP_ERROR_MSG_INCIDENT_NOT_FOUND)
 
     def test_update_intervention(self):
@@ -311,7 +311,7 @@ class TestInterventionView(unittest.TestCase):
         )
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(data.get("message"),
+        self.assertEqual(data.get("error"),
                          RESP_ERROR_MSG_EMPTY_STRING)
 
     def test_update_wrongtype(self):
@@ -376,7 +376,7 @@ class TestInterventionView(unittest.TestCase):
         )
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 404)
-        self.assertEqual(data.get("message"),
+        self.assertEqual(data.get("error"),
                          RESP_ERROR_MSG_INCIDENT_NOT_FOUND)
 
     def test_delete_intervention_success(self):

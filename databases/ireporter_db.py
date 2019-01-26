@@ -48,7 +48,7 @@ class IreporterDb():
         self.cursor_database.execute(
             """CREATE TABLE IF NOT EXISTS incident_types (
                 incident_type_id serial PRIMARY KEY,
-                incident_type_name varchar
+                incident_type_name varchar UNIQUE
             )"""
         )
 
@@ -154,6 +154,11 @@ class IreporterDb():
         self.cursor_database.execute(sql_query)
         return self.cursor_database.fetchall()
 
+    def fetch_data_incident_types(self):
+        sql_query = f"""SELECT * FROM incident_types"""
+        self.cursor_database.execute(sql_query)
+        return self.cursor_database.fetchall()
+
     def fetch_data_incidents(self, table_name):
         sql_query = f"""SELECT * FROM {table_name} 
         JOIN incident_types ON {table_name}.incident_type = incident_types.incident_type_id
@@ -165,6 +170,11 @@ class IreporterDb():
         sql_query = f"""SELECT * FROM {table_name} 
         JOIN incident_types ON {table_name}.incident_type = incident_types.incident_type_id 
         JOIN app_users ON {table_name}.created_by = app_users.user_id WHERE created_by = '{user_id}'"""
+        self.cursor_database.execute(sql_query)
+        return self.cursor_database.fetchall()
+
+    def fetch_data_user_byid(self, user_id):
+        sql_query = f"""SELECT * FROM app_users WHERE user_id = '{user_id}'"""
         self.cursor_database.execute(sql_query)
         return self.cursor_database.fetchall()
 
