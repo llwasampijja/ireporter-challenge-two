@@ -224,7 +224,7 @@ class IncidentController:
         elif action_instance in ("non_author", "revoked"):
             return Response(json.dumps({
                 "status": 401,
-                "message": message_fail
+                "error": message_fail
             }), content_type="application/json", status=401)
         else:
             return message_success

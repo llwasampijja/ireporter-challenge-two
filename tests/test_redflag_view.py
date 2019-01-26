@@ -36,7 +36,8 @@ from app.utilities.static_strings import (
     RESP_ERROR_MSG_INVALID_EDIT_STRING_TYPE,
     RESP_ERROR_MSG_FORBIDDEN_INCIDENT_UPDATE,
     RESP_ERROR_MSG_BAD_REQUEST,
-    RESP_ERROR_MSG_INCIDENT_DUPLICATE
+    RESP_ERROR_MSG_INCIDENT_DUPLICATE,
+    RESP_ERROR_MSG_NOT_LOGGEDIN
 )
 
 
@@ -50,9 +51,9 @@ class TestRedflagView(unittest.TestCase):
 
         self.ireporter_db = IreporterDb()
         self.database_helper = DatabaseHelper()
-        self.ireporter_db.drop_tables()
         self.ireporter_db.create_tables()
         self.database_helper.create_incident_types()
+        self.database_helper.create_admin()
 
         test_user = {
             "firstname": "Dall",
@@ -131,6 +132,10 @@ class TestRedflagView(unittest.TestCase):
             content_type="application/json"
         )
 
+    def tearDown(self):
+        self.ireporter_db = IreporterDb()
+        self.ireporter_db.drop_tables()
+
     def test_create_redflag_success(self):
         """unit test for creating redflag successfully"""     
         jwt_token = json.loads(self.login_response.data)["access_token"]
@@ -166,7 +171,7 @@ class TestRedflagView(unittest.TestCase):
         )
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(data.get("message"),
+        self.assertEqual(data.get("error"),
                          RESP_ERROR_MSG_INVALID_INCIDENT)
 
     def test_create_redflag_more(self):
@@ -187,7 +192,7 @@ class TestRedflagView(unittest.TestCase):
         )
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(data.get("message"),
+        self.assertEqual(data.get("error"),
                          RESP_ERROR_MSG_INVALID_INCIDENT)
 
     def test_create_redflag_videosstring(self):    
@@ -207,7 +212,7 @@ class TestRedflagView(unittest.TestCase):
         )
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(data.get("message"),
+        self.assertEqual(data.get("error"),
                          RESP_ERROR_MSG_INVALID_LIST_TYPE)
 
     def test_create_redflag_emptystring(self):    
@@ -227,7 +232,7 @@ class TestRedflagView(unittest.TestCase):
         )
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(data.get("message"),
+        self.assertEqual(data.get("error"),
                          RESP_ERROR_MSG_EMPTY_STRING)
 
     def test_create_redflag_invalid_string_type(self):    
@@ -247,7 +252,7 @@ class TestRedflagView(unittest.TestCase):
         )
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(data.get("message"),
+        self.assertEqual(data.get("error"),
                          RESP_ERROR_MSG_INVALID_STRING_TYPE)
 
     def test_create_redflag_onecoordinate(self):     
@@ -267,7 +272,7 @@ class TestRedflagView(unittest.TestCase):
         )
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(data.get("message"), RESP_ERROR_MSG_INVALID_LOCATION)
+        self.assertEqual(data.get("error"), RESP_ERROR_MSG_INVALID_LOCATION)
 
     def test_create_redflag_outofrangecoordinate(self):     
         """test add redflag with location with coordinate not in range"""
@@ -286,7 +291,7 @@ class TestRedflagView(unittest.TestCase):
         )
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(data.get("message"), RESP_ERROR_MSG_INVALID_LOCATION)
+        self.assertEqual(data.get("error"), RESP_ERROR_MSG_INVALID_LOCATION)
 
     def test_create_redflag_wrongcordinatetype(self):     
         """test add redflag with location with coordinate not in range"""
@@ -305,7 +310,7 @@ class TestRedflagView(unittest.TestCase):
         )
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(data.get("message"), RESP_ERROR_MSG_INVALID_LOCATION)
+        self.assertEqual(data.get("error"), RESP_ERROR_MSG_INVALID_LOCATION)
 
     def test_get_redflags(self):
         """unit test for getting all redflags"""
@@ -337,7 +342,7 @@ class TestRedflagView(unittest.TestCase):
         )
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 404)
-        self.assertEqual(data.get("message"),
+        self.assertEqual(data.get("error"),
                          RESP_ERROR_MSG_INCIDENT_NOT_FOUND)
 
     def test_update_redflag_wrongurl(self):
@@ -364,7 +369,7 @@ class TestRedflagView(unittest.TestCase):
         )
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 404)
-        self.assertEqual(data.get("message"),
+        self.assertEqual(data.get("error"),
                          RESP_ERROR_MSG_INCIDENT_NOT_FOUND)
 
     def test_update_redflag_emptystring(self):
@@ -378,7 +383,7 @@ class TestRedflagView(unittest.TestCase):
         )
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(data.get("message"),
+        self.assertEqual(data.get("error"),
                          RESP_ERROR_MSG_EMPTY_STRING)
 
     def test_update_redflag_location_wrongtype(self):
@@ -417,13 +422,12 @@ class TestRedflagView(unittest.TestCase):
         )
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 401)
-        self.assertEqual(response_data.get("message"),
+        self.assertEqual(response_data.get("error"),
                          RESP_ERROR_MSG_UNAUTHORIZED_EDIT)
 
     def test_update_redflag_location_nonpending(self):
         """test updated red-flag whose status isnt equal to
          'pending investigation'"""
-        self.database_helper.create_admin()
         self.test_admin_login_response = self.client.post(
             URL_LOGIN,
             data=json.dumps({
@@ -450,7 +454,7 @@ class TestRedflagView(unittest.TestCase):
         )
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 401)
-        self.assertEqual(response_data.get("message"),
+        self.assertEqual(response_data.get("error"),
                          RESP_ERROR_MSG_UNAUTHORIZED_EDIT)
 
     def test_update_redflag_location_morefields(self):
@@ -467,7 +471,7 @@ class TestRedflagView(unittest.TestCase):
         )
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response_data.get("message"),
+        self.assertEqual(response_data.get("error"),
                          RESP_ERROR_MSG_UNACCEPTABLE_INPUT)
 
     def test_update_redflag_location_success(self):
@@ -497,7 +501,7 @@ class TestRedflagView(unittest.TestCase):
         )
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response_data.get("message"),
+        self.assertEqual(response_data.get("error"),
                          RESP_ERROR_MSG_UDATE_WRONG_LOCATION)
 
     def test_update_redflag_status_nonadmin(self):
@@ -513,7 +517,7 @@ class TestRedflagView(unittest.TestCase):
         )
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 401)
-        self.assertEqual(response_data.get("message"),
+        self.assertEqual(response_data.get("error"),
                          RESP_ERROR_MSG_UNAUTHORIZED_VIEW)
 
     def test_update_redflag_comment_asuccess(self):
@@ -543,7 +547,7 @@ class TestRedflagView(unittest.TestCase):
         )
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response_data.get("message"),
+        self.assertEqual(response_data.get("error"),
                          RESP_ERROR_MSG_INCIDENT_DUPLICATE)
 
     def test_update_redflag_comment_empty(self):
@@ -557,7 +561,7 @@ class TestRedflagView(unittest.TestCase):
         )
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response_data.get("message"),
+        self.assertEqual(response_data.get("error"),
                          RESP_ERROR_MSG_BAD_REQUEST)
 
     def test_update_redflag_comment_wrong_route(self):
@@ -585,7 +589,7 @@ class TestRedflagView(unittest.TestCase):
         )
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 404)
-        self.assertEqual(data.get("message"),
+        self.assertEqual(data.get("error"),
                          RESP_ERROR_MSG_INCIDENT_NOT_FOUND)
 
     def test_delete_redflag(self):
@@ -618,12 +622,11 @@ class TestRedflagView(unittest.TestCase):
         )
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 401)
-        self.assertEqual(response_data.get("message"),
+        self.assertEqual(response_data.get("error"),
                          RESP_EEROR_MSG_UNAUTHORIZED_DELETE)
 
     def test_delete_redflag_nonpending(self):
         """Test delete redflag which whose status is nolonger pending investigation"""
-        self.database_helper.create_admin()
         self.test_admin_login_response = self.client.post(
             URL_LOGIN,
             data=json.dumps({
@@ -648,12 +651,11 @@ class TestRedflagView(unittest.TestCase):
         )
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 401)
-        self.assertEqual(response_data.get("message"),
+        self.assertEqual(response_data.get("error"),
                          RESP_EEROR_MSG_UNAUTHORIZED_DELETE)
 
     def test_update_redflag_status(self):
         """Test update status of redflag by admin"""
-        self.database_helper.create_admin()
         admin_login_response = self.client.post(URL_LOGIN, data=json.dumps({
             "username": "edward",
             "password": "i@mG8t##"
@@ -674,7 +676,6 @@ class TestRedflagView(unittest.TestCase):
 
     def test_update_redflag_status_morefields(self):
         """test update red-flag with more than just the status as an admin"""
-        self.database_helper.create_admin()
         admin_login_response = self.client.post(URL_LOGIN, data=json.dumps({
             "username": "edward",
             "password": "i@mG8t##"
@@ -693,12 +694,11 @@ class TestRedflagView(unittest.TestCase):
         )
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 401)
-        self.assertEqual(response_data.get("message"),
+        self.assertEqual(response_data.get("error"),
                          RESP_ERROR_MSG_ADMIN_NO_RIGHTS)
 
     def test_update_status_none(self):
         """test update the status of an incident which doesn't exist"""
-        self.database_helper.create_admin()
         admin_login_response = self.client.post(URL_LOGIN, data=json.dumps({
             "username": "edward",
             "password": "i@mG8t##"
@@ -714,10 +714,9 @@ class TestRedflagView(unittest.TestCase):
         )
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 404)
-        self.assertEqual(response_data.get("message"), RESP_ERROR_MSG_INCIDENT_NOT_FOUND)
+        self.assertEqual(response_data.get("error"), RESP_ERROR_MSG_INCIDENT_NOT_FOUND)
 
     def test_update_status_wrong(self):
-        self.database_helper.create_admin()
         """test update redflag with a wrong status value"""
 
         admin_login_response = self.client.post(URL_LOGIN, data=json.dumps({
@@ -737,13 +736,12 @@ class TestRedflagView(unittest.TestCase):
         )
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response_data.get("message"),
+        self.assertEqual(response_data.get("error"),
                          RESP_ERROR_MSG_UPDATE_STATUS)
 
         
     def test_admin_create_redflag(self):
         """test try to create an incident as an admin"""
-        self.database_helper.create_admin()
         admin_login_response = self.client.post(URL_LOGIN, data=json.dumps({
             "username": "edward",
             "password": "i@mG8t##"
@@ -763,5 +761,23 @@ class TestRedflagView(unittest.TestCase):
         )
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 401)
-        self.assertEqual(response_data.get("message"),
+        self.assertEqual(response_data.get("error"),
                          RESP_ERROR_MSG_UNAUTHORIZED_VIEW)
+
+    def test_acess_protected_route(self):
+        response = self.client.post(
+            URL_REDFLAGS,
+            headers=dict(content_type="application/json"),
+            data=json.dumps({
+                "location": "0.00938, 2.46287",
+                "videos": ["Video url"],
+                "images": "images urls",
+                "title": "Cop taking a bribe",
+                "comment": "He was caught red handed admin post"
+            }),
+            content_type="application/json"
+        )
+        response_data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response_data.get("error"),
+                         RESP_ERROR_MSG_NOT_LOGGEDIN)

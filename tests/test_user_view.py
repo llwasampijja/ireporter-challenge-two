@@ -32,7 +32,6 @@ class TestUserView(unittest.TestCase):
 
         self.ireporter_db = IreporterDb()
         self.database_helper = DatabaseHelper()
-        self.ireporter_db.drop_tables()
         self.ireporter_db.create_tables()
         self.database_helper.create_admin()
         self.database_helper.create_incident_types()
@@ -59,6 +58,10 @@ class TestUserView(unittest.TestCase):
             content_type="application/json"
         )
         self.assertEqual(response.status_code, 200)
+
+    def tearDown(self):
+        self.ireporter_db = IreporterDb()
+        self.ireporter_db.drop_tables()
 
     def test_update_user(self):
         """test update user's role by admin"""
@@ -91,7 +94,7 @@ class TestUserView(unittest.TestCase):
         )
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 401)
-        self.assertEqual(response_data.get("message"), RESP_ERROR_MSG_USER_STATUS_NORIGHTS)
+        self.assertEqual(response_data.get("error"), RESP_ERROR_MSG_USER_STATUS_NORIGHTS)
 
     def test_update_roleinvalid(self):
         """test update user's role with an invalid value"""
@@ -106,7 +109,7 @@ class TestUserView(unittest.TestCase):
         )
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response_data.get("message"), RESP_ERROR_MSG_INVALID_ROLE)
+        self.assertEqual(response_data.get("error"), RESP_ERROR_MSG_INVALID_ROLE)
 
     def test_update_nonexist(self):
         """test update a user who doesnt exist on the system"""
@@ -121,7 +124,7 @@ class TestUserView(unittest.TestCase):
         )
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 404)
-        self.assertEqual(response_data.get("message"), RESP_ERROR_MSG_USER_NOT_FOUND)
+        self.assertEqual(response_data.get("error"), RESP_ERROR_MSG_USER_NOT_FOUND)
 
     def test_update_primaryadmin(self):
         """test update a primary admin"""
@@ -136,7 +139,7 @@ class TestUserView(unittest.TestCase):
         )
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 401)
-        self.assertEqual(response_data.get("message"), RESP_ERROR_MSG_USER_STATUS_NORIGHTS)
+        self.assertEqual(response_data.get("error"), RESP_ERROR_MSG_USER_STATUS_NORIGHTS)
 
     def test_get_redflags_specific_user_noid(self):
         """unit test for getting all redflags for spefic user"""
@@ -171,7 +174,7 @@ class TestUserView(unittest.TestCase):
         )
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 404)
-        self.assertEqual(response_data.get("message"), RESP_ERROR_MSG_USER_NOT_FOUND)
+        self.assertEqual(response_data.get("error"), RESP_ERROR_MSG_USER_NOT_FOUND)
 
     def test_get_interventions_specific_user_listempty(self):
         """unit test for getting all redflags for spefic user"""

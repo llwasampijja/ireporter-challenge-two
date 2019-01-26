@@ -37,7 +37,6 @@ class TestAuthView(unittest.TestCase):
 
         self.ireporter_db = IreporterDb()
         self.database_helper = DatabaseHelper()
-        self.ireporter_db.drop_tables()
         self.ireporter_db.create_tables()
         self.database_helper.create_incident_types()
         self.database_helper.create_admin()
@@ -54,6 +53,10 @@ class TestAuthView(unittest.TestCase):
             "password": "passworD#1"
         }), content_type="application/json")
 
+    def tearDown(self):
+        self.ireporter_db = IreporterDb()
+        self.ireporter_db.drop_tables()
+
     def test_register_user_emptyfield(self):
         """test register with an empty field"""
         response = self.client.post(URL_REGISTER, data=json.dumps({
@@ -67,7 +70,7 @@ class TestAuthView(unittest.TestCase):
         }), content_type="application/json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
-            json.loads(response.data)["message"],
+            json.loads(response.data)["error"],
             RESP_ERROR_MSG_INVALID_PASSWORD
         )
 
@@ -83,7 +86,7 @@ class TestAuthView(unittest.TestCase):
         }), content_type="application/json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.data).get(
-            "message"), RESP_ERROR_MSG_INVALID_USER)
+            "error"), RESP_ERROR_MSG_INVALID_USER)
 
     def test_register_wrongfield(self):
         """test register with a field which isnt supposed to be their"""
@@ -98,7 +101,7 @@ class TestAuthView(unittest.TestCase):
         }), content_type="application/json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.data).get(
-            "message"), RESP_ERROR_MSG_INVALID_USER)
+            "error"), RESP_ERROR_MSG_INVALID_USER)
 
     def test_register_morefields(self): 
         """test register with more fields than necessary"""
@@ -114,7 +117,7 @@ class TestAuthView(unittest.TestCase):
         }), content_type="application/json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.data).get(
-            "message"), RESP_ERROR_MSG_INVALID_USER)
+            "error"), RESP_ERROR_MSG_INVALID_USER)
 
     def test_register_wrongtype(self):
         """test register user with a  field of wrong datatype"""
@@ -129,7 +132,7 @@ class TestAuthView(unittest.TestCase):
         }), content_type="application/json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.data).get(
-            "message"), RESP_ERROR_MSG_INVALID_NAME)
+            "error"), RESP_ERROR_MSG_INVALID_NAME)
 
     def test_register_invalidmail(self):
         """test register user with an invalid email"""
@@ -144,7 +147,7 @@ class TestAuthView(unittest.TestCase):
         }), content_type="application/json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.data).get(
-            "message"), RESP_ERROR_MSG_INVALID_EMAIL)
+            "error"), RESP_ERROR_MSG_INVALID_EMAIL)
 
     def test_register_invaliphone(self):
         """test register user with an invalid phonenumber"""
@@ -159,7 +162,7 @@ class TestAuthView(unittest.TestCase):
         }), content_type="application/json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.data).get(
-            "message"), RESP_ERROR_MSG_INVALID_PHONE)
+            "error"), RESP_ERROR_MSG_INVALID_PHONE)
 
     def test_register_invalidpass(self):
         """test register with an invalid password"""
@@ -174,7 +177,7 @@ class TestAuthView(unittest.TestCase):
         }), content_type="application/json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.data).get(
-            "message"), RESP_ERROR_MSG_INVALID_PASSWORD)
+            "error"), RESP_ERROR_MSG_INVALID_PASSWORD)
 
     def test_register_invalidothername(self):
         """test register with an invalid othername"""
@@ -189,7 +192,7 @@ class TestAuthView(unittest.TestCase):
         }), content_type="application/json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.data).get(
-            "message"), RESP_ERROR_MSG_INVALID_OTHERNAME)
+            "error"), RESP_ERROR_MSG_INVALID_OTHERNAME)
 
     def test_register_invalidfirstname(self):
         """test register with an invalid firstname"""
@@ -204,7 +207,7 @@ class TestAuthView(unittest.TestCase):
         }), content_type="application/json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.data).get(
-            "message"), RESP_ERROR_MSG_INVALID_NAME)
+            "error"), RESP_ERROR_MSG_INVALID_NAME)
 
     def test_register_invalidusername(self):
         """test register with an invalid username"""
@@ -219,7 +222,7 @@ class TestAuthView(unittest.TestCase):
         }), content_type="application/json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.data).get(
-            "message"), RESP_ERROR_MSG_INVALID_USERNAME)
+            "error"), RESP_ERROR_MSG_INVALID_USERNAME)
 
     def test_register_asuccessfully(self):
         """test register user successifully"""
@@ -263,7 +266,7 @@ class TestAuthView(unittest.TestCase):
         }), content_type="application/json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.data).get(
-            "message"), RESP_ERROR_MSG_SIGNUP_FAIL_USER_EXISTS)
+            "error"), RESP_ERROR_MSG_SIGNUP_FAIL_USER_EXISTS)
 
     def test_register_takenemail(self):
         """test register user with email already taken"""
@@ -278,7 +281,7 @@ class TestAuthView(unittest.TestCase):
         }), content_type="application/json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.data).get(
-            "message"), RESP_ERROR_MSG_SIGNUP_FAIL_USER_EXISTS)
+            "error"), RESP_ERROR_MSG_SIGNUP_FAIL_USER_EXISTS)
 
     def test_register_takenphone(self):
         """test register user with phone already taken"""
@@ -294,7 +297,7 @@ class TestAuthView(unittest.TestCase):
         }), content_type="application/json")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.data).get(
-            "message"), RESP_ERROR_MSG_SIGNUP_FAIL_USER_EXISTS)
+            "error"), RESP_ERROR_MSG_SIGNUP_FAIL_USER_EXISTS)
 
     def test_signin_wrongpassword(self):
         """test sign-in with wrong password"""
@@ -304,7 +307,7 @@ class TestAuthView(unittest.TestCase):
         }), content_type="application/json")
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 401)
-        self.assertEqual(response_data.get("message"),
+        self.assertEqual(response_data.get("error"),
                          RESP_ERROR_MSG_LOGIN_FAILED)
 
     def test_signin_emptyfield(self):
@@ -315,7 +318,7 @@ class TestAuthView(unittest.TestCase):
         }), content_type="application/json")
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response_data.get("message"), RESP_ERROR_MSG_EMPTY_STRING)
+        self.assertEqual(response_data.get("error"), RESP_ERROR_MSG_EMPTY_STRING)
 
     def test_signin_successfully(self):
         """test sign in successfully"""

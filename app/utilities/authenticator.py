@@ -2,11 +2,12 @@
 from functools import wraps
 import jwt
 
-from flask import request
+from flask import request, Response
 
 from app.utilities.static_strings import (
     RESP_ERROR_UNAUTHORIZED_VIEW,
-    RESP_ERROR_ADMIN_ONLY
+    RESP_ERROR_ADMIN_ONLY,
+    RESP_ERROR_NOT_LOGGEDIN
 )
 
 
@@ -19,6 +20,8 @@ class Authenticator():
         @wraps(fxn)
         def wrapper(*args, **kwargs):
             user_identity = Authenticator.get_identity(Authenticator, Authenticator.get_token(Authenticator))
+            if isinstance(user_identity, Response):
+                return user_identity
             if str(user_identity["is_admin"]).lower() == "true" \
                     or str(user_identity["is_admin"]).lower() == "false":
                 return fxn(*args, **kwargs)
@@ -31,8 +34,8 @@ class Authenticator():
         @wraps(fxn)
         def wrapper(*args, **kwargs):
             user_identity = Authenticator.get_identity(Authenticator, Authenticator.get_token(Authenticator))
-            if "Authorization" not in request.headers:
-                return RESP_ERROR_UNAUTHORIZED_VIEW
+            if isinstance(user_identity, Response):
+                return user_identity
             elif not user_identity["is_admin"]:
                 return fxn(*args, **kwargs)
             else:
@@ -45,6 +48,9 @@ class Authenticator():
         @wraps(fxn)
         def wrapper(*args, **kwargs):
             user_identity = Authenticator.get_identity(Authenticator, Authenticator.get_token(Authenticator))
+            if isinstance(user_identity, Response):
+                return user_identity
+
             if user_identity["is_admin"]:
                 return fxn(*args, **kwargs)
             else:
@@ -63,8 +69,8 @@ class Authenticator():
 
 
     def get_identity(self, jwt_token):
-        if isinstance(jwt_token, bytes):
-            return RESP_ERROR_UNAUTHORIZED_VIEW
-        else:
+        try:
             my_payload = jwt.decode(jwt_token, "thereisgoodintheworld", algorithms="HS256")
             return my_payload.get("user_identity")
+        except:
+            return RESP_ERROR_NOT_LOGGEDIN

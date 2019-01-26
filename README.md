@@ -12,12 +12,16 @@ This project is about a set of endpoints for the ireporter App. The data used is
 * Create a red-flag incident.
 * Get a red-flag incident by id.
 * Get all red-flag incidents.
+* Get all red-flag incidents for a particular user.
+* Update a red-flag incident's comment by id.
 * Update a red-flag incident's location by id.
 * Update a red-flag incident's status by id.
 * Delete a red-flag incident by id.
 * Create an intervention incident.
 * Get all intervention incidents.
+* Get all intervention incidents for a particular user.
 * Get an intervention incident by id.
+* Update an intervention incident's comment by id.
 * Update an intervention incident's location by id.
 * Update an intervention incident's status by id.
 * Delete an intervention incident by id.
@@ -129,6 +133,9 @@ On running that command, the application server will be launched and the URL to 
 * While in the root of the project, run the command below to run the unit tests and also generate a coverage report.
 - `pytest --cov`
 
+## Database Model
+![A database model](ireporter_db_model.jpg)
+
 ## System Security
 The endpoints of this web application have been secured using JWT (Json Web Tokens).
 
@@ -142,4 +149,4 @@ This API is deployed on heroku. Find it [here](https://ireporter-challenge-two.h
 ## API Documentation
 The API Endpoints of this project have been documented using Swagger UI and Postman.
 * The Swagger-UI documentation can be found [here](https://ireporter-challenge-two.herokuapp.com/api/v1/docs "iReporter Swagger-UI Documentation")
-* The Postman documentation can be found [here](https://documenter.getpostman.com/view/5689256/Rzn8QMm9 "IReporter Documentation")
+* The Postman documentation can be found [here](https://web.postman.co/collections/5689256-09f9912f-f2d4-fa99-039d-be218729dbe4?workspace=6f3eb107-ee9c-4777-8d0e-a855b8794983 "IReporter Documentation")
