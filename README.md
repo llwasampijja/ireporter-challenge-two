@@ -115,16 +115,20 @@ On running that command, the application server will be launched and the URL to 
 | [/red-flags](https://ireporter-challenge-two.herokuapp.com/api/v1/red-flags) | Create a red-flag  |POST  |	location (String), images ([String, String]), videos ([String, String]), title (String), comment (String) |
 | [/red-flags](https://ireporter-challenge-two.herokuapp.com/api/v1/red-flags)  | Get red-flags  |GET  | None |
 | [/red-flags/redflag_id](https://ireporter-challenge-two.herokuapp.com/api/v1/red-flags/3) | Get red-flag of the specified id  |GET  |None  |
+| [/red-flags/redflag_id/comment](https://ireporter-challenge-two.herokuapp.com/api/v1/red-flags/3/comment)  | Edit comment of a red-flag of the specified id  |PATCH  |	comment(String) |
 | [/red-flags/redflag_id/location](https://ireporter-challenge-two.herokuapp.com/api/v1/red-flags/3/location)  | Edit location of a red-flag of the specified id  |PATCH  |	location(String) |
 | [/red-flags/redflag_id/status](https://ireporter-challenge-two.herokuapp.com/api/v1/red-flags/3/status)  | Edit status of a red-flag of the specified id  |PATCH  | status (String)  |
 | [/red-flags/redflag_id](https://ireporter-challenge-two.herokuapp.com/api/v1/red-flags/3)  | Delete a red-flag of the specified id  |DELETE  |None  |
 | [/interventions](https://ireporter-challenge-two.herokuapp.com/api/v1/interventions) | Create a intervention  |POST  |	location (String), images ([String, String]), videos ([String, String]), title (String), comment (String) |
 | [/interventions](https://ireporter-challenge-two.herokuapp.com/api/v1/interventions)  | Get interventions  |GET  | None |
 | [/interventions/intervention_id](https://ireporter-challenge-two.herokuapp.com/api/v1/interventions/5) | Get an intervention of the specified id  |GET  |None  |
+| [/interventions/intervention_id/comment](https://ireporter-challenge-two.herokuapp.com/api/v1/interventions/3/comment)  | Edit comment of a intervention of the specified id  |PATCH  |	comment(String) |
 | [/interventions/intervention_id/location](https://ireporter-challenge-two.herokuapp.com/api/v1/interventions/5/location)  | Edit location of an intervention of the specified id  |PATCH  |•	location(String) |
 | [/interventions/intervention_id/status](https://ireporter-challenge-two.herokuapp.com/api/v1/interventions/5/status)  | Edit status of an intervention of the specified id  |PATCH  |• status (String)  |
 | [/interventions/intervention_id](https://ireporter-challenge-two.herokuapp.com/api/v1/interventions/5)  | Delete an intervention of the specified id  |DELETE  |None  |
 | [/users](https://ireporter-challenge-two.herokuapp.com/api/v1/users)  | Ge all users  |GET  | None  |
+| [/users/user_id/red-flags](https://ireporter-challenge-two.herokuapp.com/api/v1/users/2/red-flags)  | Get all redflags of a particular user  |GET  |None  |
+| [/users/user_id/interventions](https://ireporter-challenge-two.herokuapp.com/api/v1/users/2/interventions)  | Get all interventions of a particular user  |GET  |None  |
 | [/users/user_id](https://ireporter-challenge-two.herokuapp.com/api/v1/users/10)  | Edit a user's role of the specified |PATCH  | is_admin (Boolean)  |
 
 
