@@ -7,7 +7,10 @@ from flask import request, Response
 from app.utilities.static_strings import (
     RESP_ERROR_UNAUTHORIZED_VIEW,
     RESP_ERROR_ADMIN_ONLY,
-    RESP_ERROR_NOT_LOGGEDIN
+    RESP_ERROR_NOT_LOGGEDIN,
+    RESP_ERROR_CONCERNED_CITZENS_ONLY,
+    TESTING_RESPONSE,
+    RESP_ERROR_SESSION_EXPIRED
 )
 
 
@@ -39,7 +42,7 @@ class Authenticator():
             elif not user_identity["is_admin"]:
                 return fxn(*args, **kwargs)
             else:
-                return RESP_ERROR_UNAUTHORIZED_VIEW
+                return RESP_ERROR_CONCERNED_CITZENS_ONLY
         return wrapper
 
     @staticmethod
@@ -61,14 +64,16 @@ class Authenticator():
     def get_token(self):
         header = request.headers.get("Authorization")
         if not header:
-            return RESP_ERROR_UNAUTHORIZED_VIEW
+            return RESP_ERROR_NOT_LOGGEDIN
         token = str(header).split(" ")[1]
         return token
 
 
     def get_identity(self, jwt_token):
+        if isinstance(jwt_token, Response):
+            return jwt_token
         try:
             my_payload = jwt.decode(jwt_token, "thereisgoodintheworld", algorithms="HS256")
             return my_payload.get("user_identity")
         except:
-            return RESP_ERROR_NOT_LOGGEDIN
+            return RESP_ERROR_SESSION_EXPIRED
