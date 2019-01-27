@@ -1,5 +1,5 @@
 [report]
 omit =
     */__init__.py
-    */ireporter_db.py 
+    */
     */

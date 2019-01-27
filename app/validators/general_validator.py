@@ -48,12 +48,12 @@ class GeneralValidator():
             return True
         return False
 
-    @staticmethod
-    def create_id(get_incidents_instance, key_id):
-        """method for creating an id for every new item created"""
-        if not get_incidents_instance:
-            return 1
-        return 1 + get_incidents_instance[-1].get(key_id)
+    # @staticmethod
+    # def create_id(get_incidents_instance, key_id):
+    #     """method for creating an id for every new item created"""
+    #     if not get_incidents_instance:
+    #         return 1
+    #     return 1 + get_incidents_instance[-1].get(key_id)
 
     def invalid_coordinates(self, geolocation):
         """method checks if a given string includes valid coordinates"""
