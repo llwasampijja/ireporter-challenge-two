@@ -18,7 +18,8 @@ from app.utilities.static_strings import (
 
     RESP_ERROR_MSG_USER_STATUS_NORIGHTS,
     RESP_ERROR_MSG_INVALID_ROLE,
-    RESP_ERROR_MSG_USER_NOT_FOUND
+    RESP_ERROR_MSG_USER_NOT_FOUND,
+    RESP_ERROR_MSG_NOT_LOGGEDIN
 )
 
 
@@ -125,6 +126,23 @@ class TestUserView(unittest.TestCase):
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response_data.get("error"), RESP_ERROR_MSG_USER_NOT_FOUND)
+
+    def test_update_user_nonuser(self):
+        """test update user's role by admin"""
+        
+        # jwt_token = json.loads(self.admin_login_response.data)["access_token"]
+        response = self.client.patch(
+            URL_USERS + "/2",
+            # headers=dict(Authorization='Bearer ' + jwt_token),
+            data=json.dumps({
+                "is_admin": True
+            }),
+            content_type="application/json"
+        )
+        response_data = json.loads(response.data.decode())
+        # self.assertEqual(response.status_code, 201)
+        self.assertEqual(response_data.get("error"),
+                         RESP_ERROR_MSG_NOT_LOGGEDIN)
 
     def test_update_primaryadmin(self):
         """test update a primary admin"""

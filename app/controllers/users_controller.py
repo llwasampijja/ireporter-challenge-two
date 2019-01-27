@@ -63,8 +63,8 @@ class UsersController():
         password = request_info.get("password")
         registered_on = datetime.datetime.now()
 
-        user_id = self.my_validator.create_id(
-            self.usersdata.get_users(), "user_id")
+        # user_id = self.my_validator.create_id(
+        #     self.usersdata.get_users(), "user_id")
         
         if self.response_signupfail(request_info, (firstname, lastname), username):
             return self.response_signupfail(request_info, (firstname, lastname), username)
@@ -82,7 +82,7 @@ class UsersController():
         hashed_password = hashlib.sha224(b"{}").hexdigest().format(password)
 
         new_user = User(
-            user_id=user_id,
+            # user_id=user_id,
             firstname=firstname,
             lastname=lastname,
             othernames=othernames,
