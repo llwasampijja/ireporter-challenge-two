@@ -1,4 +1,5 @@
 """This module includes all strings and responses which are constant accross the app"""
+import os
 from flask import Response, json
 
 # welcome message
@@ -16,7 +17,7 @@ URL_INTERVENTIONS = "/api/v1/interventions"
 
 JWT_SECRET = "thereisgoodintheworld"
 JWT_ALGORITHM = 'HS256'
-JWT_EXP_DELTA_SECONDS = 20000
+JWT_EXP_DELTA_SECONDS = 200
 
 # swagger url string constants
 SWAGGER_UI_URL = "/api/v1/docs"
@@ -101,8 +102,30 @@ RESP_ERROR_MSG_FORBIDDEN_INCIDENT_UPDATE = "Action is forbidden: Attempting to e
 RESP_ERROR_MSG_ENTERED_NOTHING = "The request body is empty"
 RESP_ERROR_MSG_INVALID_EDIT_STRING_TYPE = "The value must be of string type"
 RESP_ERROR_MSG_NOT_LOGGEDIN = "This feature is only available to loggen in users. Sign in or signup for an account now"
+RESP_ERROR_MSG_CONCERNED_CITZENS_ONLY = "This feature is available to only the concerned citizen members of this site"
+RESP_ERROR_MSG_ADMIN_ONLY = "This feature is available to only the administrators of this site"
+RESP_ERROR_MSG_SESSION_EXPIRED = "You have been logged out of the system because your session expired. Re-login to continue enjoying this site's features"
+
+EXPIRED_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkZW50aXR5Ijp7InVzZXJfaWQiOjEsInVzZXJuYW1lIjoiZWR3YXJkIiwiaXNfYWRtaW4iOnRydWV9LCJleHAiOjE1NDg1Njk4OTN9.DWq5XHDYfNa28YeJLEhMgeu8iIcn3At79kJ12kHOFBQ"
+TESTING_STRING = "i AM TESTING THIS STRING"
 
 # string constants for various responses
+
+RESP_ERROR_SESSION_EXPIRED = Response(json.dumps({
+    "status": 401,
+    "error": RESP_ERROR_MSG_SESSION_EXPIRED
+}), content_type="application/json", status=401)
+
+
+TESTING_RESPONSE = Response(json.dumps({
+    "status": 401,
+    "error": TESTING_STRING
+}), content_type="application/json", status=401)
+
+RESP_ERROR_CONCERNED_CITZENS_ONLY = Response(json.dumps({
+    "status": 401,
+    "error": RESP_ERROR_MSG_CONCERNED_CITZENS_ONLY
+}), content_type="application/json", status=401)
 
 RESP_ERROR_NOT_LOGGEDIN = Response(json.dumps({
     "status": 400,
@@ -252,7 +275,7 @@ RESP_ERROR_UNAUTHORIZED_VIEW = Response(json.dumps({
 
 RESP_ERROR_ADMIN_ONLY = Response(json.dumps({
     "status": 401,
-    "error": RESP_ERROR_MSG_UNAUTHORIZED_VIEW
+    "error": RESP_ERROR_MSG_ADMIN_ONLY
 }), content_type="application/json", status=401)
 
 RESP_ERROR_INVALID_USER = Response(json.dumps({

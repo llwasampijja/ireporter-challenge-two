@@ -13,6 +13,8 @@ from app.utilities.static_strings import (
     URL_LOGIN,
     URL_REGISTER,
 
+    EXPIRED_TOKEN,
+
     RESP_SUCCESS_MSG_INCIDENT_STATUS_UPDATE,
     RESP_SUCCESS_MSG_INCIDENT_DELETE,
     RESP_SUCCESS_MSG_INCIDENT_UPDATE,
@@ -37,7 +39,10 @@ from app.utilities.static_strings import (
     RESP_ERROR_MSG_FORBIDDEN_INCIDENT_UPDATE,
     RESP_ERROR_MSG_BAD_REQUEST,
     RESP_ERROR_MSG_INCIDENT_DUPLICATE,
-    RESP_ERROR_MSG_NOT_LOGGEDIN
+    RESP_ERROR_MSG_NOT_LOGGEDIN,
+    RESP_ERROR_MSG_CONCERNED_CITZENS_ONLY,
+    RESP_ERROR_MSG_ADMIN_ONLY,
+    RESP_ERROR_MSG_SESSION_EXPIRED
 )
 
 
@@ -518,7 +523,7 @@ class TestRedflagView(unittest.TestCase):
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response_data.get("error"),
-                         RESP_ERROR_MSG_UNAUTHORIZED_VIEW)
+                         RESP_ERROR_MSG_ADMIN_ONLY)
 
     def test_update_redflag_comment_asuccess(self):
         """unit test for updating the redflag's comment successfully"""
@@ -762,12 +767,12 @@ class TestRedflagView(unittest.TestCase):
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response_data.get("error"),
-                         RESP_ERROR_MSG_UNAUTHORIZED_VIEW)
+                         RESP_ERROR_MSG_CONCERNED_CITZENS_ONLY)
 
     def test_acess_protected_route(self):
         response = self.client.post(
             URL_REDFLAGS,
-            headers=dict(content_type="application/json"),
+            # headers=dict(content_type="application/json"),
             data=json.dumps({
                 "location": "0.00938, 2.46287",
                 "videos": ["Video url"],
@@ -781,3 +786,28 @@ class TestRedflagView(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response_data.get("error"),
                          RESP_ERROR_MSG_NOT_LOGGEDIN)
+
+    def test_use_expired_token(self):
+        """unit test for creating redflag successfully"""     
+        jwt_token = EXPIRED_TOKEN
+
+        response = self.client.post(
+            URL_REDFLAGS,
+            headers=dict(Authorization='Bearer ' + jwt_token),
+            data=json.dumps({
+                "location": "90, 128",
+                "videos": ["Video url"],
+                "images": ["images urls"],
+                "title": "Corrupt cop",
+                "comment": "He was caught red handed"
+            }),
+            content_type="application/json"
+        )
+        data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(data.get("error"), RESP_ERROR_MSG_SESSION_EXPIRED)
+
+
+
+
+
