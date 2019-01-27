@@ -59,8 +59,6 @@ class Authenticator():
 
 
     def get_token(self):
-        if "Authorization" not in request.headers:
-            return RESP_ERROR_UNAUTHORIZED_VIEW
         header = request.headers.get("Authorization")
         if not header:
             return RESP_ERROR_UNAUTHORIZED_VIEW
