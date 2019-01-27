@@ -39,16 +39,6 @@ class TestUserView(unittest.TestCase):
         self.database_helper.create_admin()
         self.database_helper.create_incident_types()
 
-        # self.client.post(URL_REGISTER, data=json.dumps({
-        #     "firstname": "edwardd",
-        #     "lastname": "pjothw",
-        #     "othernames": "eddry",
-        #     "phonenumber": "0763372772",
-        #     "email": "edwardpjoth3@bolon.emp",
-        #     "username": "edwardpjothedwardme",
-        #     "password": "passworD#1"
-        # }), content_type="application/json")
-
         self.test_data1 = {
             "location": "2.00, 3.222",
             "videos": ["Video url"],
@@ -71,12 +61,6 @@ class TestUserView(unittest.TestCase):
 
         self.admin_jwt_token = self.common_test.admin_jwt_token()
 
-        # self.admin_login_response = self.client.post(URL_LOGIN, data=json.dumps({
-        #     "username": "edward",
-        #     "password": "i@mG8t##"
-        # }), content_type="application/json")
-        # jwt_token = json.loads(self.admin_login_response.data)["access_token"]
-
         response = self.client.get(
             URL_USERS + "",
             headers=dict(Authorization='Bearer ' + self.admin_jwt_token),
@@ -90,16 +74,6 @@ class TestUserView(unittest.TestCase):
 
     def test_update_user(self):
         """test update user's role by admin"""
-        
-        # jwt_token = json.loads(self.admin_login_response.data)["access_token"]
-        # response = self.client.patch(
-        #     URL_USERS + "/2",
-        #     headers=dict(Authorization='Bearer ' + jwt_token),
-        #     data=json.dumps({
-        #         "is_admin": True
-        #     }),
-        #     content_type="application/json"
-        # )
         response = self.common_test.response_patch_user(
             URL_USERS + "/2", {"is_admin": True}, self.admin_jwt_token
         )
@@ -110,16 +84,6 @@ class TestUserView(unittest.TestCase):
 
     def test_update_morefields(self):
         """test update user status with more fields than required"""
-        # jwt_token = json.loads(self.admin_login_response.data)["access_token"]
-        # response = self.client.patch(
-        #     URL_USERS + "/2",
-        #     headers=dict(Authorization='Bearer ' + jwt_token),
-        #     data=json.dumps({
-        #         "firstname": "no one",
-        #         "is_admin": True
-        #     }),
-        #     content_type="application/json"
-        # )
         response = self.common_test.response_patch_user(
             URL_USERS + "/2", {"firstname": "no one", "is_admin": True}, self.admin_jwt_token
         )
@@ -129,15 +93,6 @@ class TestUserView(unittest.TestCase):
 
     def test_update_roleinvalid(self):
         """test update user's role with an invalid value"""
-        # jwt_token = json.loads(self.admin_login_response.data)["access_token"]
-        # response = self.client.patch(
-        #     URL_USERS + "/2",
-        #     headers=dict(Authorization='Bearer ' + jwt_token),
-        #     data=json.dumps({
-        #         "is_admin": "admin"
-        #     }),
-        #     content_type="application/json"
-        # )
         response = self.common_test.response_patch_user(
             URL_USERS + "/2", {"is_admin": "admin"}, self.admin_jwt_token
         )
@@ -147,15 +102,6 @@ class TestUserView(unittest.TestCase):
 
     def test_update_nonexist(self):
         """test update a user who doesnt exist on the system"""
-        # jwt_token = json.loads(self.admin_login_response.data)["access_token"]
-        # response = self.client.patch(
-        #     URL_USERS + "/45",
-        #     headers=dict(Authorization='Bearer ' + jwt_token),
-        #     data=json.dumps({
-        #         "is_admin": True
-        #     }),
-        #     content_type="application/json"
-        # )
         response = self.common_test.response_patch_user(
             URL_USERS + "/45", {"is_admin": True}, self.admin_jwt_token
         )
@@ -166,18 +112,13 @@ class TestUserView(unittest.TestCase):
     def test_update_user_nonuser(self):
         """test update user's role by admin"""
         
-        # jwt_token = json.loads(self.admin_login_response.data)["access_token"]
         response = self.client.patch(
             URL_USERS + "/2",
-            # headers=dict(Authorization='Bearer ' + jwt_token),
             data=json.dumps({
                 "is_admin": True
             }),
             content_type="application/json"
         )
-        # response = self.common_test.response_patch_user(
-        #     URL_USERS + "/2", {"is_admin": True}, self.admin_jwt_token
-        # )
         response_data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response_data.get("error"),

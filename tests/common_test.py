@@ -2,8 +2,7 @@ from flask import Response, json
 from app import create_app
 from app.utilities.static_strings import (
     URL_LOGIN,
-    URL_REGISTER,
-    # URL_USERS
+    URL_REGISTER
 )
 class CommonTest():
     
@@ -77,21 +76,6 @@ class CommonTest():
         return json.loads(admin_login_response.data)["access_token"]
 
     def nonadmin_author_token(self):
-        # test_user = {
-        #     "firstname": "Dall",
-        #     "lastname": "Kased",
-        #     "othernames": "eddy",
-        #     "email": "dall@bolon.com",
-        #     "phonenumber": "0775961753",
-        #     "username": "dallkased",
-        #     "password": "ABd1234@1"
-        # }
-        # self.client.post(URL_REGISTER, data=json.dumps(test_user),
-        #                  content_type="application/json")
-        # login_response = self.client.post(URL_LOGIN, data=json.dumps({
-        #     "username": "dallkased",
-        #     "password": "ABd1234@1"
-        # }), content_type="application/json")
         login_response = self.response_login_user()
         return json.loads(login_response.data)["access_token"]
 
@@ -105,8 +89,6 @@ class CommonTest():
             "username": "dallkased",
             "password": "ABd1234@1"
         }
-        # self.client.post(URL_REGISTER, data=json.dumps(test_user),
-        #                  content_type="application/json")
         self.response_register_user(test_user)
         return self.client.post(URL_LOGIN, data=json.dumps({
             "username": "dallkased",
@@ -116,7 +98,4 @@ class CommonTest():
     def response_register_user(self, test_user_data):
         return self.client.post(URL_REGISTER, data=json.dumps(test_user_data),
                          content_type="application/json")
-        # return self.client.post(URL_LOGIN, data=json.dumps({
-        #     "username": "dallkased",
-        #     "password": "ABd1234@1"
-        # }), content_type="application/json")
+
