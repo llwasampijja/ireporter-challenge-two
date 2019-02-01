@@ -9,6 +9,7 @@ ireporter_db = IreporterDb()
 database_helper = DatabaseHelper()
 
 if __name__ == "__main__":
+    ireporter_db.drop_tables()
     ireporter_db.create_tables()
     database_helper.create_admin()
     database_helper.create_incident_types()

@@ -8,6 +8,7 @@
 	<title>Sign up</title>
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 	<script src="javascript/app.js"></script>
+	<script src="javascript/main.js"></script>
 </head>
 
 <body>
@@ -39,23 +40,32 @@
 		<div class="sign-form-container-elements-wrapper">
 			<div class="sign-form-image-wrapper">
 				<div class="sign-form-image" style="background-image: url('images/arrested.jpg');"></div>
-				<form class="sign-form">
+				<form class="sign-form" onsubmit="return false">
 					<span class="sign-form-title">User Signup</span>
 					<div class="sign-form-element sign-form-input-wrapper">
-						<input class="sign-form-input" type="text" name="user-name" placeholder="Full Name" required>
+						<input id="reg-firstname" class="sign-form-input" type="text" name="firstname" placeholder="firstname" required>
 					</div>
 					<div class="sign-form-element sign-form-input-wrapper">
-						<input class="sign-form-input" type="text" name="username" placeholder="username" required>
+						<input id="reg-lastname" class="sign-form-input" type="text" name="lastname" placeholder="lastname" required>
 					</div>
 					<div class="sign-form-element sign-form-input-wrapper">
-						<input class="sign-form-input" type="email" name="email" placeholder="Email" required>
+						<input id="reg-othernames" class="sign-form-input" type="text" name="othernames" placeholder="othernames" required>
 					</div>
 					<div class="sign-form-element sign-form-input-wrapper">
-						<input class="sign-form-input" type="password" name="password" placeholder="Password" required>
+						<input id="reg-username"  class="sign-form-input" type="text" name="username" placeholder="username" required>
+					</div>
+					<div class="sign-form-element sign-form-input-wrapper">
+						<input id="reg-email" class="sign-form-input" type="email" name="email" placeholder="Email" required>
+					</div>
+					<div class="sign-form-element sign-form-input-wrapper">
+						<input id="reg-phonenumber" class="sign-form-input" type="tel" name="phonenumber" placeholder="phonenumber" required>
+					</div>
+					<div class="sign-form-element sign-form-input-wrapper">
+						<input id="reg-password" class="sign-form-input" type="password" name="password" placeholder="Password" required>
 					</div>
 
 					<div class="sign-form-element sign-form-input-btn-wrapper">
-						<button class="sign-form-input-btn" onclick="openHomePage()">
+						<button class="sign-form-input-btn" onclick="registerUser()">
 							Sign up
 						</button>
 					</div>
