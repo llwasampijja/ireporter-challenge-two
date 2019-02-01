@@ -184,27 +184,63 @@ function openAdminManageTab(tabEvent, tabName) {
     tabContent = document.getElementsByClassName("section-manage-content");
 
     for (tabIndex = 0; tabIndex < tabContent.length; tabIndex++) {
-      tabContent[tabIndex].style.display = "none";
+        tabContent[tabIndex].style.display = "none";
     }
-    
+
     adminTabLinks = document.getElementsByClassName("admin-tab");
 
     for (tabIndex = 0; tabIndex < adminTabLinks.length; tabIndex++) {
-      adminTabLinks[tabIndex].className = adminTabLinks[tabIndex].className.replace(" active", "");
+        adminTabLinks[tabIndex].className = adminTabLinks[tabIndex].className.replace(" active", "");
     }
 
     document.getElementById(tabName).style.display = "block";
     tabEvent.currentTarget.className += " active";
-  }
+}
 
 
 function runAllJavaScript() {
     openViewReportsModal();
     openEditReportsModal();
     createNewReportsModal();
-} 
-
-function runAdminScripts(){
-    openRedFlagsSummaryModal()
-    openInterventionsSummaryModal() 
 }
+
+function runAdminScripts() {
+    openRedFlagsSummaryModal()
+    openInterventionsSummaryModal()
+}
+
+// function signInUser(){
+//     btnSignIn = document.getElementById("btn-signin")
+//     btnSignIn.addEventListener("click",)
+// }
+
+function getAllUsers() {
+    fetch('http://localhost:5000/api/v1/users')
+        .then(function (response) {
+            return response.json();
+
+        })
+        .then(function (myJson) {
+            // console.log(JSON.stringify(myJson));
+            // for (let x of myJson){
+            //     alert(myJson.firstname);
+            // }
+            alert(JSON.stringify(myJson))
+        });
+    // alert("Hello! I am an alert box!!");
+    // fetch("http://localhost:5000/api/v1/users").then((response) => { response.json() })
+    //     .then((json) => {
+    //         alert(json)
+    //     });
+    // alert("Hello! I am an alert box!!");
+
+    //     btnSignIn = document.getElementById("btn-signin")
+    //     btnSignIn.addEventListener("click", () => {
+    //         fetch ("http://localhost:5000/api/v1/users").then((response) => {response.json()})
+    //         .then((json) => {
+    //             alert(json)
+    //             alert("Hello! I am an alert box!!");
+    //         })
+    //     });
+}
+

@@ -22,7 +22,7 @@ JWT_EXP_DELTA_SECONDS = 200
 # swagger url string constants
 SWAGGER_UI_URL = "/api/v1/docs"
 # remote API documenation url
-API_URL = "https://llwasampijja.github.io/ireporter-challenge-two/ireporter_challenge_two.json"
+API_URL = "https://llwasampijja.github.io/ireporter_swagger_ui/ireporter_challenge_two.json"
 
 # dictionary for routes
 MY_ROUTES = {

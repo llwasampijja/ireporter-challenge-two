@@ -13,7 +13,7 @@ incident_controller = IncidentController()
 authenticator = Authenticator()
 
 @user_blueprint.route("", methods=["GET"])
-@authenticator.admin_only
+# @authenticator.admin_only
 def get_users():
     """method and route for getting all users"""
     return users_controller.get_users()
