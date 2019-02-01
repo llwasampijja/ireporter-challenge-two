@@ -1,6 +1,6 @@
 accessToken = "";
 function registerUser() {
-    const url = 'http://localhost:5000/api/v1/auth/register';
+    const url = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/register';
 
     let data = {
         firstname: document.getElementById("reg-firstname").value,
@@ -34,7 +34,7 @@ function registerUser() {
 }
 
 function loginUser() {
-    const url = 'http://localhost:5000/api/v1/auth/login';
+    const url = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/login';
 
     let data = {
         username: document.getElementById("login-username").value,
