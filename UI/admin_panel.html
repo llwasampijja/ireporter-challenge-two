@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Admin Panel | IReporter</title>
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <script src="javascript/app.js">
+    </script>
+</head>
+
+<body>
+    <header class="navigation">
+        <h1>IReporter</h1>
+        <nav class="bigscreen-menu-nav">
+            <ul>
+                <li class="header-nav-item"><a href="admin_panel.html">Admin Panel</a></li>
+                <li class="header-nav-item"><a href="my_reports.html">Dashboard</a></li>
+                <li class="header-nav-item"><a href="index.html">Home</a></li>
+                <li class="header-nav-item"><a href="index.html">Sign-out</a></li>
+                <li class="header-nav-item"><a href="#">About Us</a></li>
+                <li class="header-nav-item"><a href="#">Contact Us</a></li>
+                <li class="header-nav-item">
+                    <div class="down-arrow-wrapper" onclick="toggleAccountMenuVisibility()"><i class="down-arrow"></i></div>
+                </li>
+            </ul>
+        </nav>
+        <nav class="mobile-menu-btn">
+            <div onclick="toggleMobileMenuVisibility()" class="dropdownbtn">
+                <div class="dropdownbtn-icon-bar"></div>
+                <div class="dropdownbtn-icon-bar"></div>
+                <div class="dropdownbtn-icon-bar"></div>
+            </div>
+        </nav>
+    </header>
+
+    <nav id="account-menu" class="account-menu-nav">
+        <div id="account-menu">
+            <ul>
+                <li><a href="user_profile.html">My Account</a></li>
+                <li><a href="index.html">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <nav id="mobile-menu" class="account-menu-nav">
+        <ul>
+            <li class="header-nav-item"><a href="admin_panel.html">Admin Panel</a></li>
+            <li class="header-nav-item"><a href="my_reports.html">Dashboard</a></li>
+            <li class="header-nav-item"><a href="index.html">Home</a></li>
+            <li class="header-nav-item"><a href="index.html">Sign-out</a></li>
+            <li class="header-nav-item"><a href="#">About Us</a></li>
+            <li class="header-nav-item"><a href="#">Contact Us</a></li>
+            <li><a href="user_profile.html">My Account</a></li>
+            <li><a href="index.html">Logout</a></li>
+        </ul>
+    </nav>
+
+    <section>
+        <div>
+            <header class="inside-headers">
+                <h2 class="dashboard-header-element">Admin Panel</h2>
+
+                <div class="admin-control-panel-container">
+                    <button class="admin-tab" onclick="openAdminManageTab(event, 'manage-redflags')" id="openByDefault">Red-Flags</button>
+                    <button class="admin-tab" onclick="openAdminManageTab(event, 'manage-interventions')">Interventions</button>
+                    <button class="admin-tab" onclick="openAdminManageTab(event, 'manage-users')">Users</button>
+                </div>
+            </header>
+        </div>
+    </section>
+
+    <section id="manage-redflags" class="section-manage-content">
+        <section class="data-tables">
+            <div class="table-container reports-table">
+                <table>
+                    <tr>
+                        <th>Id</th>
+                        <th>Submited by</th>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Submission Date</th>
+                        <th>Image Evidence</th>
+                        <th>Video Evidence</th>
+                        <th>Status</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>John Ssebalamu</td>
+                        <td>Dirty Cop </td>
+                        <td>This cop is know to take money from drug dealers</td>
+                        <td>12/10/2018</td>
+                        <td>
+                            <img src="images/bribe-story.jpg" class="image-table" />
+                        </td>
+                        <td>
+                            <video controls>
+                                <source src="https://www.youtube.com/watch?v=ftkmRaRUK1I&t=22s" type="video/mp4">
+                                Your browser does not support HTML5 video.
+                            </video>
+                        </td>
+                        <td><span class="badge-status"><select>
+                                    <option value="pending-investigation">Pending Investigation</option>
+                                    <option value="resolved">Intervention</option>
+                                    <option value="rejected">Rejected</option>
+                                </select></span> </td>
+                    </tr>
+
+                </table>
+            </div>
+
+            <div class="table-container reports-summary-table">
+                <h3> Red-Flags Summary</h3>
+                <table>
+                    <tr>
+                        <th>Resolved</th>
+                        <th>Under Investigation</th>
+                        <th>Rejected</th>
+                        <th>Total</th>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>2</td>
+                        <td>7</td>
+                        <td>14</td>
+                    </tr>
+
+                </table>
+            </div>
+        </section>
+    </section>
+
+    <section id="manage-interventions" class="section-manage-content">
+        <section class="data-tables">
+            <div class="table-container reports-table">
+                <table>
+                    <tr>
+                        <th>Id</th>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Submission Date</th>
+                        <th>Image Evidence</th>
+                        <th>Video Evidence</th>
+                        <th>Status</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>Dirty Cop </td>
+                        <td>This cop is know to take money from drug dealers</td>
+                        <td>12/10/2018</td>
+                        <td>
+                            <img src="images/bribe-story.jpg" class="image-table" />
+                        </td>
+                        <td>
+                            <video controls>
+                                <source src="https://www.youtube.com/watch?v=ftkmRaRUK1I&t=22s" type="video/mp4">
+                                Your browser does not support HTML5 video.
+                            </video>
+                        </td>
+                        <td><span class="badge-status"><select>
+                                    <option value="pending-investigation">Pending Investigation</option>
+                                    <option value="resolved">Intervention</option>
+                                    <option value="rejected">Rejected</option>
+                                </select></span> </td>
+                    </tr>
+
+                </table>
+            </div>
+
+            <div class="table-container reports-summary-table">
+                <h3>Interventions Summary</h3>
+                <table>
+                    <tr>
+                        <th>Resolved</th>
+                        <th>Under Investigation</th>
+                        <th>Rejected</th>
+                        <th>Total</th>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>2</td>
+                        <td>7</td>
+                        <td>14</td>
+                    </tr>
+
+                </table>
+            </div>
+        </section>
+    </section>
+
+    <section id="manage-users" class="section-manage-content">
+        <section class="data-tables">
+            <div class="table-container reports-table">
+                <table>
+                    <tr>
+                        <th>Id</th>
+                        <th>Full Name</th>
+                        <th>Username</th>
+                        <th>E-Mail</th>
+                        <th>No. of Red-Flags</th>
+                        <th>No. of Interventions</th>
+                        <th>Red-Flags Summary</th>
+                        <th>Interventions Summary</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>Edward Army</td>
+                        <td>edward</td>
+                        <td>eddy@bolon.com</td>
+                        <td>4</td>
+                        <td>7</td>
+                        <td><button id="redflags-summary-btn" class="site-signup-btn site-btn dashboard-header-element badge-status">View
+                                Summary</button></td>
+                        <td><button id="interventions-summary-btn" class="site-signup-btn site-btn dashboard-header-element badge-status">View
+                                Summary</button></td>
+                    </tr>
+
+                </table>
+            </div>
+        </section>
+    </section>
+
+    <footer>
+        <div class="footer-items-container">
+            <section class="relevant-sites-links-section">
+                <div class="relevant-sites-links-container">
+                    <section class="relevant-sites-links-group">
+                        <ul>
+                            <li><a href="#">I hate corruption</a></li>
+                            <li><a href="#">Uganda Police</a></li>
+                            <li><a href="#">UPDF Official Site</a></li>
+                            <li><a href="#">President's Office</a></li>
+                            <li><a href="#">Uganda red Cross</a></li>
+                            <li><a href="#">Chess Corruption</a></li>
+                        </ul>
+                    </section>
+                    <section class="relevant-sites-links-group">
+                        <ul>
+                            <li><a href="#">Kill Corruption</a></li>
+                            <li><a href="#">UNRA</a></li>
+                            <li><a href="#">UMEME</a></li>
+                            <li><a href="#">UEDCL</a></li>
+                            <li><a href="#">Am Pure</a></li>
+                            <li><a href="#">Hiphop is Alive</a></li>
+                        </ul>
+                    </section>
+                    <section class="relevant-sites-links-group">
+                        <ul>
+                            <li><a href="#">Christmas is Coming</a></li>
+                            <li><a href="#">Christmas is upon us</a></li>
+                            <li><a href="#">Christmas is here</a></li>
+                            <li><a href="#">Save a soul</a></li>
+                            <li><a href="#">Bolongatiya</a></li>
+                            <li><a href="#">Thu Emperor</a></li>
+                        </ul>
+                    </section>
+                    <section class="relevant-sites-links-group">
+                        <ul>
+                            <li><a href="#">7AF</a></li>
+                            <li><a href="#">Kasubi</a></li>
+                            <li><a href="#">Andela Uganda</a></li>
+                            <li><a href="#">Mbajja</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms & Conditions</a></li>
+                        </ul>
+                    </section>
+                </div>
+
+            </section>
+            <div class="social-media-icons-wrapper">
+                <ul>
+                    <li><a href="#" class="social-media-icon">
+                            <div class="social-media-icon-wrapper"><img src="images/facebook-icon.jpg" /></div>
+                        </a></li>
+                    <li><a href="#" class="social-media-icon">
+                            <div class="social-media-icon-wrapper"><img src="images/twitter-icon.jpg" /></div>
+                        </a></li>
+                    <li><a href="#" class="social-media-icon">
+                            <div class="social-media-icon-wrapper"><img src="images/googleplus-icon.jpg" /></div>
+                        </a></li>
+                    <li><a href="#" class="social-media-icon">
+                            <div class="social-media-icon-wrapper"><img src="images/linkedin-icon.jpg" /></div>
+                        </a></li>
+
+                </ul>
+            </div>
+
+        </div>
+    </footer>
+
+    <!-- Red-flags Summary modal-->
+    <div id="redflags-summary-modal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+
+            <section class="data-tables">
+                <h3>Redflags Submitted by <span>John Ssebalamu</span></h3>
+                <div class="table-container reports-table">
+                    <table>
+                        <tr>
+                            <th>Id</th>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Submission Date</th>
+                            <th>Image Evidence</th>
+                            <th>Video Evidence</th>
+                            <th>Status</th>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>Dirty Cop </td>
+                            <td>This cop was seen taking money from drug dealers</td>
+                            <td>12/10/2018</td>
+                            <td>
+                                <img src="images/bribe-story.jpg" class="image-table" />
+                            </td>
+                            <td>
+                                <video controls>
+                                    <source src="https://www.youtube.com/watch?v=ftkmRaRUK1I&t=22s" type="video/mp4">
+                                    Your browser doesn't support HTML5 video.
+                                </video>
+                            </td>
+                            <td><span class="badge-status"><select>
+                                        <option value="pending-investigation">Pending Investigation</option>
+                                        <option value="resolved">Intervention</option>
+                                        <option value="rejected">Rejected</option>
+                                    </select></span> </td>
+                        </tr>
+
+                    </table>
+                </div>
+
+                <div class="table-container reports-summary-table">
+                    <h3> Red-Flags Summary</h3>
+                    <table>
+                        <tr>
+                            <th>Resolved</th>
+                            <th>Under Investigation</th>
+                            <th>Rejected</th>
+                            <th>Total</th>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>2</td>
+                            <td>7</td>
+                            <td>14</td>
+                        </tr>
+
+                    </table>
+                </div>
+            </section>
+        </div>
+
+    </div>
+
+    <!-- Red-flags Summary modal-->
+    <div id="interventions-summary-modal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+
+            <section class="data-tables">
+                <h3>Redflags Submitted by <span>Juliet Kikomeko</span></h3>
+                <div class="table-container reports-table">
+                    <table>
+                        <tr>
+                            <th>Id</th>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Submission Date</th>
+                            <th>Image Evidence</th>
+                            <th>Video Evidence</th>
+                            <th>Status</th>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>Dirty Cop </td>
+                            <td>This cop is know to take money from drug dealers</td>
+                            <td>12/10/2018</td>
+                            <td>
+                                <img src="images/bribe-story.jpg" class="image-table" alt="photo proof" />
+                            </td>
+                            <td>
+                                <video controls>
+                                    <source src="https://www.youtube.com/watch?v=ftkmRaRUK1I&t=22s" type="video/mp4">
+                                    Your browser doesn't support HTML5 video.
+                                </video>
+                            </td>
+                            <td><span class="badge-status"><select>
+                                        <option value="pending-investigation">Pending Investigation</option>
+                                        <option value="resolved">Intervention</option>
+                                        <option value="rejected">Rejected</option>
+                                    </select></span> </td>
+                        </tr>
+
+                    </table>
+                </div>
+
+                <div class="table-container reports-summary-table">
+                    <h3> Red-Flags Summary</h3>
+                    <table>
+                        <tr>
+                            <th>Resolved</th>
+                            <th>Under Investigation</th>
+                            <th>Rejected</th>
+                            <th>Total</th>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>2</td>
+                            <td>7</td>
+                            <td>14</td>
+                        </tr>
+
+                    </table>
+                </div>
+            </section>
+        </div>
+
+    </div>
+
+    <script>
+        document.getElementById("openByDefault").click();
+        runAdminScripts()
+    </script>
+
+</body>
+
+</html>

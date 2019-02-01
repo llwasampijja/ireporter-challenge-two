@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Home | IReporter</title>
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <script src="javascript/app.js"></script>
+</head>
+
+<body>
+    <header class="navigation">
+        <h1>IReporter</h1>
+        <nav class="bigscreen-menu-nav">
+            <ul>
+                <li class="header-nav-item"><a href="admin_panel.html">Admin Panel</a></li>
+                <li class="header-nav-item"><a href="my_reports.html">Dashboard</a></li>
+                <li class="header-nav-item"><a href="index.html">Home</a></li>
+                <li class="header-nav-item"><a href="login.html">Sign-out</a></li>
+                <li class="header-nav-item"><a href="#">About Us</a></li>
+                <li class="header-nav-item"><a href="#">Contact Us</a></li>
+                <li class="header-nav-item">
+                    <div class="down-arrow-wrapper" onclick="toggleAccountMenuVisibility()"><i class="down-arrow"></i></div>
+                </li>
+            </ul>
+        </nav>
+        <nav class="mobile-menu-btn">
+            <div onclick="toggleMobileMenuVisibility()" class="dropdownbtn">
+                <div class="dropdownbtn-icon-bar"></div>
+                <div class="dropdownbtn-icon-bar"></div>
+                <div class="dropdownbtn-icon-bar"></div>
+            </div>
+        </nav>
+    </header>
+
+    <nav id="account-menu" class="account-menu-nav">
+        <div id="account-menu">
+            <ul>
+                <li><a href="user_profile.html">My Account</a></li>
+                <li><a href="index.html">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <nav id="mobile-menu" class="account-menu-nav">
+        <ul>
+            <li class="header-nav-item"><a href="admin_panel.html">Admin Panel</a></li>
+            <li class="header-nav-item"><a href="my_reports.html">Dashboard</a></li>
+            <li class="header-nav-item"><a href="index.html">Home</a></li>
+            <li class="header-nav-item"><a href="index.html">Sign-out</a></li>
+            <li class="header-nav-item"><a href="#">About Us</a></li>
+            <li class="header-nav-item"><a href="#">Contact Us</a></li>
+            <li><a href="user_profile.html">My Account</a></li>
+            <li><a href="index.html">Logout</a></li>
+        </ul>
+    </nav>
+    <section class="website-banner">
+        <div class="website-banner-foreground">
+            <h2>Corruption Must Stop</h2>
+            <p>Get involved in the fight against corruption. Follow the link below to signup</p>
+            <span class="action-signup"><a href="signup.html" class="site-signup-btn">Sign Up</a></span>
+        </div>
+
+    </section>
+
+    <section>
+        <div>
+            <header class="inside-headers">
+                <h2>How can I get Involved?</h2>
+                <p>Below are some links to instructions on how you can get involved in putting an end to this gruesome
+                    act</p>
+            </header>
+            <div class="grid-container">
+                <div></div>
+                <div class="grid-box-container">
+                    <section class="grid-box-content">
+                        <div class="grid-item-thumbnail-wrapper"><img class="grid-item-thumbnail" src="images/intervention.png" /></div>
+                        <h3>What Sevo says about corruption</h3>
+                        <p>Sevo says blu blur and Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim quam
+                            consectetur quibusdam
+                            magni minus aut modi aliquid</p>
+                    </section>
+                </div>
+                <div class="grid-box-container">
+                    <section class="grid-box-content">
+                        <div class="grid-item-thumbnail-wrapper"><img class="grid-item-thumbnail" src="images/intervention.png" /></div>
+                        <h3>What Sevo says about corruption</h3>
+                        <p>Sevo says blu blur and Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim quam
+                            consectetur quibusdam
+                            magni minus aut modi aliquid</p>
+                    </section>
+                </div>
+                <div class="grid-box-container">
+                    <section class="grid-box-content">
+                        <div class="grid-item-thumbnail-wrapper"><img class="grid-item-thumbnail" src="images/intervention.png" /></div>
+                        <h3>What Sevo says about corruption</h3>
+                        <p>Sevo says blu blur and Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim quam
+                            consectetur quibusdam
+                            magni minus aut modi aliquid</p>
+                    </section>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="inquiry-section">
+        <div>
+            <header class="inside-headers">
+                <h2>Inquiries?</h2>
+                <p>Contact us using the form below.</p>
+            </header>
+        </div>
+        <div class="inquiry-form-wrapper">
+            <form class="inquiry-form">
+                <div class="inquiry-form-elements-wrapper">
+                    <div class="inquiry-form-element-wrapper">
+                        <input class="inquiry-input-field" name="name" id="inquirer-name" placeholder="Name" type="text"
+                            required>
+                    </div>
+                    <div class="inquiry-form-element-wrapper">
+                        <input class="inquiry-input-field" name="email" id="inquirer-email" placeholder="Email" type="email"
+                            required>
+                    </div>
+                    <div class="inquiry-form-element-wrapper">
+                        <textarea class="inquiry-message-box" name="inquiry-message" id="inquiry-message" placeholder="Message"
+                            rows="7"></textarea>
+                    </div>
+                    <div class="inquiry-form-element-wrapper">
+                        <span>
+                            <input class="site-signup-btn site-btn" type="submit" value="Send message">
+                        </span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-items-container">
+            <section class="relevant-sites-links-section">
+                <div class="relevant-sites-links-container">
+                    <section class="relevant-sites-links-group">
+                        <ul>
+                            <li><a href="#">I hate corruption</a></li>
+                            <li><a href="#">Uganda Police</a></li>
+                            <li><a href="#">UPDF Official Site</a></li>
+                            <li><a href="#">President's Office</a></li>
+                            <li><a href="#">Uganda red Cross</a></li>
+                            <li><a href="#">Chess Corruption</a></li>
+                        </ul>
+                    </section>
+                    <section class="relevant-sites-links-group">
+                        <ul>
+                            <li><a href="#">Kill Corruption</a></li>
+                            <li><a href="#">UNRA</a></li>
+                            <li><a href="#">UMEME</a></li>
+                            <li><a href="#">UEDCL</a></li>
+                            <li><a href="#">Am Pure</a></li>
+                            <li><a href="#">Hiphop is Alive</a></li>
+                        </ul>
+                    </section>
+                    <section class="relevant-sites-links-group">
+                        <ul>
+                            <li><a href="#">Christmas is Coming</a></li>
+                            <li><a href="#">Christmas is upon us</a></li>
+                            <li><a href="#">Christmas is here</a></li>
+                            <li><a href="#">Save a soul</a></li>
+                            <li><a href="#">Bolongatiya</a></li>
+                            <li><a href="#">Thu Emperor</a></li>
+                        </ul>
+                    </section>
+                    <section class="relevant-sites-links-group">
+                        <ul>
+                            <li><a href="#">7AF</a></li>
+                            <li><a href="#">Kasubi</a></li>
+                            <li><a href="#">Andela Uganda</a></li>
+                            <li><a href="#">Mbajja</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms & Conditions</a></li>
+                        </ul>
+                    </section>
+                </div>
+
+            </section>
+            <div class="social-media-icons-wrapper">
+                <ul>
+                    <li><a href="#" class="social-media-icon">
+                            <div class="social-media-icon-wrapper"><img src="images/facebook-icon.jpg" /></div>
+                        </a></li>
+                    <li><a href="#" class="social-media-icon">
+                            <div class="social-media-icon-wrapper"><img src="images/twitter-icon.jpg" /></div>
+                        </a></li>
+                    <li><a href="#" class="social-media-icon">
+                            <div class="social-media-icon-wrapper"><img src="images/googleplus-icon.jpg" /></div>
+                        </a></li>
+                    <li><a href="#" class="social-media-icon">
+                            <div class="social-media-icon-wrapper"><img src="images/linkedin-icon.jpg" /></div>
+                        </a></li>
+
+                </ul>
+            </div>
+
+        </div>
+    </footer>
+
+</body>
+
+</html>

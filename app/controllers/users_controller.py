@@ -141,7 +141,7 @@ class UsersController():
                 jwt_token = jwt.encode(payload, JWT_SECRET, JWT_ALGORITHM)
 
                 return Response(json.dumps({
-                    "status": 201,
+                    "status": 200,
                     "data": [
                         {
                             "user_id": user.get("user_id"),
@@ -156,7 +156,7 @@ class UsersController():
                     ],
                     "access_token": str(jwt_token)[2:-1],
                     "message": RESP_SUCCESS_MSG_AUTH_LOGIN
-                }), content_type="application/json", status=201)
+                }), content_type="application/json", status=200)
         return RESP_ERROR_LOGIN_FAILED
 
     def update_user_role(self, user_id, request_info):

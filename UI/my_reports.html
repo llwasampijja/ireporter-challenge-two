@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Dashboard | IReporter</title>
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <script src="javascript/app.js"></script>
+</head>
+
+<body>
+    <header class="navigation">
+        <h1>IReporter</h1>
+        <nav class="bigscreen-menu-nav">
+            <ul>
+                <li class="header-nav-item"><a href="admin_panel.html">Admin Panel</a></li>
+                <li class="header-nav-item"><a href="my_reports.html">Dashboard</a></li>
+                <li class="header-nav-item"><a href="index.html">Home</a></li>
+                <li class="header-nav-item"><a href="index.html">Sign-out</a></li>
+                <li class="header-nav-item"><a href="#">About Us</a></li>
+                <li class="header-nav-item"><a href="#">Contact Us</a></li>
+                <li class="header-nav-item">
+                    <div class="down-arrow-wrapper" onclick="toggleAccountMenuVisibility()"><i class="down-arrow"></i></div>
+                </li>
+            </ul>
+        </nav>
+        <nav class="mobile-menu-btn">
+            <div onclick="toggleMobileMenuVisibility()" class="dropdownbtn">
+                <div class="dropdownbtn-icon-bar"></div>
+                <div class="dropdownbtn-icon-bar"></div>
+                <div class="dropdownbtn-icon-bar"></div>
+            </div>
+        </nav>
+    </header>
+
+    <nav id="account-menu" class="account-menu-nav">
+        <div id="account-menu">
+            <ul>
+                <li><a href="user_profile.html">My Account</a></li>
+                <li><a href="index.html">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <nav id="mobile-menu" class="account-menu-nav">
+        <ul>
+            <li class="header-nav-item"><a href="admin_panel.html">Admin Panel</a></li>
+            <li class="header-nav-item"><a href="my_reports.html">Dashboard</a></li>
+            <li class="header-nav-item"><a href="index.html">Home</a></li>
+            <li class="header-nav-item"><a href="index.html">Sign-out</a></li>
+            <li class="header-nav-item"><a href="#">About Us</a></li>
+            <li class="header-nav-item"><a href="#">Contact Us</a></li>
+            <li><a href="user_profile.html">My Account</a></li>
+            <li><a href="index.html">Logout</a></li>
+        </ul>
+    </nav>
+
+    <section>
+        <div>
+            <header class="inside-headers">
+                <h2 class="dashboard-header-element">My Redflags/Interventions</h2>
+                <div class="filter-reports reports-type dashboard-header-element">
+                    <span class="dashboard-filter-item">Report type</span>
+                    <select class="dashboard-filter-item">
+                        <option value="all">All</option>
+                        <option value="redflag">Red-flag</option>
+                        <option value="intervention">Intervention</option>
+                    </select>
+                    <span class="dashboard-filter-item">Report Status</span>
+                    <select class="dashboard-filter-item">
+                        <option value="all">All</option>
+                        <option value="under-investigation">Under Investigation</option>
+                        <option value="resolved">Resolved</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
+                    <button id="filter-incidents" class="button-Filter site-signup-btn site-btn dashboard-filter-item">Filter
+                        Reports</button>
+                </div>
+                <input class="reports-search-box dashboard-header-element" type="text" placeholder="Search Incidents"
+                    id="search_reports" />
+                <button id="new-report-btn" class="site-signup-btn site-btn dashboard-header-element">Create New</button>
+            </header>
+            <div class="grid-container">
+                <div></div>
+                <div class="grid-box-container">
+                    <ul>
+                        <li>
+                            <div class="grid-item-thumbnail-wrapper"><img class="grid-item-thumbnail" src="images/intervention.png" /></div>
+                        </li>
+                        <li>Title: <span>Bad road</span></li>
+                        <li>Record Type: <span>Intervention</span></li>
+                        <li>Submission Date: <span>12/12/2018</span></li>
+                        <li>Status: <span>Resolved</span></li>
+                        <li>
+                            <div class="buttons-sowa">
+                                <button id="edit-report-btn" class="edit-report-btn">Edit</button>
+                                <button id="view-report-btn" class="view-report-btn">View</button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="grid-box-container">
+                    <ul>
+                        <li>
+                            <div class="grid-item-thumbnail-wrapper"><img class="grid-item-thumbnail" src="images/intervention.png" /></div>
+                        </li>
+                        <li>Title: <span>Corrupt Cop</span></li>
+                        <li>Record Type: <span>Red-flag</span></li>
+                        <li>Submission Date: <span>12/12/2018</span></li>
+                        <li>Status: <span>Under Investigation</span></li>
+                        <li>
+                            <div class="buttons-sowa">
+                                <button id="edit-report-btn" class="edit-report-btn">Edit</button>
+                                <button id="view-report-btn" class="view-report-btn">View</button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="grid-box-container">
+                    <ul>
+                        <li>
+                            <div class="grid-item-thumbnail-wrapper"><img class="grid-item-thumbnail" src="images/intervention.png" /></div>
+                        </li>
+                        <li>Title: <span>Corrupt Public Doctor</span></li>
+                        <li>Record Type: <span>Red-flag</span></li>
+                        <li>Submission Date: <span>12/12/2018</span></li>
+                        <li>Status: <span>Rejected</span></li>
+                        <li>
+                            <div class="buttons-sowa">
+                                <button id="edit-report-btn" class="edit-report-btn">Edit</button>
+                                <button id="view-report-btn" class="view-report-btn">View</button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="grid-box-container">
+                    <ul>
+                        <li>
+                            <div class="grid-item-thumbnail-wrapper"><img class="grid-item-thumbnail" src="images/intervention.png" /></div>
+                        </li>
+                        <li>Title: <span>Bad road</span></li>
+                        <li>Record Type: <span>Intervention</span></li>
+                        <li>Submission Date: <span>12/12/2018</span></li>
+                        <li>Status: <span>Resolved</span></li>
+                        <li>
+                            <div>
+                                <button id="edit-report-btn" class="edit-report-btn">Edit</button>
+                                <button id="view-report-btn" class="view-report-btn">View</button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="grid-box-container">
+                    <ul>
+                        <li>
+                            <div class="grid-item-thumbnail-wrapper"><img class="grid-item-thumbnail" src="images/intervention.png" /></div>
+                        </li>
+                        <li>Title: <span>Bad road</span></li>
+                        <li>Record Type: <span>Intervention</span></li>
+                        <li>Submission Date: <span>12/12/2018</span></li>
+                        <li>Status: <span>Resolved</span></li>
+                        <li>
+                            <div class="buttons-sowa">
+                                <button id="edit-report-btn" class="edit-report-btn">Edit</button>
+                                <button id="view-report-btn" class="view-report-btn">View</button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="grid-box-container">
+                    <ul>
+                        <li>
+                            <div class="grid-item-thumbnail-wrapper"><img class="grid-item-thumbnail" src="images/intervention.png" /></div>
+                        </li>
+                        <li>Title: <span>Bad road</span></li>
+                        <li>Record Type: <span>Intervention</span></li>
+                        <li>Submission Date: <span>12/12/2018</span></li>
+                        <li>Status: <span>Resolved</span></li>
+                        <li>
+                            <div class="buttons-sowa">
+                                <button id="edit-report-btn" class="edit-report-btn">Edit</button>
+                                <button id="view-report-btn" class="view-report-btn">View</button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="grid-box-container">
+                    <ul>
+                        <li>
+                            <div class="grid-item-thumbnail-wrapper"><img class="grid-item-thumbnail" src="images/intervention.png" /></div>
+                        </li>
+                        <li>Title: <span>Bad road</span></li>
+                        <li>Record Type: <span>Intervention</span></li>
+                        <li>Submission Date: <span>12/12/2018</span></li>
+                        <li>Status: <span>Resolved</span></li>
+                        <li>
+                            <div class="buttons-sowa">
+                                <button id="edit-report-btn" class="edit-report-btn">Edit</button>
+                                <button id="view-report-btn" class="view-report-btn">View</button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <footer>
+        <div class="footer-items-container">
+            <section class="relevant-sites-links-section">
+                <div class="relevant-sites-links-container">
+                    <section class="relevant-sites-links-group">
+                        <ul>
+                            <li><a href="#">I hate corruption</a></li>
+                            <li><a href="#">Uganda Police</a></li>
+                            <li><a href="#">UPDF Official Site</a></li>
+                            <li><a href="#">President's Office</a></li>
+                            <li><a href="#">Uganda red Cross</a></li>
+                            <li><a href="#">Chess Corruption</a></li>
+                        </ul>
+                    </section>
+                    <section class="relevant-sites-links-group">
+                        <ul>
+                            <li><a href="#">Kill Corruption</a></li>
+                            <li><a href="#">UNRA</a></li>
+                            <li><a href="#">UMEME</a></li>
+                            <li><a href="#">UEDCL</a></li>
+                            <li><a href="#">Am Pure</a></li>
+                            <li><a href="#">Hiphop is Alive</a></li>
+                        </ul>
+                    </section>
+                    <section class="relevant-sites-links-group">
+                        <ul>
+                            <li><a href="#">Christmas is Coming</a></li>
+                            <li><a href="#">Christmas is upon us</a></li>
+                            <li><a href="#">Christmas is here</a></li>
+                            <li><a href="#">Save a soul</a></li>
+                            <li><a href="#">Bolongatiya</a></li>
+                            <li><a href="#">Thu Emperor</a></li>
+                        </ul>
+                    </section>
+                    <section class="relevant-sites-links-group">
+                        <ul>
+                            <li><a href="#">7AF</a></li>
+                            <li><a href="#">Kasubi</a></li>
+                            <li><a href="#">Andela Uganda</a></li>
+                            <li><a href="#">Mbajja</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms & Conditions</a></li>
+                        </ul>
+                    </section>
+                </div>
+
+            </section>
+            <div class="social-media-icons-wrapper">
+                <ul>
+                    <li><a href="#" class="social-media-icon">
+                            <div class="social-media-icon-wrapper"><img src="images/facebook-icon.jpg" /></div>
+                        </a></li>
+                    <li><a href="#" class="social-media-icon">
+                            <div class="social-media-icon-wrapper"><img src="images/twitter-icon.jpg" /></div>
+                        </a></li>
+                    <li><a href="#" class="social-media-icon">
+                            <div class="social-media-icon-wrapper"><img src="images/googleplus-icon.jpg" /></div>
+                        </a></li>
+                    <li><a href="#" class="social-media-icon">
+                            <div class="social-media-icon-wrapper"><img src="images/linkedin-icon.jpg" /></div>
+                        </a></li>
+
+                </ul>
+            </div>
+
+        </div>
+    </footer>
+
+    <!-- The View Red-flag Modal -->
+    <div id="view-report-details-modal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <section>
+                <div>
+                    <header class="inside-headers">
+                        <h2 class="dashboard-header-element">Bad road</h2>
+                        <ul>
+                            <li>Record Type: <span>Intervention</span></li>
+                            <li>Submission Date: <span>12/12/2018</span></li>
+                            <li>Status: <span>Resolved</span></li>
+                        </ul>
+                    </header>
+                    <div class="content-container">
+                        <h3 class="modal-contents-item">Details about the case</h3>
+                        <p class="modal-contents-item">On the 21st of january, Seargent Kamukukury was caught taking a
+                            bribe
+                            on the street. This dashboard is for the normal users who register on
+                            the system to report any cases of corruption (red-flags) or interventions.
+                            In addition to having the header and the footer, it should show lists of
+                            reports (red-flags and interventions) that have been submitted by the
+                            user. These reports should be displayed in a grid list, with each grid
+                            list item showing a picture (if any) that was added on the report,
+                            the report title, type of report (i.e., red-flag or intervention),
+                            submission date, the status of the report, as well as a button for
+                            launching the view window of that specific red-flag or intervention.
+                            In case there is no picture, there a default picture should be used.
+                        </p>
+                        <h3 class="modal-contents-item">Photograghoc Evidence</h3>
+                        <div class="modal-contents-item">
+                            <img src="images/bribe-story.jpg" />
+                        </div>
+                        <h3 class="modal-contents-item">Video Evidence</h3>
+                        <div class="modal-contents-item">
+                            <video controls>
+                                <source src="https://www.youtube.com/watch?v=ftkmRaRUK1I&t=22s" type="video/mp4">
+                                Your browser does not support HTML5 video.
+                            </video>
+                        </div>
+                        <button id="delete-report" class="modal-contents-item edit-form-btn" onclick="confirmDelete();">Delete</button>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+
+    </div>
+
+    <!-- The Edit Red-flag/Intervention Modal -->
+    <div id="edit-report-details-modal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <section>
+                <div>
+                    <header class="inside-headers">
+                        <h2 class="dashboard-header-element">Edit Red-Flag/Intervention</h2>
+                    </header>
+                    <div class="content-container">
+                        <form>
+                            <input class="edit-report-input" type="text" name="report-title" placeholder="Title"
+                                required>
+
+                            <select class="edit-report-input">
+                                <option value="redflag">Red-Flag</option>
+                                <option value="intervention">Intervention</option>
+                            </select>
+                            <textarea class="edit-report-input" name="detailed-description" id="detailed-description"
+                                placeholder="Detailed Description" rows="7"></textarea>
+                            <div class="edit-report-input">
+                                <label class="edit-report-file">
+                                    Add Image
+                                </label>
+                                <input class="edit-report-file" type="file" name="picture" accept="image/*" />
+                            </div>
+                            <div class="edit-report-input">
+                                <label class="edit-report-file">
+                                    Add Video
+                                </label>
+                                <input class="edit-report-file" type="file" name="video" accept="video/*" />
+                            </div>
+                            <div class="edit-report-input">
+                                <button class="edit-form-btn" onclick="getLocation()">Get Coordinates</button>
+                                <textarea class="geocordinates-box" name="geocoordinates" id="geocoordinates-field"
+                                    placeholder="Geo-Coordinates" rows="1"></textarea>
+                            </div>
+                            <div class="edit-report-input">
+                                <button id="cancel-edit-report" class="edit-form-btn">Cancel</button>
+                                <button id="save-edit-report" class="edit-form-btn">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+
+    </div>
+
+    <!-- Create new red-flag/intervention modal -->
+    <div id="create-new-report-modal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <section>
+                <div>
+                    <header class="inside-headers">
+                        <h2 class="dashboard-header-element">Create new Red-Flag/Intervention</h2>
+                    </header>
+                    <div class="content-container">
+                        <form>
+                            <input class="edit-report-input" type="text" name="report-title" placeholder="Title"
+                                required>
+
+                            <select class="edit-report-input">
+                                <option value="redflag">Red-Flag</option>
+                                <option value="intervention">Intervention</option>
+                            </select>
+                            <textarea class="edit-report-input" name="detailed-description" id="detailed-description"
+                                placeholder="Detailed Description" rows="7"></textarea>
+                            <div class="edit-report-input">
+                                <label class="edit-report-file">
+                                    Add Image
+                                </label>
+                                <input class="edit-report-file" type="file" name="picture" accept="image/*" />
+                            </div>
+                            <div class="edit-report-input">
+                                <label class="edit-report-file">
+                                    Add Video
+                                </label>
+                                <input class="edit-report-file" type="file" name="video" accept="video/*" />
+                            </div>
+                            <div class="edit-report-input">
+                                <button class="edit-form-btn" onclick="getLocation()">Get Coordinates</button>
+                                <textarea class="geocordinates-box" name="geocoordinates" id="geocoordinates-field"
+                                    placeholder="Geo-Coordinates" rows="1"></textarea>
+                            </div>
+                            <div class="edit-report-input">
+                                <button id="cancel-create-report" class="edit-form-btn">Cancel</button>
+                                <button id="save-create-report" class="edit-form-btn">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+
+    </div>
+
+    <script>
+        runAllJavaScript();
+    </script>
+</body>
+
+</html>
