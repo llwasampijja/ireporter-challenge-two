@@ -7,8 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Admin Panel | IReporter</title>
     <link rel="stylesheet" type="text/css" href="css/main.css">
-    <script src="javascript/app.js">
-    </script>
+    <script src="javascript/app.js"></script>
+    <script src="javascript/main.js"></script>
 </head>
 
 <body>
@@ -66,7 +66,7 @@
                 <div class="admin-control-panel-container">
                     <button class="admin-tab" onclick="openAdminManageTab(event, 'manage-redflags')" id="openByDefault">Red-Flags</button>
                     <button class="admin-tab" onclick="openAdminManageTab(event, 'manage-interventions')">Interventions</button>
-                    <button class="admin-tab" onclick="openAdminManageTab(event, 'manage-users')">Users</button>
+                    <button class="admin-tab" onclick="openAdminManageTab(event, 'manage-users'); getAllUsers();">Users</button>
                 </div>
             </header>
         </div>
@@ -193,18 +193,18 @@
     <section id="manage-users" class="section-manage-content">
         <section class="data-tables">
             <div class="table-container reports-table">
-                <table>
+                <table id="users-list-table">
                     <tr>
                         <th>Id</th>
                         <th>Full Name</th>
+                        <th>Othernames</th>
                         <th>Username</th>
-                        <th>E-Mail</th>
-                        <th>No. of Red-Flags</th>
-                        <th>No. of Interventions</th>
-                        <th>Red-Flags Summary</th>
-                        <th>Interventions Summary</th>
+                        <th>Email</th>
+                        <th>PhoneNumber</th>
+                        <th>Is_Admin</th>
+                        <th>Registered On</th>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                         <td>1</td>
                         <td>Edward Army</td>
                         <td>edward</td>
@@ -215,7 +215,7 @@
                                 Summary</button></td>
                         <td><button id="interventions-summary-btn" class="site-signup-btn site-btn dashboard-header-element badge-status">View
                                 Summary</button></td>
-                    </tr>
+                    </tr> -->
 
                 </table>
             </div>
