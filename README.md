@@ -146,6 +146,9 @@ The endpoints of this web application have been secured using JWT (Json Web Toke
 ## URL Versioning
 The endpoints of this application have been versioned. The current version is one (1); i.e.: `api/v1`
 
+## Hosting
+This application's User Interface is hosted on [github pages](https://llwasampijja.github.io/ireporter-challenge-two/UI/signup.html).
+
 ## Deployed Version
 ### Heroku
 This API is deployed on heroku. Find it [here](https://ireporter-challenge-two.herokuapp.com/api/v1 "iReporter on Heroku")
