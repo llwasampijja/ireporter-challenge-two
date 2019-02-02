@@ -44,7 +44,10 @@ class UsersController():
     def get_users(self):
         """method for getting all users"""
         return Response(
-            json.dumps(self.usersdata.get_users()),
+            json.dumps({
+                "status": 200,
+                "data": self.usersdata.get_users()
+            }),
             content_type="application/json",
             status=200)
     
