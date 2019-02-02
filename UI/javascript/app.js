@@ -127,12 +127,12 @@ function createNewReportsModal() {
 
 function openRedFlagsSummaryModal() {
     var modal = document.getElementById('redflags-summary-modal');
-    var btn = document.getElementById("redflags-summary-btn");
+    // var btn = document.getElementById("redflags-summary-btn");
     var span = document.getElementsByClassName("close")[0];
 
-    btn.onclick = function () {
-        modal.style.display = "block";
-    }
+    // btn.onclick = function () {
+    //     modal.style.display = "block";
+    // }
 
     span.onclick = function () {
         modal.style.display = "none";

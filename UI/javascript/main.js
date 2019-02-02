@@ -87,7 +87,7 @@ function getAllUsers() {
                 var usersTable = document.getElementById("users-list-table");
                 var numberOfRows = 1;
                 for (let user of myJson.data) {
-                    alert(JSON.stringify(user));
+                    // alert(JSON.stringify(user));
                     var userRow = usersTable.insertRow(numberOfRows);
 
                     // Insert new cells (<td> elements)
