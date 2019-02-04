@@ -12,7 +12,7 @@ class User():
         self.user_id = kwargs.get("user_id")
         self.firstname = kwargs.get("firstname")
         self.lastname = kwargs.get("lastname")
-        self.othernames = "ANN"
+        self.othernames = "none"
         self.username = kwargs.get("username")
         self.email = kwargs.get("email")
         self.phonenumber = kwargs.get("phonenumber")

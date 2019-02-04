@@ -66,9 +66,57 @@ function loginUser() {
         });
 }
 
-// function getAllRedflags(incidents){
-//     const URL_INCIDENTS = 'http://localhost:5000/api/v1/' + incidents_endpoint
-// }
+function getAllIncidents(incidents, tableId){
+    const URL_INCIDENTS = 'http://localhost:5000/api/v1/' + incidents;
+    var accessToken = getCookie("jwtAccessToken");
+    let fetchData = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + accessToken
+        }
+    }
+
+    fetch(URL_INCIDENTS, fetchData)
+    .then(function (response) {
+        return response.json();
+    })
+    .then(function (jsonData){
+        if (jsonData.status == 200){
+            var redflagsTable = document.getElementById(tableId);
+            var numberOfRows = 1;
+            for (let redflag of jsonData.data){
+                var redflagsRow = redflagsTable.insertRow(numberOfRows);
+
+                var incidentIdCell0 = redflagsRow.insertCell(0);
+                var locationCell1 = redflagsRow.insertCell(1);
+                var titleCell2 = redflagsRow.insertCell(2);
+                var commentCell3 = redflagsRow.insertCell(3);
+                var imagesCell4 = redflagsRow.insertCell(4);
+                var videosCell5 = redflagsRow.insertCell(5);
+                var createdOnCell6 = redflagsRow.insertCell(6);
+                var createdByCell7 = redflagsRow.insertCell(7);
+                var statusCell8 = redflagsRow.insertCell(8);
+
+                incidentIdCell0.innerHTML = redflag.incident_id;
+                locationCell1.innerHTML = redflag.location;
+                titleCell2.innerHTML = redflag.title;
+                commentCell3.innerHTML = redflag.comment;
+                imagesCell4.innerHTML = redflag.images;
+                videosCell5.innerHTML = redflag.videos;
+                createdOnCell6.innerHTML = redflag.created_on;
+                createdByCell7.innerHTML = redflag.created_by;
+                statusCell8.innerHTML = redflag.status
+            }
+
+        } else if (jsonData.status == 401) {
+            alert(jsonData.error);
+            openSigninPage();
+        } else {
+            alert(jsonData.error);
+        }
+    })
+}
 
 function getAllRedflags(){
     const URL_REDFLAGS = 'http://localhost:5000/api/v1/red-flags'
@@ -159,7 +207,7 @@ function getAllUsers() {
                     // Add data to the new cells:
                     idCell0.innerHTML = user.user_id;
                     fullNameCell1.innerHTML = user.firstname + " " + user.lastname;
-                    otherNamesCell2.innerHTML = user.username;
+                    otherNamesCell2.innerHTML = user.othernames;
                     usernameCell3.innerHTML = user.username;
                     emailCell4.innerHTML = user.email;
                     phoneNumberCell5.innerHTML = user.phonenumber;
