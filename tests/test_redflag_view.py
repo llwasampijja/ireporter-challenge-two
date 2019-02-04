@@ -15,6 +15,7 @@ from app.utilities.static_strings import (
     URL_REGISTER,
 
     EXPIRED_TOKEN,
+    TEST_TOKEN,
 
     RESP_SUCCESS_MSG_INCIDENT_STATUS_UPDATE,
     RESP_SUCCESS_MSG_INCIDENT_DELETE,
@@ -113,11 +114,18 @@ class TestRedflagView(unittest.TestCase):
             "comment": "He was caught red handed 1"
         }
 
+        # unit test create redflag when not on the system
+        non_user_resp = self.common_test.response_post_incident(URL_REDFLAGS, self.test_data3, TEST_TOKEN)
+        non_user_resp_data = json.loads(non_user_resp.data.decode())
+        self.assertEqual(non_user_resp.status_code, 401)
+        self.assertEqual(non_user_resp_data.get("error"), RESP_ERROR_MSG_NOT_LOGGEDIN)
+
         self.client.post(
             URL_REGISTER,
             data=json.dumps(test_user2),
             content_type="application/json"
         )
+
         self.client.post(
             URL_REGISTER,
             data=json.dumps(test_user),
@@ -153,6 +161,12 @@ class TestRedflagView(unittest.TestCase):
     def tearDown(self):
         self.ireporter_db = IreporterDb()
         self.ireporter_db.drop_tables()
+
+    # def test_create_redflag_nouser(self):
+    #     "unit test for creating a redflag by a non existing user on the system"
+    #     admin_jwt_token = self.common_test.admin_jwt_token()
+    #     first create endpoint for deleting a user
+
 
     def test_create_redflag_success(self):
         """unit test for creating redflag successfully"""     
@@ -498,7 +512,7 @@ class TestRedflagView(unittest.TestCase):
             content_type="application/json"
         )
         response_data = json.loads(response.data.decode())
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 401)
         self.assertEqual(response_data.get("error"),
                          RESP_ERROR_MSG_NOT_LOGGEDIN)
 
