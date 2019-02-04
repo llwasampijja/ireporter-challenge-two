@@ -1,6 +1,6 @@
 function registerUser() {
-    const url = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/register';
-    // const url = 'http://localhost:5000/api/v1/auth/register';
+    // const url = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/register';
+    const url = 'http://localhost:5000/api/v1/auth/register';
 
     let data = {
         firstname: document.getElementById("reg-firstname").value,
@@ -34,8 +34,8 @@ function registerUser() {
 }
 
 function loginUser() {
-    const url = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/login';
-    // const url = 'http://localhost:5000/api/v1/auth/login';
+    // const url = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/login';
+    const url = 'http://localhost:5000/api/v1/auth/login';
 
     let data = {
         username: document.getElementById("login-username").value,
@@ -58,7 +58,7 @@ function loginUser() {
                 alert(myJson.message);
                 var accessToken = myJson.access_token;
                 setCookie("jwtAccessToken", accessToken, 30)
-                alert(accessToken);
+                // alert(accessToken);
                 openHomePage();
             } else {
                 alert(myJson.error)
@@ -66,9 +66,65 @@ function loginUser() {
         });
 }
 
+// function getAllRedflags(incidents){
+//     const URL_INCIDENTS = 'http://localhost:5000/api/v1/' + incidents_endpoint
+// }
+
+function getAllRedflags(){
+    const URL_REDFLAGS = 'http://localhost:5000/api/v1/red-flags'
+    var accessToken = getCookie("jwtAccessToken")
+    let fetchData = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + accessToken
+        }
+    }
+
+    fetch(URL_REDFLAGS, fetchData)
+    .then(function (response) {
+        return response.json();
+    })
+    .then(function (jsonData){
+        if (jsonData.status == 200){
+            var redflagsTable = document.getElementById("redflags-list-table");
+            var numberOfRows = 1;
+            for (let redflag of jsonData.data){
+                var redflagsRow = redflagsTable.insertRow(numberOfRows);
+
+                var incidentIdCell0 = redflagsRow.insertCell(0);
+                var locationCell1 = redflagsRow.insertCell(1);
+                var titleCell2 = redflagsRow.insertCell(2);
+                var commentCell3 = redflagsRow.insertCell(3);
+                var imagesCell4 = redflagsRow.insertCell(4);
+                var videosCell5 = redflagsRow.insertCell(5);
+                var createdOnCell6 = redflagsRow.insertCell(6);
+                var createdByCell7 = redflagsRow.insertCell(7);
+                var statusCell8 = redflagsRow.insertCell(8);
+
+                incidentIdCell0.innerHTML = redflag.incident_id;
+                locationCell1.innerHTML = redflag.location;
+                titleCell2.innerHTML = redflag.title;
+                commentCell3.innerHTML = redflag.comment;
+                imagesCell4.innerHTML = redflag.images;
+                videosCell5.innerHTML = redflag.videos;
+                createdOnCell6.innerHTML = redflag.created_on;
+                createdByCell7.innerHTML = redflag.created_by;
+                statusCell8.innerHTML = redflag.status
+            }
+
+        } else if (jsonData.status == 401) {
+            alert(jsonData.error);
+            openSigninPage();
+        } else {
+            alert(jsonData.error);
+        }
+    })
+}
+
 function getAllUsers() {
-    const url = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users';
-    // const url = 'http://localhost:5000/api/v1/users';
+    // const url = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users';
+    const url = 'http://localhost:5000/api/v1/users';
     // The parameters we are gonna pass to the fetch function
     var accessToken = getCookie("jwtAccessToken")
     let fetchData = {

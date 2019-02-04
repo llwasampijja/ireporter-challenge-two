@@ -147,12 +147,12 @@ function openRedFlagsSummaryModal() {
 
 function openInterventionsSummaryModal() {
     var modal = document.getElementById('interventions-summary-modal');
-    var btn = document.getElementById("interventions-summary-btn");
+    // var btn = document.getElementById("interventions-summary-btn");
     var span = document.getElementsByClassName("close")[1];
 
-    btn.onclick = function () {
-        modal.style.display = "block";
-    }
+    // btn.onclick = function () {
+    //     modal.style.display = "block";
+    // }
 
     span.onclick = function () {
         modal.style.display = "none";

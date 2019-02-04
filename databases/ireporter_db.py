@@ -2,26 +2,30 @@ import psycopg2
 import os
 
 from config import environment_config, runtime_mode
+from app.utilities.static_strings import RESP_ERROR_MSG_DATABASE_CONNECTION
 
 class IreporterDb():
 
     def __init__(self):
         """class initializing method"""
-        self.database_name = ""
-        self.database_connect = None
+        try:
+            self.database_name = ""
+            self.database_connect = None
 
-        if runtime_mode == "development":
-            self.database_connect = self.database_connection("ireporter_db")
+            if runtime_mode == "development":
+                self.database_connect = self.database_connection("ireporter_db")
 
-        if runtime_mode == "testing":
-            self.database_connect = self.database_connection("testing_db")
+            if runtime_mode == "testing":
+                self.database_connect = self.database_connection("testing_db")
 
-        if runtime_mode == "production":
-            DATABASE_URL = os.environ['DATABASE_URL']
-            self.database_connect = psycopg2.connect(DATABASE_URL, sslmode='require')
+            if runtime_mode == "production":
+                DATABASE_URL = os.environ['DATABASE_URL']
+                self.database_connect = psycopg2.connect(DATABASE_URL, sslmode='require')
 
-        self.database_connect.autocommit = True
-        self.cursor_database = self.database_connect.cursor()
+            self.database_connect.autocommit = True
+            self.cursor_database = self.database_connect.cursor()
+        except:
+            print (RESP_ERROR_MSG_DATABASE_CONNECTION)
 
     def database_connection(self, database_name):
         """method to connect to appropriate database basing on the database name"""
@@ -115,7 +119,7 @@ class IreporterDb():
             '{registered_on}'
         ) RETURNING user_id"""
         self.cursor_database.execute(sql_query)
-        print(self.cursor_database.fetchall()) 
+        return self.cursor_database.fetchall()
 
     def insert_data_interventions(self, incident_type, location, title, comment, images, videos, created_on, created_by,  status):
         sql_query = """INSERT INTO interventions(
@@ -128,10 +132,11 @@ class IreporterDb():
             created_on,
             created_by,
             status
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);"""
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING incident_id;"""
 
         data = (incident_type, location, title, comment, images, videos, created_on, created_by,  status)
         self.cursor_database.execute(sql_query, data)
+        return self.cursor_database.fetchall()
 
     def insert_data_redflags(self, incident_type, location, title, comment, images, videos, created_on, created_by,  status):
         sql_query = """INSERT INTO redflags(
@@ -144,10 +149,12 @@ class IreporterDb():
             created_on,
             created_by,
             status
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);"""
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING incident_id;"""
+        
 
         data = (incident_type, location, title, comment, images, videos, created_on, created_by,  status)
         self.cursor_database.execute(sql_query, data)
+        return self.cursor_database.fetchall()
 
     def fetch_data_users(self, app_users):
         sql_query = f"""SELECT * FROM {app_users}"""

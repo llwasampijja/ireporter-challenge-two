@@ -17,7 +17,7 @@ URL_INTERVENTIONS = "/api/v1/interventions"
 
 JWT_SECRET = "thereisgoodintheworld"
 JWT_ALGORITHM = 'HS256'
-JWT_EXP_DELTA_SECONDS = 200
+JWT_EXP_DELTA_SECONDS = 20000
 
 # swagger url string constants
 SWAGGER_UI_URL = "/api/v1/docs"
@@ -105,11 +105,17 @@ RESP_ERROR_MSG_NOT_LOGGEDIN = "This feature is only available to loggen in users
 RESP_ERROR_MSG_CONCERNED_CITZENS_ONLY = "This feature is available to only the concerned citizen members of this site"
 RESP_ERROR_MSG_ADMIN_ONLY = "This feature is available to only the administrators of this site"
 RESP_ERROR_MSG_SESSION_EXPIRED = "You have been logged out of the system because your session expired. Re-login to continue enjoying this site's features"
-
+RESP_ERROR_MSG_DATABASE_CONNECTION = "The server experienced a database connection error."
 EXPIRED_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkZW50aXR5Ijp7InVzZXJfaWQiOjEsInVzZXJuYW1lIjoiZWR3YXJkIiwiaXNfYWRtaW4iOnRydWV9LCJleHAiOjE1NDg1Njk4OTN9.DWq5XHDYfNa28YeJLEhMgeu8iIcn3At79kJ12kHOFBQ"
+TEST_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkZW50aXR5Ijp7InVzZXJfaWQiOjIsInVzZXJuYW1lIjoiZWR3YXJkcGpvdGhlZHdhcmRtZSIsImlzX2FkbWluIjpmYWxzZX0sImV4cCI6MTc0OTI3MzY4NX0.VM2kALCzF3yGI4yx1VgspfL8EAbErzVd3GeuElUOPz8"
 TESTING_STRING = "i AM TESTING THIS STRING"
 
 # string constants for various responses
+
+RESP_ERROR_DATABASE_CONNECTION = Response(json.dumps({
+    "status": 500,
+    "error": RESP_ERROR_MSG_DATABASE_CONNECTION
+}), content_type="application/json", status=500)
 
 RESP_ERROR_SESSION_EXPIRED = Response(json.dumps({
     "status": 401,
@@ -128,9 +134,9 @@ RESP_ERROR_CONCERNED_CITZENS_ONLY = Response(json.dumps({
 }), content_type="application/json", status=401)
 
 RESP_ERROR_NOT_LOGGEDIN = Response(json.dumps({
-    "status": 400,
+    "status": 401,
     "error": RESP_ERROR_MSG_NOT_LOGGEDIN
-}), content_type="application/json", status=400)
+}), content_type="application/json", status=401)
 
 RESP_ERROR_INVALID_COMMENT_STRING_TYPE = Response(json.dumps({
     "status": 400,

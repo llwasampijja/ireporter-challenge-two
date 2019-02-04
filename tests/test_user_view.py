@@ -120,7 +120,7 @@ class TestUserView(unittest.TestCase):
             content_type="application/json"
         )
         response_data = json.loads(response.data.decode())
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 401)
         self.assertEqual(response_data.get("error"),
                          RESP_ERROR_MSG_NOT_LOGGEDIN)
 

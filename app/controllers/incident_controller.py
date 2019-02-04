@@ -34,7 +34,8 @@ from app.utilities.static_strings import (
     RESP_ERROR_UNAUTHORIZED_VIEW,
     RESP_ERROR_FORBIDDEN_INCIDENT_UPDATE,
     RESP_ERROR_ENTERED_NOTHING,
-    RESP_ERROR_INVALID_COMMENT_STRING_TYPE
+    RESP_ERROR_INVALID_COMMENT_STRING_TYPE,
+    RESP_ERROR_NOT_LOGGEDIN
 )
 
 class IncidentController:
@@ -59,6 +60,9 @@ class IncidentController:
 
         strings_turple = (location, title, comment)
         media_turple = (videos, images)
+
+        if all(user.get("user_id") != created_by for user in self.users_controller.export_users()):
+            return RESP_ERROR_NOT_LOGGEDIN
      
         if self.response_create_incident_failed(request_data, strings_turple, media_turple):
             return self.response_create_incident_failed(request_data, strings_turple, media_turple)
@@ -80,12 +84,15 @@ class IncidentController:
             created_by=created_by,
             status=status      
         )
-        self.incident_data.create_incident(
-            new_incident.incident_dict(keyword), keyword)
+
+        new_incident_dict = new_incident.incident_dict(keyword)
+        incident_id = self.incident_data.create_incident(
+            new_incident.incident_dict(keyword), keyword)[0][0]
+        new_incident_dict.update({"incident_id": incident_id})
 
         return Response(json.dumps({
             "status": 201,
-            "data": [new_incident.incident_dict(keyword)],
+            "data": [new_incident_dict],
             "message": RESP_SUCCESS_MSG_CREATE_INCIDENT
         }), content_type="application/json", status=201)
 
