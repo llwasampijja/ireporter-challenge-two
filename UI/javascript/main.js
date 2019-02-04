@@ -1,6 +1,6 @@
 function registerUser() {
-    // const url = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/register';
-    const url = 'http://localhost:5000/api/v1/auth/register';
+    const url = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/register';
+    // const url = 'http://localhost:5000/api/v1/auth/register';
 
     let data = {
         firstname: document.getElementById("reg-firstname").value,
@@ -34,8 +34,8 @@ function registerUser() {
 }
 
 function loginUser() {
-    // const url = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/login';
-    const url = 'http://localhost:5000/api/v1/auth/login';
+    const url = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/login';
+    // const url = 'http://localhost:5000/api/v1/auth/login';
 
     let data = {
         username: document.getElementById("login-username").value,
@@ -67,7 +67,8 @@ function loginUser() {
 }
 
 function getAllIncidents(incidents, tableId){
-    const URL_INCIDENTS = 'http://localhost:5000/api/v1/' + incidents;
+    const URL_INCIDENTS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents;
+    // const URL_INCIDENTS = 'http://localhost:5000/api/v1/' + incidents;
     var accessToken = getCookie("jwtAccessToken");
     let fetchData = {
         method: 'GET',
@@ -83,82 +84,30 @@ function getAllIncidents(incidents, tableId){
     })
     .then(function (jsonData){
         if (jsonData.status == 200){
-            var redflagsTable = document.getElementById(tableId);
+            var incidentsTable = document.getElementById(tableId);
             var numberOfRows = 1;
-            for (let redflag of jsonData.data){
-                var redflagsRow = redflagsTable.insertRow(numberOfRows);
+            for (let incident of jsonData.data){
+                var incidentRow = incidentsTable.insertRow(numberOfRows);
 
-                var incidentIdCell0 = redflagsRow.insertCell(0);
-                var locationCell1 = redflagsRow.insertCell(1);
-                var titleCell2 = redflagsRow.insertCell(2);
-                var commentCell3 = redflagsRow.insertCell(3);
-                var imagesCell4 = redflagsRow.insertCell(4);
-                var videosCell5 = redflagsRow.insertCell(5);
-                var createdOnCell6 = redflagsRow.insertCell(6);
-                var createdByCell7 = redflagsRow.insertCell(7);
-                var statusCell8 = redflagsRow.insertCell(8);
+                var incidentIdCell0 = incidentRow.insertCell(0);
+                var locationCell1 = incidentRow.insertCell(1);
+                var titleCell2 = incidentRow.insertCell(2);
+                var commentCell3 = incidentRow.insertCell(3);
+                var imagesCell4 = incidentRow.insertCell(4);
+                var videosCell5 = incidentRow.insertCell(5);
+                var createdOnCell6 = incidentRow.insertCell(6);
+                var createdByCell7 = incidentRow.insertCell(7);
+                var statusCell8 = incidentRow.insertCell(8);
 
-                incidentIdCell0.innerHTML = redflag.incident_id;
-                locationCell1.innerHTML = redflag.location;
-                titleCell2.innerHTML = redflag.title;
-                commentCell3.innerHTML = redflag.comment;
-                imagesCell4.innerHTML = redflag.images;
-                videosCell5.innerHTML = redflag.videos;
-                createdOnCell6.innerHTML = redflag.created_on;
-                createdByCell7.innerHTML = redflag.created_by;
-                statusCell8.innerHTML = redflag.status
-            }
-
-        } else if (jsonData.status == 401) {
-            alert(jsonData.error);
-            openSigninPage();
-        } else {
-            alert(jsonData.error);
-        }
-    })
-}
-
-function getAllRedflags(){
-    const URL_REDFLAGS = 'http://localhost:5000/api/v1/red-flags'
-    var accessToken = getCookie("jwtAccessToken")
-    let fetchData = {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + accessToken
-        }
-    }
-
-    fetch(URL_REDFLAGS, fetchData)
-    .then(function (response) {
-        return response.json();
-    })
-    .then(function (jsonData){
-        if (jsonData.status == 200){
-            var redflagsTable = document.getElementById("redflags-list-table");
-            var numberOfRows = 1;
-            for (let redflag of jsonData.data){
-                var redflagsRow = redflagsTable.insertRow(numberOfRows);
-
-                var incidentIdCell0 = redflagsRow.insertCell(0);
-                var locationCell1 = redflagsRow.insertCell(1);
-                var titleCell2 = redflagsRow.insertCell(2);
-                var commentCell3 = redflagsRow.insertCell(3);
-                var imagesCell4 = redflagsRow.insertCell(4);
-                var videosCell5 = redflagsRow.insertCell(5);
-                var createdOnCell6 = redflagsRow.insertCell(6);
-                var createdByCell7 = redflagsRow.insertCell(7);
-                var statusCell8 = redflagsRow.insertCell(8);
-
-                incidentIdCell0.innerHTML = redflag.incident_id;
-                locationCell1.innerHTML = redflag.location;
-                titleCell2.innerHTML = redflag.title;
-                commentCell3.innerHTML = redflag.comment;
-                imagesCell4.innerHTML = redflag.images;
-                videosCell5.innerHTML = redflag.videos;
-                createdOnCell6.innerHTML = redflag.created_on;
-                createdByCell7.innerHTML = redflag.created_by;
-                statusCell8.innerHTML = redflag.status
+                incidentIdCell0.innerHTML = incident.incident_id;
+                locationCell1.innerHTML = incident.location;
+                titleCell2.innerHTML = incident.title;
+                commentCell3.innerHTML = incident.comment;
+                imagesCell4.innerHTML = incident.images;
+                videosCell5.innerHTML = incident.videos;
+                createdOnCell6.innerHTML = incident.created_on;
+                createdByCell7.innerHTML = incident.created_by;
+                statusCell8.innerHTML = incident.status
             }
 
         } else if (jsonData.status == 401) {
@@ -171,8 +120,8 @@ function getAllRedflags(){
 }
 
 function getAllUsers() {
-    // const url = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users';
-    const url = 'http://localhost:5000/api/v1/users';
+    const url = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users';
+    // const url = 'http://localhost:5000/api/v1/users';
     // The parameters we are gonna pass to the fetch function
     var accessToken = getCookie("jwtAccessToken")
     let fetchData = {
