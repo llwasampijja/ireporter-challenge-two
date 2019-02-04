@@ -64,7 +64,7 @@
                 <h2 class="dashboard-header-element">Admin Panel</h2>
 
                 <div class="admin-control-panel-container">
-                    <button class="admin-tab" onclick="openAdminManageTab(event, 'manage-redflags'); getAllRedflags();" id="openByDefault">Red-Flags</button>
+                    <button class="admin-tab" onclick="openAdminManageTab(event, 'manage-redflags'); getAllIncidents('red-flags', 'redflags-list-table')" id="openByDefault">Red-Flags</button>
                     <button class="admin-tab" onclick="openAdminManageTab(event, 'manage-interventions'); getAllIncidents('interventions', 'interventions-list-table')">Interventions</button>
                     <button class="admin-tab" onclick="openAdminManageTab(event, 'manage-users'); getAllUsers();">Users</button>
                 </div>
