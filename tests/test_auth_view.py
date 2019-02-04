@@ -222,7 +222,7 @@ class TestAuthView(unittest.TestCase):
     def test_signin_successfully(self):
         """test sign in successfully"""
         response = self.common_test.response_login_user()
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(json.loads(response.data).get(
             "message"), RESP_SUCCESS_MSG_AUTH_LOGIN)
 

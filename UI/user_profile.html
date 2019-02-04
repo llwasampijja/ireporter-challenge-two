@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Profile | IReporter</title>
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <script src="javascript/app.js"></script>
+</head>
+
+<body>
+    <header class="navigation">
+        <h1>IReporter</h1>
+        <nav class="bigscreen-menu-nav">
+            <ul>
+                <li class="header-nav-item"><a href="admin_panel.html">Admin Panel</a></li>
+                <li class="header-nav-item"><a href="my_reports.html">Dashboard</a></li>
+                <li class="header-nav-item"><a href="index.html">Home</a></li>
+                <li class="header-nav-item"><a href="index.html">Sign-out</a></li>
+                <li class="header-nav-item"><a href="#">About Us</a></li>
+                <li class="header-nav-item"><a href="#">Contact Us</a></li>
+                <li class="header-nav-item">
+                    <div class="down-arrow-wrapper" onclick="toggleAccountMenuVisibility(this)"><i class="down-arrow"></i></div>
+                </li>
+            </ul>
+        </nav>
+        <nav class="mobile-menu-btn">
+            <div onclick="toggleMobileMenuVisibility()" class="dropdownbtn">
+                <div class="dropdownbtn-icon-bar"></div>
+                <div class="dropdownbtn-icon-bar"></div>
+                <div class="dropdownbtn-icon-bar"></div>
+            </div>
+        </nav>
+    </header>
+
+    <nav id="account-menu" class="account-menu-nav">
+        <div id="account-menu">
+            <ul>
+                <li><a href="user_profile.html">My Account</a></li>
+                <li><a href="index.html">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <nav id="mobile-menu" class="account-menu-nav">
+        <ul>
+            <li class="header-nav-item"><a href="admin_panel.html">Admin Panel</a></li>
+            <li class="header-nav-item"><a href="my_reports.html">Dashboard</a></li>
+            <li class="header-nav-item"><a href="index.html">Home</a></li>
+            <li class="header-nav-item"><a href="index.html">Sign-out</a></li>
+            <li class="header-nav-item"><a href="#">About Us</a></li>
+            <li class="header-nav-item"><a href="#">Contact Us</a></li>
+            <li><a href="user_profile.html">My Account</a></li>
+            <li><a href="index.html">Logout</a></li>
+        </ul>
+    </nav>
+
+    <section class="profile-sections">
+        <div class="profile-container">
+            <div class="profile-content-wrapper">
+                <div class="profile-image-wrapper profile-group">
+                    <img src="images/ann.jpg" alt="profile image">
+                </div>
+                <div class="profile-summury-container profile-group">
+                    <div class="profile-summury-wrapper">
+                        <p>
+                            <div class="user-profile-detail">
+                                <label class="user-profile-label">
+                                    Name:
+                                </label>
+                                <p class="user-profile-value">Ann Night</p>
+                            </div>
+                        </p>
+
+                        <p>
+                            <div class="user-profile-detail">
+                                <label class="user-profile-label">
+                                    Contact Phone Number:
+                                </label>
+                                <p class="user-profile-value">0715575937</p>
+                            </div>
+                        </p>
+
+                        <p>
+                            <div class="user-profile-detail">
+                                <label class="user-profile-label">
+                                    Place of Residence:
+                                </label>
+                                <p class="user-profile-value">Mbajja Ntanzi</p>
+                            </div>
+                        </p>
+
+                        <p>
+                            <div class="user-profile-detail">
+                                <label class="user-profile-label">
+                                    Date of Birth:
+                                </label>
+                                <p class="user-profile-value">12th August 2024</p>
+                            </div>
+                        </p>
+                        <p>
+                            <div class="user-profile-detail">
+                                <label class="user-profile-label">
+                                    Next of Kin:
+                                </label>
+                                <p class="user-profile-value">Edward Army</p>
+                            </div>
+                        </p>
+
+                        <p>
+                            <div class="user-profile-detail">
+                                <label class="user-profile-label">
+                                    Next of Kin Contact:
+                                </label>
+                                <p class="user-profile-value">0794961853</p>
+                            </div>
+                        </p>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+    </section>
+    <section class="profile-sections">
+        <button id="edit-profile-btn" class="site-signup-btn site-btn profile-group">Edit Profile</button>
+    </section>
+
+    <section class="data-tables">
+        <div class="table-container reports-table">
+            <table>
+                <tr>
+                    <th>Id</th>
+                    <th>Title</th>
+                    <th>Report Type</th>
+                    <th>Description</th>
+                    <th>Submission Date</th>
+                    <th>Image Evidence</th>
+                    <th>Video Evidence</th>
+                    <th>Status</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Dirty Cop </td>
+                    <td>Red-Flag</td>
+                    <td>This cop is know to take money from drug dealers</td>
+                    <td>12/10/2018</td>
+                    <td>
+                        <img src="images/bribe-story.jpg" class="image-table" />
+                    </td>
+                    <td>
+                        <video controls>
+                            <source src="https://www.youtube.com/watch?v=ftkmRaRUK1I&t=22s" type="video/mp4">
+                            Your browser doesn't support HTML5 video.
+                        </video>
+                    </td>
+                    <td><span class="badge-status">Pending investigation</span> </td>
+                </tr>
+
+            </table>
+        </div>
+
+        <div class="table-container reports-summary-table">
+            <table>
+                <tr>
+                    <th>Id</th>
+                    <th>Report Type</th>
+                    <th>Resolved</th>
+                    <th>Under Investigation</th>
+                    <th>Rejected</th>
+                    <th>Total</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Red-Flags</td>
+                    <td>5</td>
+                    <td>2</td>
+                    <td>7</td>
+                    <td>14</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Interventions</td>
+                    <td>5</td>
+                    <td>2</td>
+                    <td>7</td>
+                    <td>14</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Total</td>
+                    <td>10</td>
+                    <td>4</td>
+                    <td>14</td>
+                    <td>28</td>
+                </tr>
+
+            </table>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-items-container">
+            <section class="relevant-sites-links-section">
+                <div class="relevant-sites-links-container">
+                    <section class="relevant-sites-links-group">
+                        <ul>
+                            <li><a href="#">I hate corruption</a></li>
+                            <li><a href="#">Uganda Police</a></li>
+                            <li><a href="#">UPDF Official Site</a></li>
+                            <li><a href="#">President's Office</a></li>
+                            <li><a href="#">Uganda red Cross</a></li>
+                            <li><a href="#">Chess Corruption</a></li>
+                        </ul>
+                    </section>
+                    <section class="relevant-sites-links-group">
+                        <ul>
+                            <li><a href="#">Kill Corruption</a></li>
+                            <li><a href="#">UNRA</a></li>
+                            <li><a href="#">UMEME</a></li>
+                            <li><a href="#">UEDCL</a></li>
+                            <li><a href="#">Am Pure</a></li>
+                            <li><a href="#">Hiphop is Alive</a></li>
+                        </ul>
+                    </section>
+                    <section class="relevant-sites-links-group">
+                        <ul>
+                            <li><a href="#">Christmas is Coming</a></li>
+                            <li><a href="#">Christmas is upon us</a></li>
+                            <li><a href="#">Christmas is here</a></li>
+                            <li><a href="#">Save a soul</a></li>
+                            <li><a href="#">Bolongatiya</a></li>
+                            <li><a href="#">Thu Emperor</a></li>
+                        </ul>
+                    </section>
+                    <section class="relevant-sites-links-group">
+                        <ul>
+                            <li><a href="#">7AF</a></li>
+                            <li><a href="#">Kasubi</a></li>
+                            <li><a href="#">Andela Uganda</a></li>
+                            <li><a href="#">Mbajja</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms & Conditions</a></li>
+                        </ul>
+                    </section>
+                </div>
+
+            </section>
+            <div class="social-media-icons-wrapper">
+                <ul>
+                    <li><a href="#" class="social-media-icon">
+                            <div class="social-media-icon-wrapper"><img src="images/facebook-icon.jpg" /></div>
+                        </a></li>
+                    <li><a href="#" class="social-media-icon">
+                            <div class="social-media-icon-wrapper"><img src="images/twitter-icon.jpg" /></div>
+                        </a></li>
+                    <li><a href="#" class="social-media-icon">
+                            <div class="social-media-icon-wrapper"><img src="images/googleplus-icon.jpg" /></div>
+                        </a></li>
+                    <li><a href="#" class="social-media-icon">
+                            <div class="social-media-icon-wrapper"><img src="images/linkedin-icon.jpg" /></div>
+                        </a></li>
+
+                </ul>
+            </div>
+
+        </div>
+    </footer>
+
+</body>
+
+</html>
