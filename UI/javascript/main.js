@@ -66,7 +66,7 @@ function loginUser() {
         });
 }
 
-function getAllIncidents(incidents, tableId){
+function getAllIncidents(incidents, tableId) {
     const URL_INCIDENTS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents;
     // const URL_INCIDENTS = 'http://localhost:5000/api/v1/' + incidents;
     var accessToken = getCookie("jwtAccessToken");
@@ -79,44 +79,93 @@ function getAllIncidents(incidents, tableId){
     }
 
     fetch(URL_INCIDENTS, fetchData)
-    .then(function (response) {
-        return response.json();
-    })
-    .then(function (jsonData){
-        if (jsonData.status == 200){
-            var incidentsTable = document.getElementById(tableId);
-            var numberOfRows = 1;
-            for (let incident of jsonData.data){
-                var incidentRow = incidentsTable.insertRow(numberOfRows);
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (jsonData) {
+            if (jsonData.status == 200) {
+                var incidentsTable = document.getElementById(tableId);
+                var numberOfRows = 1;
+                for (let incident of jsonData.data) {
+                    var incidentRow = incidentsTable.insertRow(numberOfRows);
 
-                var incidentIdCell0 = incidentRow.insertCell(0);
-                var locationCell1 = incidentRow.insertCell(1);
-                var titleCell2 = incidentRow.insertCell(2);
-                var commentCell3 = incidentRow.insertCell(3);
-                var imagesCell4 = incidentRow.insertCell(4);
-                var videosCell5 = incidentRow.insertCell(5);
-                var createdOnCell6 = incidentRow.insertCell(6);
-                var createdByCell7 = incidentRow.insertCell(7);
-                var statusCell8 = incidentRow.insertCell(8);
+                    var incidentIdCell0 = incidentRow.insertCell(0);
+                    var locationCell1 = incidentRow.insertCell(1);
+                    var titleCell2 = incidentRow.insertCell(2);
+                    var commentCell3 = incidentRow.insertCell(3);
+                    var imagesCell4 = incidentRow.insertCell(4);
+                    var videosCell5 = incidentRow.insertCell(5);
+                    var createdOnCell6 = incidentRow.insertCell(6);
+                    var createdByCell7 = incidentRow.insertCell(7);
+                    var statusCell8 = incidentRow.insertCell(8);
+                    var viewIncidentCell9 = incidentRow.insertCell(9);
 
-                incidentIdCell0.innerHTML = incident.incident_id;
-                locationCell1.innerHTML = incident.location;
-                titleCell2.innerHTML = incident.title;
-                commentCell3.innerHTML = incident.comment;
-                imagesCell4.innerHTML = incident.images;
-                videosCell5.innerHTML = incident.videos;
-                createdOnCell6.innerHTML = incident.created_on;
-                createdByCell7.innerHTML = incident.created_by;
-                statusCell8.innerHTML = incident.status
+                    incidentIdCell0.innerHTML = incident.incident_id;
+                    locationCell1.innerHTML = incident.location;
+                    titleCell2.innerHTML = incident.title;
+                    commentCell3.innerHTML = incident.comment;
+                    imagesCell4.innerHTML = incident.images;
+                    videosCell5.innerHTML = incident.videos;
+                    createdOnCell6.innerHTML = incident.created_on;
+                    createdByCell7.innerHTML = incident.created_by;
+                    statusCell8.innerHTML = incident.status;
+                    viewIncidentCell9.innerHTML = '<button class="view-report-btn" id="but" onclick="getIncidentById( \''+incidents + '\',this, \''+tableId + '\')">View </button>';
+                }
+
+            } else if (jsonData.status == 401) {
+                alert(jsonData.error);
+                openSigninPage();
+            } else {
+                alert(jsonData.error);
             }
+        })
+}
 
-        } else if (jsonData.status == 401) {
-            alert(jsonData.error);
-            openSigninPage();
-        } else {
-            alert(jsonData.error);
+function getIncidentById(incidents, element, tableId) {
+    var incidentTable = document.getElementById(tableId);
+    myRowIndex = element.parentNode.parentNode.rowIndex;
+    var incidentId = incidentTable.rows[myRowIndex].cells[0].innerHTML
+
+
+    // var incidentId = 1;
+    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId;
+    // const URL_INCIDENTS = 'http://localhost:5000/api/v1/' + incidents + "/" + incidentId;
+    var accessToken = getCookie("jwtAccessToken");
+    let fetchData = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + accessToken
         }
-    })
+    }
+
+    fetch(URL_INCIDENT, fetchData)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (jsonData) {
+            if (jsonData.status == 200) {
+                for (let incident of jsonData.data) {
+                    incidentTitle = document.getElementById("modal-incident-title");
+                    incidentComment = document.getElementById("modal-incident-comment")
+                    incidentCreateDate = document.getElementById("modal-incident-create-date")
+                    incidentCreateBy = document.getElementById("modal-incident-creator")
+                    incidentStatus = document.getElementById("modal-incident-status")
+                
+                    incidentTitle.innerHTML = incident.title;
+                    incidentComment.innerHTML = incident.comment;
+                    incidentCreateDate.innerHTML = incident.created_on;
+                    incidentCreateBy.innerHTML = incident.created_by;
+                    incidentStatus.innerHTML = incident.status;
+                }
+
+            } else if (jsonData.status == 401) {
+                alert(jsonData.error);
+                openSigninPage();
+            } else {
+                alert(jsonData.error);
+            }
+        })
 }
 
 function getAllUsers() {
