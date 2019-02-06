@@ -86,6 +86,7 @@
                         <th>Created On</th>
                         <th>Created By</th>
                         <th>Status</th>
+                        <th>View Incident</th>
                     </tr>
                     <!-- <tr>
                         <td>1</td>
@@ -293,6 +294,47 @@
         </div>
     </footer>
 
+    <!-- The View Red-flag Modal -->
+    <div id="view-report-details-modal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <section>
+                <div>
+                    <header class="inside-headers">
+                        <h2  id="modal-incident-title" class="dashboard-header-element">Incident Title</h2>
+                        <ul>
+                            <li>Submission Date: <span id="modal-incident-create-date">Incident Date</span></li>
+                            <li>Status: <span id="modal-incident-status">Incident Status</span></li>
+                            <li>Created By: <span id="modal-incident-creator">Incident Creator</span></li>
+                        </ul>
+                    </header>
+                    <div class="content-container">
+                        <h3 class="modal-contents-item">Details about the case</h3>
+                        <p class="modal-contents-item" id="modal-incident-comment">
+                            Incident Comment(Details)
+                        </p>
+                        <h3 class="modal-contents-item">Photograghoc Evidence</h3>
+                        <div class="modal-contents-item">
+                            <img src="images/bribe-story.jpg" />
+                        </div>
+                        <h3 class="modal-contents-item">Video Evidence</h3>
+                        <div class="modal-contents-item">
+                            <video controls>
+                                <source src="https://www.youtube.com/watch?v=ftkmRaRUK1I&t=22s" type="video/mp4">
+                                Your browser does not support HTML5 video.
+                            </video>
+                        </div>
+                        <button id="delete-report" class="modal-contents-item edit-form-btn" onclick="confirmDelete();">Delete</button>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+
+    </div>
+
     <!-- Red-flags Summary modal-->
     <div id="redflags-summary-modal" class="modal">
 
@@ -429,7 +471,8 @@
 
     <script>
         document.getElementById("openByDefault").click();
-        runAdminScripts()
+        runAdminScripts();
+        runAllJavaScript();
     </script>
 
 </body>

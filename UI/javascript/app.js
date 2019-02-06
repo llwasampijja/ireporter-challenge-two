@@ -206,6 +206,7 @@ function runAllJavaScript() {
     openViewReportsModal();
     openEditReportsModal();
     createNewReportsModal();
+    // getIncidentById("red-flags");
 }
 
 function runAdminScripts() {
