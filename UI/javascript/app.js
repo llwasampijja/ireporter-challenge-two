@@ -28,6 +28,10 @@ function openHomePage() {
     location.href = 'my_reports.html'
 }
 
+function openAdminPage() {
+    location.href = 'admin_panel.html'
+}
+
 function confirmDelete() {
     var deleteMessage = confirm("Do you really want to delete this Item?");
     if (deleteMessage == true) {
