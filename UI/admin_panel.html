@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -9,6 +10,9 @@
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <script src="javascript/app.js"></script>
     <script src="javascript/main.js"></script>
+    <script>
+        checkIfUserIsLoggedIn();
+    </script>
 </head>
 
 <body>
@@ -19,7 +23,7 @@
                 <li class="header-nav-item"><a href="admin_panel.html">Admin Panel</a></li>
                 <li class="header-nav-item"><a href="my_reports.html">Dashboard</a></li>
                 <li class="header-nav-item"><a href="index.html">Home</a></li>
-                <li class="header-nav-item"><a href="index.html">Sign-out</a></li>
+                <li class="header-nav-item"><a onclick="logoutUser();">Sign-out</a></li>
                 <li class="header-nav-item"><a href="#">About Us</a></li>
                 <li class="header-nav-item"><a href="#">Contact Us</a></li>
                 <li class="header-nav-item">

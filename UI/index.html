@@ -8,17 +8,34 @@
     <title>Home | IReporter</title>
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <script src="javascript/app.js"></script>
+    <script src="javascript/main.js"></script>
+    <!-- <script>
+        homePageNotSignedIn();
+    </script> -->
 </head>
 
 <body>
     <header class="navigation">
         <h1>IReporter</h1>
-        <nav class="bigscreen-menu-nav">
+        <nav class="bigscreen-menu-nav" id="bigscreen-menu-nav-signedin">
             <ul>
                 <li class="header-nav-item"><a href="admin_panel.html">Admin Panel</a></li>
                 <li class="header-nav-item"><a href="my_reports.html">Dashboard</a></li>
                 <li class="header-nav-item"><a href="index.html">Home</a></li>
-                <li class="header-nav-item"><a href="login.html">Sign-out</a></li>
+                <li class="header-nav-item"><a onclick="logoutUser();">Sign-out</a></li>
+                <li class="header-nav-item"><a href="#">About Us</a></li>
+                <li class="header-nav-item"><a href="#">Contact Us</a></li>
+                <li class="header-nav-item">
+                    <div class="down-arrow-wrapper" onclick="toggleAccountMenuVisibility()"><i class="down-arrow"></i></div>
+                </li>
+            </ul>
+        </nav>
+        <nav class="bigscreen-menu-nav" id="bigscreen-menu-nav-signedout">
+            <ul>
+                <!-- <li class="header-nav-item"><a href="admin_panel.html">Admin Panel</a></li> -->
+                <!-- <li class="header-nav-item"><a href="my_reports.html">Dashboard</a></li> -->
+                <li class="header-nav-item"><a href="index.html">Home</a></li>
+                <li class="header-nav-item"><a href="login.html">Sign In</a></li>
                 <li class="header-nav-item"><a href="#">About Us</a></li>
                 <li class="header-nav-item"><a href="#">Contact Us</a></li>
                 <li class="header-nav-item">
@@ -49,7 +66,7 @@
             <li class="header-nav-item"><a href="admin_panel.html">Admin Panel</a></li>
             <li class="header-nav-item"><a href="my_reports.html">Dashboard</a></li>
             <li class="header-nav-item"><a href="index.html">Home</a></li>
-            <li class="header-nav-item"><a href="index.html">Sign-out</a></li>
+            <li class="header-nav-item"><a onclick="logoutUser();">Sign-out</a></li>
             <li class="header-nav-item"><a href="#">About Us</a></li>
             <li class="header-nav-item"><a href="#">Contact Us</a></li>
             <li><a href="user_profile.html">My Account</a></li>
@@ -59,8 +76,9 @@
     <section class="website-banner">
         <div class="website-banner-foreground">
             <h2>Corruption Must Stop</h2>
-            <p>Get involved in the fight against corruption. Follow the link below to signup</p>
-            <span class="action-signup"><a href="signup.html" class="site-signup-btn">Sign Up</a></span>
+            <p id="non-member-prompt-phrase">Get involved in the fight against corruption. Follow the link below to signup</p>
+            <p id="signed-member-prompt-phrase">Get involved in the fight against corruption. Report All corruption cases here</p>
+            <span class="action-signup" id="non-member-prompt-button"><a href="signup.html" class="site-signup-btn">Sign Up</a></span>
         </div>
 
     </section>
@@ -205,6 +223,9 @@
 
         </div>
     </footer>
+    <script>
+        homePageNotSignedIn();
+    </script>
 
 </body>
 

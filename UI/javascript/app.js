@@ -7,6 +7,34 @@ function toggleMobileMenuVisibility() {
     }
 }
 
+function checkIfUserIsLoggedIn() {
+    if (getCookie("jwtAccessToken") == "") {
+        openSigninPage();
+    }
+}
+
+function homePageNotSignedIn() {
+    var menuBar = document.getElementById("bigscreen-menu-nav-signedout");
+    var menuBarSignIn = document.getElementById("bigscreen-menu-nav-signedin");
+    var nonMemberPromptPhrase = document.getElementById("non-member-prompt-phrase");
+    var nonMemberPromptButton = document.getElementById("non-member-prompt-button");
+    var signedMemberPromptPhrase = document.getElementById("signed-member-prompt-phrase");
+
+    if (getCookie("jwtAccessToken") == "") {
+        menuBarSignIn.style.display = "none"
+        signedMemberPromptPhrase.style.display = "none"
+        menuBar.style.display = "block";
+        nonMemberPromptButton.style.display = "block";
+        nonMemberPromptPhrase.style.display = "block";
+    } else {
+        menuBarSignIn.style.display = "block"
+        signedMemberPromptPhrase.style.display = "block"
+        menuBar.style.display = "none";
+        nonMemberPromptButton.style.display = "none";
+        nonMemberPromptPhrase.style.display = "none";
+    }
+}
+
 function toggleAccountMenuVisibility() {
     var menu_ = document.getElementById("account-menu");
     if (menu_.style.display === "none") {
@@ -196,7 +224,7 @@ function openAdminManageTab(tabEvent, tabName) {
 
     for (tabIndex = 0; tabIndex < adminTabLinks.length; tabIndex++) {
         adminTabLinks[tabIndex].className = adminTabLinks[tabIndex].className.replace(" active", "");
-        if (tabIndex == 1){
+        if (tabIndex == 1) {
             // getAllUsers()
         }
     }

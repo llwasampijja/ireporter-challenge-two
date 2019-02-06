@@ -1,6 +1,6 @@
 function registerUser() {
-    const url = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/register';
-    // const url = 'http://localhost:5000/api/v1/auth/register';
+    // const url = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/register';
+    const url = 'http://localhost:5000/api/v1/auth/register';
 
     let data = {
         firstname: document.getElementById("reg-firstname").value,
@@ -34,8 +34,8 @@ function registerUser() {
 }
 
 function loginUser() {
-    const url = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/login';
-    // const url = 'http://localhost:5000/api/v1/auth/login';
+    // const url = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/login';
+    const url = 'http://localhost:5000/api/v1/auth/login';
 
     let data = {
         username: document.getElementById("login-username").value,
@@ -57,7 +57,7 @@ function loginUser() {
             if (myJson.status == 200) {
                 alert(myJson.message);
                 var accessToken = myJson.access_token;
-                setCookie("jwtAccessToken", accessToken, 30)
+                setCookie("jwtAccessToken", accessToken, 3)
                 // alert(accessToken);
                 openHomePage();
             } else {
@@ -67,8 +67,8 @@ function loginUser() {
 }
 
 function getAllIncidents(incidents, tableId) {
-    const URL_INCIDENTS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents;
-    // const URL_INCIDENTS = 'http://localhost:5000/api/v1/' + incidents;
+    // const URL_INCIDENTS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents;
+    const URL_INCIDENTS = 'http://localhost:5000/api/v1/' + incidents;
     var accessToken = getCookie("jwtAccessToken");
     let fetchData = {
         method: 'GET',
@@ -128,8 +128,8 @@ function getIncidentById(incidents, element, tableId) {
 
 
     // var incidentId = 1;
-    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId;
-    // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + "/" + incidentId;
+    // const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId;
+    const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + "/" + incidentId;
     var accessToken = getCookie("jwtAccessToken");
     let fetchData = {
         method: 'GET',
@@ -180,8 +180,8 @@ function getIncidentById(incidents, element, tableId) {
 }
 
 function changeIncidentStatus(incidents, incidentId) {
-    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId + "/status";
-    // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + "/" + incidentId + "/status";
+    // const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId + "/status";
+    const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + "/" + incidentId + "/status";
     incidentStatusSelect = document.getElementById("modal-incident-status-select")
     statusChange =  incidentStatusSelect.options[incidentStatusSelect.selectedIndex].text;
     var accessToken = getCookie("jwtAccessToken")
@@ -215,8 +215,8 @@ function changeIncidentStatus(incidents, incidentId) {
 }
 
 function getAllUsers() {
-    const url = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users';
-    // const url = 'http://localhost:5000/api/v1/users';
+    // const url = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users';
+    const url = 'http://localhost:5000/api/v1/users';
     // The parameters we are gonna pass to the fetch function
     var accessToken = getCookie("jwtAccessToken")
     let fetchData = {
@@ -269,7 +269,7 @@ function getAllUsers() {
 
 function setCookie(cookieName, cookieValue, expiryPeriod) {
     var date = new Date();
-    date.setTime(date.getTime() + (expiryPeriod * 24 * 60 * 60 * 1000));
+    date.setTime(date.getTime() + (expiryPeriod * 60 * 60 * 1000));
     var expires = "expires=" + date.toGMTString();
     document.cookie = cookieName + "=" + cookieValue + ";" + expires + ";path=/";
 }
@@ -288,4 +288,10 @@ function getCookie(cookieName) {
         }
     }
     return "";
+}
+
+function logoutUser(){
+    document.cookie = "jwtAccessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    openSigninPage();
+    // return document.cookie
 }

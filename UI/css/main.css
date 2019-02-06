@@ -97,6 +97,10 @@ header nav ul li a:link{
   display: none;
 }
 
+#bigscreen-menu-nav-signedout, #non-member-prompt-phrase, #non-member-prompt-button {
+  display: none;
+}
+
 /* login window */
 .sign-form-container{
   width: 100%;
@@ -227,7 +231,7 @@ input.sign-form-input {
 
 .website-banner-foreground {
   background-color: rgba(18,18,18,0.50);
-
+  padding: 10px;
 }
 
 .site-signup-btn, .view-report-btn, .edit-report-btn {
