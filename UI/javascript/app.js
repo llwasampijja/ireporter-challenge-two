@@ -13,25 +13,101 @@ function checkIfUserIsLoggedIn() {
     }
 }
 
+function avoidLoginSignupPage() {
+    if (getCookie("isAdmin") == "true") {
+        // alert(getCookie("isAdmin"))
+        openAdminPage();
+    } else if (getCookie("isAdmin") == "false"){
+        openHomePage();
+    }
+}
+
+function avoidAdminPanelForNonAdmins() {
+    if (getCookie("isAdmin") == "false") {
+        // alert(getCookie("isAdmin"))
+        openHomePage();
+    }
+}
+
+function avoidDashBoardForAdmins() {
+    if (getCookie("isAdmin") == "true") {
+        // alert(getCookie("isAdmin"))
+        openAdminPage();
+    }
+}
+
 function homePageNotSignedIn() {
-    var menuBar = document.getElementById("bigscreen-menu-nav-signedout");
-    var menuBarSignIn = document.getElementById("bigscreen-menu-nav-signedin");
+    var signedInLInks = document.getElementsByClassName("logged-user-link");
+    var mainNavSignInLInk = document.getElementById("main-nav-signin-link");
+    var nonAdminLinks = document.getElementsByClassName("non-admin-link");
+    var adminLinks = document.getElementsByClassName("admin-link");
     var nonMemberPromptPhrase = document.getElementById("non-member-prompt-phrase");
+    var tableUserprofileAllIncidents = document.getElementById("table-userprofile-all-incidents");
+    var tableUserprofileAllIncidentsSummary = document.getElementById("table-userprofile-all-incidents-summary");
     var nonMemberPromptButton = document.getElementById("non-member-prompt-button");
     var signedMemberPromptPhrase = document.getElementById("signed-member-prompt-phrase");
 
     if (getCookie("jwtAccessToken") == "") {
-        menuBarSignIn.style.display = "none"
+        // for (let signedInLInk of signedInLInks){
+        //     signedInLInk.
+        // }
+        // menuBarSignIn.style.display = "none"
         signedMemberPromptPhrase.style.display = "none"
-        menuBar.style.display = "block";
+        mainNavSignInLInk.style.display = "inline-block";
         nonMemberPromptButton.style.display = "block";
         nonMemberPromptPhrase.style.display = "block";
+    } else if (getCookie("isAdmin")==="true"){
+        for (let signedLink of signedInLInks){
+            signedLink.style.display = "inline-block";
+        }
+
+        for (let adminLink of adminLinks){
+            adminLink.style.display = "inline-block";
+        }
+        // signedInLInks.style.display = "block";
+        if (mainNavSignInLInk != null){
+            mainNavSignInLInk.style.display = "none";
+        }
+        
+        if (signedMemberPromptPhrase != null){
+            signedMemberPromptPhrase.style.display = "block"
+        }
+
+        if (nonMemberPromptButton != null){
+            nonMemberPromptButton.style.display = "none"
+        }
+
+        if (nonMemberPromptPhrase != null){
+            nonMemberPromptPhrase.style.display = "none"
+        }
+    
     } else {
-        menuBarSignIn.style.display = "block"
-        signedMemberPromptPhrase.style.display = "block"
-        menuBar.style.display = "none";
-        nonMemberPromptButton.style.display = "none";
-        nonMemberPromptPhrase.style.display = "none";
+        for (let signedLink of signedInLInks){
+            signedLink.style.display = "inline-block";
+        }
+        for (let nonAdminLink of nonAdminLinks){
+            nonAdminLink.style.display = "inline-block";
+        }
+        if (mainNavSignInLInk != null){
+            mainNavSignInLInk.style.display = "none";
+        }
+        if (signedMemberPromptPhrase != null){
+            signedMemberPromptPhrase.style.display = "block";
+        }
+        if (nonMemberPromptButton != null){
+            nonMemberPromptButton.style.display = "none";
+        }
+        if (nonMemberPromptPhrase != null){
+            nonMemberPromptPhrase.style.display = "none";
+        }
+
+        if (tableUserprofileAllIncidentsSummary != null){
+            tableUserprofileAllIncidentsSummary.style.display = "inline-block";
+        }
+
+        if (tableUserprofileAllIncidents!= null){
+            tableUserprofileAllIncidents.style.display = "inline-block";
+        }
     }
 }
 
