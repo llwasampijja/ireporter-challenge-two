@@ -6,13 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Dashboard | IReporter</title>
-    <link rel="stylesheet" type="text/css" href="css/main.css">
     <script src="javascript/app.js"></script>
     <script src="javascript/main.js"></script>
     <script>
         checkIfUserIsLoggedIn();
         avoidDashBoardForAdmins();
+        getAllIncidentsPerUser("red-flags");
+        getAllIncidentsPerUser("interventions");
     </script>
+    <link rel="stylesheet" type="text/css" href="css/main.css">
 </head>
 
 <body>
@@ -83,8 +85,8 @@
                     id="search_reports" />
                 <button id="new-report-btn" class="site-signup-btn site-btn dashboard-header-element">Create New</button>
             </header>
-            <div class="grid-container">
-                <div></div>
+            <div class="grid-container" id="grid-container-user-incidents">
+                <!-- <div></div>
                 <div class="grid-box-container">
                     <ul>
                         <li>
@@ -203,7 +205,7 @@
                             </div>
                         </li>
                     </ul>
-                </div>
+                </div> -->
             </div>
         </div>
 
