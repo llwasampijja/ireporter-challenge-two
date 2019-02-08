@@ -57,9 +57,16 @@ function loginUser() {
             if (myJson.status == 200) {
                 alert(myJson.message);
                 var accessToken = myJson.access_token;
-                setCookie("jwtAccessToken", accessToken, 30)
-                // alert(accessToken);
-                openHomePage();
+                setCookie("jwtAccessToken", accessToken, 3)
+                for (let user of myJson.data){
+                    setCookie("isAdmin", user.is_admin, 3)
+                    if (user.is_admin == true){
+                        openAdminPage();
+                    } else {
+                        openHomePage();
+                    }
+                }
+                
             } else {
                 alert(myJson.error)
             }
@@ -129,7 +136,7 @@ function getIncidentById(incidents, element, tableId) {
 
     // var incidentId = 1;
     const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId;
-    // const URL_INCIDENTS = 'http://localhost:5000/api/v1/' + incidents + "/" + incidentId;
+    // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + "/" + incidentId;
     var accessToken = getCookie("jwtAccessToken");
     let fetchData = {
         method: 'GET',
@@ -150,13 +157,24 @@ function getIncidentById(incidents, element, tableId) {
                     incidentComment = document.getElementById("modal-incident-comment")
                     incidentCreateDate = document.getElementById("modal-incident-create-date")
                     incidentCreateBy = document.getElementById("modal-incident-creator")
-                    incidentStatus = document.getElementById("modal-incident-status")
+                    incidentStatusSelect = document.getElementById("modal-incident-status-select")
                 
                     incidentTitle.innerHTML = incident.title;
                     incidentComment.innerHTML = incident.comment;
                     incidentCreateDate.innerHTML = incident.created_on;
                     incidentCreateBy.innerHTML = incident.created_by;
-                    incidentStatus.innerHTML = incident.status;
+                    // incidentStatus.innerHTML = incident.status;
+                    if (incident.status.toLowerCase() == "pending investigation") {
+                        incidentStatusSelect.selectedIndex = 0;
+                    } else if (incident.status.toLowerCase() == "under investigation") {
+                        incidentStatusSelect.selectedIndex = 1;
+                    } else if (incident.status.toLowerCase() == "resolved") {
+                        incidentStatusSelect.selectedIndex = 2;
+                    } else {
+                        incidentStatusSelect.selectedIndex = 3;
+                    }
+                    incidentBody = document.getElementById("model-update-incident-status-btn");
+                    incidentBody.innerHTML = '<button id="update-incident-status" class="modal-contents-item edit-form-btn" onclick="changeIncidentStatus(\''+incidents+'\',' + incidentId + ')">Update </button>';
                 }
 
             } else if (jsonData.status == 401) {
@@ -166,6 +184,41 @@ function getIncidentById(incidents, element, tableId) {
                 alert(jsonData.error);
             }
         })
+}
+
+function changeIncidentStatus(incidents, incidentId) {
+    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId + "/status";
+    // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + "/" + incidentId + "/status";
+    incidentStatusSelect = document.getElementById("modal-incident-status-select")
+    statusChange =  incidentStatusSelect.options[incidentStatusSelect.selectedIndex].text;
+    var accessToken = getCookie("jwtAccessToken")
+    let data = {
+        status: statusChange.toLowerCase()
+    }
+    let fetchData = {
+        method: 'PATCH',
+        body: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + accessToken
+        }
+    }
+    var changeMessage = confirm("Do you really want to change this incident's status?");
+    if (changeMessage == true) {
+        fetch(URL_INCIDENT, fetchData)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (myJson) {
+            if (myJson.status == 201) {
+                alert(myJson.message);
+                openAdminPage();
+            } else {
+                alert(myJson.error)
+            }
+        });
+        return true;
+    }
 }
 
 function getAllUsers() {
@@ -223,7 +276,7 @@ function getAllUsers() {
 
 function setCookie(cookieName, cookieValue, expiryPeriod) {
     var date = new Date();
-    date.setTime(date.getTime() + (expiryPeriod * 24 * 60 * 60 * 1000));
+    date.setTime(date.getTime() + (expiryPeriod * 60 * 60 * 1000));
     var expires = "expires=" + date.toGMTString();
     document.cookie = cookieName + "=" + cookieValue + ";" + expires + ";path=/";
 }
@@ -242,4 +295,11 @@ function getCookie(cookieName) {
         }
     }
     return "";
+}
+
+function logoutUser(){
+    document.cookie = "jwtAccessToken=; expires=Thu, 31 Jan 2002 00:00:00 UTC; path=/;";
+    document.cookie = "isAdmin=; expires=Thu, 31 Jan 2002 00:00:00 UTC; path=/;";
+    openSigninPage();
+    // return document.cookie
 }

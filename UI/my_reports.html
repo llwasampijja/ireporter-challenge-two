@@ -8,21 +8,24 @@
     <title>Dashboard | IReporter</title>
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <script src="javascript/app.js"></script>
+    <script src="javascript/main.js"></script>
+    <script>
+        checkIfUserIsLoggedIn();
+        avoidDashBoardForAdmins();
+    </script>
 </head>
 
 <body>
     <header class="navigation">
-        <h1>IReporter</h1>
+        <h1><a href="index.html">IReporter</a></h1>
         <nav class="bigscreen-menu-nav">
             <ul>
-                <li class="header-nav-item"><a href="admin_panel.html">Admin Panel</a></li>
-                <li class="header-nav-item"><a href="my_reports.html">Dashboard</a></li>
+                <li class="header-nav-item non-admin-link"><a href="my_reports.html">Dashboard</a></li>
                 <li class="header-nav-item"><a href="index.html">Home</a></li>
-                <li class="header-nav-item"><a href="index.html">Sign-out</a></li>
                 <li class="header-nav-item"><a href="#">About Us</a></li>
                 <li class="header-nav-item"><a href="#">Contact Us</a></li>
-                <li class="header-nav-item">
-                    <div class="down-arrow-wrapper" onclick="toggleAccountMenuVisibility()"><i class="down-arrow"></i></div>
+                <li class="header-nav-item logged-user-link">
+                    <div class="down-arrow-wrapper" onclick="toggleAccountMenuVisibility()"><a href="#"><i class="down-arrow"></i></a></div>
                 </li>
             </ul>
         </nav>
@@ -39,21 +42,19 @@
         <div id="account-menu">
             <ul>
                 <li><a href="user_profile.html">My Account</a></li>
-                <li><a href="index.html">Logout</a></li>
+                <li><a href="#" onclick="logoutUser();">Logout</a></li>
             </ul>
         </div>
     </nav>
 
     <nav id="mobile-menu" class="account-menu-nav">
         <ul>
-            <li class="header-nav-item"><a href="admin_panel.html">Admin Panel</a></li>
-            <li class="header-nav-item"><a href="my_reports.html">Dashboard</a></li>
+            <li class="header-nav-item non-admin-link"><a href="my_reports.html">Dashboard</a></li>
             <li class="header-nav-item"><a href="index.html">Home</a></li>
-            <li class="header-nav-item"><a href="index.html">Sign-out</a></li>
             <li class="header-nav-item"><a href="#">About Us</a></li>
             <li class="header-nav-item"><a href="#">Contact Us</a></li>
-            <li><a href="user_profile.html">My Account</a></li>
-            <li><a href="index.html">Logout</a></li>
+            <li class="logged-user-link"><a href="user_profile.html">My Account</a></li>
+            <li class="logged-user-link"><a href="#" onclick="logoutUser();">Logout</a></li>
         </ul>
     </nav>
 
@@ -432,6 +433,9 @@
 
     <script>
         runAllJavaScript();
+    </script>
+    <script>
+        homePageNotSignedIn();
     </script>
 </body>
 

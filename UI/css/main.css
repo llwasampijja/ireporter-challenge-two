@@ -75,6 +75,14 @@ header h1 {
   margin: auto 0px;
 }
 
+header h1 a:link, header h1 a:visited{
+  color: #FFFFFF;
+}
+
+header h1 a:hover{
+  color: rgb(58, 178, 248);
+}
+
 header nav ul li {
   display: inline-block;
   font-weight: bold;
@@ -94,6 +102,10 @@ header nav ul li a:link{
 }
 
 #mobile-menu {
+  display: none;
+}
+
+.admin-link, .non-admin-link, .logged-user-link{
   display: none;
 }
 
@@ -227,7 +239,7 @@ input.sign-form-input {
 
 .website-banner-foreground {
   background-color: rgba(18,18,18,0.50);
-
+  padding: 10px;
 }
 
 .site-signup-btn, .view-report-btn, .edit-report-btn {
@@ -573,6 +585,10 @@ h2.dashboard-header-element {
   box-shadow: 0px 0px 5px 2px rgba(18,18,18,0.50);
 }
 
+#table-userprofile-all-incidents, #table-userprofile-all-incidents-summary {
+  display: none;  
+}
+
 .table-container {
   text-align: center;
   background-color: #e8e9ef;
@@ -646,19 +662,9 @@ h2.dashboard-header-element {
   color: rgb(58, 178, 248);
 }
 
-/* .site-signup-btn:hover, .view-report-btn:hover, .edit-report-btn:hover, .view-report-btn:hover, .edit-report-btn:hover */
-/* .site-signup-btn, .view-report-btn, .edit-report-btn {
-  appearance: none;
-  background-color: rgb(58, 178, 248);
-  border-radius: 30px;
-  border: 0;
-  color: #ffffff !important;
-  display: inline-block;
-  font-weight: bold;
-  padding: 1% 3%;
-  text-align: center;
-  margin: 20px 0px;
-} */
+#mainNavSignInLInk{
+  display: none;  
+}
 
 /* Responsive design with media queries */
 @media only screen and (max-width: 800px) {

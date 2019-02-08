@@ -7,6 +7,110 @@ function toggleMobileMenuVisibility() {
     }
 }
 
+function checkIfUserIsLoggedIn() {
+    if (getCookie("jwtAccessToken") == "") {
+        openSigninPage();
+    }
+}
+
+function avoidLoginSignupPage() {
+    if (getCookie("isAdmin") == "true") {
+        // alert(getCookie("isAdmin"))
+        openAdminPage();
+    } else if (getCookie("isAdmin") == "false"){
+        openHomePage();
+    }
+}
+
+function avoidAdminPanelForNonAdmins() {
+    if (getCookie("isAdmin") == "false") {
+        // alert(getCookie("isAdmin"))
+        openHomePage();
+    }
+}
+
+function avoidDashBoardForAdmins() {
+    if (getCookie("isAdmin") == "true") {
+        // alert(getCookie("isAdmin"))
+        openAdminPage();
+    }
+}
+
+function homePageNotSignedIn() {
+    var signedInLInks = document.getElementsByClassName("logged-user-link");
+    var mainNavSignInLInk = document.getElementById("main-nav-signin-link");
+    var nonAdminLinks = document.getElementsByClassName("non-admin-link");
+    var adminLinks = document.getElementsByClassName("admin-link");
+    var nonMemberPromptPhrase = document.getElementById("non-member-prompt-phrase");
+    var tableUserprofileAllIncidents = document.getElementById("table-userprofile-all-incidents");
+    var tableUserprofileAllIncidentsSummary = document.getElementById("table-userprofile-all-incidents-summary");
+    var nonMemberPromptButton = document.getElementById("non-member-prompt-button");
+    var signedMemberPromptPhrase = document.getElementById("signed-member-prompt-phrase");
+
+    if (getCookie("jwtAccessToken") == "") {
+        // for (let signedInLInk of signedInLInks){
+        //     signedInLInk.
+        // }
+        // menuBarSignIn.style.display = "none"
+        signedMemberPromptPhrase.style.display = "none"
+        mainNavSignInLInk.style.display = "inline-block";
+        nonMemberPromptButton.style.display = "block";
+        nonMemberPromptPhrase.style.display = "block";
+    } else if (getCookie("isAdmin")==="true"){
+        for (let signedLink of signedInLInks){
+            signedLink.style.display = "inline-block";
+        }
+
+        for (let adminLink of adminLinks){
+            adminLink.style.display = "inline-block";
+        }
+        // signedInLInks.style.display = "block";
+        if (mainNavSignInLInk != null){
+            mainNavSignInLInk.style.display = "none";
+        }
+        
+        if (signedMemberPromptPhrase != null){
+            signedMemberPromptPhrase.style.display = "block"
+        }
+
+        if (nonMemberPromptButton != null){
+            nonMemberPromptButton.style.display = "none"
+        }
+
+        if (nonMemberPromptPhrase != null){
+            nonMemberPromptPhrase.style.display = "none"
+        }
+    
+    } else {
+        for (let signedLink of signedInLInks){
+            signedLink.style.display = "inline-block";
+        }
+        for (let nonAdminLink of nonAdminLinks){
+            nonAdminLink.style.display = "inline-block";
+        }
+        if (mainNavSignInLInk != null){
+            mainNavSignInLInk.style.display = "none";
+        }
+        if (signedMemberPromptPhrase != null){
+            signedMemberPromptPhrase.style.display = "block";
+        }
+        if (nonMemberPromptButton != null){
+            nonMemberPromptButton.style.display = "none";
+        }
+        if (nonMemberPromptPhrase != null){
+            nonMemberPromptPhrase.style.display = "none";
+        }
+
+        if (tableUserprofileAllIncidentsSummary != null){
+            tableUserprofileAllIncidentsSummary.style.display = "inline-block";
+        }
+
+        if (tableUserprofileAllIncidents!= null){
+            tableUserprofileAllIncidents.style.display = "inline-block";
+        }
+    }
+}
+
 function toggleAccountMenuVisibility() {
     var menu_ = document.getElementById("account-menu");
     if (menu_.style.display === "none") {
@@ -26,6 +130,10 @@ function openSigninPage() {
 
 function openHomePage() {
     location.href = 'my_reports.html'
+}
+
+function openAdminPage() {
+    location.href = 'admin_panel.html'
 }
 
 function confirmDelete() {
@@ -192,7 +300,7 @@ function openAdminManageTab(tabEvent, tabName) {
 
     for (tabIndex = 0; tabIndex < adminTabLinks.length; tabIndex++) {
         adminTabLinks[tabIndex].className = adminTabLinks[tabIndex].className.replace(" active", "");
-        if (tabIndex == 1){
+        if (tabIndex == 1) {
             // getAllUsers()
         }
     }
