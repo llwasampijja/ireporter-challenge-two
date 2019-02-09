@@ -133,9 +133,7 @@ function getAllIncidents(incidents, tableId) {
         })
 }
 
-function getAllIncidentsPerUser(incidents) {
-    // const URL_INCIDENTS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents;
-    
+function getAllIncidentsPerUser(incidents, tabSectionId) {    
     var accessToken = getCookie("jwtAccessToken");
     var userId = getCookie("userIdCookie");
     let fetchData = {
@@ -155,11 +153,8 @@ function getAllIncidentsPerUser(incidents) {
         })
         .then(function (jsonData) {
             if (jsonData.status == 200) {
-                // var incidentsTable = document.getElementById(tableId);
-                // var numberOfRows = 1;
                 for (let incident of jsonData.data) {
-                    // alertalert(JSON.stringify(incident));
-                    var gridContainerUserIncidents = document.getElementById("grid-container-user-incidents")
+                    var gridContainerUserIncidents = document.getElementById(tabSectionId)
                     var gridBoxContainerDiv = document.createElement('div');
                     gridBoxContainerDiv.className = "grid-box-container";
                     var gridBoxUl = document.createElement("ul");
@@ -172,6 +167,11 @@ function getAllIncidentsPerUser(incidents) {
                     gridBoxLiDivThumbnail.appendChild(gridBoxImgThumbnail);
                     gridBoxLiThumbnail.appendChild(gridBoxLiDivThumbnail);
                     
+                    var gridBoxLiIncidentId = document.createElement("li");
+                    gridBoxLiIncidentId.innerHTML = "Incident Id: "
+                    var gridBoxLiSpanIncidentId = document.createElement("span");
+                    gridBoxLiSpanIncidentId.innerHTML = incident.incident_id;
+                    gridBoxLiIncidentId.appendChild(gridBoxLiSpanIncidentId);
                     var gridBoxLiTitle = document.createElement("li");
                     gridBoxLiTitle.innerHTML = "Title: "
                     var gridBoxLiSpanTitle = document.createElement("span");
@@ -195,10 +195,8 @@ function getAllIncidentsPerUser(incidents) {
                     var gridBoxLiButtons = document.createElement("li");
                     var gridBoxLiDivButtons = document.createElement("div");
                     gridBoxLiDivButtons.className = "buttons-sowa";
-                    gridBoxLiDivButtons.innerHTML = '<button id="edit-report-btn" class="edit-report-btn">Edit</button><button id="view-report-btn" class="view-report-btn">View</button>';
-                    // gridBoxDivButtonEditReportBtn = document.createElement("button");
+                    gridBoxLiDivButtons.innerHTML = '<button class="view-report-btn" id="but" onclick="getUserIncidentById( \'' + incidents + '\', ' + gridBoxLiSpanIncidentId.innerHTML + ')">View </button>';
 
-                    // gridBoxDivButtonViewReportBtn = document.createElement("button");
                     gridBoxLiButtons.appendChild(gridBoxLiDivButtons);
 
                     gridBoxUl.appendChild(gridBoxLiThumbnail);
@@ -210,29 +208,6 @@ function getAllIncidentsPerUser(incidents) {
 
                     gridBoxContainerDiv.appendChild(gridBoxUl);
                     gridContainerUserIncidents.appendChild(gridBoxContainerDiv);
-
-                    // var incidentRow = incidentsTable.insertRow(numberOfRows)
-                    // var incidentIdCell0 = incidentRow.insertCell(0);
-                    // var locationCell1 = incidentRow.insertCell(1);
-                    // var titleCell2 = incidentRow.insertCell(2);
-                    // var commentCell3 = incidentRow.insertCell(3);
-                    // var imagesCell4 = incidentRow.insertCell(4);
-                    // var videosCell5 = incidentRow.insertCell(5);
-                    // var createdOnCell6 = incidentRow.insertCell(6);
-                    // var createdByCell7 = incidentRow.insertCell(7);
-                    // var statusCell8 = incidentRow.insertCell(8);
-                    // var viewIncidentCell9 = incidentRow.insertCell(9);
-
-                    // incidentIdCell0.innerHTML = incident.incident_id;
-                    // locationCell1.innerHTML = incident.location;
-                    // titleCell2.innerHTML = incident.title;
-                    // commentCell3.innerHTML = incident.comment;
-                    // imagesCell4.innerHTML = incident.images;
-                    // videosCell5.innerHTML = incident.videos;
-                    // createdOnCell6.innerHTML = incident.created_on;
-                    // createdByCell7.innerHTML = incident.created_by;
-                    // statusCell8.innerHTML = incident.status;
-                    // viewIncidentCell9.innerHTML = '<button class="view-report-btn" id="but" onclick="getIncidentById( \''+incidents + '\',this, \''+tableId + '\')">View </button>';
                 }
 
             } else if (jsonData.status == 401) {
@@ -250,7 +225,6 @@ function getIncidentById(incidents, element, tableId) {
     var incidentId = incidentTable.rows[myRowIndex].cells[0].innerHTML
 
 
-    // var incidentId = 1;
     const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId;
     // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + "/" + incidentId;
     var accessToken = getCookie("jwtAccessToken");
@@ -279,7 +253,6 @@ function getIncidentById(incidents, element, tableId) {
                     incidentComment.innerHTML = incident.comment;
                     incidentCreateDate.innerHTML = incident.created_on;
                     incidentCreateBy.innerHTML = incident.created_by;
-                    // incidentStatus.innerHTML = incident.status;
                     if (incident.status.toLowerCase() == "pending investigation") {
                         incidentStatusSelect.selectedIndex = 0;
                     } else if (incident.status.toLowerCase() == "under investigation") {
@@ -300,6 +273,126 @@ function getIncidentById(incidents, element, tableId) {
                 alert(jsonData.error);
             }
         })
+}
+
+function getUserIncidentById(incidents, incidentId) {
+    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId;
+    // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + "/" + incidentId;
+    var accessToken = getCookie("jwtAccessToken");
+    let fetchData = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + accessToken
+        }
+    }
+
+    fetch(URL_INCIDENT, fetchData)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (jsonData) {
+            if (jsonData.status == 200) {
+                for (let incident of jsonData.data) {
+                    var incidentType = document.getElementById("modal-incident-type");
+                    var incidentId = document.getElementById("modal-incident-id");
+                    var incidentTitle = document.getElementById("modal-incident-title");
+                    var incidentComment = document.getElementById("modal-incident-comment");
+                    var incidentCreateDate = document.getElementById("modal-incident-create-date");
+                    var incidentLocation = document.getElementById('modal-view-incident-geocoordinates-field')
+                    incidentStatus = document.getElementById("modal-incident-status");
+                    incidentEditId = document.getElementById("modal-edit-incident-incident-id");
+                    incidentEditType = document.getElementById("modal-edit-incident-incident-type");
+                    incidentEditComment = document.getElementById("modal-edit-incident-detailed-description");
+                    incindentEditLocation = document.getElementById("modal-edit-incident-geocoordinates-field");
+
+                    incidentLocation.value = incident.location;
+                    incidentType.innerHTML = incident.incident_type;
+                    incidentId.innerHTML = incident.incident_id;
+                    incidentTitle.innerHTML = incident.title;
+                    incidentComment.innerHTML = incident.comment;
+                    incidentCreateDate.innerHTML = incident.created_on;
+                    incidentStatus.innerHTML = incident.status;
+                    incidentBody = document.getElementById("model-update-incident-attribute-btn");
+                    incidentBody.innerHTML = '<button id="update-incident-attribute" class="modal-contents-item edit-form-btn" onclick="updateUserIncident(\''+incidents+'\',' + incidentId.innerHTML + ')">Update </button>';
+                }
+
+            } else if (jsonData.status == 401) {
+                alert(jsonData.error);
+                openSigninPage();
+            } else {
+                alert(jsonData.error);
+            }
+        })
+}
+
+function updateUserIncident(incidents, incidentId) {
+    var accessToken = getCookie("jwtAccessToken");
+    let data = {};
+    var incidentAttribute = "";
+
+    var radioButtonComment = document.getElementById("checkbutton-comment");
+    var incidentType = document.getElementById("modal-incident-type").innerHTML;
+    var incidentComment = document.getElementById("modal-incident-comment").value;
+    var incidentLocation = document.getElementById('modal-view-incident-geocoordinates-field').value
+    if (incidentType == "interventions"){
+        
+        if (radioButtonComment.checked){
+            incidentAttribute = "comment";
+            data = {
+                comment: incidentComment
+            }
+        } else {
+            incidentAttribute = "location";
+            data = {
+                location: incidentLocation
+            }
+        }
+
+    } else {
+        if (radioButtonComment.checked){
+            incidentAttribute = "comment";
+            incidentComment = document.getElementById("modal-incident-comment").value;
+            data = {
+                comment: incidentComment
+            }
+        } else {
+            incidentAttribute = "location";
+            incidentLocation = document.getElementById("modal-incident-comment").value;
+            data = {
+                location: incidentLocation
+            }
+        }
+    }
+
+    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + '/' + incidentId + '/' + incidentAttribute;
+    // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + '/' + incidentId + '/' + incidentAttribute;
+
+    let fetchData = {
+        method: 'PATCH',
+        body: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + accessToken
+        }
+    }
+    var changeMessage = confirm("Do you really want to change this incident's " + incidentAttribute + "?");
+    if (changeMessage == true) {
+        fetch(URL_INCIDENT, fetchData)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (myJson) {
+            
+            if (myJson.status == 201) {
+                alert(myJson.message);
+                openAdminPage();
+            } else {
+                alert(myJson.error);
+            }
+        });
+        return true;
+    }
 }
 
 function changeIncidentStatus(incidents, incidentId) {
@@ -358,7 +451,6 @@ function getAllUsers() {
                 var usersTable = document.getElementById("users-list-table");
                 var numberOfRows = 1;
                 for (let user of myJson.data) {
-                    // alert(JSON.stringify(user));
                     var userRow = usersTable.insertRow(numberOfRows);
 
                     // Insert new cells (<td> elements)
@@ -418,5 +510,4 @@ function logoutUser(){
     document.cookie = "jwtAccessToken=; expires=Thu, 31 Jan 2002 00:00:00 UTC; path=/;";
     document.cookie = "isAdmin=; expires=Thu, 31 Jan 2002 00:00:00 UTC; path=/;";
     openSigninPage();
-    // return document.cookie
 }
