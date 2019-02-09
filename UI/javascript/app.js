@@ -15,7 +15,6 @@ function checkIfUserIsLoggedIn() {
 
 function avoidLoginSignupPage() {
     if (getCookie("isAdmin") == "true") {
-        // alert(getCookie("isAdmin"))
         openAdminPage();
     } else if (getCookie("isAdmin") == "false"){
         openHomePage();
@@ -24,14 +23,12 @@ function avoidLoginSignupPage() {
 
 function avoidAdminPanelForNonAdmins() {
     if (getCookie("isAdmin") == "false") {
-        // alert(getCookie("isAdmin"))
         openHomePage();
     }
 }
 
 function avoidDashBoardForAdmins() {
     if (getCookie("isAdmin") == "true") {
-        // alert(getCookie("isAdmin"))
         openAdminPage();
     }
 }
@@ -48,10 +45,6 @@ function homePageNotSignedIn() {
     var signedMemberPromptPhrase = document.getElementById("signed-member-prompt-phrase");
 
     if (getCookie("jwtAccessToken") == "") {
-        // for (let signedInLInk of signedInLInks){
-        //     signedInLInk.
-        // }
-        // menuBarSignIn.style.display = "none"
         signedMemberPromptPhrase.style.display = "none"
         mainNavSignInLInk.style.display = "inline-block";
         nonMemberPromptButton.style.display = "block";
@@ -148,8 +141,6 @@ function confirmDelete() {
 function openViewReportsModal() {
     var modal = document.getElementById('view-report-details-modal');
 
-    // var btn_ = document.getElementsByClassName("view-report-btn");
-
     document.addEventListener('click', function (event) {
         if (event.target.classList.contains('view-report-btn')) {
             modal.style.display = "block";
@@ -179,59 +170,57 @@ function openEditReportsModal() {
     }, false);
 
     var span = document.getElementsByClassName("close")[1];
-    var cancel_edit_report = document.getElementById("cancel-edit-report")
-    var save_edit_report = document.getElementById("save-edit-report")
 
     span.onclick = function () {
         modal.style.display = "none";
     }
 
-    cancel_edit_report.onclick = function () {
-        modal.style.display = "none";
-    }
+    // cancel_edit_report.onclick = function () {
+    //     modal.style.display = "none";
+    // }
 
-    save_edit_report.onclick = function () {
-        modal.style.display = "none";
-    }
+    // save_edit_report.onclick = function () {
+    //     modal.style.display = "none";
+    // }
 
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
+    // window.onclick = function (event) {
+    //     if (event.target == modal) {
+    //         modal.style.display = "none";
+    //     }
+    // }
 }
 
-function createNewReportsModal() {
-    var modal = document.getElementById('create-new-report-modal');
+// function createNewReportsModal() {
+//     var modal = document.getElementById('create-new-report-modal');
 
-    var create_new_report = document.getElementById('new-report-btn')
+//     var create_new_report = document.getElementById('new-report-btn')
 
-    create_new_report.addEventListener('click', function (event) {
-        modal.style.display = "block"
-    });
+//     create_new_report.addEventListener('click', function (event) {
+//         modal.style.display = "block"
+//     });
 
-    var span = document.getElementsByClassName("close")[2];
-    var cancel_create_report = document.getElementById("cancel-create-report")
-    var save_create_report = document.getElementById("save-create-report")
+//     var span = document.getElementsByClassName("close")[2];
+//     var cancel_create_report = document.getElementById("cancel-create-report")
+//     var save_create_report = document.getElementById("save-create-report")
 
-    span.onclick = function () {
-        modal.style.display = "none";
-    }
+//     span.onclick = function () {
+//         modal.style.display = "none";
+//     }
 
-    cancel_create_report.onclick = function () {
-        modal.style.display = "none";
-    }
+//     cancel_create_report.onclick = function () {
+//         modal.style.display = "none";
+//     }
 
-    save_create_report.onclick = function () {
-        modal.style.display = "none";
-    }
+//     save_create_report.onclick = function () {
+//         modal.style.display = "none";
+//     }
 
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-}
+//     window.onclick = function (event) {
+//         if (event.target == modal) {
+//             modal.style.display = "none";
+//         }
+//     }
+// }
 
 function openRedFlagsSummaryModal() {
     var modal = document.getElementById('redflags-summary-modal');
@@ -273,19 +262,16 @@ function openInterventionsSummaryModal() {
     }
 }
 
-function getLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
-    } else {
-        x.innerHTML = "Geolocation is not supported by your current browser.";
+function showPosition(){
+    if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(function(position){
+            var positionCoordinates = position.coords.latitude + ", " + position.coords.longitude
+            document.getElementById('modal-view-incident-geocoordinates-field').value = positionCoordinates;
+        });
+    } else{
+        alert("HTML5 Geolocation isn't supported by your current browser.");
     }
 }
-
-function showPosition(position) {
-
-    document.getElementById('geocoordinates-field').innerHTML = position.coords.latitude + "," + position.coords.longitude;
-}
-
 
 function openAdminManageTab(tabEvent, tabName) {
     var tabIndex, tabContent, adminTabLinks;
@@ -293,16 +279,12 @@ function openAdminManageTab(tabEvent, tabName) {
 
     for (tabIndex = 0; tabIndex < tabContent.length; tabIndex++) {
         tabContent[tabIndex].style.display = "none";
-        // getAllUsers();
     }
 
     adminTabLinks = document.getElementsByClassName("admin-tab");
 
     for (tabIndex = 0; tabIndex < adminTabLinks.length; tabIndex++) {
         adminTabLinks[tabIndex].className = adminTabLinks[tabIndex].className.replace(" active", "");
-        if (tabIndex == 1) {
-            // getAllUsers()
-        }
     }
 
     document.getElementById(tabName).style.display = "block";
@@ -312,8 +294,8 @@ function openAdminManageTab(tabEvent, tabName) {
 
 function runAllJavaScript() {
     openViewReportsModal();
-    openEditReportsModal();
-    createNewReportsModal();
+    // openEditReportsModal();
+    // createNewReportsModal();
     // getIncidentById("red-flags");
 }
 
@@ -321,11 +303,3 @@ function runAdminScripts() {
     openRedFlagsSummaryModal()
     openInterventionsSummaryModal()
 }
-
-// function signInUser(){
-//     btnSignIn = document.getElementById("btn-signin")
-//     btnSignIn.addEventListener("click",)
-// }
-
-
-
