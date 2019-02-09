@@ -86,7 +86,7 @@ class IncidentData:
     def update(self, incidednts_list, incident_id, new_update, username, table_name):
         """method with logic to update an incident in the incidents list"""
         for incident in incidednts_list:
-            print("test this" + str(username) + incident.get("created_by"))
+            # print("test this" + str(username) + incident.get("created_by"))
             if incident.get("incident_id") == incident_id \
             and username == incident.get("created_by") \
             and incident.get("status") == "pending investigation":
@@ -140,7 +140,7 @@ class IncidentData:
     def get_or_delete(self, incident_id, keyword, action_keyword, username, table_name):
         """helper method for getting or deleting an incident"""
         if keyword == "redflag" and action_keyword == "delete":
-            print("jy ruf dkag " + keyword)
+            # print("jy ruf dkag " + keyword)
             return self.delete(self.get_all_dbincidents("redflag", table_name), incident_id, username, table_name)
         elif keyword == "intervention" and action_keyword == "delete":
             return self.delete(self.get_all_dbincidents("intervention", table_name), incident_id, username, table_name)
@@ -156,7 +156,7 @@ class IncidentData:
         else:
             table_name = "interventions"
         data_from_db = self.ireporter_db.fetch_data_incidents(table_name)
-        print(data_from_db)
+        # print(data_from_db)
         dict_incident = {}
         list_incidents = []
         for incident in data_from_db:
@@ -180,7 +180,7 @@ class IncidentData:
     def get_all_suer_dbincidents(self, user_id, table_name):
        
         data_from_db = self.ireporter_db.fetch_data_user_incidents(user_id, table_name)
-        print(data_from_db)
+        # print(data_from_db)
         dict_incident = {}
         list_incidents = []
         for incident in data_from_db:

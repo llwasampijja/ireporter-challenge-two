@@ -489,6 +489,10 @@ h2.dashboard-header-element {
   margin: 10px 0px; 
 }
 
+.model-report-details-view{
+  width: 75%;
+}
+
 .modal-contents-item img, .modal-contents-item video{
   width: 85%;
 }
