@@ -315,8 +315,10 @@ function getUserIncidentById(incidents, incidentId) {
                     incidentComment.innerHTML = incident.comment;
                     incidentCreateDate.innerHTML = incident.created_on;
                     incidentStatus.innerHTML = incident.status;
-                    incidentBody = document.getElementById("model-update-incident-attribute-btn");
-                    incidentBody.innerHTML = '<button id="update-incident-attribute" class="modal-contents-item edit-form-btn" onclick="updateUserIncident(\''+incidents+'\',' + incidentId.innerHTML + ')">Update </button>';
+                    incidentUpdateBtnDiv = document.getElementById("model-update-incident-attribute-btn");
+                    incidentUpdateBtnDiv.innerHTML = '<button id="update-incident-attribute" class="modal-contents-item edit-form-btn" onclick="updateUserIncident(\''+incidents+'\',' + incidentId.innerHTML + ')">Update </button>';
+                    incidentDeleteBtnDiv = document.getElementById("model-delete-incident-attribute-btn");
+                    incidentDeleteBtnDiv.innerHTML = '<button id="update-incident-attribute" class="modal-contents-item edit-form-btn" onclick="deleteUserIncident(\''+incidents+'\',' + incidentId.innerHTML + ')">Delete </button>';
                 }
 
             } else if (jsonData.status == 401) {
@@ -395,6 +397,36 @@ function updateUserIncident(incidents, incidentId) {
         });
         return true;
     }
+}
+
+function deleteUserIncident(incidents, incidentId){
+    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + '/' + incidentId;
+    // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + '/' + incidentId;
+    var accessToken = getCookie("jwtAccessToken");
+    let fetchData = {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + accessToken
+        }
+    }
+
+    var promptDeleteUserIncident  = confirm("Do you really want to delete this incident?");
+    if (promptDeleteUserIncident == true){
+        fetch(URL_INCIDENT, fetchData)
+        .then(function(response){
+            return response.json();
+        }).then(function(myJson){
+            if (myJson.status == 200){
+                alert(myJson.message);
+                openHomePage();
+            } else {
+                alert(myJson.error);
+            }
+        })
+    }
+
+    
 }
 
 function changeIncidentStatus(incidents, incidentId) {
