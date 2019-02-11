@@ -9,9 +9,12 @@ function toggleMobileMenuVisibility() {
 
 function checkIfUserIsLoggedIn() {
     if (getCookie("jwtAccessToken") == "") {
-        alert(getCookie("jwtAccessToken"))
-        alert(getCookie("isAdmin"))
+        alert(getCookie("jwtAccessToken"));
+        alert(getCookie("isAdmin"));
         openSigninPage();
+    } else {
+        alert(getCookie("jwtAccessToken"));
+        alert(getCookie("isAdmin"));
     }
 }
 
@@ -19,6 +22,8 @@ function avoidLoginSignupPage() {
     if (getCookie("isAdmin") == "true") {
         openAdminPage();
     } else if (getCookie("isAdmin") == "false"){
+        alert(getCookie("jwtAccessToken"));
+        alert(getCookie("isAdmin"));
         openHomePage();
     }
 }
