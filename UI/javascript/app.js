@@ -9,6 +9,8 @@ function toggleMobileMenuVisibility() {
 
 function checkIfUserIsLoggedIn() {
     if (getCookie("jwtAccessToken") == "") {
+        alert(getCookie("jwtAccessToken"))
+        alert(getCookie("isAdmin"))
         openSigninPage();
     }
 }
