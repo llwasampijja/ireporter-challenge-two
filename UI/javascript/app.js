@@ -12,9 +12,11 @@ function checkIfUserIsLoggedIn() {
         alert(getCookie("jwtAccessToken"));
         alert(getCookie("isAdmin"));
         openSigninPage();
+        break;
     } else {
         alert(getCookie("jwtAccessToken"));
         alert(getCookie("isAdmin"));
+        break;
     }
 }
 
@@ -23,10 +25,14 @@ function avoidLoginSignupPage() {
         alert(getCookie("jwtAccessToken"));
         alert(getCookie("isAdmin"));
         openAdminPage();
+        break;
     } else if (getCookie("isAdmin") == "false"){
         alert(getCookie("jwtAccessToken"));
         alert(getCookie("isAdmin"));
         openHomePage();
+        break;
+    } else {
+        break;
     }
 }
 
