@@ -25,7 +25,8 @@ function registerUser() {
         })
         .then(function (myJson) {
             if (myJson.status == 201) {
-                setCookie("jwtAccessToken", user.is_admin, 3);
+                var accessToken = myJson.access_token;
+                setCookie("jwtAccessToken", accessToken, 3)
                 alert(myJson.message);
                 for (let user of myJson.data){
                     setCookie("isAdmin", user.is_admin, 3);
