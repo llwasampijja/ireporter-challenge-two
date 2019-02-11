@@ -15,7 +15,7 @@ function checkIfUserIsLoggedIn() {
     } else if (getCookie("jwtAccessToken") != "" && getCookie("isAdmin") == "false"){
         openHomePage();
     } else {
-        openSigninPage();
+        // openSigninPage();
     }
 }
 
