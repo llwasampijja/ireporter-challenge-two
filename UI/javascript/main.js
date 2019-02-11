@@ -80,6 +80,43 @@ function loginUser() {
         });
 }
 
+function createIncident(incidents){
+    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents;
+    // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents;
+    var accessToken = getCookie("jwtAccessToken");
+    var newIncident = {
+        title: document.getElementById("modal-create-new-report-title").value,
+        comment:document.getElementById("modal-create-new-report-comment").value,
+        location: document.getElementById("modal-create-new-report-location").value,
+        videos: ["Video url"],
+        images: ["imageone", "imagetwo"]
+    }
+    alert(JSON.stringify(newIncident))
+    let fetchData = {
+        method: 'POST',
+        body: JSON.stringify(newIncident),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + accessToken
+        }
+    }
+
+    var createNewIncidentPrompt = confirm("Continue and create a new incident!");
+    if (createNewIncidentPrompt == true){
+        fetch(URL_INCIDENT, fetchData)
+        .then(function(response){
+            return response.json();
+        }).then(function(myJson){
+            if (myJson.status == 201){
+                alert(myJson.message);
+                openHomePage();
+            } else {
+                alert(myJson.error)
+            }
+        })
+    }
+}
+
 function getAllIncidents(incidents, tableId) {
     const URL_INCIDENTS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents;
     // const URL_INCIDENTS = 'http://localhost:5000/api/v1/' + incidents;
@@ -133,6 +170,10 @@ function getAllIncidents(incidents, tableId) {
                 alert(jsonData.error);
             }
         })
+}
+
+function getIncidentTab(response) {
+    return response.json();
 }
 
 function getAllIncidentsPerUser(incidents, tabSectionId) {    
@@ -296,6 +337,7 @@ function getUserIncidentById(incidents, incidentId) {
         .then(function (jsonData) {
             if (jsonData.status == 200) {
                 for (let incident of jsonData.data) {
+                    alert(JSON.stringify(incident));
                     var incidentType = document.getElementById("modal-incident-type");
                     var incidentId = document.getElementById("modal-incident-id");
                     var incidentTitle = document.getElementById("modal-incident-title");
@@ -541,7 +583,8 @@ function getCookie(cookieName) {
 }
 
 function logoutUser(){
-    document.cookie = "jwtAccessToken=; expires=Thu, 31 Jan 2002 00:00:00 UTC; path=/;";
-    document.cookie = "isAdmin=; expires=Thu, 31 Jan 2002 00:00:00 UTC; path=/;";
+    document.cookie = "jwtAccessToken=; expires=Thu, 31 Jan 2018 00:00:00 UTC; path=/;";
+    document.cookie = "isAdmin=; expires=Thu, 31 Jan 2018 00:00:00 UTC; path=/;";
+    document.cookie = "userIdCookie=; expires=Thu, 31 Jan 2018 00:00:00 UTC; path=/;";
     openSigninPage();
 }
