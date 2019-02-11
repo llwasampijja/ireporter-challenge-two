@@ -10,14 +10,18 @@ function toggleMobileMenuVisibility() {
 function checkIfUserIsLoggedIn() {
     if (getCookie("jwtAccessToken") == "") {
         openSigninPage();
+    } else {
+        break;
     }
 }
 
 function avoidLoginSignupPage() {
-    if (getCookie("isAdmin") == "true") {
+    if (getCookie("jwtAccessToken") != "" && getCookie("isAdmin") == "true") {
         openAdminPage();
-    } else if (getCookie("isAdmin") == "false"){
+    } else if (getCookie("jwtAccessToken") != "" && getCookie("isAdmin") == "false"){
         openHomePage();
+    } else {
+        break;
     }
 }
 
