@@ -9,28 +9,17 @@ function toggleMobileMenuVisibility() {
 
 function checkIfUserIsLoggedIn() {
     if (getCookie("jwtAccessToken") == "") {
-        // alert(getCookie("jwtAccessToken"));
-        // alert(getCookie("isAdmin"));
         openSigninPage();
-        // break;
     } else {
-        // alert(getCookie("jwtAccessToken"));
-        // alert(getCookie("isAdmin"));
         break;
     }
 }
 
 function avoidLoginSignupPage() {
     if (getCookie("jwtAccessToken") != "" && getCookie("isAdmin") == "true") {
-        // alert(getCookie("jwtAccessToken"));
-        // alert(getCookie("isAdmin"));
         openAdminPage();
-        // break;
     } else if (getCookie("jwtAccessToken") != "" && getCookie("isAdmin") == "false"){
-        // alert(getCookie("jwtAccessToken"));
-        // alert(getCookie("isAdmin"));
         openHomePage();
-        // break;
     } else {
         break;
     }
