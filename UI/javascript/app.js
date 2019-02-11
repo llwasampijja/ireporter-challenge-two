@@ -11,7 +11,7 @@ function checkIfUserIsLoggedIn() {
     if (getCookie("jwtAccessToken") == "") {
         openSigninPage();
     } else {
-        break;
+        return;
     }
 }
 
@@ -21,7 +21,8 @@ function avoidLoginSignupPage() {
     } else if (getCookie("jwtAccessToken") != "" && getCookie("isAdmin") == "false"){
         openHomePage();
     } else {
-        break;
+        alert("This weired");
+        return;
     }
 }
 

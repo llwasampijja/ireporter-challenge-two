@@ -64,16 +64,16 @@
     <section>
         <div>
             <header class="inside-headers">
-                <h2 class="dashboard-header-element">Admin Panel</h2>
+                <h2 class="dashboard-header-element">Manage Incidents</h2>
 
                 <div class="admin-control-panel-container">
                     <button class="admin-tab"
                         onclick="openAdminManageTab(event, 'view-user-incidents'); getAllIncidentsPerUser('red-flags', 'view-user-incidents'); getAllIncidentsPerUser('interventions', 'view-user-incidents');"
-                        id="openByDefault">Red-Flags</button>
+                        id="openByDefault">All Incidents</button>
                     <button class="admin-tab"
-                        onclick="openAdminManageTab(event, 'view-user-redflags'); getAllIncidentsPerUser('red-flags', 'view-user-redflags');">Interventions</button>
+                        onclick="openAdminManageTab(event, 'view-user-redflags'); getAllIncidentsPerUser('red-flags', 'view-user-redflags');">Red-flags</button>
                     <button class="admin-tab"
-                        onclick="openAdminManageTab(event, 'view-user-interventions'); getAllIncidentsPerUser('interventions', 'view-user-interventions');">Users</button>
+                        onclick="openAdminManageTab(event, 'view-user-interventions'); getAllIncidentsPerUser('interventions', 'view-user-interventions');">Interventions</button>
                 </div>
             </header>
         </div>
@@ -272,6 +272,7 @@
                             <input type="radio" name="attribute" value="location" id="checkbutton-location">Location
                         </div>
                         <div id="model-update-incident-attribute-btn"></div>
+                        <div id="model-delete-incident-attribute-btn"></div>
                     </div>
                 </div>
 
