@@ -20,6 +20,8 @@ function checkIfUserIsLoggedIn() {
 
 function avoidLoginSignupPage() {
     if (getCookie("isAdmin") == "true") {
+        alert(getCookie("jwtAccessToken"));
+        alert(getCookie("isAdmin"));
         openAdminPage();
     } else if (getCookie("isAdmin") == "false"){
         alert(getCookie("jwtAccessToken"));
