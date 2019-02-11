@@ -9,28 +9,28 @@ function toggleMobileMenuVisibility() {
 
 function checkIfUserIsLoggedIn() {
     if (getCookie("jwtAccessToken") == "") {
-        alert(getCookie("jwtAccessToken"));
-        alert(getCookie("isAdmin"));
+        // alert(getCookie("jwtAccessToken"));
+        // alert(getCookie("isAdmin"));
         openSigninPage();
-        break;
+        // break;
     } else {
-        alert(getCookie("jwtAccessToken"));
-        alert(getCookie("isAdmin"));
+        // alert(getCookie("jwtAccessToken"));
+        // alert(getCookie("isAdmin"));
         break;
     }
 }
 
 function avoidLoginSignupPage() {
-    if (getCookie("isAdmin") == "true") {
-        alert(getCookie("jwtAccessToken"));
-        alert(getCookie("isAdmin"));
+    if (getCookie("jwtAccessToken") != "" && getCookie("isAdmin") == "true") {
+        // alert(getCookie("jwtAccessToken"));
+        // alert(getCookie("isAdmin"));
         openAdminPage();
-        break;
-    } else if (getCookie("isAdmin") == "false"){
-        alert(getCookie("jwtAccessToken"));
-        alert(getCookie("isAdmin"));
+        // break;
+    } else if (getCookie("jwtAccessToken") != "" && getCookie("isAdmin") == "false"){
+        // alert(getCookie("jwtAccessToken"));
+        // alert(getCookie("isAdmin"));
         openHomePage();
-        break;
+        // break;
     } else {
         break;
     }

@@ -25,10 +25,11 @@ function registerUser() {
         })
         .then(function (myJson) {
             if (myJson.status == 201) {
+                setCookie("jwtAccessToken", user.is_admin, 3);
                 alert(myJson.message);
                 for (let user of myJson.data){
-                    setCookie("isAdmin", user.is_admin, 3)
-                    setCookie("userIdCookie", user.user_id, 3)
+                    setCookie("isAdmin", user.is_admin, 3);
+                    setCookie("userIdCookie", user.user_id, 3);
                 }
                 openHomePage();
             } else {
