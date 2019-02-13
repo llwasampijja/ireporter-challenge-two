@@ -21,7 +21,7 @@ function avoidLoginSignupPage() {
     } else if (getCookie("jwtAccessToken") != "" && getCookie("isAdmin") == "false"){
         openHomePage();
     } else {
-        alert("This weired");
+        alert("You have been logged out, Login again to regain access!");
         return;
     }
 }
@@ -62,7 +62,7 @@ function homePageNotSignedIn() {
         for (let adminLink of adminLinks){
             adminLink.style.display = "inline-block";
         }
-        // signedInLInks.style.display = "block";
+
         if (mainNavSignInLInk != null){
             mainNavSignInLInk.style.display = "none";
         }
@@ -134,15 +134,6 @@ function openAdminPage() {
     location.href = 'admin_panel.html'
 }
 
-function confirmDelete() {
-    var deleteMessage = confirm("Do you really want to delete this Item?");
-    if (deleteMessage == true) {
-        window.location.replace("my_reports.html");
-        return true;
-    }
-}
-
-
 function openViewReportsModal() {
     var modal = document.getElementById('view-report-details-modal');
 
@@ -163,36 +154,6 @@ function openViewReportsModal() {
             modal.style.display = "none";
         }
     }
-}
-
-function openEditReportsModal() {
-    var modal = document.getElementById('edit-report-details-modal');
-
-    document.addEventListener('click', function (event) {
-        if (event.target.classList.contains('edit-report-btn')) {
-            modal.style.display = "block";
-        }
-    }, false);
-
-    var span = document.getElementsByClassName("close")[1];
-
-    span.onclick = function () {
-        modal.style.display = "none";
-    }
-
-    // cancel_edit_report.onclick = function () {
-    //     modal.style.display = "none";
-    // }
-
-    // save_edit_report.onclick = function () {
-    //     modal.style.display = "none";
-    // }
-
-    // window.onclick = function (event) {
-    //     if (event.target == modal) {
-    //         modal.style.display = "none";
-    //     }
-    // }
 }
 
 function createNewReportsModal(incidentType) {
@@ -222,47 +183,6 @@ function createNewReportsModal(incidentType) {
 
     save_create_report.onclick = function () {
         createIncident(incidentType);
-        // modal.style.display = "none";
-    }
-
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-}
-
-function openRedFlagsSummaryModal() {
-    var modal = document.getElementById('redflags-summary-modal');
-    // var btn = document.getElementById("redflags-summary-btn");
-    var span = document.getElementsByClassName("close")[0];
-
-    // btn.onclick = function () {
-    //     modal.style.display = "block";
-    // }
-
-    span.onclick = function () {
-        modal.style.display = "none";
-    }
-
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-}
-
-function openInterventionsSummaryModal() {
-    var modal = document.getElementById('interventions-summary-modal');
-    // var btn = document.getElementById("interventions-summary-btn");
-    var span = document.getElementsByClassName("close")[1];
-
-    // btn.onclick = function () {
-    //     modal.style.display = "block";
-    // }
-
-    span.onclick = function () {
-        modal.style.display = "none";
     }
 
     window.onclick = function (event) {
@@ -304,12 +224,4 @@ function openAdminManageTab(tabEvent, tabName) {
 
 function runAllJavaScript() {
     openViewReportsModal();
-    // openEditReportsModal();
-    // createNewReportsModal();
-    // getIncidentById("red-flags");
-}
-
-function runAdminScripts() {
-    openRedFlagsSummaryModal()
-    openInterventionsSummaryModal()
 }
