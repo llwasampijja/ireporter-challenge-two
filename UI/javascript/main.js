@@ -25,10 +25,12 @@ function registerUser() {
         })
         .then(function (myJson) {
             if (myJson.status == 201) {
+                var accessToken = myJson.access_token;
+                setCookie("jwtAccessToken", accessToken, 3)
                 alert(myJson.message);
                 for (let user of myJson.data){
-                    setCookie("isAdmin", user.is_admin, 3)
-                    setCookie("userIdCookie", user.user_id, 3)
+                    setCookie("isAdmin", user.is_admin, 3);
+                    setCookie("userIdCookie", user.user_id, 3);
                 }
                 openHomePage();
             } else {
@@ -76,6 +78,43 @@ function loginUser() {
                 alert(myJson.error)
             }
         });
+}
+
+function createIncident(incidents){
+    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents;
+    // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents;
+    var accessToken = getCookie("jwtAccessToken");
+    var newIncident = {
+        title: document.getElementById("modal-create-new-report-title").value,
+        comment:document.getElementById("modal-create-new-report-comment").value,
+        location: document.getElementById("modal-create-new-report-location").value,
+        videos: ["Video url"],
+        images: ["imageone", "imagetwo"]
+    }
+    alert(JSON.stringify(newIncident))
+    let fetchData = {
+        method: 'POST',
+        body: JSON.stringify(newIncident),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + accessToken
+        }
+    }
+
+    var createNewIncidentPrompt = confirm("Continue and create a new incident!");
+    if (createNewIncidentPrompt == true){
+        fetch(URL_INCIDENT, fetchData)
+        .then(function(response){
+            return response.json();
+        }).then(function(myJson){
+            if (myJson.status == 201){
+                alert(myJson.message);
+                openHomePage();
+            } else {
+                alert(myJson.error)
+            }
+        })
+    }
 }
 
 function getAllIncidents(incidents, tableId) {
@@ -131,6 +170,10 @@ function getAllIncidents(incidents, tableId) {
                 alert(jsonData.error);
             }
         })
+}
+
+function getIncidentTab(response) {
+    return response.json();
 }
 
 function getAllIncidentsPerUser(incidents, tabSectionId) {    
@@ -294,6 +337,7 @@ function getUserIncidentById(incidents, incidentId) {
         .then(function (jsonData) {
             if (jsonData.status == 200) {
                 for (let incident of jsonData.data) {
+                    alert(JSON.stringify(incident));
                     var incidentType = document.getElementById("modal-incident-type");
                     var incidentId = document.getElementById("modal-incident-id");
                     var incidentTitle = document.getElementById("modal-incident-title");
@@ -313,8 +357,10 @@ function getUserIncidentById(incidents, incidentId) {
                     incidentComment.innerHTML = incident.comment;
                     incidentCreateDate.innerHTML = incident.created_on;
                     incidentStatus.innerHTML = incident.status;
-                    incidentBody = document.getElementById("model-update-incident-attribute-btn");
-                    incidentBody.innerHTML = '<button id="update-incident-attribute" class="modal-contents-item edit-form-btn" onclick="updateUserIncident(\''+incidents+'\',' + incidentId.innerHTML + ')">Update </button>';
+                    incidentUpdateBtnDiv = document.getElementById("model-update-incident-attribute-btn");
+                    incidentUpdateBtnDiv.innerHTML = '<button id="update-incident-attribute" class="modal-contents-item edit-form-btn" onclick="updateUserIncident(\''+incidents+'\',' + incidentId.innerHTML + ')">Update </button>';
+                    incidentDeleteBtnDiv = document.getElementById("model-delete-incident-attribute-btn");
+                    incidentDeleteBtnDiv.innerHTML = '<button id="update-incident-attribute" class="modal-contents-item edit-form-btn" onclick="deleteUserIncident(\''+incidents+'\',' + incidentId.innerHTML + ')">Delete </button>';
                 }
 
             } else if (jsonData.status == 401) {
@@ -393,6 +439,36 @@ function updateUserIncident(incidents, incidentId) {
         });
         return true;
     }
+}
+
+function deleteUserIncident(incidents, incidentId){
+    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + '/' + incidentId;
+    // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + '/' + incidentId;
+    var accessToken = getCookie("jwtAccessToken");
+    let fetchData = {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + accessToken
+        }
+    }
+
+    var promptDeleteUserIncident  = confirm("Do you really want to delete this incident?");
+    if (promptDeleteUserIncident == true){
+        fetch(URL_INCIDENT, fetchData)
+        .then(function(response){
+            return response.json();
+        }).then(function(myJson){
+            if (myJson.status == 200){
+                alert(myJson.message);
+                openHomePage();
+            } else {
+                alert(myJson.error);
+            }
+        })
+    }
+
+    
 }
 
 function changeIncidentStatus(incidents, incidentId) {
@@ -507,7 +583,8 @@ function getCookie(cookieName) {
 }
 
 function logoutUser(){
-    document.cookie = "jwtAccessToken=; expires=Thu, 31 Jan 2002 00:00:00 UTC; path=/;";
-    document.cookie = "isAdmin=; expires=Thu, 31 Jan 2002 00:00:00 UTC; path=/;";
+    document.cookie = "jwtAccessToken=; expires=Thu, 31 Jan 2018 00:00:00 UTC; path=/;";
+    document.cookie = "isAdmin=; expires=Thu, 31 Jan 2018 00:00:00 UTC; path=/;";
+    document.cookie = "userIdCookie=; expires=Thu, 31 Jan 2018 00:00:00 UTC; path=/;";
     openSigninPage();
 }

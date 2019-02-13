@@ -64,16 +64,16 @@
     <section>
         <div>
             <header class="inside-headers">
-                <h2 class="dashboard-header-element">Admin Panel</h2>
+                <h2 class="dashboard-header-element">Manage Incidents</h2>
 
                 <div class="admin-control-panel-container">
                     <button class="admin-tab"
                         onclick="openAdminManageTab(event, 'view-user-incidents'); getAllIncidentsPerUser('red-flags', 'view-user-incidents'); getAllIncidentsPerUser('interventions', 'view-user-incidents');"
-                        id="openByDefault">Red-Flags</button>
+                        id="openByDefault">All Incidents</button>
                     <button class="admin-tab"
-                        onclick="openAdminManageTab(event, 'view-user-redflags'); getAllIncidentsPerUser('red-flags', 'view-user-redflags');">Interventions</button>
+                        onclick="openAdminManageTab(event, 'view-user-redflags'); getAllIncidentsPerUser('red-flags', 'view-user-redflags');">Red-flags</button>
                     <button class="admin-tab"
-                        onclick="openAdminManageTab(event, 'view-user-interventions'); getAllIncidentsPerUser('interventions', 'view-user-interventions');">Users</button>
+                        onclick="openAdminManageTab(event, 'view-user-interventions'); getAllIncidentsPerUser('interventions', 'view-user-interventions');">Interventions</button>
                 </div>
             </header>
         </div>
@@ -97,8 +97,6 @@
                 </div>
                 <input class="reports-search-box dashboard-header-element" type="text" placeholder="Search Incidents"
                     id="search_reports" />
-                <button id="new-report-btn" class="site-signup-btn site-btn dashboard-header-element">Create
-                    New</button>
             </header>
             <div class="grid-container" id="grid-container-user-incidents">
             </div>
@@ -123,7 +121,7 @@
                 </div>
                 <input class="reports-search-box dashboard-header-element" type="text" placeholder="Search Incidents"
                     id="search_reports" />
-                <button id="new-report-btn" class="site-signup-btn site-btn dashboard-header-element">Create
+                <button id="new-report-btn" class="new-report-btn site-signup-btn site-btn dashboard-header-element" onclick="createNewReportsModal('red-flags');">Create
                     New</button>
             </header>
             <div class="grid-container" id="grid-container-user-incidents">
@@ -149,7 +147,7 @@
                 </div>
                 <input class="reports-search-box dashboard-header-element" type="text" placeholder="Search Incidents"
                     id="search_reports" />
-                <button id="new-report-btn" class="site-signup-btn site-btn dashboard-header-element">Create
+                <button type="button" id="new-report-btn" class="new-report-btn site-signup-btn site-btn dashboard-header-element" onclick="createNewReportsModal('interventions');">Create
                     New</button>
             </header>
             <div class="grid-container" id="grid-container-user-incidents">
@@ -272,6 +270,7 @@
                             <input type="radio" name="attribute" value="location" id="checkbutton-location">Location
                         </div>
                         <div id="model-update-incident-attribute-btn"></div>
+                        <div id="model-delete-incident-attribute-btn"></div>
                     </div>
                 </div>
 
@@ -284,24 +283,19 @@
     <div id="create-new-report-modal" class="modal">
         <!-- Modal content -->
         <div class="modal-content">
-            <span class="close">&times;</span>
+            <span id="close-create-incident-modal" class="close">&times;</span>
             <section>
                 <div>
                     <header class="inside-headers">
                         <h2 class="dashboard-header-element">Create new Red-Flag/Intervention</h2>
                     </header>
                     <div class="content-container">
-                        <form>
-                            <input class="edit-report-input" type="text" name="report-title" placeholder="Title"
-                                required>
-
-                            <select class="edit-report-input">
-                                <option value="redflag">Red-Flag</option>
-                                <option value="intervention">Intervention</option>
-                            </select>
-                            <textarea class="edit-report-input" name="detailed-description" id="detailed-description"
+                        <form onsubmit="return false">
+                            <input id="modal-create-new-report-title" class="edit-report-input" type="text" name="report-title" placeholder="Title" required>
+                            <p><span id="modal-create-new-report-type"></span></p>
+                            <textarea id="modal-create-new-report-comment"  class="edit-report-input" name="detailed-description" id="detailed-description"
                                 placeholder="Detailed Description" rows="7"></textarea>
-                            <div class="edit-report-input">
+                            <!-- <div class="edit-report-input">
                                 <label class="edit-report-file">
                                     Add Image
                                 </label>
@@ -312,15 +306,15 @@
                                     Add Video
                                 </label>
                                 <input class="edit-report-file" type="file" name="video" accept="video/*" />
-                            </div>
+                            </div> -->
                             <div class="edit-report-input">
-                                <button class="edit-form-btn" onclick="getLocation()">Get Coordinates</button>
-                                <textarea class="geocordinates-box" name="geocoordinates" id="geocoordinates-field"
+                                <button id="modal-create-new-report-location-btn" class="edit-form-btn" onclick="showPosition()">Get Coordinates</button>
+                                <textarea id="modal-create-new-report-location"  class="geocordinates-box" name="geocoordinates" id="geocoordinates-field"
                                     placeholder="Geo-Coordinates" rows="1"></textarea>
                             </div>
                             <div class="edit-report-input">
                                 <button id="cancel-create-report" class="edit-form-btn">Cancel</button>
-                                <button id="save-create-report" class="edit-form-btn">Submit</button>
+                                <button id="save-create-report" class="edit-form-btn" onclick="">Submit</button>
                             </div>
                         </form>
                     </div>

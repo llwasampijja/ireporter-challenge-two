@@ -10,14 +10,19 @@ function toggleMobileMenuVisibility() {
 function checkIfUserIsLoggedIn() {
     if (getCookie("jwtAccessToken") == "") {
         openSigninPage();
+    } else {
+        return;
     }
 }
 
 function avoidLoginSignupPage() {
-    if (getCookie("isAdmin") == "true") {
+    if (getCookie("jwtAccessToken") != "" && getCookie("isAdmin") == "true") {
         openAdminPage();
-    } else if (getCookie("isAdmin") == "false"){
+    } else if (getCookie("jwtAccessToken") != "" && getCookie("isAdmin") == "false"){
         openHomePage();
+    } else {
+        alert("This weired");
+        return;
     }
 }
 
@@ -190,37 +195,42 @@ function openEditReportsModal() {
     // }
 }
 
-// function createNewReportsModal() {
-//     var modal = document.getElementById('create-new-report-modal');
+function createNewReportsModal(incidentType) {
+    var modal = document.getElementById('create-new-report-modal');
 
-//     var create_new_report = document.getElementById('new-report-btn')
+    document.addEventListener('click', function (event) {
+        if (event.target.classList.contains('new-report-btn')) {
+            modal.style.display = "block";
+        }
+    }, false);
 
-//     create_new_report.addEventListener('click', function (event) {
-//         modal.style.display = "block"
-//     });
+    var newreportType = document.getElementById("modal-create-new-report-type");
 
-//     var span = document.getElementsByClassName("close")[2];
-//     var cancel_create_report = document.getElementById("cancel-create-report")
-//     var save_create_report = document.getElementById("save-create-report")
+    newreportType.innerHTML = incidentType;
 
-//     span.onclick = function () {
-//         modal.style.display = "none";
-//     }
+    var span = document.getElementById("close-create-incident-modal");
+    var cancel_create_report = document.getElementById("cancel-create-report")
+    var save_create_report = document.getElementById("save-create-report")
 
-//     cancel_create_report.onclick = function () {
-//         modal.style.display = "none";
-//     }
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
 
-//     save_create_report.onclick = function () {
-//         modal.style.display = "none";
-//     }
+    cancel_create_report.onclick = function () {
+        modal.style.display = "none";
+    }
 
-//     window.onclick = function (event) {
-//         if (event.target == modal) {
-//             modal.style.display = "none";
-//         }
-//     }
-// }
+    save_create_report.onclick = function () {
+        createIncident(incidentType);
+        // modal.style.display = "none";
+    }
+
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+}
 
 function openRedFlagsSummaryModal() {
     var modal = document.getElementById('redflags-summary-modal');
