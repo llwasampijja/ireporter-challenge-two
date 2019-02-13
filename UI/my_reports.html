@@ -13,6 +13,15 @@
         avoidDashBoardForAdmins();
 
     </script>
+    <style>
+        /* Set the size of the div element that contains the map */
+        #incidents-map {
+            height: 400px;
+            /* The height is 400 pixels */
+            width: 100%;
+            /* The width is the width of the web page */
+        }
+    </style>
     <link rel="stylesheet" type="text/css" href="css/main.css">
 </head>
 
@@ -67,8 +76,7 @@
                 <h2 class="dashboard-header-element">Manage Incidents</h2>
 
                 <div class="admin-control-panel-container">
-                    <button class="admin-tab"
-                        onclick="openAdminManageTab(event, 'view-user-incidents'); getAllIncidentsPerUser('red-flags', 'view-user-incidents'); getAllIncidentsPerUser('interventions', 'view-user-incidents');"
+                    <button class="admin-tab" onclick="openAdminManageTab(event, 'view-user-incidents');"
                         id="openByDefault">All Incidents</button>
                     <button class="admin-tab"
                         onclick="openAdminManageTab(event, 'view-user-redflags'); getAllIncidentsPerUser('red-flags', 'view-user-redflags');">Red-flags</button>
@@ -98,8 +106,9 @@
                 <input class="reports-search-box dashboard-header-element" type="text" placeholder="Search Incidents"
                     id="search_reports" />
             </header>
-            <div class="grid-container" id="grid-container-user-incidents">
-            </div>
+            <div id="incidents-map"></div>
+            <!-- <div class="grid-container" id="grid-container-user-incidents">
+            </div> -->
         </div>
     </section>
 
@@ -121,7 +130,8 @@
                 </div>
                 <input class="reports-search-box dashboard-header-element" type="text" placeholder="Search Incidents"
                     id="search_reports" />
-                <button id="new-report-btn" class="new-report-btn site-signup-btn site-btn dashboard-header-element" onclick="createNewReportsModal('red-flags');">Create
+                <button id="new-report-btn" class="new-report-btn site-signup-btn site-btn dashboard-header-element"
+                    onclick="createNewReportsModal('red-flags');">Create
                     New</button>
             </header>
             <div class="grid-container" id="grid-container-user-incidents">
@@ -147,7 +157,9 @@
                 </div>
                 <input class="reports-search-box dashboard-header-element" type="text" placeholder="Search Incidents"
                     id="search_reports" />
-                <button type="button" id="new-report-btn" class="new-report-btn site-signup-btn site-btn dashboard-header-element" onclick="createNewReportsModal('interventions');">Create
+                <button type="button" id="new-report-btn"
+                    class="new-report-btn site-signup-btn site-btn dashboard-header-element"
+                    onclick="createNewReportsModal('interventions');">Create
                     New</button>
             </header>
             <div class="grid-container" id="grid-container-user-incidents">
@@ -291,10 +303,12 @@
                     </header>
                     <div class="content-container">
                         <form onsubmit="return false">
-                            <input id="modal-create-new-report-title" class="edit-report-input" type="text" name="report-title" placeholder="Title" required>
+                            <input id="modal-create-new-report-title" class="edit-report-input" type="text"
+                                name="report-title" placeholder="Title" required>
                             <p><span id="modal-create-new-report-type"></span></p>
-                            <textarea id="modal-create-new-report-comment"  class="edit-report-input" name="detailed-description" id="detailed-description"
-                                placeholder="Detailed Description" rows="7"></textarea>
+                            <textarea id="modal-create-new-report-comment" class="edit-report-input"
+                                name="detailed-description" id="detailed-description" placeholder="Detailed Description"
+                                rows="7"></textarea>
                             <!-- <div class="edit-report-input">
                                 <label class="edit-report-file">
                                     Add Image
@@ -308,9 +322,11 @@
                                 <input class="edit-report-file" type="file" name="video" accept="video/*" />
                             </div> -->
                             <div class="edit-report-input">
-                                <button id="modal-create-new-report-location-btn" class="edit-form-btn" onclick="showPosition()">Get Coordinates</button>
-                                <textarea id="modal-create-new-report-location"  class="geocordinates-box" name="geocoordinates" id="geocoordinates-field"
-                                    placeholder="Geo-Coordinates" rows="1"></textarea>
+                                <button id="modal-create-new-report-location-btn" class="edit-form-btn"
+                                    onclick="showPosition()">Get Coordinates</button>
+                                <textarea id="modal-create-new-report-location" class="geocordinates-box"
+                                    name="geocoordinates" id="geocoordinates-field" placeholder="Geo-Coordinates"
+                                    rows="1"></textarea>
                             </div>
                             <div class="edit-report-input">
                                 <button id="cancel-create-report" class="edit-form-btn">Cancel</button>
@@ -325,6 +341,10 @@
 
     </div>
 
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8mHiPPe0RPNlVzcEJ_wqu3LryiPbO-j8&callback=getAllIncidentsPerUser('red-flags', 'view-user-incidents')">
+        </script>
+
     <script>
         document.getElementById("openByDefault").click();
         runAllJavaScript();
@@ -332,6 +352,89 @@
     <script>
         homePageNotSignedIn();
     </script>
+
+    <script>
+
+
+        // Initialize and add the map
+        function initMap() {
+            const URL_REDFLAGS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/red-flags';
+            const URL_INTERVENTIONS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/interventions';
+            var fetchData = {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + getCookie('jwtAccessToken')
+                }
+            }
+
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 10,
+                center: new google.maps.LatLng(-33.92, 151.25),
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            });
+
+            var infowindow = new google.maps.InfoWindow();
+
+            var marker, numberOfIncidents = 0;
+
+            fetch(URL_REDFLAGS, fetchData).then(function (response) {
+                return response.json();
+            }).then(function (myJson) {
+                if (myJson.status == 200) {
+                    for (let incident in myJson.data) {
+                        locationCoordinates = incident.location.split(',')
+                        marker = new google.maps.Marker({
+                            position: new google.maps.LatLng(locationCoordinates[0], locationCoordinates[1]),
+                            map: map
+                        });
+
+                        google.maps.event.addListener(marker, 'click', (function (marker, numberOfIncidents) {
+                            return function () {
+                                infowindow.setContent(incident.comment);
+                                infowindow.open(map, marker);
+                            }
+                        })(marker, numberOfIncidents));
+                        numberOfIncidents += 1;
+                    }
+                }
+            }).catch((myError) => {
+                return;
+            });
+
+            fetch(URL_INTERVENTIONS, fetchData).then(function (response) {
+                return response.json();
+            }).then(function (myJson) {
+                if (myJson.status == 200) {
+                    for (let incident in myJson.data) {
+                        locationCoordinates = incident.location.split(',')
+                        marker = new google.maps.Marker({
+                            position: new google.maps.LatLng(locationCoordinates[0], locationCoordinates[1]),
+                            map: map
+                        });
+
+                        google.maps.event.addListener(marker, 'click', (function (marker, numberOfIncidents) {
+                            return function () {
+                                infowindow.setContent(incident.comment);
+                                infowindow.open(map, marker);
+                            }
+                        })(marker, numberOfIncidents));
+                        numberOfIncidents += 1;
+                    }
+                }
+            }).catch((myError) => {
+                return;
+            });
+        }
+    </script>
+    <!--Load the API from the specified URL
+            * The async attribute allows the browser to render the page while the API loads
+            * The key parameter will contain your own API key (which is not needed for this tutorial)
+            * The callback parameter executes the initMap() function
+            -->
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8mHiPPe0RPNlVzcEJ_wqu3LryiPbO-j8&callback=initMap">
+        </script>
 </body>
 
 </html>
