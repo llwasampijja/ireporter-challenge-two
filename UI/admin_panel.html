@@ -24,8 +24,8 @@
                 <li class="header-nav-item admin-link"><a href="admin_panel.html">Admin Panel</a></li>
                 <li class="header-nav-item non-admin-link"><a href="my_reports.html">Dashboard</a></li>
                 <li class="header-nav-item"><a href="index.html">Home</a></li>
-                <li class="header-nav-item"><a href="#">About Us</a></li>
-                <li class="header-nav-item"><a href="#">Contact Us</a></li>
+                <li class="header-nav-item"><a href="about_us.html">About Us</a></li>
+                <li class="header-nav-item"><a href="contact_us.html">Contact Us</a></li>
                 <li class="header-nav-item">
                     <div class="down-arrow-wrapper" onclick="toggleAccountMenuVisibility()"><a href="#"><i class="down-arrow"></i></a></div>
                 </li>
@@ -54,8 +54,8 @@
             <li class="header-nav-item admin-link"><a href="admin_panel.html">Admin Panel</a></li>
             <li class="header-nav-item non-admin-link"><a href="my_reports.html">Dashboard</a></li>
             <li class="header-nav-item"><a href="index.html">Home</a></li>
-            <li class="header-nav-item"><a href="#">About Us</a></li>
-            <li class="header-nav-item"><a href="#">Contact Us</a></li>
+            <li class="header-nav-item"><a href="about_us.html">About Us</a></li>
+            <li class="header-nav-item"><a href="contact_us.html">Contact Us</a></li>
             <li><a href="user_profile.html">My Account</a></li>
             <li><a href="#" onclick="logoutUser();">Logout</a></li>
         </ul>
@@ -94,25 +94,6 @@
                     </tr>
                 </table>
             </div>
-
-            <div class="table-container reports-summary-table">
-                <h3> Red-Flags Summary</h3>
-                <table>
-                    <tr>
-                        <th>Resolved</th>
-                        <th>Under Investigation</th>
-                        <th>Rejected</th>
-                        <th>Total</th>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>2</td>
-                        <td>7</td>
-                        <td>14</td>
-                    </tr>
-
-                </table>
-            </div>
         </section>
     </section>
 
@@ -130,25 +111,7 @@
                         <th>Created On</th>
                         <th>Created By</th>
                         <th>Status</th>
-                    </tr>
-
-                </table>
-            </div>
-
-            <div class="table-container reports-summary-table">
-                <h3>Interventions Summary</h3>
-                <table>
-                    <tr>
-                        <th>Resolved</th>
-                        <th>Under Investigation</th>
-                        <th>Rejected</th>
-                        <th>Total</th>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>2</td>
-                        <td>7</td>
-                        <td>14</td>
+                        <th>View Incident</th>
                     </tr>
 
                 </table>
@@ -280,7 +243,7 @@
                         <h3 class="modal-contents-item">Video Evidence</h3>
                         <div class="modal-contents-item">
                             <video controls>
-                                <source src="https://www.youtube.com/watch?v=ftkmRaRUK1I&t=22s" type="video/mp4">
+                                <source src="videos/VID-20160309-WA0042.mp4" type="video/mp4">
                                 Your browser does not support HTML5 video.
                             </video>
                         </div>
@@ -293,143 +256,8 @@
 
     </div>
 
-    <!-- Red-flags Summary modal-->
-    <div id="redflags-summary-modal" class="modal">
-
-        <!-- Modal content -->
-        <div class="modal-content">
-            <span class="close">&times;</span>
-
-            <section class="data-tables">
-                <h3>Redflags Submitted by <span>John Ssebalamu</span></h3>
-                <div class="table-container reports-table">
-                    <table>
-                        <tr>
-                            <th>Id</th>
-                            <th>Title</th>
-                            <th>Description</th>
-                            <th>Submission Date</th>
-                            <th>Image Evidence</th>
-                            <th>Video Evidence</th>
-                            <th>Status</th>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Dirty Cop </td>
-                            <td>This cop was seen taking money from drug dealers</td>
-                            <td>12/10/2018</td>
-                            <td>
-                                <img src="images/bribe-story.jpg" class="image-table" />
-                            </td>
-                            <td>
-                                <video controls>
-                                    <source src="https://www.youtube.com/watch?v=ftkmRaRUK1I&t=22s" type="video/mp4">
-                                    Your browser doesn't support HTML5 video.
-                                </video>
-                            </td>
-                            <td><span class="badge-status"><select>
-                                        <option value="pending-investigation">Pending Investigation</option>
-                                        <option value="resolved">Intervention</option>
-                                        <option value="rejected">Rejected</option>
-                                    </select></span> </td>
-                        </tr>
-
-                    </table>
-                </div>
-
-                <div class="table-container reports-summary-table">
-                    <h3> Red-Flags Summary</h3>
-                    <table>
-                        <tr>
-                            <th>Resolved</th>
-                            <th>Under Investigation</th>
-                            <th>Rejected</th>
-                            <th>Total</th>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>2</td>
-                            <td>7</td>
-                            <td>14</td>
-                        </tr>
-
-                    </table>
-                </div>
-            </section>
-        </div>
-
-    </div>
-
-    <!-- Red-flags Summary modal-->
-    <div id="interventions-summary-modal" class="modal">
-
-        <!-- Modal content -->
-        <div class="modal-content">
-            <span class="close">&times;</span>
-
-            <section class="data-tables">
-                <h3>Redflags Submitted by <span>Juliet Kikomeko</span></h3>
-                <div class="table-container reports-table">
-                    <table>
-                        <tr>
-                            <th>Id</th>
-                            <th>Title</th>
-                            <th>Description</th>
-                            <th>Submission Date</th>
-                            <th>Image Evidence</th>
-                            <th>Video Evidence</th>
-                            <th>Status</th>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Dirty Cop </td>
-                            <td>This cop is know to take money from drug dealers</td>
-                            <td>12/10/2018</td>
-                            <td>
-                                <img src="images/bribe-story.jpg" class="image-table" alt="photo proof" />
-                            </td>
-                            <td>
-                                <video controls>
-                                    <source src="https://www.youtube.com/watch?v=ftkmRaRUK1I&t=22s" type="video/mp4">
-                                    Your browser doesn't support HTML5 video.
-                                </video>
-                            </td>
-                            <td><span class="badge-status"><select>
-                                        <option value="pending-investigation">Pending Investigation</option>
-                                        <option value="resolved">Intervention</option>
-                                        <option value="rejected">Rejected</option>
-                                    </select></span> </td>
-                        </tr>
-
-                    </table>
-                </div>
-
-                <div class="table-container reports-summary-table">
-                    <h3> Red-Flags Summary</h3>
-                    <table>
-                        <tr>
-                            <th>Resolved</th>
-                            <th>Under Investigation</th>
-                            <th>Rejected</th>
-                            <th>Total</th>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>2</td>
-                            <td>7</td>
-                            <td>14</td>
-                        </tr>
-
-                    </table>
-                </div>
-            </section>
-        </div>
-
-    </div>
-
     <script>
         document.getElementById("openByDefault").click();
-        runAdminScripts();
         runAllJavaScript();
     </script>
     <script>

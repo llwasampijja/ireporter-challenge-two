@@ -1,6 +1,6 @@
 function registerUser() {
-    const url = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/register';
-    // const url = 'http://localhost:5000/api/v1/auth/register';
+    // const USER_USER = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/register';
+    const USER_USER = 'http://localhost:5000/api/v1/auth/register';
 
     let data = {
         firstname: document.getElementById("reg-firstname").value,
@@ -19,7 +19,7 @@ function registerUser() {
             'Content-Type': 'application/json'
         }
     }
-    fetch(url, fetchData)
+    fetch(USER_USER, fetchData)
         .then(function (response) {
             return response.json();
         })
@@ -40,14 +40,14 @@ function registerUser() {
 }
 
 function loginUser() {
-    const url = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/login';
-    // const url = 'http://localhost:5000/api/v1/auth/login';
+    // const USER_USER = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/login';
+    const USER_USER = 'http://localhost:5000/api/v1/auth/login';
 
     let data = {
         username: document.getElementById("login-username").value,
         password: document.getElementById("login-password").value
     }
-    // The parameters we are gonna pass to the fetch function
+    // The parameters to be passed to the fetch function
     let fetchData = {
         method: 'POST',
         body: JSON.stringify(data),
@@ -55,7 +55,7 @@ function loginUser() {
             'Content-Type': 'application/json'
         }
     }
-    fetch(url, fetchData)
+    fetch(USER_USER, fetchData)
         .then(function (response) {
             return response.json();
         })
@@ -81,8 +81,8 @@ function loginUser() {
 }
 
 function createIncident(incidents){
-    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents;
-    // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents;
+    // const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents;
+    const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents;
     var accessToken = getCookie("jwtAccessToken");
     var newIncident = {
         title: document.getElementById("modal-create-new-report-title").value,
@@ -91,7 +91,6 @@ function createIncident(incidents){
         videos: ["Video url"],
         images: ["imageone", "imagetwo"]
     }
-    alert(JSON.stringify(newIncident))
     let fetchData = {
         method: 'POST',
         body: JSON.stringify(newIncident),
@@ -118,8 +117,8 @@ function createIncident(incidents){
 }
 
 function getAllIncidents(incidents, tableId) {
-    const URL_INCIDENTS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents;
-    // const URL_INCIDENTS = 'http://localhost:5000/api/v1/' + incidents;
+    // const URL_INCIDENTS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents;
+    const URL_INCIDENTS = 'http://localhost:5000/api/v1/' + incidents;
     var accessToken = getCookie("jwtAccessToken");
     let fetchData = {
         method: 'GET',
@@ -187,8 +186,8 @@ function getAllIncidentsPerUser(incidents, tabSectionId) {
         }
     }
 
-    const URL_INCIDENTS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users/' + userId + '/' + incidents;
-    // const URL_INCIDENTS = 'http://localhost:5000/api/v1/users/' + userId + '/' + incidents;
+    // const URL_INCIDENTS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users/' + userId + '/' + incidents;
+    const URL_INCIDENTS = 'http://localhost:5000/api/v1/users/' + userId + '/' + incidents;
 
     fetch(URL_INCIDENTS, fetchData)
         .then(function (response) {
@@ -268,8 +267,8 @@ function getIncidentById(incidents, element, tableId) {
     var incidentId = incidentTable.rows[myRowIndex].cells[0].innerHTML
 
 
-    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId;
-    // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + "/" + incidentId;
+    // const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId;
+    const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + "/" + incidentId;
     var accessToken = getCookie("jwtAccessToken");
     let fetchData = {
         method: 'GET',
@@ -319,8 +318,8 @@ function getIncidentById(incidents, element, tableId) {
 }
 
 function getUserIncidentById(incidents, incidentId) {
-    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId;
-    // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + "/" + incidentId;
+    // const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId;
+    const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + "/" + incidentId;
     var accessToken = getCookie("jwtAccessToken");
     let fetchData = {
         method: 'GET',
@@ -337,7 +336,6 @@ function getUserIncidentById(incidents, incidentId) {
         .then(function (jsonData) {
             if (jsonData.status == 200) {
                 for (let incident of jsonData.data) {
-                    alert(JSON.stringify(incident));
                     var incidentType = document.getElementById("modal-incident-type");
                     var incidentId = document.getElementById("modal-incident-id");
                     var incidentTitle = document.getElementById("modal-incident-title");
@@ -378,41 +376,23 @@ function updateUserIncident(incidents, incidentId) {
     var incidentAttribute = "";
 
     var radioButtonComment = document.getElementById("checkbutton-comment");
-    var incidentType = document.getElementById("modal-incident-type").innerHTML;
     var incidentComment = document.getElementById("modal-incident-comment").value;
     var incidentLocation = document.getElementById('modal-view-incident-geocoordinates-field').value
-    if (incidentType == "interventions"){
-        
-        if (radioButtonComment.checked){
-            incidentAttribute = "comment";
-            data = {
-                comment: incidentComment
-            }
-        } else {
-            incidentAttribute = "location";
-            data = {
-                location: incidentLocation
-            }
+ 
+    if (radioButtonComment.checked){
+        incidentAttribute = "comment";
+        data = {
+            comment: incidentComment
         }
-
     } else {
-        if (radioButtonComment.checked){
-            incidentAttribute = "comment";
-            incidentComment = document.getElementById("modal-incident-comment").value;
-            data = {
-                comment: incidentComment
-            }
-        } else {
-            incidentAttribute = "location";
-            incidentLocation = document.getElementById("modal-incident-comment").value;
-            data = {
-                location: incidentLocation
-            }
+        incidentAttribute = "location";
+        data = {
+            location: incidentLocation
         }
     }
 
-    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + '/' + incidentId + '/' + incidentAttribute;
-    // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + '/' + incidentId + '/' + incidentAttribute;
+    // const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + '/' + incidentId + '/' + incidentAttribute;
+    const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + '/' + incidentId + '/' + incidentAttribute;
 
     let fetchData = {
         method: 'PATCH',
@@ -442,8 +422,8 @@ function updateUserIncident(incidents, incidentId) {
 }
 
 function deleteUserIncident(incidents, incidentId){
-    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + '/' + incidentId;
-    // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + '/' + incidentId;
+    // const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + '/' + incidentId;
+    const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + '/' + incidentId;
     var accessToken = getCookie("jwtAccessToken");
     let fetchData = {
         method: 'DELETE',
@@ -472,8 +452,8 @@ function deleteUserIncident(incidents, incidentId){
 }
 
 function changeIncidentStatus(incidents, incidentId) {
-    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId + "/status";
-    // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + "/" + incidentId + "/status";
+    // const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId + "/status";
+    const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + "/" + incidentId + "/status";
     incidentStatusSelect = document.getElementById("modal-incident-status-select")
     statusChange =  incidentStatusSelect.options[incidentStatusSelect.selectedIndex].text;
     var accessToken = getCookie("jwtAccessToken")
@@ -507,8 +487,8 @@ function changeIncidentStatus(incidents, incidentId) {
 }
 
 function getAllUsers() {
-    const url = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users';
-    // const url = 'http://localhost:5000/api/v1/users';
+    // const url = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users';
+    const url = 'http://localhost:5000/api/v1/users';
     // The parameters we are gonna pass to the fetch function
     var accessToken = getCookie("jwtAccessToken")
     let fetchData = {
