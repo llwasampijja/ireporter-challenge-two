@@ -1,6 +1,6 @@
 function registerUser() {
-    // const USER_USER = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/register';
-    const USER_USER = 'http://localhost:5000/api/v1/auth/register';
+    const USER_USER = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/register';
+    // const USER_USER = 'http://localhost:5000/api/v1/auth/register';
 
     let data = {
         firstname: document.getElementById("reg-firstname").value,
@@ -40,8 +40,8 @@ function registerUser() {
 }
 
 function loginUser() {
-    // const USER_USER = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/login';
-    const USER_USER = 'http://localhost:5000/api/v1/auth/login';
+    const USER_USER = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/login';
+    // const USER_USER = 'http://localhost:5000/api/v1/auth/login';
 
     let data = {
         username: document.getElementById("login-username").value,
@@ -81,8 +81,8 @@ function loginUser() {
 }
 
 function createIncident(incidents) {
-    // const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents;
-    const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents;
+    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents;
+    // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents;
     var accessToken = getCookie("jwtAccessToken");
     var newIncident = {
         title: document.getElementById("modal-create-new-report-title").value,
@@ -117,8 +117,8 @@ function createIncident(incidents) {
 }
 
 function getAllIncidents(incidents, tableId) {
-    // const URL_INCIDENTS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents;
-    const URL_INCIDENTS = 'http://localhost:5000/api/v1/' + incidents;
+    const URL_INCIDENTS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents;
+    // const URL_INCIDENTS = 'http://localhost:5000/api/v1/' + incidents;
     var accessToken = getCookie("jwtAccessToken");
     let fetchData = {
         method: 'GET',
@@ -187,8 +187,8 @@ function getAllIncidentsPerUser(incidents, tabSectionId) {
         }
     }
 
-    // const URL_INCIDENTS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users/' + userId + '/' + incidents;
-    const URL_INCIDENTS = 'http://localhost:5000/api/v1/users/' + userId + '/' + incidents;
+    const URL_INCIDENTS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users/' + userId + '/' + incidents;
+    // const URL_INCIDENTS = 'http://localhost:5000/api/v1/users/' + userId + '/' + incidents;
 
     fetch(URL_INCIDENTS, fetchData)
         .then(function (response) {
@@ -275,8 +275,8 @@ function getIncidentById(incidents, element, tableId) {
     var incidentId = incidentTable.rows[myRowIndex].cells[0].innerHTML
 
 
-    // const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId;
-    const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + "/" + incidentId;
+    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId;
+    // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + "/" + incidentId;
     var accessToken = getCookie("jwtAccessToken");
     let fetchData = {
         method: 'GET',
@@ -326,8 +326,8 @@ function getIncidentById(incidents, element, tableId) {
 }
 
 function getUserIncidentById(incidents, incidentId) {
-    // const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId;
-    const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + "/" + incidentId;
+    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId;
+    // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + "/" + incidentId;
     var accessToken = getCookie("jwtAccessToken");
     let fetchData = {
         method: 'GET',
@@ -399,8 +399,8 @@ function updateUserIncident(incidents, incidentId) {
         }
     }
 
-    // const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + '/' + incidentId + '/' + incidentAttribute;
-    const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + '/' + incidentId + '/' + incidentAttribute;
+    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + '/' + incidentId + '/' + incidentAttribute;
+    // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + '/' + incidentId + '/' + incidentAttribute;
 
     let fetchData = {
         method: 'PATCH',
@@ -430,8 +430,8 @@ function updateUserIncident(incidents, incidentId) {
 }
 
 function deleteUserIncident(incidents, incidentId) {
-    // const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + '/' + incidentId;
-    const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + '/' + incidentId;
+    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + '/' + incidentId;
+    // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + '/' + incidentId;
     var accessToken = getCookie("jwtAccessToken");
     let fetchData = {
         method: 'DELETE',
@@ -460,8 +460,8 @@ function deleteUserIncident(incidents, incidentId) {
 }
 
 function changeIncidentStatus(incidents, incidentId) {
-    // const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId + "/status";
-    const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + "/" + incidentId + "/status";
+    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId + "/status";
+    // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + "/" + incidentId + "/status";
     incidentStatusSelect = document.getElementById("modal-incident-status-select")
     statusChange = incidentStatusSelect.options[incidentStatusSelect.selectedIndex].text;
     var accessToken = getCookie("jwtAccessToken")
@@ -495,8 +495,8 @@ function changeIncidentStatus(incidents, incidentId) {
 }
 
 function getAllUsers() {
-    // const url = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users';
-    const url = 'http://localhost:5000/api/v1/users';
+    const url = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users';
+    // const url = 'http://localhost:5000/api/v1/users';
     // The parameters we are gonna pass to the fetch function
     var accessToken = getCookie("jwtAccessToken")
     let fetchData = {
