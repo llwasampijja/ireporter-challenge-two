@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Home | IReporter</title>
+    <title>About Us | IReporter</title>
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <script src="javascript/app.js"></script>
     <script src="javascript/main.js"></script>
-   
+
 </head>
 
 <body>
@@ -24,7 +24,8 @@
                 <li class="header-nav-item"><a href="about_us.html">About Us</a></li>
                 <li class="header-nav-item"><a href="contact_us.html">Contact Us</a></li>
                 <li class="header-nav-item logged-user-link">
-                    <div class="down-arrow-wrapper" onclick="toggleAccountMenuVisibility()"><a href="#"><i class="down-arrow"></i></a></div>
+                    <div class="down-arrow-wrapper" onclick="toggleAccountMenuVisibility()"><a href="#"><i
+                                class="down-arrow"></i></a></div>
                 </li>
             </ul>
         </nav>
@@ -57,88 +58,61 @@
             <li class="logged-user-link"><a href="#" onclick="logoutUser();">Logout</a></li>
         </ul>
     </nav>
-    <section class="website-banner">
-        <div class="website-banner-foreground">
-            <h2>Corruption Must Stop</h2>
-            <p id="non-member-prompt-phrase">Get involved in the fight against corruption. Follow the link below to signup</p>
-            <p id="signed-member-prompt-phrase">Get involved in the fight against corruption. Report All corruption cases here</p>
-            <span class="action-signup" id="non-member-prompt-button"><a href="signup.html" class="site-signup-btn">Sign Up</a></span>
-        </div>
 
-    </section>
-
-    <section>
+    <section class="page-content-text-section">
         <div>
             <header class="inside-headers">
-                <h2>How can I get Involved?</h2>
-                <p>Below are some links to instructions on how you can get involved in putting an end to this gruesome
-                    act</p>
+                <h2>About iReporter</h2>
             </header>
-            <div class="grid-container">
-                <div></div>
-                <div class="grid-box-container">
-                    <section class="grid-box-content">
-                        <div class="grid-item-thumbnail-wrapper"><img class="grid-item-thumbnail" src="images/intervention.png" /></div>
-                        <h3>What Sevo says about corruption</h3>
-                        <p>Sevo says blu blur and Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim quam
-                            consectetur quibusdam
-                            magni minus aut modi aliquid</p>
-                    </section>
+            <div class="page-content-container">
+
+                <div class="page-content-text">
+                    <h3 class="page-content-text-heading">Why?</h3>
+                    <p>
+                        Corruption is a huge bane to Africa’s development. As concerned Africans, we must to develop
+                        novel and localised solutions that can curb this menace, hence the birth of iReporter. iReporter
+                         enables any/every citizen to bring any form of corruption to the notice of appropriate 
+                         authorities and the general public. Users can also report on things that needs government 
+                         intervention.
+                    </p>
                 </div>
-                <div class="grid-box-container">
-                    <section class="grid-box-content">
-                        <div class="grid-item-thumbnail-wrapper"><img class="grid-item-thumbnail" src="images/intervention.png" /></div>
-                        <h3>What Sevo says about corruption</h3>
-                        <p>Sevo says blu blur and Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim quam
-                            consectetur quibusdam
-                            magni minus aut modi aliquid</p>
-                    </section>
-                </div>
-                <div class="grid-box-container">
-                    <section class="grid-box-content">
-                        <div class="grid-item-thumbnail-wrapper"><img class="grid-item-thumbnail" src="images/intervention.png" /></div>
-                        <h3>What Sevo says about corruption</h3>
-                        <p>Sevo says blu blur and Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim quam
-                            consectetur quibusdam
-                            magni minus aut modi aliquid</p>
-                    </section>
-                </div>
+                
             </div>
         </div>
 
     </section>
 
     <section class="inquiry-section">
-        <div>
-            <header class="inside-headers">
-                <h2>Inquiries?</h2>
-                <p>Contact us using the form below.</p>
-            </header>
-        </div>
-        <div class="inquiry-form-wrapper">
-            <form class="inquiry-form">
-                <div class="inquiry-form-elements-wrapper">
-                    <div class="inquiry-form-element-wrapper">
-                        <input class="inquiry-input-field" name="name" id="inquirer-name" placeholder="Name" type="text"
-                            required>
+            <div>
+                <header class="inside-headers">
+                    <h2>Inquiries?</h2>
+                    <p>Contact us using the form below.</p>
+                </header>
+            </div>
+            <div class="inquiry-form-wrapper">
+                <form class="inquiry-form">
+                    <div class="inquiry-form-elements-wrapper">
+                        <div class="inquiry-form-element-wrapper">
+                            <input class="inquiry-input-field" name="name" id="inquirer-name" placeholder="Name" type="text"
+                                required>
+                        </div>
+                        <div class="inquiry-form-element-wrapper">
+                            <input class="inquiry-input-field" name="email" id="inquirer-email" placeholder="Email" type="email"
+                                required>
+                        </div>
+                        <div class="inquiry-form-element-wrapper">
+                            <textarea class="inquiry-message-box" name="inquiry-message" id="inquiry-message" placeholder="Message"
+                                rows="7"></textarea>
+                        </div>
+                        <div class="inquiry-form-element-wrapper">
+                            <span>
+                                <input class="site-signup-btn site-btn" type="submit" value="Send message">
+                            </span>
+                        </div>
                     </div>
-                    <div class="inquiry-form-element-wrapper">
-                        <input class="inquiry-input-field" name="email" id="inquirer-email" placeholder="Email" type="email"
-                            required>
-                    </div>
-                    <div class="inquiry-form-element-wrapper">
-                        <textarea class="inquiry-message-box" name="inquiry-message" id="inquiry-message" placeholder="Message"
-                            rows="7"></textarea>
-                    </div>
-                    <div class="inquiry-form-element-wrapper">
-                        <span>
-                            <input class="site-signup-btn site-btn" type="submit" value="Send message">
-                        </span>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </section>
+                </form>
+            </div>
+        </section>
 
     <footer>
         <div class="footer-items-container">

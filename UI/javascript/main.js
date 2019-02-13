@@ -1,6 +1,6 @@
 function registerUser() {
-    const url = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/register';
-    // const url = 'http://localhost:5000/api/v1/auth/register';
+    const USER_USER = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/register';
+    // const USER_USER = 'http://localhost:5000/api/v1/auth/register';
 
     let data = {
         firstname: document.getElementById("reg-firstname").value,
@@ -19,7 +19,7 @@ function registerUser() {
             'Content-Type': 'application/json'
         }
     }
-    fetch(url, fetchData)
+    fetch(USER_USER, fetchData)
         .then(function (response) {
             return response.json();
         })
@@ -40,14 +40,14 @@ function registerUser() {
 }
 
 function loginUser() {
-    const url = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/login';
-    // const url = 'http://localhost:5000/api/v1/auth/login';
+    const USER_USER = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/login';
+    // const USER_USER = 'http://localhost:5000/api/v1/auth/login';
 
     let data = {
         username: document.getElementById("login-username").value,
         password: document.getElementById("login-password").value
     }
-    // The parameters we are gonna pass to the fetch function
+    // The parameters to be passed to the fetch function
     let fetchData = {
         method: 'POST',
         body: JSON.stringify(data),
@@ -55,7 +55,7 @@ function loginUser() {
             'Content-Type': 'application/json'
         }
     }
-    fetch(url, fetchData)
+    fetch(USER_USER, fetchData)
         .then(function (response) {
             return response.json();
         })
@@ -91,7 +91,6 @@ function createIncident(incidents){
         videos: ["Video url"],
         images: ["imageone", "imagetwo"]
     }
-    alert(JSON.stringify(newIncident))
     let fetchData = {
         method: 'POST',
         body: JSON.stringify(newIncident),
@@ -337,7 +336,6 @@ function getUserIncidentById(incidents, incidentId) {
         .then(function (jsonData) {
             if (jsonData.status == 200) {
                 for (let incident of jsonData.data) {
-                    alert(JSON.stringify(incident));
                     var incidentType = document.getElementById("modal-incident-type");
                     var incidentId = document.getElementById("modal-incident-id");
                     var incidentTitle = document.getElementById("modal-incident-title");
@@ -378,36 +376,18 @@ function updateUserIncident(incidents, incidentId) {
     var incidentAttribute = "";
 
     var radioButtonComment = document.getElementById("checkbutton-comment");
-    var incidentType = document.getElementById("modal-incident-type").innerHTML;
     var incidentComment = document.getElementById("modal-incident-comment").value;
     var incidentLocation = document.getElementById('modal-view-incident-geocoordinates-field').value
-    if (incidentType == "interventions"){
-        
-        if (radioButtonComment.checked){
-            incidentAttribute = "comment";
-            data = {
-                comment: incidentComment
-            }
-        } else {
-            incidentAttribute = "location";
-            data = {
-                location: incidentLocation
-            }
+ 
+    if (radioButtonComment.checked){
+        incidentAttribute = "comment";
+        data = {
+            comment: incidentComment
         }
-
     } else {
-        if (radioButtonComment.checked){
-            incidentAttribute = "comment";
-            incidentComment = document.getElementById("modal-incident-comment").value;
-            data = {
-                comment: incidentComment
-            }
-        } else {
-            incidentAttribute = "location";
-            incidentLocation = document.getElementById("modal-incident-comment").value;
-            data = {
-                location: incidentLocation
-            }
+        incidentAttribute = "location";
+        data = {
+            location: incidentLocation
         }
     }
 
