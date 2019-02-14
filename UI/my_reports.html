@@ -35,10 +35,8 @@
                 <li class="header-nav-item"><a href="index.html">Home</a></li>
                 <li class="header-nav-item"><a href="about_us.html">About Us</a></li>
                 <li class="header-nav-item"><a href="contact_us.html">Contact Us</a></li>
-                <li class="header-nav-item logged-user-link">
-                    <div class="down-arrow-wrapper" onclick="toggleAccountMenuVisibility()"><a href="#"><i
-                                class="down-arrow"></i></a></div>
-                </li>
+                <li class="header-nav-item logged-user-link"><a href="user_profile.html">My Profile</a></li>
+                <li class="header-nav-item logged-user-link"><a href="#" onclick="logoutUser();">Logout</a></li>
             </ul>
         </nav>
         <nav class="mobile-menu-btn">
@@ -73,15 +71,33 @@
     <section>
         <div>
             <header class="inside-headers">
-                <h2 class="dashboard-header-element">Manage Incidents</h2>
+                <h2 id="dashboard-header-incident-type" class="dashboard-header-element">Fgetterventions</h2>
+                <div class="filter-reports reports-type dashboard-header-element">
+                    <span class="dashboard-filter-item">Report Status</span>
+                    <select class="dashboard-filter-item">
+                        <option value="all">All</option>
+                        <option value="under-investigation">Under Investigation</option>
+                        <option value="resolved">Resolved</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
+                    <button id="filter-incidents"
+                        class="button-Filter site-signup-btn site-btn dashboard-filter-item">Filter
+                        Reports</button>
+                </div>
+                <input class="reports-search-box dashboard-header-element" type="text" placeholder="Search Incidents"
+                    id="search_reports" />
+                <button type="button" id="new-report-btn"
+                    class="new-report-btn site-signup-btn site-btn dashboard-header-element"
+                    onclick="createNewReportsModal('interventions');">Create
+                    New</button>
 
                 <div class="admin-control-panel-container">
-                    <button class="admin-tab" onclick="openAdminManageTab(event, 'view-user-incidents');"
-                        id="openByDefault">All Incidents</button>
+                    <button class="admin-tab" onclick="openAdminManageTab(event, 'view-user-incidents'), setDashBoardHeaderIncidedentType('Map');"
+                        id="openByDefault">Map-Incidents</button>
                     <button class="admin-tab"
-                        onclick="openAdminManageTab(event, 'view-user-redflags'); getAllIncidentsPerUser('red-flags', 'view-user-redflags');">Red-flags</button>
+                        onclick="openAdminManageTab(event, 'view-user-redflags'); getAllIncidentsPerUser('red-flags', 'view-user-redflags'), setDashBoardHeaderIncidedentType('Red-flags');">Red-flags</button>
                     <button class="admin-tab"
-                        onclick="openAdminManageTab(event, 'view-user-interventions'); getAllIncidentsPerUser('interventions', 'view-user-interventions');">Interventions</button>
+                        onclick="openAdminManageTab(event, 'view-user-interventions'); getAllIncidentsPerUser('interventions', 'view-user-interventions'), setDashBoardHeaderIncidedentType('Interventions');">Interventions</button>
                 </div>
             </header>
         </div>
@@ -89,7 +105,7 @@
 
     <section id="view-user-incidents" class="section-manage-content">
         <div>
-            <header class="inside-headers">
+            <!-- <header class="inside-headers">
                 <h2 class="dashboard-header-element">All Incidents (Redflags & Interventions)</h2>
                 <div class="filter-reports reports-type dashboard-header-element">
                     <span class="dashboard-filter-item">Report Status</span>
@@ -105,7 +121,7 @@
                 </div>
                 <input class="reports-search-box dashboard-header-element" type="text" placeholder="Search Incidents"
                     id="search_reports" />
-            </header>
+            </header> -->
             <div id="incidents-map"></div>
             <!-- <div class="grid-container" id="grid-container-user-incidents">
             </div> -->
@@ -114,7 +130,7 @@
 
     <section id="view-user-redflags" class="section-manage-content">
         <div>
-            <header class="inside-headers">
+            <!-- <header class="inside-headers">
                 <h2 class="dashboard-header-element">All Redflags</h2>
                 <div class="filter-reports reports-type dashboard-header-element">
                     <span class="dashboard-filter-item">Report Status</span>
@@ -133,7 +149,7 @@
                 <button id="new-report-btn" class="new-report-btn site-signup-btn site-btn dashboard-header-element"
                     onclick="createNewReportsModal('red-flags');">Create
                     New</button>
-            </header>
+            </header> -->
             <div class="grid-container" id="grid-container-user-incidents">
             </div>
         </div>
@@ -141,7 +157,7 @@
 
     <section id="view-user-interventions" class="section-manage-content">
         <div>
-            <header class="inside-headers">
+            <!-- <header class="inside-headers">
                 <h2 class="dashboard-header-element">All Interventions</h2>
                 <div class="filter-reports reports-type dashboard-header-element">
                     <span class="dashboard-filter-item">Report Status</span>
@@ -161,7 +177,7 @@
                     class="new-report-btn site-signup-btn site-btn dashboard-header-element"
                     onclick="createNewReportsModal('interventions');">Create
                     New</button>
-            </header>
+            </header> -->
             <div class="grid-container" id="grid-container-user-incidents">
             </div>
         </div>
@@ -246,7 +262,7 @@
                     <header class="inside-headers">
                         <h2 id="modal-incident-title" class="dashboard-header-element">Incident Title</h2>
                         <ul>
-                            <li>Incident Id: <span id="modal-incident-id">Incident Type</span></li>
+                            <li>Incident Id: <span id="modal-incident-id">Incident Id</span></li>
                             <li>Incident Type: <span id="modal-incident-type">Incident Type</span></li>
                             <li>Submission Date: <span id="modal-incident-create-date">Incident Date</span></li>
                             <li>Status:
@@ -258,24 +274,16 @@
                         <h3 class="modal-contents-item">Incident Location</h3>
                         <div class="edit-report-input">
                             <button class="edit-form-btn" onclick="showPosition()">Get Coordinates</button>
-                            <textarea class="geocordinates-box" name="geocoordinates"
-                                id="modal-view-incident-geocoordinates-field" placeholder="Geo-Coordinates"
-                                rows="1"></textarea>
+                            <input id="modal-view-incident-geocoordinates-field" class="geocordinates-box" type="text"
+                                name="geocoordinates" placeholder="Click to get location" disabled>
                         </div>
                         <h3 class="modal-contents-item">Details about the case</h3>
                         <textarea class="modal-contents-item model-report-details-view" name="detailed-description"
                             id="modal-incident-comment" placeholder="Incident Comment(Details)" rows="10"></textarea>
                         <h3 class="modal-contents-item">Photograghoc Evidence</h3>
-                        <div class="modal-contents-item">
-                            <img src="images/bribe-story.jpg" />
-                        </div>
+                        <div class="modal-contents-item" id="modal-incident-images"></div>
                         <h3 class="modal-contents-item">Video Evidence</h3>
-                        <div class="modal-contents-item">
-                            <video controls>
-                                <source src="videos/VID-20160309-WA0042.mp4" type="video/mp4">
-                                Your browser does not support HTML5 video.
-                            </video>
-                        </div>
+                        <div class="modal-contents-item"  id="modal-incident-videos"></div>
                         <div>
                             <input type="radio" name="attribute" value="comment" id="checkbutton-comment"
                                 checked>Comment
@@ -303,12 +311,22 @@
                     </header>
                     <div class="content-container">
                         <form onsubmit="return false">
+                            <span class="edit-report-input">Incident Type:
+                                <select id="modal-incident-type-select">
+                                    <option value="red-flags">Red-flags</option>
+                                    <option value="interventions">Interventions</option>
+                                </select>
+                            </span>
                             <input id="modal-create-new-report-title" class="edit-report-input" type="text"
                                 name="report-title" placeholder="Title" required>
                             <p><span id="modal-create-new-report-type"></span></p>
                             <textarea id="modal-create-new-report-comment" class="edit-report-input"
                                 name="detailed-description" id="detailed-description" placeholder="Detailed Description"
                                 rows="7"></textarea>
+                            <input id="modal-create-new-report-images" class="edit-report-input" type="text"
+                                name="report-images" placeholder="Enter image urls separated by commas (no spaces)" required>
+                            <input id="modal-create-new-report-videos" class="edit-report-input" type="text"
+                                name="report-images" placeholder="Enter video urls separated by commas (no spaces)" required>
                             <!-- <div class="edit-report-input">
                                 <label class="edit-report-file">
                                     Add Image
@@ -324,9 +342,8 @@
                             <div class="edit-report-input">
                                 <button id="modal-create-new-report-location-btn" class="edit-form-btn"
                                     onclick="showPosition()">Get Coordinates</button>
-                                <textarea id="modal-create-new-report-location" class="geocordinates-box"
-                                    name="geocoordinates" id="geocoordinates-field" placeholder="Geo-Coordinates"
-                                    rows="1"></textarea>
+                                <input id="modal-add-incident-geocoordinates-field" class="geocordinates-box" type="text"
+                                    name="geocoordinates" placeholder="Click to get Location" disabled>
                             </div>
                             <div class="edit-report-input">
                                 <button id="cancel-create-report" class="edit-form-btn">Cancel</button>
@@ -370,7 +387,7 @@
 
             var map = new google.maps.Map(document.getElementById('incidents-map'), {
                 zoom: 10,
-                center: new google.maps.LatLng(-33.92, 151.25),
+                center: new google.maps.LatLng(0.3425241, 32.5915049),
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             });
 
@@ -385,7 +402,7 @@
                     for (let incident in myJson.data) {
                         locationCoordinates = incident.location.split(',')
                         marker = new google.maps.Marker({
-                            position: new google.maps.LatLng(locationCoordinates[0], locationCoordinates[1]),
+                            position: new google.maps.LatLng(parseFloat(locationCoordinates[0]), parseFloat(locationCoordinates[1])),
                             map: map
                         });
 
@@ -409,7 +426,7 @@
                     for (let incident in myJson.data) {
                         locationCoordinates = incident.location.split(',')
                         marker = new google.maps.Marker({
-                            position: new google.maps.LatLng(locationCoordinates[0], locationCoordinates[1]),
+                            position: new google.maps.LatLng(parseFloat(locationCoordinates[0]), parseFloat(locationCoordinates[1])),
                             map: map
                         });
 
