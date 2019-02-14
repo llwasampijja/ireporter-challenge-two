@@ -109,15 +109,6 @@ function homePageNotSignedIn() {
     }
 }
 
-function toggleAccountMenuVisibility() {
-    var menu_ = document.getElementById("account-menu");
-    if (menu_.style.display === "none") {
-        menu_.style.display = "block";
-    } else {
-        menu_.style.display = "none";
-    }
-}
-
 function openSignupPage() {
     location.href = 'signup.html'
 }
@@ -156,7 +147,7 @@ function openViewReportsModal() {
     }
 }
 
-function createNewReportsModal(incidentType) {
+function createNewReportsModal(incidentTypes) {
     var modal = document.getElementById('create-new-report-modal');
 
     document.addEventListener('click', function (event) {
@@ -165,9 +156,9 @@ function createNewReportsModal(incidentType) {
         }
     }, false);
 
-    var newreportType = document.getElementById("modal-create-new-report-type");
+    // var newreportType = document.getElementById("modal-create-new-report-type");
 
-    newreportType.innerHTML = incidentType;
+    // newreportType.innerHTML = incidentType;
 
     var span = document.getElementById("close-create-incident-modal");
     var cancel_create_report = document.getElementById("cancel-create-report")
@@ -182,6 +173,13 @@ function createNewReportsModal(incidentType) {
     }
 
     save_create_report.onclick = function () {
+        var incidentType = ""
+        var incidentTypeSelect = document.getElementById("modal-incident-type-select");
+        if (incidentTypeSelect.selectedIndex == 0){
+            incidentType = "red-flags"
+        } else {
+            incidentType = "interventions"
+        }
         createIncident(incidentType);
     }
 
@@ -195,8 +193,9 @@ function createNewReportsModal(incidentType) {
 function showPosition(){
     if(navigator.geolocation){
         navigator.geolocation.getCurrentPosition(function(position){
-            var positionCoordinates = position.coords.latitude + ", " + position.coords.longitude
+            var positionCoordinates = position.coords.latitude + ", " + position.coords.longitude;
             document.getElementById('modal-view-incident-geocoordinates-field').value = positionCoordinates;
+            document.getElementById('modal-add-incident-geocoordinates-field').value = positionCoordinates;
         });
     } else{
         alert("HTML5 Geolocation isn't supported by your current browser.");
@@ -221,6 +220,9 @@ function openAdminManageTab(tabEvent, tabName) {
     tabEvent.currentTarget.className += " active";
 }
 
+function setDashBoardHeaderIncidedentType(incidentType){
+    document.getElementById("dashboard-header-incident-type").innerHTML = incidentType;
+}
 
 function runAllJavaScript() {
     openViewReportsModal();
