@@ -10,8 +10,8 @@ URL_REGISTER = "/api/v1/auth/register"
 URL_LOGIN = "/api/v1/auth/login"
 URL_USERS = "/api/v1/users"
 URL_BASE = "/api/v1"
-BASE_IMAGES_URL = "http://127.0.0.1:5000/api/v1/files/uploads/images/"
-BASE_VIDEOS_URL = "http://127.0.0.1:5000/api/v1/files/uploads/videos/"
+BASE_IMAGES_URL = "https://ireporter-challenge-two.herokuapp.com/api/v1/files/uploads/images/"
+BASE_VIDEOS_URL = "https://ireporter-challenge-two.herokuapp.com/api/v1/files/uploads/videos/"
 
 # url string constants for incidents
 URL_REDFLAGS = "/api/v1/red-flags"
