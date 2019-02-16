@@ -65,9 +65,6 @@ class UsersController():
         is_admin = False
         password = request_info.get("password")
         registered_on = datetime.datetime.now()
-
-        # user_id = self.my_validator.create_id(
-        #     self.usersdata.get_users(), "user_id")
         
         if self.response_signupfail(request_info, (firstname, lastname), username):
             return self.response_signupfail(request_info, (firstname, lastname), username)

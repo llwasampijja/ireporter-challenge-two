@@ -92,7 +92,8 @@
                     New</button>
 
                 <div class="admin-control-panel-container">
-                    <button class="admin-tab" onclick="openAdminManageTab(event, 'view-user-incidents'), setDashBoardHeaderIncidedentType('Map');"
+                    <button class="admin-tab"
+                        onclick="openAdminManageTab(event, 'view-user-incidents'), setDashBoardHeaderIncidedentType('Map');"
                         id="openByDefault">Map-Incidents</button>
                     <button class="admin-tab"
                         onclick="openAdminManageTab(event, 'view-user-redflags'); getAllIncidentsPerUser('red-flags', 'view-user-redflags'), setDashBoardHeaderIncidedentType('Red-flags');">Red-flags</button>
@@ -280,10 +281,30 @@
                         <h3 class="modal-contents-item">Details about the case</h3>
                         <textarea class="modal-contents-item model-report-details-view" name="detailed-description"
                             id="modal-incident-comment" placeholder="Incident Comment(Details)" rows="10"></textarea>
+
                         <h3 class="modal-contents-item">Photograghoc Evidence</h3>
                         <div class="modal-contents-item" id="modal-incident-images"></div>
+                        <input id="modal-edit-report-images" class="edit-report-input" type="text" name="report-images"
+                            placeholder="Enter image urls separated by commas (no spaces)" required>
+                        <div class="edit-report-input">
+                            <label class="edit-report-file">
+                                Add Image
+                            </label>
+                            <input id="modal-create-new-report-images-input" class="edit-report-file" type="file"
+                                name="picture" accept="image/*" />
+                        </div>
+                        <div id="model-update-incident-images-btn-div"></div>
                         <h3 class="modal-contents-item">Video Evidence</h3>
-                        <div class="modal-contents-item"  id="modal-incident-videos"></div>
+                        <div class="modal-contents-item" id="modal-incident-videos"></div>
+                        <input id="modal-edit-report-videos" class="edit-report-input" type="text" name="report-images"
+                            placeholder="Enter video urls separated by commas (no spaces)" required>
+                        <div class="edit-report-input">
+                            <label class="edit-report-file">
+                                Add Video
+                            </label>
+                            <input id="modal-create-new-report-videos-input" class="edit-report-file" type="file" name="video" accept="video/*" />
+                        </div>
+                        <div id="model-update-incident-videos-btn-div"></div>
                         <div>
                             <input type="radio" name="attribute" value="comment" id="checkbutton-comment"
                                 checked>Comment
@@ -324,16 +345,18 @@
                                 name="detailed-description" id="detailed-description" placeholder="Detailed Description"
                                 rows="7"></textarea>
                             <input id="modal-create-new-report-images" class="edit-report-input" type="text"
-                                name="report-images" placeholder="Enter image urls separated by commas (no spaces)" required>
+                                name="report-images" placeholder="Enter image urls separated by commas (no spaces)"
+                                required>
                             <input id="modal-create-new-report-videos" class="edit-report-input" type="text"
-                                name="report-images" placeholder="Enter video urls separated by commas (no spaces)" required>
+                                name="report-images" placeholder="Enter video urls separated by commas (no spaces)"
+                                required>
                             <!-- <div class="edit-report-input">
                                 <label class="edit-report-file">
                                     Add Image
                                 </label>
-                                <input class="edit-report-file" type="file" name="picture" accept="image/*" />
-                            </div>
-                            <div class="edit-report-input">
+                                <input id="modal-create-new-report-images-input" class="edit-report-file" type="file" name="picture" accept="image/*" />
+                            </div> -->
+                            <!-- <div class="edit-report-input">
                                 <label class="edit-report-file">
                                     Add Video
                                 </label>
@@ -342,8 +365,9 @@
                             <div class="edit-report-input">
                                 <button id="modal-create-new-report-location-btn" class="edit-form-btn"
                                     onclick="showPosition()">Get Coordinates</button>
-                                <input id="modal-add-incident-geocoordinates-field" class="geocordinates-box" type="text"
-                                    name="geocoordinates" placeholder="Click to get Location" disabled>
+                                <input id="modal-add-incident-geocoordinates-field" class="geocordinates-box"
+                                    type="text" name="geocoordinates" placeholder="0.32358400000000004, 32.5967872"
+                                    disabled>
                             </div>
                             <div class="edit-report-input">
                                 <button id="cancel-create-report" class="edit-form-btn">Cancel</button>
