@@ -80,17 +80,111 @@ function loginUser() {
         });
 }
 
+function uploadMedia(incidentType, incident_id) {
+    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/files/uploads/images/' + incidentType + '/' + incident_id;
+    // const URL_INCIDENT = 'http://localhost:5000/api/v1/files/uploads/images/' + incidentType + '/' + incident_id;
+    var accessToken = getCookie("jwtAccessToken");
+    var date = new Date();
+    var timestamp = date.getTime();
+
+    let myHeader = new Headers();
+    myHeader.append('Accept', 'application/json');
+    myHeader.append('Authorization', 'Bearer ' + accessToken);
+
+    let myFormData = new FormData();
+
+    let myFileInput = document.getElementById('modal-create-new-report-images-input').files[0];
+    myFormData.append('images', myFileInput, "IMG-" + timestamp + ".png");
+    let req = new Request(URL_INCIDENT, {
+        method: 'PATCH',
+        headers: myHeader,
+        body: myFormData
+    });
+
+    var uploadImageIncidentPrompt = confirm("Continue and upload this image!");
+    if (uploadImageIncidentPrompt == true) {
+        fetch(req).then(function (response) {
+            return response.json();
+        }).then(function (myJson) {
+
+            if (myJson.status == 201) {
+                alert(myJson.message);
+            } else {
+                alert(myJson.error)
+            }
+        }).catch((myError) => {
+            alert("Image Upload Error: " + myError.message);
+        })
+    }
+}
+
+
+function uploadVideo(incidentType, incident_id) {
+    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/files/uploads/videos/' + incidentType + '/' + incident_id;
+    // const URL_INCIDENT = 'http://localhost:5000/api/v1/files/uploads/videos/' + incidentType + '/' + incident_id;
+    var accessToken = getCookie("jwtAccessToken");
+    var date = new Date();
+    var timestamp = date.getTime();
+
+    let myHeader = new Headers();
+    myHeader.append('Accept', 'application/json');
+    myHeader.append('Authorization', 'Bearer ' + accessToken);
+
+    let myFormData = new FormData();
+
+    let myFileInput = document.getElementById('modal-create-new-report-videos-input').files[0];
+    myFormData.append('videos', myFileInput, "VID-" + timestamp + ".mp4");
+    let req = new Request(URL_INCIDENT, {
+        method: 'PATCH',
+        headers: myHeader,
+        body: myFormData
+    });
+
+    var uploadVideoIncidentPrompt = confirm("Continue and upload this video!");
+    if (uploadVideoIncidentPrompt == true) {
+        fetch(req).then(function (response) {
+            return response.json();
+        }).then(function (myJson) {
+
+            if (myJson.status == 201) {
+                alert(myJson.message);
+            } else {
+                alert(myJson.error)
+            }
+        }).catch((myError) => {
+            alert("Video Upload Error: " + myError.message);
+        })
+    }
+
+}
+
 function createIncident(incidents) {
+    alert(incidents)
     const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents;
     // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents;
     var accessToken = getCookie("jwtAccessToken");
 
+    myLocation = document.getElementById("modal-add-incident-geocoordinates-field").value,
+        myVideos = document.getElementById("modal-create-new-report-videos").value.toString().split(','),
+        myImages = document.getElementById("modal-create-new-report-images").value.toString().split(',')
+    if (myVideos[0].trim().length == 0) {
+        myVideos = ["novideo"];
+    }
+
+    if (myImages[0].trim().length == 0) {
+        myImages = ["noimage"];
+    }
+
+    if (myLocation.length == 0) {
+        myLocation = "0.32358400000000004, 32.5967872";
+    }
+
     var newIncident = {
         title: document.getElementById("modal-create-new-report-title").value,
         comment: document.getElementById("modal-create-new-report-comment").value,
-        location: document.getElementById("modal-add-incident-geocoordinates-field").value,
-        videos: document.getElementById("modal-create-new-report-videos").value.toString().split(','),
-        images: document.getElementById("modal-create-new-report-images").value.toString().split(',')
+        location: myLocation,
+        videos: myVideos,
+        images: myImages
     }
     let fetchData = {
         method: 'POST',
@@ -111,9 +205,11 @@ function createIncident(incidents) {
                     alert(myJson.message);
                     openHomePage();
                 } else {
-                    alert(myJson.error)
+                    return alert(myJson.error);
                 }
-            })
+            }).catch((myError) => {
+                return alert("Create Error: " + myError.message)
+            });
     }
 }
 
@@ -138,7 +234,7 @@ function getAllIncidents(incidents, tableId) {
                 var incidentsTable = document.getElementById(tableId);
                 var numberOfRows = 1;
                 var tableRowIndex = 1
-                for (tableRowIndex; tableRowIndex < incidentsTable.rows.length; tableRowIndex++){
+                for (tableRowIndex; tableRowIndex < incidentsTable.rows.length; tableRowIndex++) {
                     incidentsTable.rows[tableRowIndex].innerHTML = "";
                 }
                 for (let incident of jsonData.data) {
@@ -249,6 +345,7 @@ function getAllIncidentsPerUser(incidents, tabSectionId) {
                     gridBoxLiButtons.appendChild(gridBoxLiDivButtons);
 
                     gridBoxUl.appendChild(gridBoxLiThumbnail);
+                    gridBoxUl.appendChild(gridBoxLiIncidentId);
                     gridBoxUl.appendChild(gridBoxLiTitle);
                     gridBoxUl.appendChild(gridBoxLiRecordType);
                     gridBoxUl.appendChild(gridBoxLiSubmissionDate);
@@ -363,6 +460,10 @@ function getUserIncidentById(incidents, incidentId) {
                     incindentEditLocation = document.getElementById("modal-edit-incident-geocoordinates-field");
                     var incidentImageContainerDiv = document.getElementById("modal-incident-images");
                     var incidentVideoContainerDiv = document.getElementById("modal-incident-videos");
+                    var incidentImageEditBox = document.getElementById("modal-edit-report-images");
+                    var incidentVideoEditBox = document.getElementById("modal-edit-report-videos")
+                    incidentImageContainerDiv.innerHTML = "";
+                    incidentVideoContainerDiv.innerHTML = "";
 
 
                     incidentLocation.value = incident.location;
@@ -372,25 +473,37 @@ function getUserIncidentById(incidents, incidentId) {
                     incidentComment.innerHTML = incident.comment;
                     incidentCreateDate.innerHTML = incident.created_on;
                     incidentStatus.innerHTML = incident.status;
+                    incidentImageEditBox.value = incident.images;
+                    incidentVideoEditBox.value = incident.videos;
 
                     var incidentsImageUrlString = incident.images.toString().split(',');
-                    for (let myImageIndex = 0; myImageIndex < incidentsImageUrlString.length; myImageIndex++){
-                        var imageElement = document.createElement('img');
-                        imageElement.src = incidentsImageUrlString[myImageIndex];
-                        incidentImageContainerDiv.appendChild(imageElement)
+                    if (incidentsImageUrlString[0] != "noimage") {
+                        for (let myImageIndex = 0; myImageIndex < incidentsImageUrlString.length; myImageIndex++) {
+                            var imageElement = document.createElement('img');
+                            imageElement.src = incidentsImageUrlString[myImageIndex];
+                            incidentImageContainerDiv.appendChild(imageElement)
+                        }
                     }
 
                     var incidentsVideoUrlString = incident.videos.toString().split(',');
-                    for (let myVideoIndex = 0; myVideoIndex < incidentsVideoUrlString.length; myVideoIndex++){
+
+
+                    for (let myVideoIndex = 0; myVideoIndex < incidentsVideoUrlString.length; myVideoIndex++) {
                         var videoElement = document.createElement('video');
                         videoElement.controls = true;
                         var sourceElement = document.createElement('source');
                         sourceElement.src = incidentsVideoUrlString[myVideoIndex];
                         videoElement.appendChild(sourceElement);
-                        incidentVideoContainerDiv.appendChild(videoElement);
-                    }
-                    // alert(incidentsImageUrlString[0]);
 
+                        if (incidentsVideoUrlString[myVideoIndex] != "novideo") {
+                            incidentVideoContainerDiv.appendChild(videoElement);
+                        }
+                    }
+
+                    var incidentUpdateImagesBtnDiv = document.getElementById("model-update-incident-images-btn-div");
+                    incidentUpdateImagesBtnDiv.innerHTML = '<button id="update-incident-attribute" class="modal-contents-item edit-form-btn" onclick="uploadMedia(\'' + incidents + '\',' + incidentId.innerHTML + ')">Update Images</button>';
+                    var incidentUpdateVideosBtnDiv = document.getElementById("model-update-incident-videos-btn-div");
+                    incidentUpdateVideosBtnDiv.innerHTML = '<button id="update-incident-attribute-video" class="modal-contents-item edit-form-btn" onclick="uploadVideo(\'' + incidents + '\',' + incidentId.innerHTML + ')">Update Videos</button>';
                     incidentUpdateBtnDiv = document.getElementById("model-update-incident-attribute-btn");
                     incidentUpdateBtnDiv.innerHTML = '<button id="update-incident-attribute" class="modal-contents-item edit-form-btn" onclick="updateUserIncident(\'' + incidents + '\',' + incidentId.innerHTML + ')">Update </button>';
                     incidentDeleteBtnDiv = document.getElementById("model-delete-incident-attribute-btn");
@@ -543,7 +656,7 @@ function getAllUsers() {
                 var usersTable = document.getElementById("users-list-table");
                 var numberOfRows = 1;
                 var tableRowIndex = 1
-                for (tableRowIndex; tableRowIndex < usersTable.rows.length; tableRowIndex++){
+                for (tableRowIndex; tableRowIndex < usersTable.rows.length; tableRowIndex++) {
                     incidentsTable.rows[tableRowIndex].innerHTML = "";
                 }
                 for (let user of myJson.data) {
