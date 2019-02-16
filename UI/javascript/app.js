@@ -156,10 +156,6 @@ function createNewReportsModal(incidentTypes) {
         }
     }, false);
 
-    // var newreportType = document.getElementById("modal-create-new-report-type");
-
-    // newreportType.innerHTML = incidentType;
-
     var span = document.getElementById("close-create-incident-modal");
     var cancel_create_report = document.getElementById("cancel-create-report")
     var save_create_report = document.getElementById("save-create-report")
@@ -173,14 +169,15 @@ function createNewReportsModal(incidentTypes) {
     }
 
     save_create_report.onclick = function () {
-        var incidentType = ""
+        var incidentType = "";
         var incidentTypeSelect = document.getElementById("modal-incident-type-select");
         if (incidentTypeSelect.selectedIndex == 0){
-            incidentType = "red-flags"
+            incidentType = "red-flags";
         } else {
-            incidentType = "interventions"
+            incidentType = "interventions";
         }
         createIncident(incidentType);
+        
     }
 
     window.onclick = function (event) {
@@ -191,9 +188,12 @@ function createNewReportsModal(incidentTypes) {
 }
 
 function showPosition(){
+    
     if(navigator.geolocation){
+        alert("show po")
         navigator.geolocation.getCurrentPosition(function(position){
             var positionCoordinates = position.coords.latitude + ", " + position.coords.longitude;
+            alert(positionCoordinates);
             document.getElementById('modal-view-incident-geocoordinates-field').value = positionCoordinates;
             document.getElementById('modal-add-incident-geocoordinates-field').value = positionCoordinates;
         });

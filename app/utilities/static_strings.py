@@ -10,6 +10,8 @@ URL_REGISTER = "/api/v1/auth/register"
 URL_LOGIN = "/api/v1/auth/login"
 URL_USERS = "/api/v1/users"
 URL_BASE = "/api/v1"
+BASE_IMAGES_URL = "http://127.0.0.1:5000/api/v1/files/uploads/images/"
+BASE_VIDEOS_URL = "http://127.0.0.1:5000/api/v1/files/uploads/videos/"
 
 # url string constants for incidents
 URL_REDFLAGS = "/api/v1/red-flags"
@@ -108,9 +110,23 @@ RESP_ERROR_MSG_SESSION_EXPIRED = "You have been logged out of the system because
 RESP_ERROR_MSG_DATABASE_CONNECTION = "The server experienced a database connection error."
 EXPIRED_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkZW50aXR5Ijp7InVzZXJfaWQiOjEsInVzZXJuYW1lIjoiZWR3YXJkIiwiaXNfYWRtaW4iOnRydWV9LCJleHAiOjE1NDg1Njk4OTN9.DWq5XHDYfNa28YeJLEhMgeu8iIcn3At79kJ12kHOFBQ"
 TEST_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkZW50aXR5Ijp7InVzZXJfaWQiOjIsInVzZXJuYW1lIjoiZWR3YXJkcGpvdGhlZHdhcmRtZSIsImlzX2FkbWluIjpmYWxzZX0sImV4cCI6MTc0OTI3MzY4NX0.VM2kALCzF3yGI4yx1VgspfL8EAbErzVd3GeuElUOPz8"
+RESP_ERROR_MSG_NO_FILE_UPLOADED = "No file uploaded"
+RESP_ERROR_MSG_FILE_UPLOAD_ERROR = "There was an unexpected error while uploading your files"
 TESTING_STRING = "i AM TESTING THIS STRING"
 
+
+
 # string constants for various responses
+
+RESP_ERROR_NO_FILE_UPLOADED = Response(json.dumps({
+    "status": 400,
+    "error": RESP_ERROR_MSG_NO_FILE_UPLOADED
+}), content_type="application/json", status=400)
+
+RESP_ERROR_FILE_UPLOAD_ERROR = Response(json.dumps({
+    "status": 400,
+    "error": RESP_ERROR_MSG_FILE_UPLOAD_ERROR
+}), content_type="application/json", status=400)
 
 RESP_ERROR_DATABASE_CONNECTION = Response(json.dumps({
     "status": 500,
