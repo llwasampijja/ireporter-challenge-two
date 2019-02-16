@@ -48,13 +48,6 @@ class GeneralValidator():
             return True
         return False
 
-    # @staticmethod
-    # def create_id(get_incidents_instance, key_id):
-    #     """method for creating an id for every new item created"""
-    #     if not get_incidents_instance:
-    #         return 1
-    #     return 1 + get_incidents_instance[-1].get(key_id)
-
     def invalid_coordinates(self, geolocation):
         """method checks if a given string includes valid coordinates"""
         geolocation = geolocation.replace(" ", "")
@@ -77,3 +70,12 @@ class GeneralValidator():
         if -bound <= coordinate <= 0:
             return False
         return True
+
+
+    def allowed_file(self, filename):
+        return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ("jpg", "png", "jpeg")
+
+    def allowed_video_file(self, filename):
+        return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ("mp4")
