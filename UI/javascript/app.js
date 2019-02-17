@@ -18,7 +18,7 @@ function checkIfUserIsLoggedIn() {
 function avoidLoginSignupPage() {
     if (getCookie("jwtAccessToken") != "" && getCookie("isAdmin") == "true") {
         openAdminPage();
-    } else if (getCookie("jwtAccessToken") != "" && getCookie("isAdmin") == "false"){
+    } else if (getCookie("jwtAccessToken") != "" && getCookie("isAdmin") == "false") {
         openHomePage();
     } else {
         alert("You have been logged out, Login again to regain access!");
@@ -54,56 +54,56 @@ function homePageNotSignedIn() {
         mainNavSignInLInk.style.display = "inline-block";
         nonMemberPromptButton.style.display = "block";
         nonMemberPromptPhrase.style.display = "block";
-    } else if (getCookie("isAdmin")==="true"){
-        for (let signedLink of signedInLInks){
+    } else if (getCookie("isAdmin") === "true") {
+        for (let signedLink of signedInLInks) {
             signedLink.style.display = "inline-block";
         }
 
-        for (let adminLink of adminLinks){
+        for (let adminLink of adminLinks) {
             adminLink.style.display = "inline-block";
         }
 
-        if (mainNavSignInLInk != null){
+        if (mainNavSignInLInk != null) {
             mainNavSignInLInk.style.display = "none";
         }
-        
-        if (signedMemberPromptPhrase != null){
+
+        if (signedMemberPromptPhrase != null) {
             signedMemberPromptPhrase.style.display = "block"
         }
 
-        if (nonMemberPromptButton != null){
+        if (nonMemberPromptButton != null) {
             nonMemberPromptButton.style.display = "none"
         }
 
-        if (nonMemberPromptPhrase != null){
+        if (nonMemberPromptPhrase != null) {
             nonMemberPromptPhrase.style.display = "none"
         }
-    
+
     } else {
-        for (let signedLink of signedInLInks){
+        for (let signedLink of signedInLInks) {
             signedLink.style.display = "inline-block";
         }
-        for (let nonAdminLink of nonAdminLinks){
+        for (let nonAdminLink of nonAdminLinks) {
             nonAdminLink.style.display = "inline-block";
         }
-        if (mainNavSignInLInk != null){
+        if (mainNavSignInLInk != null) {
             mainNavSignInLInk.style.display = "none";
         }
-        if (signedMemberPromptPhrase != null){
+        if (signedMemberPromptPhrase != null) {
             signedMemberPromptPhrase.style.display = "block";
         }
-        if (nonMemberPromptButton != null){
+        if (nonMemberPromptButton != null) {
             nonMemberPromptButton.style.display = "none";
         }
-        if (nonMemberPromptPhrase != null){
+        if (nonMemberPromptPhrase != null) {
             nonMemberPromptPhrase.style.display = "none";
         }
 
-        if (tableUserprofileAllIncidentsSummary != null){
+        if (tableUserprofileAllIncidentsSummary != null) {
             tableUserprofileAllIncidentsSummary.style.display = "inline-block";
         }
 
-        if (tableUserprofileAllIncidents!= null){
+        if (tableUserprofileAllIncidents != null) {
             tableUserprofileAllIncidents.style.display = "inline-block";
         }
     }
@@ -148,11 +148,37 @@ function openViewReportsModal() {
 }
 
 function createNewReportsModal(incidentTypes) {
+
     var modal = document.getElementById('create-new-report-modal');
+    var mapIncidents = document.getElementById("user-incidents-map")
+    // var adminTabLinks = document.getElementsByClassName("admin-tab");
+    // if (document.getElementById("dashboard-header-incident-type").innerHTML === "Map") {
+    //     openAdminManageTab(event, 'view-user-redflags');
+    //     setDashBoardHeaderIncidedentType('Red-flags');
+
+    //     var tabIndex, tabContent, adminTabLinks;
+    //     tabContent = document.getElementsByClassName("section-manage-content");
+
+    //     // for (tabIndex = 0; tabIndex < tabContent.length; tabIndex++) {
+    //     //     tabContent[tabIndex].style.display = "none";
+    //     // }
+
+    //     adminTabLinks = document.getElementsByClassName("admin-tab");
+
+    //     // for (tabIndex = 0; tabIndex < adminTabLinks.length; tabIndex++) {
+    //         adminTabLinks[0].className = adminTabLinks[0].className.replace(" active", "");
+    //     // }
+
+    //     document.getElementById('view-user-redflags').style.display = "block";
+    //     tabEvent.currentTarget.className += " active";
+    // }
+
+    showViewIncidentMap(0.3236, 32.5978, "modal-incident-new-map-location");
 
     document.addEventListener('click', function (event) {
         if (event.target.classList.contains('new-report-btn')) {
             modal.style.display = "block";
+            mapIncidents.style.display = "none"
         }
     }, false);
 
@@ -162,42 +188,44 @@ function createNewReportsModal(incidentTypes) {
 
     span.onclick = function () {
         modal.style.display = "none";
+        mapIncidents.style.display = "block"
     }
 
     cancel_create_report.onclick = function () {
         modal.style.display = "none";
+        mapIncidents.style.display = "block"
     }
 
     save_create_report.onclick = function () {
         var incidentType = "";
         var incidentTypeSelect = document.getElementById("modal-incident-type-select");
-        if (incidentTypeSelect.selectedIndex == 0){
+        if (incidentTypeSelect.selectedIndex == 0) {
             incidentType = "red-flags";
         } else {
             incidentType = "interventions";
         }
         createIncident(incidentType);
-        
+
     }
 
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
+            mapIncidents.style.display = "block";
         }
     }
 }
 
-function showPosition(){
-    
-    if(navigator.geolocation){
-        alert("show po")
-        navigator.geolocation.getCurrentPosition(function(position){
+function showPosition() {
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
             var positionCoordinates = position.coords.latitude + ", " + position.coords.longitude;
             alert(positionCoordinates);
             document.getElementById('modal-view-incident-geocoordinates-field').value = positionCoordinates;
             document.getElementById('modal-add-incident-geocoordinates-field').value = positionCoordinates;
         });
-    } else{
+    } else {
         alert("HTML5 Geolocation isn't supported by your current browser.");
     }
 }
@@ -220,7 +248,7 @@ function openAdminManageTab(tabEvent, tabName) {
     tabEvent.currentTarget.className += " active";
 }
 
-function setDashBoardHeaderIncidedentType(incidentType){
+function setDashBoardHeaderIncidedentType(incidentType) {
     document.getElementById("dashboard-header-incident-type").innerHTML = incidentType;
 }
 
