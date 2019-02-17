@@ -159,7 +159,7 @@ function uploadVideo(incidentType, incident_id) {
 }
 
 function createIncident(incidents) {
-    alert(incidents)
+
     const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents;
     // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents;
     var accessToken = getCookie("jwtAccessToken");
@@ -255,8 +255,10 @@ function getAllIncidents(incidents, tableId) {
                     locationCell1.innerHTML = incident.location;
                     titleCell2.innerHTML = incident.title;
                     commentCell3.innerHTML = incident.comment;
-                    imagesCell4.innerHTML = incident.images;
-                    videosCell5.innerHTML = incident.videos;
+                    let numberOfImages = incident.images.toString().split(",").length
+                    let numberOfVideos = incident.videos.toString().split(",").length
+                    imagesCell4.innerHTML = numberOfImages;
+                    videosCell5.innerHTML = numberOfVideos;
                     createdOnCell6.innerHTML = incident.created_on;
                     createdByCell7.innerHTML = incident.created_by;
                     statusCell8.innerHTML = incident.status;
@@ -354,13 +356,6 @@ function getAllIncidentsPerUser(incidents, tabSectionId) {
 
                     gridBoxContainerDiv.appendChild(gridBoxUl);
                     gridContainerUserIncidents.appendChild(gridBoxContainerDiv);
-
-                    // var incidentLocationCoordinates = incident.location.split(',')
-                    // var inicidentCordnates = { lat: incidentLocationCoordinates[0], lng: incidentLocationCoordinates[1] };
-                    // var myMap = new google.maps.Map(
-                    //     document.getElementById('incidents-map'), { zoom: 4, center: inicidentCordnates });
-                    // // The marker, positioned at Uluru
-                    // // var marker = new google.maps.Marker({ position: inicidentCordnates, map: myMap });
                 }
 
             } else if (jsonData.status == 401) {
@@ -401,6 +396,10 @@ function getIncidentById(incidents, element, tableId) {
                     incidentCreateDate = document.getElementById("modal-incident-create-date")
                     incidentCreateBy = document.getElementById("modal-incident-creator")
                     incidentStatusSelect = document.getElementById("modal-incident-status-select")
+                    var incidentImageAdminDiv = document.getElementById("modal-admin-view-incident-images");
+                    var incidentVideoAdminDiv = document.getElementById("modal-admin-view-incident-videos");
+                    incidentImageAdminDiv.innerHTML = "";
+                    incidentVideoAdminDiv.innerHTML = "";
 
                     incidentTitle.innerHTML = incident.title;
                     incidentComment.innerHTML = incident.comment;
@@ -415,6 +414,30 @@ function getIncidentById(incidents, element, tableId) {
                     } else {
                         incidentStatusSelect.selectedIndex = 3;
                     }
+
+                    let incidentsImageUrlString = incident.images.toString().split(',');
+                    if (incidentsImageUrlString[0] != "noimage") {
+                        for (let myImageIndex = 0; myImageIndex < incidentsImageUrlString.length; myImageIndex++) {
+                            let imageElement = document.createElement('img');
+                            imageElement.src = incidentsImageUrlString[myImageIndex];
+                            incidentImageAdminDiv.appendChild(imageElement)
+                        }
+                    }
+
+                    let incidentsVideoUrlString = incident.videos.toString().split(',');
+                    for (let myVideoIndex = 0; myVideoIndex < incidentsVideoUrlString.length; myVideoIndex++) {
+                        let videoElement = document.createElement('video');
+                        videoElement.controls = true;
+                        let sourceElement = document.createElement('source');
+                        sourceElement.src = incidentsVideoUrlString[myVideoIndex];
+                        videoElement.appendChild(sourceElement);
+
+                        if (incidentsVideoUrlString[myVideoIndex] != "novideo") {
+                            incidentVideoAdminDiv.appendChild(videoElement);
+                        }
+                    }
+
+
                     incidentBody = document.getElementById("model-update-incident-status-btn");
                     incidentBody.innerHTML = '<button id="update-incident-status" class="modal-contents-item edit-form-btn" onclick="changeIncidentStatus(\'' + incidents + '\',' + incidentId + ')">Update </button>';
                 }
@@ -508,6 +531,10 @@ function getUserIncidentById(incidents, incidentId) {
                     incidentUpdateBtnDiv.innerHTML = '<button id="update-incident-attribute" class="modal-contents-item edit-form-btn" onclick="updateUserIncident(\'' + incidents + '\',' + incidentId.innerHTML + ')">Update </button>';
                     incidentDeleteBtnDiv = document.getElementById("model-delete-incident-attribute-btn");
                     incidentDeleteBtnDiv.innerHTML = '<button id="update-incident-attribute" class="modal-contents-item edit-form-btn" onclick="deleteUserIncident(\'' + incidents + '\',' + incidentId.innerHTML + ')">Delete </button>';
+                    locationCoordinates = incident.location.split(',');
+                    myLatitude = parseFloat(locationCoordinates[0].trim());
+                    myLogitude = parseFloat(locationCoordinates[1].trim());
+                    showViewIncidentMap(myLatitude, myLogitude, "modal-incident-view-map-location");
                 }
 
             } else if (jsonData.status == 401) {
@@ -713,6 +740,49 @@ function getCookie(cookieName) {
         }
     }
     return "";
+}
+
+function showViewIncidentMap(myIncidentlatitude, myIncidentLogitude, modalIncidentViewMapLocation) {
+    let modalMap = L.map(modalIncidentViewMapLocation);
+    modalMap.setView([myIncidentlatitude, myIncidentLogitude], 13);
+
+    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibGx3YXNhbXBpamphIiwiYSI6ImNqczdkY25wbDB3bm0zeW8zaXljaDN3cWgifQ.7GN9HpLQG2mAC6D-2lxuOg', {
+        maxZoom: 18,
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+            '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+            'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+        id: 'mapbox.streets'
+    }).addTo(modalMap);
+
+    let incidentLocationmarker = L.marker([myIncidentlatitude, myIncidentLogitude]);
+    incidentLocationmarker.addTo(modalMap)
+        .openPopup();
+
+    var popup = L.popup();
+
+    function onMapClick(e) {
+        var extractedLocation = e.latlng.toString().slice(7, -1);
+        document.getElementById('modal-view-incident-geocoordinates-field').value = extractedLocation;
+        document.getElementById('modal-add-incident-geocoordinates-field').value = extractedLocation;
+    }
+
+    document.addEventListener('click', function (event) {
+        if (event.target.classList.contains('modal-view-incident-get-geocoordinates')) {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var positionCoordinates = position.coords.latitude + ", " + position.coords.longitude;
+                    modalMap.setView([position.coords.latitude, position.coords.longitude], 13);
+                    incidentLocationmarker = L.marker([position.coords.latitude, position.coords.longitude]);
+                    document.getElementById('modal-view-incident-geocoordinates-field').value = positionCoordinates;
+                    document.getElementById('modal-add-incident-geocoordinates-field').value = positionCoordinates;
+                });
+            } else {
+                alert("HTML5 Geolocation isn't supported by your current browser.");
+            }
+        }
+    }, false);
+
+    modalMap.on('click', onMapClick);
 }
 
 function logoutUser() {
