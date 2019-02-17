@@ -108,6 +108,16 @@ header nav ul li a:link{
   display: none;
 }
 
+#user-incidents-map, #admin-incidents-map {
+  height: 600px;
+  width: 100%;
+}
+
+#modal-incident-view-map-location, #modal-incident-new-map-location {
+  height: 200px;
+  width: 100%;
+}
+
 /* login window */
 .sign-form-container{
   width: 100%;
