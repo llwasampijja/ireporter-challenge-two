@@ -18,6 +18,12 @@ def get_users():
     """method and route for getting all users"""
     return users_controller.get_users()
 
+@user_blueprint.route("/<int:user_id>", methods=["GET"])
+@authenticator.authorized
+def get_user(user_id):
+    """method for getting a user by id"""
+    return users_controller.get_user(user_id)
+
 @user_blueprint.route("/<int:user_id>", methods=["PATCH"])
 @authenticator.admin_only
 def update_user(user_id):

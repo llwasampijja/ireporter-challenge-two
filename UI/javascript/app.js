@@ -126,18 +126,48 @@ function openAdminPage() {
 }
 
 function openViewReportsModal() {
-    var modal = document.getElementById('view-report-details-modal');
+    let modalViewReport = document.getElementById('view-report-details-modal');
+    // var modalUser = document.getElementById('view-user-profile-modal');
 
     document.addEventListener('click', function (event) {
         if (event.target.classList.contains('view-report-btn')) {
+            modalViewReport.style.display = "block";
+            // modalUser.style.display = "none";
+        }
+    }, false);
+
+    // var span = document.getElementsByClassName("close")[0];
+    let spanViewReport = document.getElementById("modal-close-profile-view");
+
+    spanViewReport.onclick = function () {
+        modalViewReport.style.display = "none";
+    }
+
+    window.onclick = function (event) {
+        if (event.target == modalViewReport) {
+            modalViewReport.style.display = "none";
+        }
+    }
+}
+
+function openViewUserProfileModal(userId) {
+    var modal = document.getElementById('view-user-profile-modal');
+
+    document.addEventListener('click', function (event) {
+        if (event.target.classList.contains('view-user-profile-btn')) {
             modal.style.display = "block";
         }
     }, false);
 
     var span = document.getElementsByClassName("close")[0];
+    // let span = document.getElementById("close-user-profile");
 
     span.onclick = function () {
         modal.style.display = "none";
+    }
+    let modalUserRoleChange = document.getElementById("btn-user-role-change");
+    modalUserRoleChange.onclick = function () {
+        changeUserRole(userId)
     }
 
     window.onclick = function (event) {
@@ -254,4 +284,5 @@ function setDashBoardHeaderIncidedentType(incidentType) {
 
 function runAllJavaScript() {
     openViewReportsModal();
+    // openViewUserProfileModal();
 }

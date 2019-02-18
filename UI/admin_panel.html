@@ -148,6 +148,7 @@
                         <th>PhoneNumber</th>
                         <th>Is_Admin</th>
                         <th>Registered On</th>
+                        <th>View</th>
                     </tr>
                 </table>
             </div>
@@ -222,12 +223,207 @@
         </div>
     </footer>
 
+    <!-- The View user profile Modal -->
+    <div id="view-user-profile-modal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span id="close-user-profile" class="close">&times;</span>
+
+            <section class="profile-sections">
+                <div class="profile-container">
+                    <div class="profile-content-wrapper">
+                        <div class="profile-image-wrapper profile-group">
+                            <img src="images/ann.jpg" alt="profile image">
+                        </div>
+                        <div class="profile-summury-container profile-group">
+                            <div class="profile-summury-wrapper">
+                                <p>
+                                    <div class="user-profile-detail">
+                                        <label class="user-profile-label">
+                                            User Id:
+                                        </label>
+                                        <p id="modal-users-userid" class="user-profile-value">User Id</p>
+                                    </div>
+                                </p>
+                                <p>
+                                    <div class="user-profile-detail">
+                                        <label class="user-profile-label">
+                                            Name:
+                                        </label>
+                                        <p id="modal-users-fullname" class="user-profile-value">Fullname</p>
+                                    </div>
+                                </p>
+
+                                <p>
+                                    <div class="user-profile-detail">
+                                        <label class="user-profile-label">
+                                            Othername:
+                                        </label>
+                                        <p id="modal-users-othername" class="user-profile-value">Othername</p>
+                                    </div>
+                                </p>
+
+                                <p>
+                                    <div class="user-profile-detail">
+                                        <label class="user-profile-label">
+                                            Username:
+                                        </label>
+                                        <p id="modal-users-username" class="user-profile-value">username</p>
+                                    </div>
+                                </p>
+
+                                <p>
+                                    <div class="user-profile-detail">
+                                        <label class="user-profile-label">
+                                            Email:
+                                        </label>
+                                        <p id="modal-users-email" class="user-profile-value">Email</p>
+                                    </div>
+                                </p>
+
+                                <p>
+                                    <div class="user-profile-detail">
+                                        <label class="user-profile-label">
+                                            Contact Phone Number:
+                                        </label>
+                                        <p id="modal-users-phonenumber" class="user-profile-value">PhoneNumber</p>
+                                    </div>
+                                </p>
+
+                                <p>
+                                    <div class="user-profile-detail">
+                                        <label class="user-profile-label">
+                                            is Admin?:
+                                        </label>
+                                        <p id="modal-users-isadmin" class="user-profile-value">isadmin</p>
+                                    </div>
+                                </p>
+
+                                <p>
+                                    <div class="user-profile-detail">
+                                        <label class="user-profile-label">
+                                            Joined On:
+                                        </label>
+                                        <p id="modal-users-registeredon" class="user-profile-value">joining date</p>
+                                    </div>
+                                </p>
+
+                                <!-- <p>
+                                    <div class="user-profile-detail">
+                                        <label class="user-profile-label">
+                                            Place of Residence:
+                                        </label>
+                                        <p class="user-profile-value">Mbajja Ntanzi</p>
+                                    </div>
+                                </p>
+        
+                                <p>
+                                    <div class="user-profile-detail">
+                                        <label class="user-profile-label">
+                                            Date of Birth:
+                                        </label>
+                                        <p class="user-profile-value">12th August 2024</p>
+                                    </div>
+                                </p>
+                                <p>
+                                    <div class="user-profile-detail">
+                                        <label class="user-profile-label">
+                                            Next of Kin:
+                                        </label>
+                                        <p class="user-profile-value">Edward Army</p>
+                                    </div>
+                                </p>
+        
+                                <p>
+                                    <div class="user-profile-detail">
+                                        <label class="user-profile-label">
+                                            Next of Kin Contact:
+                                        </label>
+                                        <p class="user-profile-value">0794961853</p>
+                                    </div>
+                                </p> -->
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </section>
+            <section class="profile-sections">
+                <button id="btn-user-role-change" class="site-signup-btn site-btn profile-group"></button>
+            </section>
+
+
+
+            <section class="data-tables">
+                <div class="table-container reports-summary-table">
+                    <table id="table-userprofile-all-incidents-summary-admin-view">
+                        <tr>
+                            <th>Report Type</th>
+                            <th>Pending Investigation</th>
+                            <th>Under Investigation</th>
+                            <th>Resolved</th>
+                            <th>Rejected</th>
+                            <th>Total</th>
+                        </tr>
+                        <tr>
+                            <td>Red-Flags</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Interventions</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Total</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+
+                    </table>
+                </div>
+                <div class="table-container reports-table">
+                    <table id="modal-userprofile-redflags-list-table">
+                        <tr>
+                            <th>Id</th>
+                            <th>Type</th>
+                            <!-- <th>Location</th> -->
+                            <th>Title</th>
+                            <!-- <th>Comment</th> -->
+                            <th>Images</th>
+                            <th>Videos</th>
+                            <!-- <th>Created On</th> -->
+                            <th>Status</th>
+                            <th>View Incident</th>
+                        </tr>
+                    </table>
+                </div>
+
+
+            </section>
+        </div>
+
+    </div>
+
     <!-- The View Red-flag Modal -->
     <div id="view-report-details-modal" class="modal">
 
         <!-- Modal content -->
         <div class="modal-content">
-            <span class="close">&times;</span>
+            <span id="modal-close-profile-view" class="close">&times;</span>
             <section>
                 <div>
                     <header class="inside-headers">
