@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Sign in</title>
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<script src="javascript/app.js"></script>
+	<script src="javascript/main.js"></script>
+	<script>
+		 avoidLoginSignupPage();
+	</script>
+</head>
+
+<body>
+	<header class="navigation">
+		<h1><a href="index.html">IReporter</a></h1>
+		<nav class="bigscreen-menu-nav">
+			<ul>
+				<li class="header-nav-item"><a href="index.html">Home</a></li>
+				<li class="header-nav-item"><a href="about_us.html">About Us</a></li>
+			</ul>
+		</nav>
+		<nav class="mobile-menu-btn">
+			<div onclick="toggleMobileMenuVisibility()" class="dropdownbtn">
+				<div class="dropdownbtn-icon-bar"></div>
+				<div class="dropdownbtn-icon-bar"></div>
+				<div class="dropdownbtn-icon-bar"></div>
+			</div>
+		</nav>
+	</header>
+
+	<nav id="mobile-menu" class="account-menu-nav">
+		<ul>
+			<li class="header-nav-item"><a href="index.html">Home</a></li>
+			<li class="header-nav-item"><a href="about_us.html">About Us</a></li>
+		</ul>
+	</nav>
+
+	<section class="sign-form-container">
+		<div class="sign-form-container-elements-wrapper">
+			<div class="sign-form-image-wrapper">
+				<div class="sign-form-image" style="background-image: url('images/anti-corruption.jpg');"></div>
+				<form class="sign-form" onsubmit="return false">
+					<span class="sign-form-title">User Login</span>
+					<div class="sign-form-element sign-form-input-wrapper">
+						<input id="login-username" class="sign-form-input" type="text" name="username" placeholder="username" required>
+					</div>
+					<div class="sign-form-element sign-form-input-wrapper">
+						<input id="login-password" class="sign-form-input" type="password" name="password" placeholder="Password"
+						 required>
+					</div>
+
+					<div class="sign-form-element sign-form-input-btn-wrapper">
+						<button id="btn-signin" class="sign-form-input-btn" onclick="loginUser()">
+							Sign in
+						</button>
+					</div>
+
+					<div class="sign-form-element">
+						<span>Forgot your </span>
+						<a href="#">password?</a>
+					</div>
+
+					<div class="sign-form-element ">
+						<span>Not a member yet? click button below to signup</span>
+						<button class="sign-form-input-btn" onclick="openSignupPage()">
+							Signup
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</section>
+</body>
+
+</html>

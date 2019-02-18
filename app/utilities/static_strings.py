@@ -10,6 +10,10 @@ URL_REGISTER = "/api/v1/auth/register"
 URL_LOGIN = "/api/v1/auth/login"
 URL_USERS = "/api/v1/users"
 URL_BASE = "/api/v1"
+BASE_IMAGES_URL = "https://ireporter-challenge-two.herokuapp.com/api/v1/files/uploads/images/"
+BASE_VIDEOS_URL = "https://ireporter-challenge-two.herokuapp.com/api/v1/files/uploads/videos/"
+# BASE_IMAGES_URL = "http://localhost:5000/api/v1/files/uploads/images/"
+# BASE_VIDEOS_URL = "http://localhost:5000/api/v1/files/uploads/videos/"
 
 # url string constants for incidents
 URL_REDFLAGS = "/api/v1/red-flags"
@@ -17,12 +21,12 @@ URL_INTERVENTIONS = "/api/v1/interventions"
 
 JWT_SECRET = "thereisgoodintheworld"
 JWT_ALGORITHM = 'HS256'
-JWT_EXP_DELTA_SECONDS = 200
+JWT_EXP_DELTA_SECONDS = 20000
 
 # swagger url string constants
 SWAGGER_UI_URL = "/api/v1/docs"
 # remote API documenation url
-API_URL = "https://llwasampijja.github.io/ireporter-challenge-two/ireporter_challenge_two.json"
+API_URL = "https://llwasampijja.github.io/ireporter_swagger_ui/ireporter_challenge_two.json"
 
 # dictionary for routes
 MY_ROUTES = {
@@ -105,11 +109,31 @@ RESP_ERROR_MSG_NOT_LOGGEDIN = "This feature is only available to loggen in users
 RESP_ERROR_MSG_CONCERNED_CITZENS_ONLY = "This feature is available to only the concerned citizen members of this site"
 RESP_ERROR_MSG_ADMIN_ONLY = "This feature is available to only the administrators of this site"
 RESP_ERROR_MSG_SESSION_EXPIRED = "You have been logged out of the system because your session expired. Re-login to continue enjoying this site's features"
-
+RESP_ERROR_MSG_DATABASE_CONNECTION = "The server experienced a database connection error."
 EXPIRED_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkZW50aXR5Ijp7InVzZXJfaWQiOjEsInVzZXJuYW1lIjoiZWR3YXJkIiwiaXNfYWRtaW4iOnRydWV9LCJleHAiOjE1NDg1Njk4OTN9.DWq5XHDYfNa28YeJLEhMgeu8iIcn3At79kJ12kHOFBQ"
+TEST_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkZW50aXR5Ijp7InVzZXJfaWQiOjIsInVzZXJuYW1lIjoiZWR3YXJkcGpvdGhlZHdhcmRtZSIsImlzX2FkbWluIjpmYWxzZX0sImV4cCI6MTc0OTI3MzY4NX0.VM2kALCzF3yGI4yx1VgspfL8EAbErzVd3GeuElUOPz8"
+RESP_ERROR_MSG_NO_FILE_UPLOADED = "No file uploaded"
+RESP_ERROR_MSG_FILE_UPLOAD_ERROR = "There was an unexpected error while uploading your files"
 TESTING_STRING = "i AM TESTING THIS STRING"
 
+
+
 # string constants for various responses
+
+RESP_ERROR_NO_FILE_UPLOADED = Response(json.dumps({
+    "status": 400,
+    "error": RESP_ERROR_MSG_NO_FILE_UPLOADED
+}), content_type="application/json", status=400)
+
+RESP_ERROR_FILE_UPLOAD_ERROR = Response(json.dumps({
+    "status": 400,
+    "error": RESP_ERROR_MSG_FILE_UPLOAD_ERROR
+}), content_type="application/json", status=400)
+
+RESP_ERROR_DATABASE_CONNECTION = Response(json.dumps({
+    "status": 500,
+    "error": RESP_ERROR_MSG_DATABASE_CONNECTION
+}), content_type="application/json", status=500)
 
 RESP_ERROR_SESSION_EXPIRED = Response(json.dumps({
     "status": 401,
@@ -128,9 +152,9 @@ RESP_ERROR_CONCERNED_CITZENS_ONLY = Response(json.dumps({
 }), content_type="application/json", status=401)
 
 RESP_ERROR_NOT_LOGGEDIN = Response(json.dumps({
-    "status": 400,
+    "status": 401,
     "error": RESP_ERROR_MSG_NOT_LOGGEDIN
-}), content_type="application/json", status=400)
+}), content_type="application/json", status=401)
 
 RESP_ERROR_INVALID_COMMENT_STRING_TYPE = Response(json.dumps({
     "status": 400,

@@ -1,4 +1,4 @@
-## other configuration excluded from example...
+## Excluded files and folders
 exclude_patterns:
 - "tests/"
 - "spec/"
@@ -18,3 +18,4 @@ exclude_patterns:
 - "**/*.d.ts"
 - "app/views" 
 - "app/models" #
+- "UI/"

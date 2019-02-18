@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Dashboard | IReporter</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+        integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+        crossorigin="" />
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+        integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+        crossorigin=""></script>
+    <script src="javascript/app.js"></script>
+    <script src="javascript/main.js"></script>
+    <script>
+        checkIfUserIsLoggedIn();
+        avoidDashBoardForAdmins();
+    </script>
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+</head>
+
+
+<body>
+    <header class="navigation">
+        <h1><a href="index.html">IReporter</a></h1>
+        <nav class="bigscreen-menu-nav">
+            <ul>
+                <li class="header-nav-item non-admin-link"><a href="my_reports.html">Dashboard</a></li>
+                <li class="header-nav-item"><a href="index.html">Home</a></li>
+                <li class="header-nav-item"><a href="about_us.html">About Us</a></li>
+                <li class="header-nav-item"><a href="contact_us.html">Contact Us</a></li>
+                <li class="header-nav-item logged-user-link"><a href="user_profile.html">My Profile</a></li>
+                <li class="header-nav-item logged-user-link"><a href="#" onclick="logoutUser();">Logout</a></li>
+            </ul>
+        </nav>
+        <nav class="mobile-menu-btn">
+            <div onclick="toggleMobileMenuVisibility()" class="dropdownbtn">
+                <div class="dropdownbtn-icon-bar"></div>
+                <div class="dropdownbtn-icon-bar"></div>
+                <div class="dropdownbtn-icon-bar"></div>
+            </div>
+        </nav>
+    </header>
+
+    <nav id="account-menu" class="account-menu-nav">
+        <div id="account-menu">
+            <ul>
+                <li><a href="user_profile.html">My Account</a></li>
+                <li><a href="#" onclick="logoutUser();">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <nav id="mobile-menu" class="account-menu-nav">
+        <ul>
+            <li class="header-nav-item non-admin-link"><a href="my_reports.html">Dashboard</a></li>
+            <li class="header-nav-item"><a href="index.html">Home</a></li>
+            <li class="header-nav-item"><a href="about_us.html">About Us</a></li>
+            <li class="header-nav-item"><a href="contact_us.html">Contact Us</a></li>
+            <li class="logged-user-link"><a href="user_profile.html">My Account</a></li>
+            <li class="logged-user-link"><a href="#" onclick="logoutUser();">Logout</a></li>
+        </ul>
+    </nav>
+
+    <section>
+        <div>
+            <header class="inside-headers">
+                <h2 id="dashboard-header-incident-type" class="dashboard-header-element">Fgetterventions</h2>
+                <div class="filter-reports reports-type dashboard-header-element">
+                    <span class="dashboard-filter-item">Report Status</span>
+                    <select class="dashboard-filter-item">
+                        <option value="all">All</option>
+                        <option value="under-investigation">Under Investigation</option>
+                        <option value="resolved">Resolved</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
+                    <button id="filter-incidents"
+                        class="button-Filter site-signup-btn site-btn dashboard-filter-item">Filter
+                        Reports</button>
+                </div>
+                <input class="reports-search-box dashboard-header-element" type="text" placeholder="Search Incidents"
+                    id="search_reports" />
+                <button type="button" id="new-report-btn"
+                    class="new-report-btn site-signup-btn site-btn dashboard-header-element"
+                    onclick="createNewReportsModal('interventions');">Create
+                    New</button>
+
+                <div class="admin-control-panel-container">
+                    <button class="admin-tab"
+                        onclick="openAdminManageTab(event, 'view-user-incidents'), setDashBoardHeaderIncidedentType('Map');"
+                        id="openByDefault">Map-Incidents</button>
+                    <button class="admin-tab"
+                        onclick="openAdminManageTab(event, 'view-user-redflags'); getAllIncidentsPerUser('red-flags', 'view-user-redflags'), setDashBoardHeaderIncidedentType('Red-flags');">Red-flags</button>
+                    <button class="admin-tab"
+                        onclick="openAdminManageTab(event, 'view-user-interventions'); getAllIncidentsPerUser('interventions', 'view-user-interventions'), setDashBoardHeaderIncidedentType('Interventions');">Interventions</button>
+                </div>
+            </header>
+        </div>
+    </section>
+
+    <section id="view-user-incidents" class="section-manage-content">
+        <div>
+            <div id="user-incidents-map"></div>
+        </div>
+    </section>
+
+    <section id="view-user-redflags" class="section-manage-content">
+        <div>
+            <div class="grid-container" id="grid-container-user-incidents">
+            </div>
+        </div>
+    </section>
+
+    <section id="view-user-interventions" class="section-manage-content">
+        <div>
+            <div class="grid-container" id="grid-container-user-incidents">
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-items-container">
+            <section class="relevant-sites-links-section">
+                <div class="relevant-sites-links-container">
+                    <section class="relevant-sites-links-group">
+                        <ul>
+                            <li><a href="#">I hate corruption</a></li>
+                            <li><a href="#">Uganda Police</a></li>
+                            <li><a href="#">UPDF Official Site</a></li>
+                            <li><a href="#">President's Office</a></li>
+                            <li><a href="#">Uganda red Cross</a></li>
+                            <li><a href="#">Chess Corruption</a></li>
+                        </ul>
+                    </section>
+                    <section class="relevant-sites-links-group">
+                        <ul>
+                            <li><a href="#">Kill Corruption</a></li>
+                            <li><a href="#">UNRA</a></li>
+                            <li><a href="#">UMEME</a></li>
+                            <li><a href="#">UEDCL</a></li>
+                            <li><a href="#">Am Pure</a></li>
+                            <li><a href="#">Hiphop is Alive</a></li>
+                        </ul>
+                    </section>
+                    <section class="relevant-sites-links-group">
+                        <ul>
+                            <li><a href="#">Christmas is Coming</a></li>
+                            <li><a href="#">Christmas is upon us</a></li>
+                            <li><a href="#">Christmas is here</a></li>
+                            <li><a href="#">Save a soul</a></li>
+                            <li><a href="#">Bolongatiya</a></li>
+                            <li><a href="#">Thu Emperor</a></li>
+                        </ul>
+                    </section>
+                    <section class="relevant-sites-links-group">
+                        <ul>
+                            <li><a href="#">7AF</a></li>
+                            <li><a href="#">Kasubi</a></li>
+                            <li><a href="#">Andela Uganda</a></li>
+                            <li><a href="#">Mbajja</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms & Conditions</a></li>
+                        </ul>
+                    </section>
+                </div>
+
+            </section>
+            <div class="social-media-icons-wrapper">
+                <ul>
+                    <li><a href="#" class="social-media-icon">
+                            <div class="social-media-icon-wrapper"><img src="images/facebook-icon.jpg" /></div>
+                        </a></li>
+                    <li><a href="#" class="social-media-icon">
+                            <div class="social-media-icon-wrapper"><img src="images/twitter-icon.jpg" /></div>
+                        </a></li>
+                    <li><a href="#" class="social-media-icon">
+                            <div class="social-media-icon-wrapper"><img src="images/googleplus-icon.jpg" /></div>
+                        </a></li>
+                    <li><a href="#" class="social-media-icon">
+                            <div class="social-media-icon-wrapper"><img src="images/linkedin-icon.jpg" /></div>
+                        </a></li>
+
+                </ul>
+            </div>
+
+        </div>
+    </footer>
+
+    <!-- The View Red-flag Modal -->
+    <div id="view-report-details-modal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span id="modal-close-profile-view" class="close">&times;</span>
+            <section>
+                <div>
+                    <header class="inside-headers">
+                        <h2 id="modal-incident-title" class="dashboard-header-element">Incident Title</h2>
+                        <ul>
+                            <li>Incident Id: <span id="modal-incident-id">Incident Id</span></li>
+                            <li>Incident Type: <span id="modal-incident-type">Incident Type</span></li>
+                            <li>Submission Date: <span id="modal-incident-create-date">Incident Date</span></li>
+                            <li>Status:
+                                <span class="badge-status" id="modal-incident-status">Incident Status</span>
+                            </li>
+                        </ul>
+                    </header>
+                    <div class="content-container">
+                        <h3 class="modal-contents-item">Incident Location</h3>
+                        <div class="edit-report-input">
+                            <button id="modal-view-incident-get-geocoordinates" class="edit-form-btn modal-view-incident-get-geocoordinates" >Get Coordinates</button>
+                            <input id="modal-view-incident-geocoordinates-field" class="geocordinates-box" type="text"
+                                name="geocoordinates" placeholder="Click to get location" disabled>
+                            <div id="modal-incident-view-map-location"></div>
+                        </div>
+                        <h3 class="modal-contents-item">Details about the case</h3>
+                        <textarea class="modal-contents-item model-report-details-view" name="detailed-description"
+                            id="modal-incident-comment" placeholder="Incident Comment(Details)" rows="10"></textarea>
+
+                        <h3 class="modal-contents-item">Photograghoc Evidence</h3>
+                        <div class="modal-contents-item" id="modal-incident-images"></div>
+                        <input id="modal-edit-report-images" class="edit-report-input" type="text" name="report-images"
+                            placeholder="Enter image urls separated by commas (no spaces)" required>
+                        <div class="edit-report-input">
+                            <label class="edit-report-file">
+                                Add Image
+                            </label>
+                            <input id="modal-create-new-report-images-input" class="edit-report-file" type="file"
+                                name="picture" accept="image/*" />
+                        </div>
+                        <div id="model-update-incident-images-btn-div"></div>
+                        <h3 class="modal-contents-item">Video Evidence</h3>
+                        <div class="modal-contents-item" id="modal-incident-videos"></div>
+                        <input id="modal-edit-report-videos" class="edit-report-input" type="text" name="report-images"
+                            placeholder="Enter video urls separated by commas (no spaces)" required>
+                        <div class="edit-report-input">
+                            <label class="edit-report-file">
+                                Add Video
+                            </label>
+                            <input id="modal-create-new-report-videos-input" class="edit-report-file" type="file"
+                                name="video" accept="video/*" />
+                        </div>
+                        <div id="model-update-incident-videos-btn-div"></div>
+                        <div>
+                            <input type="radio" name="attribute" value="comment" id="checkbutton-comment"
+                                checked>Comment
+                            <input type="radio" name="attribute" value="location" id="checkbutton-location">Location
+                        </div>
+                        <div id="model-update-incident-attribute-btn"></div>
+                        <div id="model-delete-incident-attribute-btn"></div>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+
+    </div>
+
+    <!-- Create new red-flag/intervention modal -->
+    <div id="create-new-report-modal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span id="close-create-incident-modal" class="close">&times;</span>
+            <section>
+                <div>
+                    <header class="inside-headers">
+                        <h2 class="dashboard-header-element">Create new Red-Flag/Intervention</h2>
+                    </header>
+                    <div class="content-container">
+                        <form onsubmit="return false">
+                            <span class="edit-report-input">Incident Type:
+                                <select id="modal-incident-type-select">
+                                    <option value="red-flags">Red-flags</option>
+                                    <option value="interventions">Interventions</option>
+                                </select>
+                            </span>
+                            <input id="modal-create-new-report-title" class="edit-report-input" type="text"
+                                name="report-title" placeholder="Title" required>
+                            <p><span id="modal-create-new-report-type"></span></p>
+                            <textarea id="modal-create-new-report-comment" class="edit-report-input"
+                                name="detailed-description" id="detailed-description" placeholder="Detailed Description"
+                                rows="7"></textarea>
+                            <input id="modal-create-new-report-images" class="edit-report-input" type="text"
+                                name="report-images" placeholder="Enter image urls separated by commas (no spaces)">
+                            <input id="modal-create-new-report-videos" class="edit-report-input" type="text"
+                                name="report-images" placeholder="Enter video urls separated by commas (no spaces)">
+                            <div class="edit-report-input">
+                                <button id="modal-create-new-report-location-btn" class="edit-form-btn modal-view-incident-get-geocoordinates">Get Coordinates</button>
+                                <input id="modal-add-incident-geocoordinates-field" class="geocordinates-box"
+                                    type="text" name="geocoordinates" placeholder="0.32358400000000004, 32.5967872"
+                                    disabled>
+                                <div id="modal-incident-new-map-location"></div>
+                            </div>
+                            <div class="edit-report-input">
+                                <button id="cancel-create-report" class="edit-form-btn">Cancel</button>
+                                <button id="save-create-report" class="edit-form-btn" onclick="">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+
+        
+    </div>
+
+    <script>
+        document.getElementById("openByDefault").click();
+        runAllJavaScript();
+    </script>
+    <script>
+        homePageNotSignedIn();
+    </script>
+
+    <script>
+
+        let mymap = L.map('user-incidents-map').setView([0.32358400000000004, 32.5967872], 13);
+
+        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibGx3YXNhbXBpamphIiwiYSI6ImNqczdkY25wbDB3bm0zeW8zaXljaDN3cWgifQ.7GN9HpLQG2mAC6D-2lxuOg', {
+            maxZoom: 18,
+            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+                '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+                'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+            id: 'mapbox.streets'
+        }).addTo(mymap);
+
+        var name = "Lwasa Lamech";
+        var companyName = "Andela"
+        L.marker([0.3236, 32.5978])
+            .addTo(mymap)
+            .bindPopup("<b>" + companyName + "</b><br>I am " + name)
+            .openPopup();
+
+        // var popup = L.popup();
+
+        // mymap.on('click', onMapClick);
+
+        const URL_REDFLAGS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/red-flags';
+        const URL_INTERVENTIONS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/interventions';
+        // const URL_REDFLAGS = 'http://localhost:5000/api/v1/red-flags';
+        // const URL_INTERVENTIONS = 'http://localhost:5000/api/v1/interventions';
+        var fetchData = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + getCookie('jwtAccessToken')
+            }
+        }
+
+        fetch(URL_REDFLAGS, fetchData).then(function (response) {
+            return response.json();
+        }).then(function (myJson) {
+
+            if (myJson.status == 200) {
+                for (var incidentIndex = 0; incidentIndex < myJson.data.length; incidentIndex++) {
+                    incident = myJson.data[incidentIndex];
+                    locationCoordinates = incident.location.split(',');
+                    myLatitude = parseFloat(locationCoordinates[0].trim());
+                    myLogitude = parseFloat(locationCoordinates[1].trim());
+                    L.marker([myLatitude, myLogitude])
+                        .addTo(mymap)
+                        .bindPopup("<b>" + incident.title + "</b><br>I am " + incident.comment)
+                        .openPopup();
+                }
+            }
+        }).catch((myError) => {
+            return;
+        });
+
+        fetch(URL_INTERVENTIONS, fetchData).then(function (response) {
+            return response.json();
+        }).then(function (myJson) {
+            if (myJson.status == 200) {
+                for (var incidentIndex = 0; incidentIndex < myJson.data.length; incidentIndex++) {
+                    incident = myJson.data[incidentIndex];
+                    locationCoordinates = incident.location.split(',');
+                    myLatitude = parseFloat(locationCoordinates[0].trim());
+                    myLogitude = parseFloat(locationCoordinates[1].trim());
+                    L.marker([myLatitude, myLogitude])
+                        .addTo(mymap)
+                        .bindPopup("<b>" + incident.title + "</b><br>I am " + incident.comment)
+                        .openPopup();
+                }
+            }
+        }).catch((myError) => {
+            return;
+        });
+
+    </script>
+</body>
+
+</html>

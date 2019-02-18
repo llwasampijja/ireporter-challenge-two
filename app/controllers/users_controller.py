@@ -44,12 +44,27 @@ class UsersController():
     def get_users(self):
         """method for getting all users"""
         return Response(
-            json.dumps(self.usersdata.get_users()),
+            json.dumps({
+                "status": 200,
+                "data": self.usersdata.get_users()
+            }),
             content_type="application/json",
             status=200)
     
     def export_users(self):
         return self.usersdata.get_users()
+
+    def get_user(self, user_id):
+        """method for getting a single user by id"""
+        get_user_instance = self.usersdata.get_user(user_id)
+        if get_user_instance is None:
+            return RESP_ERROR_USER_NOT_FOUND
+        else:
+            get_user_instance.pop("password")
+            return Response(json.dumps({
+                "status": 200,
+                "data": [get_user_instance]
+            }), content_type="application/json", status=200)    
 
     def adduser(self, request_info):
         """method for registering a user (signing up)"""
@@ -62,9 +77,6 @@ class UsersController():
         is_admin = False
         password = request_info.get("password")
         registered_on = datetime.datetime.now()
-
-        # user_id = self.my_validator.create_id(
-        #     self.usersdata.get_users(), "user_id")
         
         if self.response_signupfail(request_info, (firstname, lastname), username):
             return self.response_signupfail(request_info, (firstname, lastname), username)
@@ -94,12 +106,12 @@ class UsersController():
             registered_on=registered_on
         )
 
-        self.usersdata.add_user(new_user.user_dict())
+        user_id  = self.usersdata.add_user(new_user.user_dict())[0][0]
         newuser_dict = (new_user.user_dict())
         newuser_dict.pop("password")
 
         user_details = {
-                    "user_id": newuser_dict.get("user_id"),
+                    "user_id": user_id,
                     "username": newuser_dict.get("username"),
                     "is_admin": newuser_dict.get("is_admin")
                 }
@@ -108,6 +120,8 @@ class UsersController():
                 'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=JWT_EXP_DELTA_SECONDS)
                 }
         jwt_token = jwt.encode(payload, JWT_SECRET, JWT_ALGORITHM)
+
+        newuser_dict.update({"user_id": user_id})
 
         return Response(json.dumps({
             "status": 201,
@@ -141,7 +155,7 @@ class UsersController():
                 jwt_token = jwt.encode(payload, JWT_SECRET, JWT_ALGORITHM)
 
                 return Response(json.dumps({
-                    "status": 201,
+                    "status": 200,
                     "data": [
                         {
                             "user_id": user.get("user_id"),
@@ -156,7 +170,7 @@ class UsersController():
                     ],
                     "access_token": str(jwt_token)[2:-1],
                     "message": RESP_SUCCESS_MSG_AUTH_LOGIN
-                }), content_type="application/json", status=201)
+                }), content_type="application/json", status=200)
         return RESP_ERROR_LOGIN_FAILED
 
     def update_user_role(self, user_id, request_info):

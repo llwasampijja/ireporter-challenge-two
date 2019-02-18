@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Admin Panel | IReporter</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+        integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+        crossorigin="" />
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+        integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+        crossorigin=""></script>
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <script src="javascript/app.js"></script>
+    <script src="javascript/main.js"></script>
+    <script>
+        checkIfUserIsLoggedIn();
+        avoidAdminPanelForNonAdmins();
+    </script>
+</head>
+
+<body>
+    <header class="navigation">
+        <h1><a href="index.html">IReporter</a></h1>
+        <nav class="bigscreen-menu-nav">
+            <ul>
+                <li class="header-nav-item admin-link"><a href="admin_panel.html">Admin Panel</a></li>
+                <li class="header-nav-item non-admin-link"><a href="my_reports.html">Dashboard</a></li>
+                <li class="header-nav-item"><a href="index.html">Home</a></li>
+                <li class="header-nav-item"><a href="about_us.html">About Us</a></li>
+                <li class="header-nav-item"><a href="contact_us.html">Contact Us</a></li>
+                <li class="header-nav-item logged-user-link"><a href="user_profile.html">My Profile</a></li>
+                <li class="header-nav-item logged-user-link"><a href="#" onclick="logoutUser();">Logout</a></li>
+            </ul>
+        </nav>
+        <nav class="mobile-menu-btn">
+            <div onclick="toggleMobileMenuVisibility()" class="dropdownbtn">
+                <div class="dropdownbtn-icon-bar"></div>
+                <div class="dropdownbtn-icon-bar"></div>
+                <div class="dropdownbtn-icon-bar"></div>
+            </div>
+        </nav>
+    </header>
+
+    <nav id="account-menu" class="account-menu-nav">
+        <div id="account-menu">
+            <ul>
+                <li><a href="user_profile.html">My Account</a></li>
+                <li><a href="#" onclick="logoutUser();">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <nav id="mobile-menu" class="account-menu-nav">
+        <ul>
+            <li class="header-nav-item admin-link"><a href="admin_panel.html">Admin Panel</a></li>
+            <li class="header-nav-item non-admin-link"><a href="my_reports.html">Dashboard</a></li>
+            <li class="header-nav-item"><a href="index.html">Home</a></li>
+            <li class="header-nav-item"><a href="about_us.html">About Us</a></li>
+            <li class="header-nav-item"><a href="contact_us.html">Contact Us</a></li>
+            <li><a href="user_profile.html">My Account</a></li>
+            <li><a href="#" onclick="logoutUser();">Logout</a></li>
+        </ul>
+    </nav>
+
+    <section>
+        <div>
+            <header class="inside-headers">
+                <h2 class="dashboard-header-element">Admin Panel</h2>
+
+                <div class="admin-control-panel-container">
+                    <button class="admin-tab" onclick="openAdminManageTab(event, 'manage-incidents-map');"
+                        id="openByDefault">Map View</button>
+                    <button class="admin-tab"
+                        onclick="openAdminManageTab(event, 'manage-redflags'); getAllIncidents('red-flags', 'redflags-list-table')">Red-Flags</button>
+                    <button class="admin-tab"
+                        onclick="openAdminManageTab(event, 'manage-interventions'); getAllIncidents('interventions', 'interventions-list-table')">Interventions</button>
+                    <button class="admin-tab"
+                        onclick="openAdminManageTab(event, 'manage-users'); getAllUsers();">Users</button>
+                </div>
+            </header>
+        </div>
+    </section>
+
+    <section id="manage-incidents-map" class="section-manage-content">
+        <div>
+            <div id="admin-incidents-map"></div>
+        </div>
+    </section>
+
+    <section id="manage-redflags" class="section-manage-content">
+        <section class="data-tables">
+            <div class="table-container reports-table">
+                <table id="redflags-list-table">
+                    <tr>
+                        <th>Incident Id</th>
+                        <th>Location</th>
+                        <th>Title</th>
+                        <th>Comment</th>
+                        <th>Images</th>
+                        <th>Videos</th>
+                        <th>Created On</th>
+                        <th>Created By</th>
+                        <th>Status</th>
+                        <th>View Incident</th>
+                    </tr>
+                </table>
+            </div>
+        </section>
+    </section>
+
+    <section id="manage-interventions" class="section-manage-content">
+        <section class="data-tables">
+            <div class="table-container reports-table">
+                <table id="interventions-list-table">
+                    <tr>
+                        <th>Incident Id</th>
+                        <th>Location</th>
+                        <th>Title</th>
+                        <th>Comment</th>
+                        <th>Images</th>
+                        <th>Videos</th>
+                        <th>Created On</th>
+                        <th>Created By</th>
+                        <th>Status</th>
+                        <th>View Incident</th>
+                    </tr>
+
+                </table>
+            </div>
+        </section>
+    </section>
+
+    <section id="manage-users" class="section-manage-content">
+        <section class="data-tables">
+            <div class="table-container reports-table">
+                <table id="users-list-table">
+                    <tr>
+                        <th>Id</th>
+                        <th>Full Name</th>
+                        <th>Othernames</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>PhoneNumber</th>
+                        <th>Is_Admin</th>
+                        <th>Registered On</th>
+                        <th>View</th>
+                    </tr>
+                </table>
+            </div>
+        </section>
+    </section>
+
+    <footer>
+        <div class="footer-items-container">
+            <section class="relevant-sites-links-section">
+                <div class="relevant-sites-links-container">
+                    <section class="relevant-sites-links-group">
+                        <ul>
+                            <li><a href="#">I hate corruption</a></li>
+                            <li><a href="#">Uganda Police</a></li>
+                            <li><a href="#">UPDF Official Site</a></li>
+                            <li><a href="#">President's Office</a></li>
+                            <li><a href="#">Uganda red Cross</a></li>
+                            <li><a href="#">Chess Corruption</a></li>
+                        </ul>
+                    </section>
+                    <section class="relevant-sites-links-group">
+                        <ul>
+                            <li><a href="#">Kill Corruption</a></li>
+                            <li><a href="#">UNRA</a></li>
+                            <li><a href="#">UMEME</a></li>
+                            <li><a href="#">UEDCL</a></li>
+                            <li><a href="#">Am Pure</a></li>
+                            <li><a href="#">Hiphop is Alive</a></li>
+                        </ul>
+                    </section>
+                    <section class="relevant-sites-links-group">
+                        <ul>
+                            <li><a href="#">Christmas is Coming</a></li>
+                            <li><a href="#">Christmas is upon us</a></li>
+                            <li><a href="#">Christmas is here</a></li>
+                            <li><a href="#">Save a soul</a></li>
+                            <li><a href="#">Bolongatiya</a></li>
+                            <li><a href="#">Thu Emperor</a></li>
+                        </ul>
+                    </section>
+                    <section class="relevant-sites-links-group">
+                        <ul>
+                            <li><a href="#">7AF</a></li>
+                            <li><a href="#">Kasubi</a></li>
+                            <li><a href="#">Andela Uganda</a></li>
+                            <li><a href="#">Mbajja</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms & Conditions</a></li>
+                        </ul>
+                    </section>
+                </div>
+
+            </section>
+            <div class="social-media-icons-wrapper">
+                <ul>
+                    <li><a href="#" class="social-media-icon">
+                            <div class="social-media-icon-wrapper"><img src="images/facebook-icon.jpg" /></div>
+                        </a></li>
+                    <li><a href="#" class="social-media-icon">
+                            <div class="social-media-icon-wrapper"><img src="images/twitter-icon.jpg" /></div>
+                        </a></li>
+                    <li><a href="#" class="social-media-icon">
+                            <div class="social-media-icon-wrapper"><img src="images/googleplus-icon.jpg" /></div>
+                        </a></li>
+                    <li><a href="#" class="social-media-icon">
+                            <div class="social-media-icon-wrapper"><img src="images/linkedin-icon.jpg" /></div>
+                        </a></li>
+
+                </ul>
+            </div>
+
+        </div>
+    </footer>
+
+    <!-- The View user profile Modal -->
+    <div id="view-user-profile-modal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span id="close-user-profile" class="close">&times;</span>
+
+            <section class="profile-sections">
+                <div class="profile-container">
+                    <div class="profile-content-wrapper">
+                        <div class="profile-image-wrapper profile-group">
+                            <img src="images/ann.jpg" alt="profile image">
+                        </div>
+                        <div class="profile-summury-container profile-group">
+                            <div class="profile-summury-wrapper">
+                                <p>
+                                    <div class="user-profile-detail">
+                                        <label class="user-profile-label">
+                                            User Id:
+                                        </label>
+                                        <p id="modal-users-userid" class="user-profile-value">User Id</p>
+                                    </div>
+                                </p>
+                                <p>
+                                    <div class="user-profile-detail">
+                                        <label class="user-profile-label">
+                                            Name:
+                                        </label>
+                                        <p id="modal-users-fullname" class="user-profile-value">Fullname</p>
+                                    </div>
+                                </p>
+
+                                <p>
+                                    <div class="user-profile-detail">
+                                        <label class="user-profile-label">
+                                            Othername:
+                                        </label>
+                                        <p id="modal-users-othername" class="user-profile-value">Othername</p>
+                                    </div>
+                                </p>
+
+                                <p>
+                                    <div class="user-profile-detail">
+                                        <label class="user-profile-label">
+                                            Username:
+                                        </label>
+                                        <p id="modal-users-username" class="user-profile-value">username</p>
+                                    </div>
+                                </p>
+
+                                <p>
+                                    <div class="user-profile-detail">
+                                        <label class="user-profile-label">
+                                            Email:
+                                        </label>
+                                        <p id="modal-users-email" class="user-profile-value">Email</p>
+                                    </div>
+                                </p>
+
+                                <p>
+                                    <div class="user-profile-detail">
+                                        <label class="user-profile-label">
+                                            Contact Phone Number:
+                                        </label>
+                                        <p id="modal-users-phonenumber" class="user-profile-value">PhoneNumber</p>
+                                    </div>
+                                </p>
+
+                                <p>
+                                    <div class="user-profile-detail">
+                                        <label class="user-profile-label">
+                                            is Admin?:
+                                        </label>
+                                        <p id="modal-users-isadmin" class="user-profile-value">isadmin</p>
+                                    </div>
+                                </p>
+
+                                <p>
+                                    <div class="user-profile-detail">
+                                        <label class="user-profile-label">
+                                            Joined On:
+                                        </label>
+                                        <p id="modal-users-registeredon" class="user-profile-value">joining date</p>
+                                    </div>
+                                </p>
+
+                                <!-- <p>
+                                    <div class="user-profile-detail">
+                                        <label class="user-profile-label">
+                                            Place of Residence:
+                                        </label>
+                                        <p class="user-profile-value">Mbajja Ntanzi</p>
+                                    </div>
+                                </p>
+        
+                                <p>
+                                    <div class="user-profile-detail">
+                                        <label class="user-profile-label">
+                                            Date of Birth:
+                                        </label>
+                                        <p class="user-profile-value">12th August 2024</p>
+                                    </div>
+                                </p>
+                                <p>
+                                    <div class="user-profile-detail">
+                                        <label class="user-profile-label">
+                                            Next of Kin:
+                                        </label>
+                                        <p class="user-profile-value">Edward Army</p>
+                                    </div>
+                                </p>
+        
+                                <p>
+                                    <div class="user-profile-detail">
+                                        <label class="user-profile-label">
+                                            Next of Kin Contact:
+                                        </label>
+                                        <p class="user-profile-value">0794961853</p>
+                                    </div>
+                                </p> -->
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </section>
+            <section class="profile-sections">
+                <button id="btn-user-role-change" class="site-signup-btn site-btn profile-group"></button>
+            </section>
+
+
+
+            <section class="data-tables">
+                <div class="table-container reports-summary-table">
+                    <table id="table-userprofile-all-incidents-summary-admin-view">
+                        <tr>
+                            <th>Report Type</th>
+                            <th>Pending Investigation</th>
+                            <th>Under Investigation</th>
+                            <th>Resolved</th>
+                            <th>Rejected</th>
+                            <th>Total</th>
+                        </tr>
+                        <tr>
+                            <td>Red-Flags</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Interventions</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Total</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+
+                    </table>
+                </div>
+                <div class="table-container reports-table">
+                    <table id="modal-userprofile-redflags-list-table">
+                        <tr>
+                            <th>Id</th>
+                            <th>Type</th>
+                            <!-- <th>Location</th> -->
+                            <th>Title</th>
+                            <!-- <th>Comment</th> -->
+                            <th>Images</th>
+                            <th>Videos</th>
+                            <!-- <th>Created On</th> -->
+                            <th>Status</th>
+                            <th>View Incident</th>
+                        </tr>
+                    </table>
+                </div>
+
+
+            </section>
+        </div>
+
+    </div>
+
+    <!-- The View Red-flag Modal -->
+    <div id="view-report-details-modal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span id="modal-close-profile-view" class="close">&times;</span>
+            <section>
+                <div>
+                    <header class="inside-headers">
+                        <h2 id="modal-incident-title" class="dashboard-header-element">Incident Title</h2>
+                        <ul>
+                            <li>Submission Date: <span id="modal-incident-create-date">Incident Date</span></li>
+                            <li>Status:
+                                <span class="badge-status">
+                                    <select id="modal-incident-status-select">
+                                        <option value="pending-investigation">Pending Investigation</option>
+                                        <option value="under-investigation">Under Investigation</option>
+                                        <option value="resolved">Resolved</option>
+                                        <option value="rejected">Rejected</option>
+                                    </select>
+                                </span>
+                            </li>
+                            <li>Created By: <span id="modal-incident-creator">Incident Creator</span></li>
+                        </ul>
+                    </header>
+                    <div class="content-container">
+                        <h3 class="modal-contents-item">Details about the case</h3>
+                        <p class="modal-contents-item" id="modal-incident-comment">
+                            Incident Comment(Details)
+                        </p>
+                        <h3 class="modal-contents-item">Photograghoc Evidence</h3>
+                        <div class="modal-contents-item" id="modal-admin-view-incident-images"></div>
+                        <h3 class="modal-contents-item">Video Evidence</h3>
+                        <div class="modal-contents-item" id="modal-admin-view-incident-videos"></div>
+                        <div id="model-update-incident-status-btn"></div>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+
+    </div>
+
+    <script>
+        document.getElementById("openByDefault").click();
+        runAllJavaScript();
+    </script>
+    <script>
+        homePageNotSignedIn();
+    </script>
+
+    <script>
+
+        let mymap = L.map('admin-incidents-map').setView([0.32358400000000004, 32.5967872], 13);
+
+        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibGx3YXNhbXBpamphIiwiYSI6ImNqczdkY25wbDB3bm0zeW8zaXljaDN3cWgifQ.7GN9HpLQG2mAC6D-2lxuOg', {
+            maxZoom: 18,
+            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+                '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+                'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+            id: 'mapbox.streets'
+        }).addTo(mymap);
+
+        var name = "Lwasa Lamech";
+        var companyName = "Andela"
+        L.marker([0.3236, 32.5978])
+            .addTo(mymap)
+            .bindPopup("<b>" + companyName + "</b><br>I am " + name)
+            .openPopup();
+
+        // var popup = L.popup();
+
+        const URL_REDFLAGS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/red-flags';
+        const URL_INTERVENTIONS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/interventions';
+        // const URL_REDFLAGS = 'http://localhost:5000/api/v1/red-flags';
+        // const URL_INTERVENTIONS = 'http://localhost:5000/api/v1/interventions';
+        var fetchData = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + getCookie('jwtAccessToken')
+            }
+        }
+
+        fetch(URL_REDFLAGS, fetchData).then(function (response) {
+            return response.json();
+        }).then(function (myJson) {
+
+            if (myJson.status == 200) {
+                for (var incidentIndex = 0; incidentIndex < myJson.data.length; incidentIndex++) {
+                    incident = myJson.data[incidentIndex];
+                    locationCoordinates = incident.location.split(',');
+                    myLatitude = parseFloat(locationCoordinates[0].trim());
+                    myLogitude = parseFloat(locationCoordinates[1].trim());
+                    L.marker([myLatitude, myLogitude])
+                        .addTo(mymap)
+                        .bindPopup("<b>" + incident.title + "</b><br>I am " + incident.comment)
+                        .openPopup();
+                }
+            }
+        }).catch((myError) => {
+            return;
+        });
+
+        fetch(URL_INTERVENTIONS, fetchData).then(function (response) {
+            return response.json();
+        }).then(function (myJson) {
+            if (myJson.status == 200) {
+                for (var incidentIndex = 0; incidentIndex < myJson.data.length; incidentIndex++) {
+                    incident = myJson.data[incidentIndex];
+                    locationCoordinates = incident.location.split(',');
+                    myLatitude = parseFloat(locationCoordinates[0].trim());
+                    myLogitude = parseFloat(locationCoordinates[1].trim());
+                    L.marker([myLatitude, myLogitude])
+                        .addTo(mymap)
+                        .bindPopup("<b>" + incident.title + "</b><br>I am " + incident.comment)
+                        .openPopup();
+                }
+            }
+        }).catch((myError) => {
+            return;
+        });
+
+    </script>
+
+</body>
+
+</html>

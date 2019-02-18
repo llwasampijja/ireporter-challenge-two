@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Contact Us | IReporter</title>
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <script src="javascript/app.js"></script>
+    <script src="javascript/main.js"></script>
+   
+</head>
+
+<body>
+    <header class="navigation">
+        <h1><a href="index.html">IReporter</a></h1>
+        <nav class="bigscreen-menu-nav" id="bigscreen-menu-nav-signedin">
+            <ul>
+                <li class="header-nav-item admin-link"><a href="admin_panel.html">Admin Panel</a></li>
+                <li class="header-nav-item non-admin-link"><a href="my_reports.html">Dashboard</a></li>
+                <li class="header-nav-item"><a href="index.html">Home</a></li>
+                <li class="header-nav-item" id="main-nav-signin-link"><a href="login.html">Sign-in</a></li>
+                <li class="header-nav-item"><a href="about_us.html">About Us</a></li>
+                <li class="header-nav-item"><a href="contact_us.html">Contact Us</a></li>
+                <li class="header-nav-item logged-user-link"><a href="user_profile.html">My Profile</a></li>
+                <li class="header-nav-item logged-user-link"><a href="#" onclick="logoutUser();">Logout</a></li>
+            </ul>
+        </nav>
+        <nav class="mobile-menu-btn">
+            <div onclick="toggleMobileMenuVisibility()" class="dropdownbtn">
+                <div class="dropdownbtn-icon-bar"></div>
+                <div class="dropdownbtn-icon-bar"></div>
+                <div class="dropdownbtn-icon-bar"></div>
+            </div>
+        </nav>
+    </header>
+
+    <nav id="account-menu" class="account-menu-nav">
+        <div id="account-menu">
+            <ul>
+                <li><a href="user_profile.html">My Account</a></li>
+                <li><a href="#" onclick="logoutUser();">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <nav id="mobile-menu" class="account-menu-nav">
+        <ul>
+            <li class="header-nav-item admin-link"><a href="admin_panel.html">Admin Panel</a></li>
+            <li class="header-nav-item non-admin-link"><a href="my_reports.html">Dashboard</a></li>
+            <li class="header-nav-item"><a href="index.html">Home</a></li>
+            <li class="header-nav-item"><a href="about_us.html">About Us</a></li>
+            <li class="header-nav-item"><a href="contact_us.html">Contact Us</a></li>
+            <li class="logged-user-link"><a href="user_profile.html">My Account</a></li>
+            <li class="logged-user-link"><a href="#" onclick="logoutUser();">Logout</a></li>
+        </ul>
+    </nav>
+
+    <section class="inquiry-section">
+        <div>
+            <header class="inside-headers">
+                <h2>Inquiries?</h2>
+                <p>Contact us using the form below.</p>
+            </header>
+        </div>
+        <div class="inquiry-form-wrapper">
+            <form class="inquiry-form">
+                <div class="inquiry-form-elements-wrapper">
+                    <div class="inquiry-form-element-wrapper">
+                        <input class="inquiry-input-field" name="name" id="inquirer-name" placeholder="Name" type="text"
+                            required>
+                    </div>
+                    <div class="inquiry-form-element-wrapper">
+                        <input class="inquiry-input-field" name="email" id="inquirer-email" placeholder="Email" type="email"
+                            required>
+                    </div>
+                    <div class="inquiry-form-element-wrapper">
+                        <textarea class="inquiry-message-box" name="inquiry-message" id="inquiry-message" placeholder="Message"
+                            rows="7"></textarea>
+                    </div>
+                    <div class="inquiry-form-element-wrapper">
+                        <span>
+                            <input class="site-signup-btn site-btn" type="submit" value="Send message">
+                        </span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-items-container">
+            <section class="relevant-sites-links-section">
+                <div class="relevant-sites-links-container">
+                    <section class="relevant-sites-links-group">
+                        <ul>
+                            <li><a href="#">I hate corruption</a></li>
+                            <li><a href="#">Uganda Police</a></li>
+                            <li><a href="#">UPDF Official Site</a></li>
+                            <li><a href="#">President's Office</a></li>
+                            <li><a href="#">Uganda red Cross</a></li>
+                            <li><a href="#">Chess Corruption</a></li>
+                        </ul>
+                    </section>
+                    <section class="relevant-sites-links-group">
+                        <ul>
+                            <li><a href="#">Kill Corruption</a></li>
+                            <li><a href="#">UNRA</a></li>
+                            <li><a href="#">UMEME</a></li>
+                            <li><a href="#">UEDCL</a></li>
+                            <li><a href="#">Am Pure</a></li>
+                            <li><a href="#">Hiphop is Alive</a></li>
+                        </ul>
+                    </section>
+                    <section class="relevant-sites-links-group">
+                        <ul>
+                            <li><a href="#">Christmas is Coming</a></li>
+                            <li><a href="#">Christmas is upon us</a></li>
+                            <li><a href="#">Christmas is here</a></li>
+                            <li><a href="#">Save a soul</a></li>
+                            <li><a href="#">Bolongatiya</a></li>
+                            <li><a href="#">Thu Emperor</a></li>
+                        </ul>
+                    </section>
+                    <section class="relevant-sites-links-group">
+                        <ul>
+                            <li><a href="#">7AF</a></li>
+                            <li><a href="#">Kasubi</a></li>
+                            <li><a href="#">Andela Uganda</a></li>
+                            <li><a href="#">Mbajja</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms & Conditions</a></li>
+                        </ul>
+                    </section>
+                </div>
+
+            </section>
+            <div class="social-media-icons-wrapper">
+                <ul>
+                    <li><a href="#" class="social-media-icon">
+                            <div class="social-media-icon-wrapper"><img src="images/facebook-icon.jpg" /></div>
+                        </a></li>
+                    <li><a href="#" class="social-media-icon">
+                            <div class="social-media-icon-wrapper"><img src="images/twitter-icon.jpg" /></div>
+                        </a></li>
+                    <li><a href="#" class="social-media-icon">
+                            <div class="social-media-icon-wrapper"><img src="images/googleplus-icon.jpg" /></div>
+                        </a></li>
+                    <li><a href="#" class="social-media-icon">
+                            <div class="social-media-icon-wrapper"><img src="images/linkedin-icon.jpg" /></div>
+                        </a></li>
+
+                </ul>
+            </div>
+
+        </div>
+    </footer>
+    <script>
+        homePageNotSignedIn();
+    </script>
+
+</body>
+
+</html>

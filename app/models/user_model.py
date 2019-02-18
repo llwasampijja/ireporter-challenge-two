@@ -12,7 +12,7 @@ class User():
         self.user_id = kwargs.get("user_id")
         self.firstname = kwargs.get("firstname")
         self.lastname = kwargs.get("lastname")
-        self.othernames = "ANN"
+        self.othernames = "none"
         self.username = kwargs.get("username")
         self.email = kwargs.get("email")
         self.phonenumber = kwargs.get("phonenumber")
@@ -77,11 +77,23 @@ class UsersData():
         """method for getting user items in the users list"""
         return self.get_all_dbusers()
 
+    def get_user(self, user_id):
+        """helper method for geing a user"""
+        return self.my_get_user(self.get_all_dbusers(), user_id)
+
     def update_user(self, user_id, new_user_info):
         """method for updating a user item in the users list"""
         for user in self.get_all_dbusers():
             if user.get("user_id") == user_id:
                 self.ireporter_db.update_data_user_role(user_id, new_user_info.get("is_admin"))
+                return user
+        return None
+
+    @staticmethod
+    def my_get_user(users_list, user_id):
+        """method for retrieving an incident from the incidents list"""
+        for user in users_list:
+            if user.get("user_id") == user_id:
                 return user
         return None
 
