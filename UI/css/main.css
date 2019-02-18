@@ -251,7 +251,7 @@ input.sign-form-input {
   padding: 10px;
 }
 
-.site-signup-btn, .view-report-btn, .edit-report-btn {
+.site-signup-btn, .view-report-btn, .edit-report-btn, .view-user-profile-btn{
   appearance: none;
   background-color: rgb(58, 178, 248);
   border-radius: 30px;
@@ -453,7 +453,7 @@ h2.dashboard-header-element {
   margin: 10px 0px;
 }
 
-.view-report-btn, .edit-report-btn {
+.view-report-btn, .edit-report-btn, .view-user-profile-btn {
   padding: 10px 40px;
 }
 
