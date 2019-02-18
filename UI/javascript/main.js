@@ -879,7 +879,7 @@ function getAllUsers() {
 }
 
 function getUserById(userId) {
-    const URL_USER = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users';
+    const URL_USER = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users/' + userId;
     // const URL_USER = 'http://localhost:5000/api/v1/users/' + userId;
     // The parameters we are gonna pass to the fetch function
     let accessToken = getCookie("jwtAccessToken")
