@@ -130,7 +130,7 @@ header nav ul li a:link{
   margin: 0 auto;
 }
 
-/* #myloader, #mysignup-loader, */
+#myloader, #mysignup-loader,
 #user-update-incident-images-loader,
 #user-update-incident-videos-loader,
 #user-update-incident-attribute-loader,
