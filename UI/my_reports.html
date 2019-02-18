@@ -231,6 +231,7 @@
                             <input id="modal-create-new-report-images-input" class="edit-report-file" type="file"
                                 name="picture" accept="image/*" />
                         </div>
+                        <div id="user-update-incident-images-loader" class="loader"></div>
                         <div id="model-update-incident-images-btn-div"></div>
                         <h3 class="modal-contents-item">Video Evidence</h3>
                         <div class="modal-contents-item" id="modal-incident-videos"></div>
@@ -243,13 +244,16 @@
                             <input id="modal-create-new-report-videos-input" class="edit-report-file" type="file"
                                 name="video" accept="video/*" />
                         </div>
+                        <div id="user-update-incident-videos-loader" class="loader"></div>
                         <div id="model-update-incident-videos-btn-div"></div>
                         <div>
                             <input type="radio" name="attribute" value="comment" id="checkbutton-comment"
                                 checked>Comment
                             <input type="radio" name="attribute" value="location" id="checkbutton-location">Location
                         </div>
+                        <div id="user-update-incident-attribute-loader" class="loader"></div>
                         <div id="model-update-incident-attribute-btn"></div>
+                        <div id="user-delete-incident-loader" class="loader"></div>
                         <div id="model-delete-incident-attribute-btn"></div>
                     </div>
                 </div>
@@ -294,6 +298,7 @@
                                     disabled>
                                 <div id="modal-incident-new-map-location"></div>
                             </div>
+                            <div id="user-create-incident-loader" class="loader"></div>
                             <div class="edit-report-input">
                                 <button id="cancel-create-report" class="edit-form-btn">Cancel</button>
                                 <button id="save-create-report" class="edit-form-btn" onclick="">Submit</button>
