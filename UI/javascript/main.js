@@ -1,4 +1,7 @@
 function registerUser() {
+    let mySignupLoader = document.getElementById("mysignup-loader");
+    mySignupLoader.style.display = "block";
+    
     const USER_USER = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/register';
     // const USER_USER = 'http://localhost:5000/api/v1/auth/register';
 
@@ -33,13 +36,17 @@ function registerUser() {
                     setCookie("userIdCookie", user.user_id, 3);
                 }
                 openHomePage();
+                mySignupLoader.style.display = "none";
             } else {
-                alert(myJson.error)
+                alert(myJson.error);
+                mySignupLoader.style.display = "none";
             }
         });
 }
 
 function loginUser() {
+    let myLoginLoader = document.getElementById("myloader");
+    myLoginLoader.style.display = "block";
     const USER_USER = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/login';
     // const USER_USER = 'http://localhost:5000/api/v1/auth/login';
 
@@ -72,15 +79,19 @@ function loginUser() {
                     } else {
                         openHomePage();
                     }
+                    myLoginLoader.style.display = "none";
                 }
 
             } else {
-                alert(myJson.error)
+                alert(myJson.error);
+                myLoginLoader.style.display = "none";
             }
         });
 }
 
 function uploadMedia(incidentType, incident_id) {
+    let userUpdateIncidentImagesLoader = getElementById("user-update-incident-images-loader");
+    userUpdateIncidentImagesLoader.style.display = "block";
     const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/files/uploads/images/' + incidentType + '/' + incident_id;
     // const URL_INCIDENT = 'http://localhost:5000/api/v1/files/uploads/images/' + incidentType + '/' + incident_id;
     var accessToken = getCookie("jwtAccessToken");
@@ -109,8 +120,10 @@ function uploadMedia(incidentType, incident_id) {
 
             if (myJson.status == 201) {
                 alert(myJson.message);
+                userUpdateIncidentImagesLoader.style.display = "none";
             } else {
                 alert(myJson.error)
+                userUpdateIncidentImagesLoader.style.display = "none";
             }
         }).catch((myError) => {
             console.log("Image Upload Error: " + myError.message);
@@ -120,6 +133,8 @@ function uploadMedia(incidentType, incident_id) {
 
 
 function uploadVideo(incidentType, incident_id) {
+    let userUpdateIncidentVideosLoader = getElementById("user-update-incident-videos-loader");
+    userUpdateIncidentVideosLoader.style.display = "block";
     const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/files/uploads/videos/' + incidentType + '/' + incident_id;
     // const URL_INCIDENT = 'http://localhost:5000/api/v1/files/uploads/videos/' + incidentType + '/' + incident_id;
     var accessToken = getCookie("jwtAccessToken");
@@ -148,8 +163,10 @@ function uploadVideo(incidentType, incident_id) {
 
             if (myJson.status == 201) {
                 alert(myJson.message);
+                userUpdateIncidentVideosLoader.style.display = "none";
             } else {
                 alert(myJson.error)
+                userUpdateIncidentVideosLoader.style.display = "none";
             }
         }).catch((myError) => {
             console.log("Video Upload Error: " + myError.message);
@@ -159,6 +176,8 @@ function uploadVideo(incidentType, incident_id) {
 }
 
 function createIncident(incidents) {
+    let userCreateIncidentLoader = document.getElementById("user-create-incident-loader");
+    userCreateIncidentLoader.style.display = "block";
 
     const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents;
     // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents;
@@ -204,8 +223,10 @@ function createIncident(incidents) {
                 if (myJson.status == 201) {
                     alert(myJson.message);
                     openHomePage();
+                    userCreateIncidentLoader.style.display = "none";
                 } else {
-                    return alert(myJson.error);
+                    alert(myJson.error);
+                    userCreateIncidentLoader.style.display = "none";
                 }
             }).catch((myError) => {
                 console.log("Create Error: " + myError.message)
@@ -661,6 +682,8 @@ function getUserIncidentById(incidents, incidentId) {
 }
 
 function updateUserIncident(incidents, incidentId) {
+    let userUpdateIncidentAttributeLoader = document.getElementById("user-update-incident-attribute-loader");
+    userUpdateIncidentAttributeLoader.style.display = "block";
     var accessToken = getCookie("jwtAccessToken");
     let data = {};
     var incidentAttribute = "";
@@ -703,9 +726,10 @@ function updateUserIncident(incidents, incidentId) {
                 if (myJson.status == 201) {
                     alert(myJson.message);
                     openAdminPage();
+                    userUpdateIncidentAttributeLoader.style.display = "none";
                 } else {
-                    console.log("hi");
                     alert(myJson.error);
+                    userUpdateIncidentAttributeLoader.style.display = "none";
                 }
             });
         return true;
@@ -713,6 +737,9 @@ function updateUserIncident(incidents, incidentId) {
 }
 
 function deleteUserIncident(incidents, incidentId) {
+    let userDeleteIncidentLoader = getElementById("user-delete-incident-loader");
+    userDeleteIncidentLoader.style.display = "block";
+    
     const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + '/' + incidentId;
     // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + '/' + incidentId;
     var accessToken = getCookie("jwtAccessToken");
@@ -733,8 +760,10 @@ function deleteUserIncident(incidents, incidentId) {
                 if (myJson.status == 200) {
                     alert(myJson.message);
                     openHomePage();
+                    userDeleteIncidentLoader.style.display = "none";
                 } else {
                     alert(myJson.error);
+                    userDeleteIncidentLoader.style.display = "none";
                 }
             })
     }
@@ -743,6 +772,8 @@ function deleteUserIncident(incidents, incidentId) {
 }
 
 function changeUserRole(userId) {
+    let adminUpdateUserLoader = document.getElementById("admin-update-user-loader");
+    adminUpdateUserLoader.style.display = "block";
     const URL_USER = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users/' + userId;
     // const URL_USER = 'http://localhost:5000/api/v1/users/' + userId;
     let modalUserRoleChangeBtn = document.getElementById("btn-user-role-change");
@@ -777,8 +808,10 @@ function changeUserRole(userId) {
             if (myJson.status == 201) {
                 alert(myJson.message);
                 openAdminPage();
+                adminUpdateUserLoader.style.display = "none";
             } else {
                 alert(myJson.message);
+                adminUpdateUserLoader.style.display = "none";
             }
         }).catch((myError) => {
             console.log("Error updating status: " + myError.message);
@@ -787,6 +820,10 @@ function changeUserRole(userId) {
 }
 
 function changeIncidentStatus(incidents, incidentId) {
+    let adminUpdateIncidentLoader = document.getElementById("admin-update-incident-loader");
+    adminUpdateIncidentLoader.style.display = "block";
+    let modelUpdateIncidentStatusBtn = document.getElementById("model-update-incident-status-btn");
+    modelUpdateIncidentStatusBtn.style.display = "block";
     const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId + "/status";
     // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + "/" + incidentId + "/status";
     incidentStatusSelect = document.getElementById("modal-incident-status-select")
@@ -813,8 +850,10 @@ function changeIncidentStatus(incidents, incidentId) {
                 if (myJson.status == 201) {
                     alert(myJson.message);
                     openAdminPage();
+                    modelUpdateIncidentStatusBtn.style.display = "none";
                 } else {
                     alert(myJson.error)
+                    modelUpdateIncidentStatusBtn.style.display = "none";
                 }
             });
         return true;
