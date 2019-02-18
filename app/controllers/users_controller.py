@@ -54,6 +54,18 @@ class UsersController():
     def export_users(self):
         return self.usersdata.get_users()
 
+    def get_user(self, user_id):
+        """method for getting a single user by id"""
+        get_user_instance = self.usersdata.get_user(user_id)
+        if get_user_instance is None:
+            return RESP_ERROR_USER_NOT_FOUND
+        else:
+            get_user_instance.pop("password")
+            return Response(json.dumps({
+                "status": 200,
+                "data": [get_user_instance]
+            }), content_type="application/json", status=200)    
+
     def adduser(self, request_info):
         """method for registering a user (signing up)"""
         firstname = request_info.get("firstname")
@@ -65,9 +77,6 @@ class UsersController():
         is_admin = False
         password = request_info.get("password")
         registered_on = datetime.datetime.now()
-
-        # user_id = self.my_validator.create_id(
-        #     self.usersdata.get_users(), "user_id")
         
         if self.response_signupfail(request_info, (firstname, lastname), username):
             return self.response_signupfail(request_info, (firstname, lastname), username)
