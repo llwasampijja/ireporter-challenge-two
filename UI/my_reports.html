@@ -18,6 +18,7 @@
     <script>
         checkIfUserIsLoggedIn();
         avoidDashBoardForAdmins();
+        // addOnClickEventToFilterButton();
     </script>
     <link rel="stylesheet" type="text/css" href="css/main.css">
 </head>
@@ -71,14 +72,15 @@
                 <h2 id="dashboard-header-incident-type" class="dashboard-header-element">Fgetterventions</h2>
                 <div class="filter-reports reports-type dashboard-header-element">
                     <span class="dashboard-filter-item">Report Status</span>
-                    <select class="dashboard-filter-item">
+                    <select id="dashboard-select-filter-incidents" class="dashboard-filter-item">
                         <option value="all">All</option>
+                        <option value="pending-investigation">Pending Investigation</option>
                         <option value="under-investigation">Under Investigation</option>
                         <option value="resolved">Resolved</option>
                         <option value="rejected">Rejected</option>
                     </select>
                     <button id="filter-incidents"
-                        class="button-Filter site-signup-btn site-btn dashboard-filter-item">Filter
+                        class="button-Filter site-signup-btn site-btn dashboard-filter-item" onclick="addOnClickEventToFilterButton()">Filter
                         Reports</button>
                 </div>
                 <input class="reports-search-box dashboard-header-element" type="text" placeholder="Search Incidents"
