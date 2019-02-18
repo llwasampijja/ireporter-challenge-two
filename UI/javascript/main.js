@@ -502,6 +502,129 @@ function getAllIncidentsPerUser(incidents, tabSectionId) {
         })
 }
 
+function addOnClickEventToFilterButton(){
+    // filterIncidentsPerUser(incidents, tabSectionId)
+    if (document.getElementById("dashboard-header-incident-type").innerHTML.toString().toLowerCase() == "red-flags"){
+        filterIncidentsPerUser('red-flags', 'view-user-redflags')
+    } else if (document.getElementById("dashboard-header-incident-type").innerHTML.toString().toLowerCase() == "interventions"){
+        filterIncidentsPerUser('interventions', 'view-user-interventions')
+    }
+    // filterIncidentsPerUser(incidents, tabSectionId)
+}
+
+function filterIncidentsPerUser(incidents, tabSectionId) {
+    let dashBoardSelector = document.getElementById("dashboard-select-filter-incidents");
+    var accessToken = getCookie("jwtAccessToken");
+    var userId = getCookie("userIdCookie");
+    let fetchData = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + accessToken
+        }
+    }
+
+    let incidentStatus = "";
+
+    if (dashBoardSelector.selectedIndex == 1) {
+        dashBoardSelector.selectedIndex = 1;
+        incidentStatus = "pending investigation";
+    } else if (dashBoardSelector.selectedIndex == 2) {
+        dashBoardSelector.selectedIndex = 2;
+        incidentStatus = "under investigation";
+    } else if (dashBoardSelector.selectedIndex == 3) {
+        dashBoardSelector.selectedIndex = 3;
+        incidentStatus = "resolved";
+    } else if (dashBoardSelector.selectedIndex == 4) {
+        dashBoardSelector.selectedIndex = 4;
+        incidentStatus = "rejected";
+    } else {
+        dashBoardSelector.selectedIndex = 0;
+        incidentStatus = "all";
+    }
+
+    const URL_INCIDENTS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users/' + userId + '/' + incidents;
+    // const URL_INCIDENTS = 'http://localhost:5000/api/v1/users/' + userId + '/' + incidents;
+
+    fetch(URL_INCIDENTS, fetchData)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (jsonData) {
+            if (jsonData.status == 200) {
+                var gridContainerUserIncidents = document.getElementById(tabSectionId)
+                gridContainerUserIncidents.innerHTML = "";
+                for (let incident of jsonData.data) {
+                    var gridBoxContainerDiv = document.createElement('div');
+                    gridBoxContainerDiv.className = "grid-box-container";
+                    var gridBoxUl = document.createElement("ul");
+                    var gridBoxLiDivThumbnail = document.createElement("div");
+                    gridBoxLiDivThumbnail.className = "grid-item-thumbnail-wrapper";
+                    var gridBoxLiThumbnail = document.createElement("li");
+                    var gridBoxImgThumbnail = document.createElement("img");
+                    gridBoxImgThumbnail.className = "grid-item-thumbnail";
+                    gridBoxImgThumbnail.src = "images/intervention.png";
+                    gridBoxLiDivThumbnail.appendChild(gridBoxImgThumbnail);
+                    gridBoxLiThumbnail.appendChild(gridBoxLiDivThumbnail);
+
+                    var gridBoxLiIncidentId = document.createElement("li");
+                    gridBoxLiIncidentId.innerHTML = "Incident Id: "
+                    var gridBoxLiSpanIncidentId = document.createElement("span");
+                    gridBoxLiSpanIncidentId.innerHTML = incident.incident_id;
+                    gridBoxLiIncidentId.appendChild(gridBoxLiSpanIncidentId);
+                    var gridBoxLiTitle = document.createElement("li");
+                    gridBoxLiTitle.innerHTML = "Title: "
+                    var gridBoxLiSpanTitle = document.createElement("span");
+                    gridBoxLiSpanTitle.innerHTML = incident.title;
+                    gridBoxLiTitle.appendChild(gridBoxLiSpanTitle);
+                    var gridBoxLiRecordType = document.createElement("li");
+                    gridBoxLiRecordType.innerHTML = "Incident Type: "
+                    var gridBoxLiSpanRecordType = document.createElement("span");
+                    gridBoxLiSpanRecordType.innerHTML = incident.incident_type;
+                    gridBoxLiRecordType.appendChild(gridBoxLiSpanRecordType);
+                    var gridBoxLiSubmissionDate = document.createElement("li");
+                    gridBoxLiSubmissionDate.innerHTML = "Date: "
+                    var gridBoxLiSpanSubmissionDate = document.createElement("span");
+                    gridBoxLiSpanSubmissionDate.innerHTML = incident.created_on;
+                    gridBoxLiSubmissionDate.appendChild(gridBoxLiSpanSubmissionDate);
+                    var gridBoxLiStatus = document.createElement("li");
+                    gridBoxLiStatus.innerHTML = "Status: "
+                    var gridBoxLiSpanStatus = document.createElement("span");
+                    gridBoxLiSpanStatus.innerHTML = incident.status;
+                    gridBoxLiStatus.appendChild(gridBoxLiSpanStatus);
+                    var gridBoxLiButtons = document.createElement("li");
+                    var gridBoxLiDivButtons = document.createElement("div");
+                    gridBoxLiDivButtons.className = "buttons-sowa";
+                    gridBoxLiDivButtons.innerHTML = '<button class="view-report-btn" id="but" onclick="getUserIncidentById( \'' + incidents + '\', ' + gridBoxLiSpanIncidentId.innerHTML + ')">View </button>';
+
+                    gridBoxLiButtons.appendChild(gridBoxLiDivButtons);
+
+                    gridBoxUl.appendChild(gridBoxLiThumbnail);
+                    gridBoxUl.appendChild(gridBoxLiIncidentId);
+                    gridBoxUl.appendChild(gridBoxLiTitle);
+                    gridBoxUl.appendChild(gridBoxLiRecordType);
+                    gridBoxUl.appendChild(gridBoxLiSubmissionDate);
+                    gridBoxUl.appendChild(gridBoxLiStatus);
+                    gridBoxUl.appendChild(gridBoxLiButtons);
+
+                    gridBoxContainerDiv.appendChild(gridBoxUl);
+                    
+                    if(incidentStatus == "all"){
+                        gridContainerUserIncidents.appendChild(gridBoxContainerDiv);
+                    } else if (incidentStatus == incident.status.toLowerCase()){
+                        gridContainerUserIncidents.appendChild(gridBoxContainerDiv);
+                    }
+                }
+
+            } else if (jsonData.status == 401) {
+                alert(jsonData.error);
+                openSigninPage();
+            } else {
+                alert(jsonData.error);
+            }
+        })
+}
+
 function getIncidentById(incidents, element, tableId) {
     var incidentTable = document.getElementById(tableId);
     myRowIndex = element.parentNode.parentNode.rowIndex;
