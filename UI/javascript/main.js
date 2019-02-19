@@ -847,7 +847,8 @@ function updateUserIncident(incidents, incidentId) {
             .then(function (myJson) {
 
                 if (myJson.status == 201) {
-                    alert(myJson.message);
+                    // alert(myJson.message);
+                    alert("You have successfully updated this incident's " + incidentAttribute)
                     openAdminPage();
                     userUpdateIncidentAttributeLoader.style.display = "none";
                 } else {
