@@ -119,6 +119,33 @@ header nav ul li a:link{
 }
 
 /* login window */
+.loader {
+  border: 10px solid rgb(58, 178, 248);
+  border-radius: 50%;
+  border-top: 10px solid rgb(52,152,219);
+  border-bottom: 10px solid rgb(52,152,219);
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+#myloader, #mysignup-loader,
+#user-update-incident-images-loader,
+#user-update-incident-videos-loader,
+#user-update-incident-attribute-loader,
+#user-delete-incident-loader,
+#user-create-incident-loader,
+#admin-update-incident-loader,
+#admin-update-user-loader {
+  display: none;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 .sign-form-container{
   width: 100%;
   margin: 0 auto;
