@@ -46,25 +46,35 @@
 				<form class="sign-form" onsubmit="return false">
 					<span class="sign-form-title">User Signup</span>
 					<div class="sign-form-element sign-form-input-wrapper">
-						<input id="reg-firstname" class="sign-form-input" type="text" name="firstname" placeholder="firstname" required>
+						<input id="reg-firstname" class="sign-form-input" type="text" name="firstname"
+							placeholder="firstname" onblur="validateName('reg-firstname', 'validate-first-name');" required>
+						<span id="validate-first-name"><small>a name must contain only letters from a to z</small></span>
 					</div>
 					<div class="sign-form-element sign-form-input-wrapper">
-						<input id="reg-lastname" class="sign-form-input" type="text" name="lastname" placeholder="lastname" required>
+						<input id="reg-lastname" class="sign-form-input" type="text" name="lastname"
+							placeholder="lastname" onblur="validateName('reg-lastname', 'validate-last-name');" required>
+						<span id="validate-last-name"><small>a name must contain only letters from a to z</small></span>
 					</div>
 					<div class="sign-form-element sign-form-input-wrapper">
-						<input id="reg-othernames" class="sign-form-input" type="text" name="othernames" placeholder="othernames">
+						<input id="reg-othernames" class="sign-form-input" type="text" name="othernames"
+							placeholder="othernames">
+							<span id="validate-first-name"><small>a name must contain only letters from a to z</small></span>
 					</div>
 					<div class="sign-form-element sign-form-input-wrapper">
-						<input id="reg-username"  class="sign-form-input" type="text" name="username" placeholder="username" required>
+						<input id="reg-username" class="sign-form-input" type="text" name="username"
+							placeholder="username" required>
 					</div>
 					<div class="sign-form-element sign-form-input-wrapper">
-						<input id="reg-email" class="sign-form-input" type="email" name="email" placeholder="Email" required>
+						<input id="reg-email" class="sign-form-input" type="email" name="email" placeholder="Email"
+							required>
 					</div>
 					<div class="sign-form-element sign-form-input-wrapper">
-						<input id="reg-phonenumber" class="sign-form-input" type="tel" name="phonenumber" placeholder="phonenumber" required>
+						<input id="reg-phonenumber" class="sign-form-input" type="tel" name="phonenumber"
+							placeholder="phonenumber" required>
 					</div>
 					<div class="sign-form-element sign-form-input-wrapper">
-						<input id="reg-password" class="sign-form-input" type="password" name="password" placeholder="Password" required>
+						<input id="reg-password" class="sign-form-input" type="password" name="password"
+							placeholder="Password" required>
 					</div>
 
 					<div class="sign-form-element sign-form-input-btn-wrapper">
@@ -85,5 +95,16 @@
 		</div>
 	</section>
 </body>
+<script>
+	var email = document.getElementById("reg-email");
+	email.addEventListener("input", function (event) {
+		if (email.validity.typeMismatch) {
+			email.setCustomValidity("I expect an e-mail, darling!");
+		} else {
+			email.setCustomValidity("");
+		}
+	});
+</script>
+<script src="javascript/form_validation.js"></script>
 
 </html>

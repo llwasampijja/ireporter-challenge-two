@@ -157,6 +157,10 @@ header nav ul li a:link{
   100% { transform: rotate(360deg); }
 }
 
+#validate-first-name, #validate-last-name {
+  display: none;
+}
+
 .sign-form-container{
   width: 100%;
   margin: 0 auto;

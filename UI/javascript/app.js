@@ -21,7 +21,7 @@ function avoidLoginSignupPage() {
     } else if (getCookie("jwtAccessToken") != "" && getCookie("isAdmin") == "false") {
         openHomePage();
     } else {
-        alert("You have been logged out, Login again to regain access!");
+        // alert("You have been logged out, Login again to regain access!");
         return;
     }
 }
