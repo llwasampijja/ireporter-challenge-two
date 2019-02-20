@@ -21,7 +21,7 @@ function avoidLoginSignupPage() {
     } else if (getCookie("jwtAccessToken") != "" && getCookie("isAdmin") == "false") {
         openHomePage();
     } else {
-        alert("You have been logged out, Login again to regain access!");
+        // alert("You have been logged out, Login again to regain access!");
         return;
     }
 }
@@ -253,12 +253,12 @@ function showPosition() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
             var positionCoordinates = position.coords.latitude + ", " + position.coords.longitude;
-            alert(positionCoordinates);
+            // alert(positionCoordinates);
             document.getElementById('modal-view-incident-geocoordinates-field').value = positionCoordinates;
             document.getElementById('modal-add-incident-geocoordinates-field').value = positionCoordinates;
         });
     } else {
-        alert("HTML5 Geolocation isn't supported by your current browser.");
+        // alert("HTML5 Geolocation isn't supported by your current browser.");
     }
 }
 
