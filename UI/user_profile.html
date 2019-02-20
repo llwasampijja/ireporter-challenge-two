@@ -62,80 +62,80 @@
         <div class="profile-container">
             <div class="profile-content-wrapper">
                 <div class="profile-image-wrapper profile-group">
-                    <img src="images/ann.jpg" alt="profile image">
+                    <img src="images/default-profile-pic.jpg" alt="profile image">
                 </div>
                 <div class="profile-summury-container profile-group">
                     <div class="profile-summury-wrapper">
-                        <p>
-                            <div class="user-profile-detail">
+                        <!-- <p> -->
+                            <div class="user-profile-detail" style="display:none">
                                 <label class="user-profile-label">
                                     User Id:
                                 </label>
                                 <p id="modal-users-userid" class="user-profile-value">User Id</p>
                             </div>
-                        </p>
-                        <p>
+                        <!-- </p> -->
+                        <!-- <p> -->
                             <div class="user-profile-detail">
                                 <label class="user-profile-label">
                                     Name:
                                 </label>
                                 <p id="modal-users-fullname" class="user-profile-value">Fullname</p>
                             </div>
-                        </p>
+                        <!-- </p> -->
 
-                        <p>
+                        <!-- <p> -->
                             <div class="user-profile-detail">
                                 <label class="user-profile-label">
                                     Othername:
                                 </label>
                                 <p id="modal-users-othername" class="user-profile-value">Othername</p>
                             </div>
-                        </p>
+                        <!-- </p> -->
 
-                        <p>
+                        <!-- <p> -->
                             <div class="user-profile-detail">
                                 <label class="user-profile-label">
                                     Username:
                                 </label>
                                 <p id="modal-users-username" class="user-profile-value">username</p>
                             </div>
-                        </p>
+                        <!-- </p> -->
 
-                        <p>
+                        <!-- <p> -->
                             <div class="user-profile-detail">
                                 <label class="user-profile-label">
                                     Email:
                                 </label>
                                 <p id="modal-users-email" class="user-profile-value">Email</p>
                             </div>
-                        </p>
+                        <!-- </p> -->
 
-                        <p>
+                        <!-- <p> -->
                             <div class="user-profile-detail">
                                 <label class="user-profile-label">
                                     Contact Phone Number:
                                 </label>
                                 <p id="modal-users-phonenumber" class="user-profile-value">PhoneNumber</p>
                             </div>
-                        </p>
+                        <!-- </p> -->
 
-                        <p>
+                        <!-- <p> -->
                             <div class="user-profile-detail">
                                 <label class="user-profile-label">
                                     is Admin?:
                                 </label>
                                 <p id="modal-users-isadmin" class="user-profile-value">isadmin</p>
                             </div>
-                        </p>
+                        <!-- </p> -->
 
-                        <p>
+                        <!-- <p> -->
                             <div class="user-profile-detail">
                                 <label class="user-profile-label">
                                     Joined On:
                                 </label>
                                 <p id="modal-users-registeredon" class="user-profile-value">joining date</p>
                             </div>
-                        </p>
+                        <!-- </p> -->
 
                         <!-- <p>
                             <div class="user-profile-detail">
@@ -173,14 +173,17 @@
                         </p> -->
                     </div>
                 </div>
-
-
             </div>
 
         </div>
     </section>
     <section class="profile-sections" style="display:none">
         <button id="btn-user-role-change" class="site-signup-btn site-btn profile-group"></button>
+    </section>
+
+    <section class="profile-sections">
+        <div id="admin-update-user-loader" class="loader"></div>
+        <button id="btn-reload-user-profile" class="site-signup-btn site-btn profile-group">Reload</button>
     </section>
 
 
@@ -315,6 +318,7 @@
     <script>
         homePageNotSignedIn();
         getUserProfileDetails();
+        reLoadUserDetails(getCookie("userIdCookie"));
     </script>
 
 </body>
