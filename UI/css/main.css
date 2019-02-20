@@ -364,7 +364,8 @@ input.sign-form-input {
 
 .site-btn {
   background-color: rgb(65, 105, 225);
-  color: black;
+  /* color: black; */
+  color: rgb(255, 255, 255);
   /* color: black !important; */
 }
 
@@ -713,6 +714,7 @@ h2.dashboard-header-element {
 
 #new-report-btn, #filter-incidents {
   background-color: rgb(255, 255, 248);
+  color: rgb(65, 105, 225);
 }
 
 #new-report-btn:hover {
