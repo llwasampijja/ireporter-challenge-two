@@ -152,6 +152,7 @@ function openViewReportsModal() {
 
 function openViewUserProfileModal(userId) {
     var modal = document.getElementById('view-user-profile-modal');
+    
 
     document.addEventListener('click', function (event) {
         if (event.target.classList.contains('view-user-profile-btn')) {
@@ -165,6 +166,7 @@ function openViewUserProfileModal(userId) {
     span.onclick = function () {
         modal.style.display = "none";
     }
+    reLoadUserDetails(userId);
     let modalUserRoleChange = document.getElementById("btn-user-role-change");
     modalUserRoleChange.onclick = function () {
         changeUserRole(userId)

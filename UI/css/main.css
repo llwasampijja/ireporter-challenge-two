@@ -141,6 +141,17 @@ header nav ul li a:link{
   display: none;
 }
 
+.no-records-message-container-class{
+  margin: 20px auto;
+  width: 200px;
+  text-align: center;
+}
+
+#no-records-message-container-id {
+  display: none;
+}
+
+
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
@@ -327,6 +338,8 @@ input.sign-form-input {
   margin: 10px;
   display: inline-block;
   border-radius: 20px;
+  height: 300px;
+  overflow: hidden;
 }
 
 .grid-box-content {
@@ -603,6 +616,7 @@ h2.dashboard-header-element {
 .profile-image-wrapper img {
   margin: auto;
   display: block;
+  width: 100%;
 }
 
 .user-profile-label{
