@@ -714,10 +714,10 @@ h2.dashboard-header-element {
 
 #new-report-btn, #filter-incidents {
   background-color: rgb(255, 255, 248);
-  color: rgb(65, 105, 225);
+  color: rgb(0, 0, 0);
 }
 
-#new-report-btn:hover {
+#new-report-btn:hover, #filter-incidents:hover {
   background-color: #E8E8E8;
 }
 
