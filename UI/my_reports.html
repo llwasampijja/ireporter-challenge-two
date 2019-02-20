@@ -79,8 +79,8 @@
                         <option value="resolved">Resolved</option>
                         <option value="rejected">Rejected</option>
                     </select>
-                    <button id="filter-incidents"
-                        class="button-Filter site-signup-btn site-btn dashboard-filter-item" onclick="addOnClickEventToFilterButton()">Filter
+                    <button id="filter-incidents" class="button-Filter site-signup-btn site-btn dashboard-filter-item"
+                        onclick="addOnClickEventToFilterButton()">Filter
                         Reports</button>
                 </div>
                 <input class="reports-search-box dashboard-header-element" type="text" placeholder="Search Incidents"
@@ -92,7 +92,7 @@
 
                 <div class="admin-control-panel-container">
                     <button class="admin-tab"
-                        onclick="openAdminManageTab(event, 'view-user-incidents'), setDashBoardHeaderIncidedentType('Map');"
+                        onclick="openAdminManageTab(event, 'view-user-incidents'), setDashBoardHeaderIncidedentType('Map'); hideNoRecordsMessage();"
                         id="openByDefault">Map-Incidents</button>
                     <button class="admin-tab"
                         onclick="openAdminManageTab(event, 'view-user-redflags'); getAllIncidentsPerUser('red-flags', 'view-user-redflags'), setDashBoardHeaderIncidedentType('Red-flags');">Red-flags</button>
@@ -102,6 +102,10 @@
             </header>
         </div>
     </section>
+    <div id="view-user-incidents-loader" class="loader"></div>
+    <div id="no-records-message-container-id" class="no-records-message-container-class">
+        <p>There are no records to display.</p>
+    </div>
 
     <section id="view-user-incidents" class="section-manage-content">
         <div>
@@ -213,7 +217,8 @@
                     <div class="content-container">
                         <h3 class="modal-contents-item">Incident Location</h3>
                         <div class="edit-report-input">
-                            <button id="modal-view-incident-get-geocoordinates" class="edit-form-btn modal-view-incident-get-geocoordinates" >Get Coordinates</button>
+                            <button id="modal-view-incident-get-geocoordinates"
+                                class="edit-form-btn modal-view-incident-get-geocoordinates">Get Coordinates</button>
                             <input id="modal-view-incident-geocoordinates-field" class="geocordinates-box" type="text"
                                 name="geocoordinates" placeholder="Click to get location" disabled>
                             <div id="modal-incident-view-map-location"></div>
@@ -294,7 +299,9 @@
                             <input id="modal-create-new-report-videos" class="edit-report-input" type="text"
                                 name="report-images" placeholder="Enter video urls separated by commas (no spaces)">
                             <div class="edit-report-input">
-                                <button id="modal-create-new-report-location-btn" class="edit-form-btn modal-view-incident-get-geocoordinates">Get Coordinates</button>
+                                <button id="modal-create-new-report-location-btn"
+                                    class="edit-form-btn modal-view-incident-get-geocoordinates">Get
+                                    Coordinates</button>
                                 <input id="modal-add-incident-geocoordinates-field" class="geocordinates-box"
                                     type="text" name="geocoordinates" placeholder="0.32358400000000004, 32.5967872"
                                     disabled>
@@ -312,7 +319,7 @@
             </section>
         </div>
 
-        
+
     </div>
 
     <script>
@@ -324,6 +331,10 @@
     </script>
 
     <script>
+        let userIncidentsListLoader = document.getElementById("view-user-incidents-loader");
+        let noRecordsContainer = document.getElementById("no-records-message-container-id");
+        let numberOfMapIncidents = 0;
+        userIncidentsListLoader.style.display = "none";
 
         let mymap = L.map('user-incidents-map').setView([0.32358400000000004, 32.5967872], 13);
 
@@ -346,10 +357,12 @@
 
         // mymap.on('click', onMapClick);
 
-        const URL_REDFLAGS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/red-flags';
-        const URL_INTERVENTIONS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/interventions';
-        // const URL_REDFLAGS = 'http://localhost:5000/api/v1/red-flags';
-        // const URL_INTERVENTIONS = 'http://localhost:5000/api/v1/interventions';
+        var userId = getCookie("userIdCookie");
+
+        // const URL_REDFLAGS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users/' + userId + '/red-flags';
+        // const URL_INTERVENTIONS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users/' + userId + '/interventions';
+        const URL_REDFLAGS = 'http://localhost:5000/api/v1/users/' + userId + '/red-flags';
+        const URL_INTERVENTIONS = 'http://localhost:5000/api/v1/users/' + userId + '/interventions';
         var fetchData = {
             method: 'GET',
             headers: {
@@ -372,7 +385,13 @@
                         .addTo(mymap)
                         .bindPopup("<b>" + incident.title + "</b><br>I am " + incident.comment)
                         .openPopup();
+                    numberOfMapIncidents += 1;
                 }
+            }
+            if (numberOfMapIncidents < 1) {
+                noRecordsContainer.style.display = "block";
+            } else {
+                noRecordsContainer.style.display = "none";
             }
         }).catch((myError) => {
             return;
@@ -391,11 +410,18 @@
                         .addTo(mymap)
                         .bindPopup("<b>" + incident.title + "</b><br>I am " + incident.comment)
                         .openPopup();
+                    numberOfMapIncidents += 1;
                 }
+            }
+            if (numberOfMapIncidents < 1) {
+                noRecordsContainer.style.display = "block";
+            } else {
+                noRecordsContainer.style.display = "none";
             }
         }).catch((myError) => {
             return;
         });
+
 
     </script>
 </body>

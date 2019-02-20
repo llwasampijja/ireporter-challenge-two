@@ -73,7 +73,7 @@
                 <h2 class="dashboard-header-element">Admin Panel</h2>
 
                 <div class="admin-control-panel-container">
-                    <button class="admin-tab" onclick="openAdminManageTab(event, 'manage-incidents-map');"
+                    <button class="admin-tab" onclick="openAdminManageTab(event, 'manage-incidents-map'); hideNoRecordsMessage();"
                         id="openByDefault">Map View</button>
                     <button class="admin-tab"
                         onclick="openAdminManageTab(event, 'manage-redflags'); getAllIncidents('red-flags', 'redflags-list-table')">Red-Flags</button>
@@ -85,6 +85,10 @@
             </header>
         </div>
     </section>
+    <div id="view-admin-incidents-loader" class="loader"></div>
+    <div id="no-records-message-container-id" class="no-records-message-container-class">
+        <p>There are no records to display.</p>
+    </div>
 
     <section id="manage-incidents-map" class="section-manage-content">
         <div>
@@ -234,80 +238,80 @@
                 <div class="profile-container">
                     <div class="profile-content-wrapper">
                         <div class="profile-image-wrapper profile-group">
-                            <img src="images/ann.jpg" alt="profile image">
+                            <img src="images/default-profile-pic.jpg" alt="profile image">
                         </div>
                         <div class="profile-summury-container profile-group">
                             <div class="profile-summury-wrapper">
-                                <p>
-                                    <div class="user-profile-detail">
-                                        <label class="user-profile-label">
-                                            User Id:
-                                        </label>
-                                        <p id="modal-users-userid" class="user-profile-value">User Id</p>
-                                    </div>
-                                </p>
-                                <p>
-                                    <div class="user-profile-detail">
-                                        <label class="user-profile-label">
-                                            Name:
-                                        </label>
-                                        <p id="modal-users-fullname" class="user-profile-value">Fullname</p>
-                                    </div>
-                                </p>
+                                <!-- <p> -->
+                                <div class="user-profile-detail" style="display: none;">
+                                    <label class="user-profile-label">
+                                        User Id:
+                                    </label>
+                                    <p id="modal-users-userid" class="user-profile-value">User Id</p>
+                                </div>
+                                <!-- </p> -->
+                                <!-- <p> -->
+                                <div class="user-profile-detail">
+                                    <label class="user-profile-label">
+                                        Name:
+                                    </label>
+                                    <p id="modal-users-fullname" class="user-profile-value">Fullname</p>
+                                </div>
+                                <!-- </p> -->
 
-                                <p>
-                                    <div class="user-profile-detail">
-                                        <label class="user-profile-label">
-                                            Othername:
-                                        </label>
-                                        <p id="modal-users-othername" class="user-profile-value">Othername</p>
-                                    </div>
-                                </p>
+                                <!-- <p> -->
+                                <div class="user-profile-detail">
+                                    <label class="user-profile-label">
+                                        Othername:
+                                    </label>
+                                    <p id="modal-users-othername" class="user-profile-value">Othername</p>
+                                </div>
+                                <!-- </p> -->
 
-                                <p>
-                                    <div class="user-profile-detail">
-                                        <label class="user-profile-label">
-                                            Username:
-                                        </label>
-                                        <p id="modal-users-username" class="user-profile-value">username</p>
-                                    </div>
-                                </p>
+                                <!-- <p> -->
+                                <div class="user-profile-detail">
+                                    <label class="user-profile-label">
+                                        Username:
+                                    </label>
+                                    <p id="modal-users-username" class="user-profile-value">username</p>
+                                </div>
+                                <!-- </p> -->
 
-                                <p>
-                                    <div class="user-profile-detail">
-                                        <label class="user-profile-label">
-                                            Email:
-                                        </label>
-                                        <p id="modal-users-email" class="user-profile-value">Email</p>
-                                    </div>
-                                </p>
+                                <!-- <p> -->
+                                <div class="user-profile-detail">
+                                    <label class="user-profile-label">
+                                        Email:
+                                    </label>
+                                    <p id="modal-users-email" class="user-profile-value">Email</p>
+                                </div>
+                                <!-- </p> -->
 
-                                <p>
-                                    <div class="user-profile-detail">
-                                        <label class="user-profile-label">
-                                            Contact Phone Number:
-                                        </label>
-                                        <p id="modal-users-phonenumber" class="user-profile-value">PhoneNumber</p>
-                                    </div>
-                                </p>
+                                <!-- <p> -->
+                                <div class="user-profile-detail">
+                                    <label class="user-profile-label">
+                                        Contact Phone Number:
+                                    </label>
+                                    <p id="modal-users-phonenumber" class="user-profile-value">PhoneNumber</p>
+                                </div>
+                                <!-- </p> -->
 
-                                <p>
-                                    <div class="user-profile-detail">
-                                        <label class="user-profile-label">
-                                            is Admin?:
-                                        </label>
-                                        <p id="modal-users-isadmin" class="user-profile-value">isadmin</p>
-                                    </div>
-                                </p>
+                                <!-- <p> -->
+                                <div class="user-profile-detail">
+                                    <label class="user-profile-label">
+                                        is Admin?:
+                                    </label>
+                                    <p id="modal-users-isadmin" class="user-profile-value">isadmin</p>
+                                </div>
+                                <!-- </p> -->
 
-                                <p>
-                                    <div class="user-profile-detail">
-                                        <label class="user-profile-label">
-                                            Joined On:
-                                        </label>
-                                        <p id="modal-users-registeredon" class="user-profile-value">joining date</p>
-                                    </div>
-                                </p>
+                                <!-- <p> -->
+                                <div class="user-profile-detail">
+                                    <label class="user-profile-label">
+                                        Joined On:
+                                    </label>
+                                    <p id="modal-users-registeredon" class="user-profile-value">joining date</p>
+                                </div>
+                                <!-- </p> -->
 
                                 <!-- <p>
                                     <div class="user-profile-detail">
@@ -355,9 +359,6 @@
                 <div id="admin-update-user-loader" class="loader"></div>
                 <button id="btn-user-role-change" class="site-signup-btn site-btn profile-group"></button>
             </section>
-
-
-
             <section class="data-tables">
                 <div class="table-container reports-summary-table">
                     <table id="table-userprofile-all-incidents-summary-admin-view">
@@ -414,6 +415,11 @@
                 </div>
 
 
+            </section>
+            <section class="profile-sections">
+                <div id="admin-update-user-loader" class="loader"></div>
+                <button id="btn-reload-user-profile" class="site-signup-btn site-btn profile-group"
+                    onclick="">Reload</button>
             </section>
         </div>
 
@@ -472,6 +478,10 @@
     </script>
 
     <script>
+        let adminIncidentsListLoader = document.getElementById("view-admin-incidents-loader");
+        let noRecordsContainer = document.getElementById("no-records-message-container-id");
+        let numberOfMapIncidents = 0;
+        adminIncidentsListLoader.style.display = "none";
 
         let mymap = L.map('admin-incidents-map').setView([0.32358400000000004, 32.5967872], 13);
 
@@ -492,10 +502,10 @@
 
         // var popup = L.popup();
 
-        const URL_REDFLAGS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/red-flags';
-        const URL_INTERVENTIONS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/interventions';
-        // const URL_REDFLAGS = 'http://localhost:5000/api/v1/red-flags';
-        // const URL_INTERVENTIONS = 'http://localhost:5000/api/v1/interventions';
+        // const URL_REDFLAGS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/red-flags';
+        // const URL_INTERVENTIONS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/interventions';
+        const URL_REDFLAGS = 'http://localhost:5000/api/v1/red-flags';
+        const URL_INTERVENTIONS = 'http://localhost:5000/api/v1/interventions';
         var fetchData = {
             method: 'GET',
             headers: {
@@ -518,7 +528,13 @@
                         .addTo(mymap)
                         .bindPopup("<b>" + incident.title + "</b><br>I am " + incident.comment)
                         .openPopup();
+                    numberOfMapIncidents += 1;
                 }
+            }
+            if (numberOfMapIncidents < 1) {
+                noRecordsContainer.style.display = "block";
+            } else {
+                noRecordsContainer.style.display = "none";
             }
         }).catch((myError) => {
             return;
@@ -537,11 +553,19 @@
                         .addTo(mymap)
                         .bindPopup("<b>" + incident.title + "</b><br>I am " + incident.comment)
                         .openPopup();
+                    numberOfMapIncidents += 1;
                 }
+            }
+            if (numberOfMapIncidents < 1) {
+                noRecordsContainer.style.display = "block";
+            } else {
+                noRecordsContainer.style.display = "none";
             }
         }).catch((myError) => {
             return;
         });
+
+
 
     </script>
 

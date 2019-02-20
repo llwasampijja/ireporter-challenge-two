@@ -1,9 +1,9 @@
 function registerUser() {
     let mySignupLoader = document.getElementById("mysignup-loader");
     mySignupLoader.style.display = "block";
-    
-    const USER_USER = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/register';
-    // const USER_USER = 'http://localhost:5000/api/v1/auth/register';
+
+    // const USER_USER = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/register';
+    const USER_USER = 'http://localhost:5000/api/v1/auth/register';
 
     let data = {
         firstname: document.getElementById("reg-firstname").value,
@@ -47,8 +47,8 @@ function registerUser() {
 function loginUser() {
     let myLoginLoader = document.getElementById("myloader");
     myLoginLoader.style.display = "block";
-    const USER_USER = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/login';
-    // const USER_USER = 'http://localhost:5000/api/v1/auth/login';
+    // const USER_USER = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/login';
+    const USER_USER = 'http://localhost:5000/api/v1/auth/login';
 
     let data = {
         username: document.getElementById("login-username").value,
@@ -90,10 +90,10 @@ function loginUser() {
 }
 
 function uploadMedia(incidentType, incident_id) {
-    let userUpdateIncidentImagesLoader = getElementById("user-update-incident-images-loader");
+    let userUpdateIncidentImagesLoader = document.getElementById("user-update-incident-images-loader");
     userUpdateIncidentImagesLoader.style.display = "block";
-    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/files/uploads/images/' + incidentType + '/' + incident_id;
-    // const URL_INCIDENT = 'http://localhost:5000/api/v1/files/uploads/images/' + incidentType + '/' + incident_id;
+    // const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/files/uploads/images/' + incidentType + '/' + incident_id;
+    const URL_INCIDENT = 'http://localhost:5000/api/v1/files/uploads/images/' + incidentType + '/' + incident_id;
     var accessToken = getCookie("jwtAccessToken");
     var date = new Date();
     var timestamp = date.getTime();
@@ -133,10 +133,10 @@ function uploadMedia(incidentType, incident_id) {
 
 
 function uploadVideo(incidentType, incident_id) {
-    let userUpdateIncidentVideosLoader = getElementById("user-update-incident-videos-loader");
+    let userUpdateIncidentVideosLoader = document.getElementById("user-update-incident-videos-loader");
     userUpdateIncidentVideosLoader.style.display = "block";
-    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/files/uploads/videos/' + incidentType + '/' + incident_id;
-    // const URL_INCIDENT = 'http://localhost:5000/api/v1/files/uploads/videos/' + incidentType + '/' + incident_id;
+    // const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/files/uploads/videos/' + incidentType + '/' + incident_id;
+    const URL_INCIDENT = 'http://localhost:5000/api/v1/files/uploads/videos/' + incidentType + '/' + incident_id;
     var accessToken = getCookie("jwtAccessToken");
     var date = new Date();
     var timestamp = date.getTime();
@@ -179,8 +179,8 @@ function createIncident(incidents) {
     let userCreateIncidentLoader = document.getElementById("user-create-incident-loader");
     userCreateIncidentLoader.style.display = "block";
 
-    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents;
-    // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents;
+    // const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents;
+    const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents;
     var accessToken = getCookie("jwtAccessToken");
 
     myLocation = document.getElementById("modal-add-incident-geocoordinates-field").value,
@@ -229,14 +229,16 @@ function createIncident(incidents) {
                     userCreateIncidentLoader.style.display = "none";
                 }
             }).catch((myError) => {
-                console.log("Create Error: " + myError.message)
+                console.log("Create Error: " + myError.message);
             });
     }
 }
 
 function getAllIncidents(incidents, tableId) {
-    const URL_INCIDENTS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents;
-    // const URL_INCIDENTS = 'http://localhost:5000/api/v1/' + incidents;
+    let adminIncidentsListLoader = document.getElementById("view-admin-incidents-loader");
+    adminIncidentsListLoader.style.display = "block";
+    // const URL_INCIDENTS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents;
+    const URL_INCIDENTS = 'http://localhost:5000/api/v1/' + incidents;
     var accessToken = getCookie("jwtAccessToken");
     let fetchData = {
         method: 'GET',
@@ -254,10 +256,17 @@ function getAllIncidents(incidents, tableId) {
             if (jsonData.status == 200) {
                 var incidentsTable = document.getElementById(tableId);
                 var numberOfRows = 1;
-                var tableRowIndex = 1
+                var tableRowIndex = 1;
                 for (tableRowIndex; tableRowIndex < incidentsTable.rows.length; tableRowIndex++) {
                     incidentsTable.rows[tableRowIndex].innerHTML = "";
                 }
+                let noRecordsContainer = document.getElementById("no-records-message-container-id");
+                if (jsonData.data.length < 1) {
+                    noRecordsContainer.style.display = "block"
+                } else {
+                    noRecordsContainer.style.display = "none"
+                }
+
                 for (let incident of jsonData.data) {
                     var incidentRow = incidentsTable.insertRow(numberOfRows);
 
@@ -293,7 +302,8 @@ function getAllIncidents(incidents, tableId) {
             } else {
                 alert(jsonData.error);
             }
-        })
+            adminIncidentsListLoader.style.display = "none";
+        });
 }
 
 function getAllIncidentsPerUserAdmin(incidents, tableId, userId) {
@@ -312,8 +322,8 @@ function getAllIncidentsPerUserAdmin(incidents, tableId, userId) {
     // myRowIndex = element.parentNode.parentNode.rowIndex;
     // var userId = usersTable.rows[myRowIndex].cells[0].innerHTML
     // alert(userId)
-    const URL_INCIDENTS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users/' + userId + '/' + incidents;
-    // const URL_INCIDENTS = 'http://localhost:5000/api/v1/users/' + userId + '/' + incidents;
+    // const URL_INCIDENTS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users/' + userId + '/' + incidents;
+    const URL_INCIDENTS = 'http://localhost:5000/api/v1/users/' + userId + '/' + incidents;
 
     let userProfileIncidentsSummary = document.getElementById("table-userprofile-all-incidents-summary-admin-view");
 
@@ -332,9 +342,9 @@ function getAllIncidentsPerUserAdmin(incidents, tableId, userId) {
                 let numberIncidentsResolved = 0;
                 let numberIncidentsRejected = 0;
 
-                // for (tableRowIndex; tableRowIndex < incidentsTable.rows.length; tableRowIndex++) {
-                //     incidentsTable.rows[tableRowIndex].innerHTML = "";
-                // }
+                for (tableRowIndex; tableRowIndex < incidentsTable.rows.length; tableRowIndex++) {
+                    incidentsTable.rows[tableRowIndex].innerHTML = "";
+                }
                 for (let incident of jsonData.data) {
 
                     let incidentRow = incidentsTable.insertRow(numberOfRows);
@@ -352,17 +362,17 @@ function getAllIncidentsPerUserAdmin(incidents, tableId, userId) {
                     titleCell2.innerHTML = incident.title;
                     let numberOfImages = incident.images.toString().split(",").length
                     let numberOfVideos = incident.videos.toString().split(",").length
-                    if(incident.images.toString().split(",")[0]== "noimage"){
+                    if (incident.images.toString().split(",")[0] == "noimage") {
                         imagesCell3.innerHTML = 0;
                     } else {
                         imagesCell3.innerHTML = numberOfImages;
                     }
-                    if(incident.images.toString().split(",")[0]== "noimage"){
+                    if (incident.images.toString().split(",")[0] == "noimage") {
                         videosCell4.innerHTML = 0;
                     } else {
                         videosCell4.innerHTML = numberOfVideos;
                     }
-                    
+
                     statusCell5.innerHTML = incident.status;
                     viewIncidentCell6.innerHTML = '<button class="view-report-btn" id="but" onclick="getIncidentById( \'' + incidents + '\',this, \'' + tableId + '\')">View </button>';
 
@@ -397,7 +407,7 @@ function getAllIncidentsPerUserAdmin(incidents, tableId, userId) {
                 userProfileIncidentsSummary.rows[3].cells[2].innerHTML = parseInt(userProfileIncidentsSummary.rows[1].cells[2].innerHTML) + parseInt(userProfileIncidentsSummary.rows[2].cells[2].innerHTML);
                 userProfileIncidentsSummary.rows[3].cells[3].innerHTML = parseInt(userProfileIncidentsSummary.rows[1].cells[3].innerHTML) + parseInt(userProfileIncidentsSummary.rows[2].cells[3].innerHTML);
                 userProfileIncidentsSummary.rows[3].cells[4].innerHTML = parseInt(userProfileIncidentsSummary.rows[1].cells[4].innerHTML) + parseInt(userProfileIncidentsSummary.rows[2].cells[4].innerHTML);
-                userProfileIncidentsSummary.rows[3].cells[5].innerHTML = parseInt(userProfileIncidentsSummary.rows[1].cells[5].innerHTML) + parseInt(userProfileIncidentsSummary.rows[2].cells[5].innerHTML)
+                userProfileIncidentsSummary.rows[3].cells[5].innerHTML = parseInt(userProfileIncidentsSummary.rows[1].cells[5].innerHTML) + parseInt(userProfileIncidentsSummary.rows[2].cells[5].innerHTML);
 
             } else if (jsonData.status == 401) {
                 alert(jsonData.error);
@@ -406,7 +416,7 @@ function getAllIncidentsPerUserAdmin(incidents, tableId, userId) {
                 alert(jsonData.error);
             }
         }).catch((myError) => {
-            console.log("Error Loading User Incidents: " + myError.message)
+            console.log("Error Loading User Incidents: " + myError.message);
         });
 }
 
@@ -415,6 +425,8 @@ function getIncidentTab(response) {
 }
 
 function getAllIncidentsPerUser(incidents, tabSectionId) {
+    let userIncidentsListLoader = document.getElementById("view-user-incidents-loader");
+    userIncidentsListLoader.style.display = "block";
     var accessToken = getCookie("jwtAccessToken");
     var userId = getCookie("userIdCookie");
     let fetchData = {
@@ -425,8 +437,8 @@ function getAllIncidentsPerUser(incidents, tabSectionId) {
         }
     }
 
-    const URL_INCIDENTS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users/' + userId + '/' + incidents;
-    // const URL_INCIDENTS = 'http://localhost:5000/api/v1/users/' + userId + '/' + incidents;
+    // const URL_INCIDENTS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users/' + userId + '/' + incidents;
+    const URL_INCIDENTS = 'http://localhost:5000/api/v1/users/' + userId + '/' + incidents;
 
     fetch(URL_INCIDENTS, fetchData)
         .then(function (response) {
@@ -434,7 +446,13 @@ function getAllIncidentsPerUser(incidents, tabSectionId) {
         })
         .then(function (jsonData) {
             if (jsonData.status == 200) {
-                var gridContainerUserIncidents = document.getElementById(tabSectionId)
+                let noRecordsContainer = document.getElementById("no-records-message-container-id");
+                if (jsonData.data.length < 1) {
+                    noRecordsContainer.style.display = "block"
+                } else {
+                    noRecordsContainer.style.display = "none"
+                }
+                var gridContainerUserIncidents = document.getElementById(tabSectionId);
                 gridContainerUserIncidents.innerHTML = "";
                 for (let incident of jsonData.data) {
                     var gridBoxContainerDiv = document.createElement('div');
@@ -493,26 +511,32 @@ function getAllIncidentsPerUser(incidents, tabSectionId) {
                     gridContainerUserIncidents.appendChild(gridBoxContainerDiv);
                 }
 
+                userIncidentsListLoader.style.display = "none";
+
             } else if (jsonData.status == 401) {
                 alert(jsonData.error);
                 openSigninPage();
+                userIncidentsListLoader.style.display = "none";
             } else {
                 alert(jsonData.error);
+                userIncidentsListLoader.style.display = "none";
             }
         })
 }
 
-function addOnClickEventToFilterButton(){
+function addOnClickEventToFilterButton() {
     // filterIncidentsPerUser(incidents, tabSectionId)
-    if (document.getElementById("dashboard-header-incident-type").innerHTML.toString().toLowerCase() == "red-flags"){
-        filterIncidentsPerUser('red-flags', 'view-user-redflags')
-    } else if (document.getElementById("dashboard-header-incident-type").innerHTML.toString().toLowerCase() == "interventions"){
-        filterIncidentsPerUser('interventions', 'view-user-interventions')
+    if (document.getElementById("dashboard-header-incident-type").innerHTML.toString().toLowerCase() == "red-flags") {
+        filterIncidentsPerUser('red-flags', 'view-user-redflags');
+    } else if (document.getElementById("dashboard-header-incident-type").innerHTML.toString().toLowerCase() == "interventions") {
+        filterIncidentsPerUser('interventions', 'view-user-interventions');
     }
     // filterIncidentsPerUser(incidents, tabSectionId)
 }
 
 function filterIncidentsPerUser(incidents, tabSectionId) {
+    let userIncidentsListLoader = document.getElementById("view-user-incidents-loader");
+    userIncidentsListLoader.style.display = "block";
     let dashBoardSelector = document.getElementById("dashboard-select-filter-incidents");
     var accessToken = getCookie("jwtAccessToken");
     var userId = getCookie("userIdCookie");
@@ -543,8 +567,8 @@ function filterIncidentsPerUser(incidents, tabSectionId) {
         incidentStatus = "all";
     }
 
-    const URL_INCIDENTS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users/' + userId + '/' + incidents;
-    // const URL_INCIDENTS = 'http://localhost:5000/api/v1/users/' + userId + '/' + incidents;
+    // const URL_INCIDENTS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users/' + userId + '/' + incidents;
+    const URL_INCIDENTS = 'http://localhost:5000/api/v1/users/' + userId + '/' + incidents;
 
     fetch(URL_INCIDENTS, fetchData)
         .then(function (response) {
@@ -552,8 +576,15 @@ function filterIncidentsPerUser(incidents, tabSectionId) {
         })
         .then(function (jsonData) {
             if (jsonData.status == 200) {
+                let noRecordsContainer = document.getElementById("no-records-message-container-id");
+                if (jsonData.data.length < 1) {
+                    noRecordsContainer.style.display = "block"
+                } else {
+                    noRecordsContainer.style.display = "none"
+                }
                 var gridContainerUserIncidents = document.getElementById(tabSectionId)
                 gridContainerUserIncidents.innerHTML = "";
+                let numberOfFIlteredIncidents = 0;
                 for (let incident of jsonData.data) {
                     var gridBoxContainerDiv = document.createElement('div');
                     gridBoxContainerDiv.className = "grid-box-container";
@@ -608,19 +639,30 @@ function filterIncidentsPerUser(incidents, tabSectionId) {
                     gridBoxUl.appendChild(gridBoxLiButtons);
 
                     gridBoxContainerDiv.appendChild(gridBoxUl);
-                    
-                    if(incidentStatus == "all"){
+
+                    if (incidentStatus == "all") {
                         gridContainerUserIncidents.appendChild(gridBoxContainerDiv);
-                    } else if (incidentStatus == incident.status.toLowerCase()){
+                        numberOfFIlteredIncidents += 1;
+                    } else if (incidentStatus == incident.status.toLowerCase()) {
                         gridContainerUserIncidents.appendChild(gridBoxContainerDiv);
+                        numberOfFIlteredIncidents += 1;
                     }
                 }
+                userIncidentsListLoader.style.display = "none";
+                if (numberOfFIlteredIncidents < 1) {
+                    noRecordsContainer.style.display = "block";
+                } else {
+                    noRecordsContainer.style.display = "none";
+                }
+
 
             } else if (jsonData.status == 401) {
                 alert(jsonData.error);
                 openSigninPage();
+                userIncidentsListLoader.style.display = "none";
             } else {
                 alert(jsonData.error);
+                userIncidentsListLoader.style.display = "none";
             }
         })
 }
@@ -631,8 +673,8 @@ function getIncidentById(incidents, element, tableId) {
     var incidentId = incidentTable.rows[myRowIndex].cells[0].innerHTML
 
 
-    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId;
-    // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + "/" + incidentId;
+    // const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId;
+    const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + "/" + incidentId;
     var accessToken = getCookie("jwtAccessToken");
     let fetchData = {
         method: 'GET',
@@ -710,8 +752,8 @@ function getIncidentById(incidents, element, tableId) {
 }
 
 function getUserIncidentById(incidents, incidentId) {
-    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId;
-    // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + "/" + incidentId;
+    // const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId;
+    const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + "/" + incidentId;
     var accessToken = getCookie("jwtAccessToken");
     let fetchData = {
         method: 'GET',
@@ -827,8 +869,8 @@ function updateUserIncident(incidents, incidentId) {
         }
     }
 
-    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + '/' + incidentId + '/' + incidentAttribute;
-    // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + '/' + incidentId + '/' + incidentAttribute;
+    // const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + '/' + incidentId + '/' + incidentAttribute;
+    const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + '/' + incidentId + '/' + incidentAttribute;
 
     let fetchData = {
         method: 'PATCH',
@@ -861,11 +903,11 @@ function updateUserIncident(incidents, incidentId) {
 }
 
 function deleteUserIncident(incidents, incidentId) {
-    let userDeleteIncidentLoader = getElementById("user-delete-incident-loader");
+    let userDeleteIncidentLoader = document.getElementById("user-delete-incident-loader");
     userDeleteIncidentLoader.style.display = "block";
-    
-    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + '/' + incidentId;
-    // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + '/' + incidentId;
+
+    // const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + '/' + incidentId;
+    const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + '/' + incidentId;
     var accessToken = getCookie("jwtAccessToken");
     let fetchData = {
         method: 'DELETE',
@@ -898,8 +940,8 @@ function deleteUserIncident(incidents, incidentId) {
 function changeUserRole(userId) {
     let adminUpdateUserLoader = document.getElementById("admin-update-user-loader");
     adminUpdateUserLoader.style.display = "block";
-    const URL_USER = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users/' + userId;
-    // const URL_USER = 'http://localhost:5000/api/v1/users/' + userId;
+    // const URL_USER = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users/' + userId;
+    const URL_USER = 'http://localhost:5000/api/v1/users/' + userId;
     let modalUserRoleChangeBtn = document.getElementById("btn-user-role-change");
     let btnRoleState = modalUserRoleChangeBtn.innerHTML;
     let newUserRole = true;
@@ -948,8 +990,8 @@ function changeIncidentStatus(incidents, incidentId) {
     adminUpdateIncidentLoader.style.display = "block";
     let modelUpdateIncidentStatusBtn = document.getElementById("model-update-incident-status-btn");
     modelUpdateIncidentStatusBtn.style.display = "block";
-    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId + "/status";
-    // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + "/" + incidentId + "/status";
+    // const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId + "/status";
+    const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + "/" + incidentId + "/status";
     incidentStatusSelect = document.getElementById("modal-incident-status-select")
     statusChange = incidentStatusSelect.options[incidentStatusSelect.selectedIndex].text;
     var accessToken = getCookie("jwtAccessToken");
@@ -985,8 +1027,10 @@ function changeIncidentStatus(incidents, incidentId) {
 }
 
 function getAllUsers() {
-    const url = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users';
-    // const url = 'http://localhost:5000/api/v1/users';
+    let adminIncidentsListLoader = document.getElementById("view-admin-incidents-loader");
+    adminIncidentsListLoader.style.display = "block";
+    // const url = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users';
+    const url = 'http://localhost:5000/api/v1/users';
     // The parameters we are gonna pass to the fetch function
     var accessToken = getCookie("jwtAccessToken")
     let fetchData = {
@@ -1007,6 +1051,12 @@ function getAllUsers() {
                 let tableRowIndex = 1
                 for (tableRowIndex; tableRowIndex < usersTable.rows.length; tableRowIndex++) {
                     usersTable.rows[tableRowIndex].innerHTML = "";
+                }
+                let noRecordsContainer = document.getElementById("no-records-message-container-id");
+                if (myJson.data.length < 1) {
+                    noRecordsContainer.style.display = "block"
+                } else {
+                    noRecordsContainer.style.display = "none"
                 }
                 for (let user of myJson.data) {
                     var userRow = usersTable.insertRow(numberOfRows);
@@ -1038,12 +1088,26 @@ function getAllUsers() {
                 alert(myJson.error);
                 openSigninPage();
             }
+            adminIncidentsListLoader.style.display = "none";
         });
 }
 
+function reLoadUserDetails(userId) {
+    let refreshUserDetailsBtn = document.getElementById("btn-reload-user-profile");
+    let adminUpdateUserLoader = document.getElementById("admin-update-user-loader");
+    refreshUserDetailsBtn.onclick = function () {
+        adminUpdateUserLoader.style.display = "block";
+        getUserById(userId);
+        // openViewUserProfileModal(userId);
+        getAllIncidentsPerUserAdmin("red-flags", "modal-userprofile-redflags-list-table", userId);
+        getAllIncidentsPerUserAdmin("interventions", "modal-userprofile-redflags-list-table", userId);
+        adminUpdateUserLoader.style.display = "none";
+    }
+}
+
 function getUserById(userId) {
-    const URL_USER = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users/' + userId;
-    // const URL_USER = 'http://localhost:5000/api/v1/users/' + userId;
+    // const URL_USER = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users/' + userId;
+    const URL_USER = 'http://localhost:5000/api/v1/users/' + userId;
     // The parameters we are gonna pass to the fetch function
     let accessToken = getCookie("jwtAccessToken")
     let fetchData = {
@@ -1068,6 +1132,7 @@ function getUserById(userId) {
                 let modalUserIsAdmin = document.getElementById("modal-users-isadmin");
                 let modalUserRegisteredOn = document.getElementById("modal-users-registeredon");
                 let modalUserRoleChange = document.getElementById("btn-user-role-change");
+
 
                 modalUserId.innerHTML = user.user_id;
                 modalUserFullname.innerHTML = user.firstname + " " + user.lastname;
@@ -1100,7 +1165,7 @@ function getUserById(userId) {
 function getUserProfileDetails() {
     let userId = getCookie("userIdCookie");
     getUserById(userId);
-    
+
     // getAllIncidentsPerUser("red-flags", "modal-userprofile-redflags-list-table", userId)
     // getAllIncidentsPerUser("interventions", "modal-userprofile-redflags-list-table", userId)
     getAllIncidentsPerUserAdmin("red-flags", "modal-userprofile-redflags-list-table", userId);
@@ -1180,4 +1245,9 @@ function logoutUser() {
     document.cookie = "isAdmin=; expires=Thu, 31 Jan 2018 00:00:00 UTC; path=/;";
     document.cookie = "userIdCookie=; expires=Thu, 31 Jan 2018 00:00:00 UTC; path=/;";
     openSigninPage();
+}
+
+function hideNoRecordsMessage() {
+    let noRecordsContainer = document.getElementById("no-records-message-container-id");
+    noRecordsContainer.style.display = "none";
 }
