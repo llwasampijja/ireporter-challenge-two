@@ -200,6 +200,30 @@ header nav ul li a:link{
     flex-wrap: wrap;
     padding: 30px 45px;
 }
+
+.form-response-message{
+  width: 100%;
+  font-weight: bold;
+  /* font-size: 20px; */
+  /* color: #555555; */
+  line-height: 1.2;
+  letter-spacing: 2px;
+  text-align: center;
+  color: green;
+  display: block;
+  font-style: italic;
+  margin: 10px;
+}
+
+#form-response-message-ok{
+  color: green;
+  display: none;
+}
+
+#form-response-message-fail{
+  color: red;
+  display: none;
+}
   
 .sign-form-title {
     width: 100%;
@@ -329,6 +353,7 @@ input.sign-form-input {
   border-radius: 50%;
 }
 
+
 .grid-box-container {
   width: 25%;
   overflow: auto;
@@ -338,6 +363,9 @@ input.sign-form-input {
   margin: 10px;
   display: inline-block;
   border-radius: 20px;
+}
+
+.home-page-grid-container {
   height: 300px;
   overflow: hidden;
 }
