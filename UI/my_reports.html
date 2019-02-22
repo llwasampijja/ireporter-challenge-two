@@ -128,12 +128,12 @@
 
                 <div class="admin-control-panel-container">
                     <button class="admin-tab"
-                        onclick="openAdminManageTab(event, 'view-user-incidents'), setDashBoardHeaderIncidedentType('Map'); hideNoRecordsMessage();"
+                        onclick="openAdminManageTab(event, 'view-user-incidents'), setDashBoardHeaderIncidedentType('Map'); hideNoRecordsMessage(); disableFilterPropertiesForMap();"
                         id="openByDefault">Map-Incidents</button>
                     <button class="admin-tab"
-                        onclick="openAdminManageTab(event, 'view-user-redflags'); getAllIncidentsPerUser('red-flags', 'view-user-redflags'), setDashBoardHeaderIncidedentType('Red-flags');">Red-flags</button>
+                        onclick="openAdminManageTab(event, 'view-user-redflags'); getAllIncidentsPerUser('red-flags', 'view-user-redflags'), setDashBoardHeaderIncidedentType('Red-flags'); disableFilterPropertiesForMap();">Red-flags</button>
                     <button class="admin-tab"
-                        onclick="openAdminManageTab(event, 'view-user-interventions'); getAllIncidentsPerUser('interventions', 'view-user-interventions'), setDashBoardHeaderIncidedentType('Interventions');">Interventions</button>
+                        onclick="openAdminManageTab(event, 'view-user-interventions'); getAllIncidentsPerUser('interventions', 'view-user-interventions'), setDashBoardHeaderIncidedentType('Interventions'); disableFilterPropertiesForMap();">Interventions</button>
                 </div>
             </header>
         </div>
@@ -360,7 +360,8 @@
                             <div id="user-create-incident-loader" class="loader"></div>
                             <div><span id="modal-id-create-incident-message-success"
                                     class="form-response-message">Succeeded</span></div>
-                            <div><span id="modal-id-create-incident-message-fail" class="form-response-message">Failed</span>
+                            <div><span id="modal-id-create-incident-message-fail"
+                                    class="form-response-message">Failed</span>
                             </div>
                             <div class="edit-report-input">
                                 <button id="cancel-create-report" class="edit-form-btn">Cancel</button>

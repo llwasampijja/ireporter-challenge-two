@@ -579,6 +579,144 @@ function addOnClickEventToFilterButton() {
     // filterIncidentsPerUser(incidents, tabSectionId)
 }
 
+function addOnClickEventToFilterButtonAdmin() {
+    // filterIncidentsPerUser(incidents, tabSectionId)
+    if (document.getElementById("dashboard-header-incident-type").innerHTML.toString().toLowerCase() == "red-flags") {
+        filterAllIncidents('red-flags', 'redflags-list-table');
+    } else if (document.getElementById("dashboard-header-incident-type").innerHTML.toString().toLowerCase() == "interventions") {
+        filterAllIncidents('interventions', 'interventions-list-table');
+    }
+    // filterIncidentsPerUser(incidents, tabSectionId)
+}
+
+function filterAllIncidents(incidents, tableId) {
+    let adminIncidentsListLoader = document.getElementById("view-admin-incidents-loader");
+    adminIncidentsListLoader.style.display = "block";
+    let dashBoardSelector = document.getElementById("dashboard-select-filter-incidents");
+    const URL_INCIDENTS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents;
+    // const URL_INCIDENTS = 'http://localhost:5000/api/v1/' + incidents;
+    var accessToken = getCookie("jwtAccessToken");
+    let fetchData = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + accessToken
+        }
+    }
+
+    let incidentStatus = "";
+
+    if (dashBoardSelector.selectedIndex == 1) {
+        dashBoardSelector.selectedIndex = 1;
+        incidentStatus = "pending investigation";
+    } else if (dashBoardSelector.selectedIndex == 2) {
+        dashBoardSelector.selectedIndex = 2;
+        incidentStatus = "under investigation";
+    } else if (dashBoardSelector.selectedIndex == 3) {
+        dashBoardSelector.selectedIndex = 3;
+        incidentStatus = "resolved";
+    } else if (dashBoardSelector.selectedIndex == 4) {
+        dashBoardSelector.selectedIndex = 4;
+        incidentStatus = "rejected";
+    } else {
+        dashBoardSelector.selectedIndex = 0;
+        incidentStatus = "all";
+    }
+
+    fetch(URL_INCIDENTS, fetchData)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (jsonData) {
+            if (jsonData.status == 200) {
+                var incidentsTable = document.getElementById(tableId);
+                var numberOfRows = 1;
+                var tableRowIndex = 1;
+                for (tableRowIndex; tableRowIndex < incidentsTable.rows.length; tableRowIndex++) {
+                    incidentsTable.rows[tableRowIndex].innerHTML = "";
+                }
+                let noRecordsContainer = document.getElementById("no-records-message-container-id");
+                if (jsonData.data.length < 1) {
+                    noRecordsContainer.style.display = "block"
+                } else {
+                    noRecordsContainer.style.display = "none"
+                }
+
+                for (let incident of jsonData.data) {
+                    if (incidentStatus == "all") {
+                        let incidentRow = incidentsTable.insertRow(numberOfRows);
+                        var incidentIdCell0 = incidentRow.insertCell(0);
+                        var locationCell1 = incidentRow.insertCell(1);
+                        var titleCell2 = incidentRow.insertCell(2);
+                        var commentCell3 = incidentRow.insertCell(3);
+                        var imagesCell4 = incidentRow.insertCell(4);
+                        var videosCell5 = incidentRow.insertCell(5);
+                        var createdOnCell6 = incidentRow.insertCell(6);
+                        var createdByCell7 = incidentRow.insertCell(7);
+                        var statusCell8 = incidentRow.insertCell(8);
+                        var viewIncidentCell9 = incidentRow.insertCell(9);
+
+                        incidentIdCell0.innerHTML = incident.incident_id;
+                        locationCell1.innerHTML = incident.location;
+                        titleCell2.innerHTML = incident.title;
+                        commentCell3.innerHTML = incident.comment;
+                        let numberOfImages = incident.images.toString().split(",").length
+                        let numberOfVideos = incident.videos.toString().split(",").length
+                        imagesCell4.innerHTML = numberOfImages;
+                        videosCell5.innerHTML = numberOfVideos;
+                        createdOnCell6.innerHTML = incident.created_on;
+                        createdByCell7.innerHTML = incident.created_by;
+                        statusCell8.innerHTML = incident.status;
+                        viewIncidentCell9.innerHTML = '<button class="view-report-btn" id="but" onclick="getIncidentById( \'' + incidents + '\',this, \'' + tableId + '\')">View </button>';
+                        numberOfRows += 1;
+                    } else if (incidentStatus == incident.status.toLowerCase()) {
+                        let incidentRow = incidentsTable.insertRow(numberOfRows);
+                        var incidentIdCell0 = incidentRow.insertCell(0);
+                        var locationCell1 = incidentRow.insertCell(1);
+                        var titleCell2 = incidentRow.insertCell(2);
+                        var commentCell3 = incidentRow.insertCell(3);
+                        var imagesCell4 = incidentRow.insertCell(4);
+                        var videosCell5 = incidentRow.insertCell(5);
+                        var createdOnCell6 = incidentRow.insertCell(6);
+                        var createdByCell7 = incidentRow.insertCell(7);
+                        var statusCell8 = incidentRow.insertCell(8);
+                        var viewIncidentCell9 = incidentRow.insertCell(9);
+
+                        incidentIdCell0.innerHTML = incident.incident_id;
+                        locationCell1.innerHTML = incident.location;
+                        titleCell2.innerHTML = incident.title;
+                        commentCell3.innerHTML = incident.comment;
+                        let numberOfImages = incident.images.toString().split(",").length
+                        let numberOfVideos = incident.videos.toString().split(",").length
+                        imagesCell4.innerHTML = numberOfImages;
+                        videosCell5.innerHTML = numberOfVideos;
+                        createdOnCell6.innerHTML = incident.created_on;
+                        createdByCell7.innerHTML = incident.created_by;
+                        statusCell8.innerHTML = incident.status;
+                        viewIncidentCell9.innerHTML = '<button class="view-report-btn" id="but" onclick="getIncidentById( \'' + incidents + '\',this, \'' + tableId + '\')">View </button>';
+                        numberOfRows += 1;
+                    }
+
+                }
+
+                adminIncidentsListLoader.style.display = "none";
+                if (numberOfRows < 2) {
+                    noRecordsContainer.style.display = "block";
+                } else {
+                    noRecordsContainer.style.display = "none";
+                }
+
+            } else if (jsonData.status == 401) {
+                // alert(jsonData.error);
+                openSigninPage();
+            } else {
+                // alert(jsonData.error);
+            }
+            adminIncidentsListLoader.style.display = "none";
+        });
+}
+
+
 function filterIncidentsPerUser(incidents, tabSectionId) {
     let userIncidentsListLoader = document.getElementById("view-user-incidents-loader");
     userIncidentsListLoader.style.display = "block";
@@ -712,6 +850,19 @@ function filterIncidentsPerUser(incidents, tabSectionId) {
         })
 }
 
+function disableFilterPropertiesForMap(){
+    if (document.getElementById("dashboard-header-incident-type").innerHTML.toString().toLowerCase() == "map"){
+        document.getElementById("id-searchreports").disabled = true;
+        document.getElementById("dashboard-select-filter-incidents").disabled = true;
+    } else {
+        document.getElementById("id-searchreports").disabled = false;
+        document.getElementById("dashboard-select-filter-incidents").disabled = false;
+    }
+    if (document.getElementById("dashboard-header-incident-type").innerHTML.toString().toLowerCase() == "users"){
+        document.getElementById("dashboard-select-filter-incidents").disabled = true;
+    }
+}
+
 function searchIncidentsByWord() {
     let tabName = ""
     if (document.getElementById("dashboard-header-incident-type").innerHTML.toString().toLowerCase() == "red-flags") {
@@ -719,6 +870,7 @@ function searchIncidentsByWord() {
     } else if (document.getElementById("dashboard-header-incident-type").innerHTML.toString().toLowerCase() == "interventions") {
         tabName = 'view-user-interventions';
     }
+
     let searchInput = document.getElementById("id-searchreports");
     let filterString = searchInput.value.toLowerCase();
 
@@ -730,7 +882,7 @@ function searchIncidentsByWord() {
         let listedIncident = incidentsListed.item(incidentsCounter).innerHTML.toString().toLowerCase();
         if (listedIncident.indexOf(filterString) > -1) {
             incidentsListed.item(incidentsCounter).style.display = "";
-            newIncidentsListed+=1;
+            newIncidentsListed += 1;
         } else {
             incidentsListed.item(incidentsCounter).style.display = "none";
         }
@@ -742,6 +894,61 @@ function searchIncidentsByWord() {
     } else {
         noRecordsContainer.style.display = "none"
     }
+}
+
+function searchAdminIncidentsByWord() {
+    let tableName = ""
+    if (document.getElementById("dashboard-header-incident-type").innerHTML.toString().toLowerCase() == "red-flags") {
+        tableName = 'redflags-list-table';
+    } else if (document.getElementById("dashboard-header-incident-type").innerHTML.toString().toLowerCase() == "interventions") {
+        tableName = 'interventions-list-table';
+    } else if (document.getElementById("dashboard-header-incident-type").innerHTML.toString().toLowerCase() == "users") {
+        tableName = 'users-list-table';
+    }
+    let searchInput = document.getElementById("id-searchreports");
+    let filterString = searchInput.value.toLowerCase();
+
+    let itemsTable = document.getElementById(tableName);
+    let tableRows = itemsTable.getElementsByTagName("tr");
+    let newIncidentsListed = 0;
+
+    for (let indexOfRow = 1; indexOfRow < tableRows.length; indexOfRow++) {
+        let listedIncident = tableRows[indexOfRow].innerHTML.toString().toLowerCase();
+        if (listedIncident.indexOf(filterString) > -1) {
+            tableRows[indexOfRow].style.display = "";
+            newIncidentsListed += 1;
+        } else {
+            tableRows[indexOfRow].style.display = "none";
+        }
+    }
+
+    let noRecordsContainer = document.getElementById("no-records-message-container-id");
+    if (newIncidentsListed < 1) {
+        noRecordsContainer.style.display = "block"
+    } else {
+        noRecordsContainer.style.display = "none"
+    }
+
+    // let incidentsContainer = document.getElementById(tabName);
+    // let incidentsListed = document.getElementById(tabName).children;
+    // let newIncidentsListed = 0;
+
+    // for (let incidentsCounter = 0; incidentsCounter < incidentsContainer.childElementCount; incidentsCounter++) {
+    //     let listedIncident = incidentsListed.item(incidentsCounter).innerHTML.toString().toLowerCase();
+    //     if (listedIncident.indexOf(filterString) > -1) {
+    //         incidentsListed.item(incidentsCounter).style.display = "";
+    //         newIncidentsListed+=1;
+    //     } else {
+    //         incidentsListed.item(incidentsCounter).style.display = "none";
+    //     }
+    // }
+
+    // let noRecordsContainer = document.getElementById("no-records-message-container-id");
+    // if (newIncidentsListed < 1) {
+    //     noRecordsContainer.style.display = "block"
+    // } else {
+    //     noRecordsContainer.style.display = "none"
+    // }
 }
 
 function getIncidentById(incidents, element, tableId) {
