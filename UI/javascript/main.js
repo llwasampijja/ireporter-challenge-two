@@ -1475,7 +1475,7 @@ function getUserById(userId) {
                 modalUserIsAdmin.innerHTML = user.is_admin;
                 modalUserRegisteredOn.innerHTML = user.registered_on;
 
-                if (user.user_id == 1) {
+                if (user.user_id == 1 || user.user_id == getCookie("userIdCookie")) {
                     modalUserRoleChange.style.display = "none";
                 } else if (Boolean(user.is_admin) == Boolean("true") && user.user_id != 1) {
                     modalUserRoleChange.innerHTML = "Revoke Admin Rights";
