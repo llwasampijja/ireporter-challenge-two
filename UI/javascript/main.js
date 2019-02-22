@@ -5,8 +5,8 @@ function registerUser() {
     let mySignupLoader = document.getElementById("mysignup-loader");
     mySignupLoader.style.display = "block";
 
-    const USER_USER = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/register';
-    // const USER_USER = 'http://localhost:5000/api/v1/auth/register';
+    // const USER_USER = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/register';
+    const USER_USER = 'http://localhost:5000/api/v1/auth/register';
 
     let data = {
         firstname: document.getElementById("reg-firstname").value,
@@ -57,8 +57,8 @@ function loginUser() {
     let loginFailMessage = document.getElementById("form-response-message-fail");
     loginFailMessage.style.display = "none"
     myLoginLoader.style.display = "block";
-    const USER_USER = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/login';
-    // const USER_USER = 'http://localhost:5000/api/v1/auth/login';
+    // const USER_USER = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/login';
+    const USER_USER = 'http://localhost:5000/api/v1/auth/login';
 
     let data = {
         username: document.getElementById("login-username").value,
@@ -109,8 +109,8 @@ function loginUser() {
 function uploadMedia(incidentType, incident_id) {
     let userUpdateIncidentImagesLoader = document.getElementById("user-update-incident-images-loader");
     userUpdateIncidentImagesLoader.style.display = "block";
-    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/files/uploads/images/' + incidentType + '/' + incident_id;
-    // const URL_INCIDENT = 'http://localhost:5000/api/v1/files/uploads/images/' + incidentType + '/' + incident_id;
+    // const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/files/uploads/images/' + incidentType + '/' + incident_id;
+    const URL_INCIDENT = 'http://localhost:5000/api/v1/files/uploads/images/' + incidentType + '/' + incident_id;
     var accessToken = getCookie("jwtAccessToken");
     var date = new Date();
     var timestamp = date.getTime();
@@ -152,8 +152,8 @@ function uploadMedia(incidentType, incident_id) {
 function uploadVideo(incidentType, incident_id) {
     let userUpdateIncidentVideosLoader = document.getElementById("user-update-incident-videos-loader");
     userUpdateIncidentVideosLoader.style.display = "block";
-    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/files/uploads/videos/' + incidentType + '/' + incident_id;
-    // const URL_INCIDENT = 'http://localhost:5000/api/v1/files/uploads/videos/' + incidentType + '/' + incident_id;
+    // const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/files/uploads/videos/' + incidentType + '/' + incident_id;
+    const URL_INCIDENT = 'http://localhost:5000/api/v1/files/uploads/videos/' + incidentType + '/' + incident_id;
     var accessToken = getCookie("jwtAccessToken");
     var date = new Date();
     var timestamp = date.getTime();
@@ -196,8 +196,8 @@ function createIncident(incidents) {
     let userCreateIncidentLoader = document.getElementById("user-create-incident-loader");
     userCreateIncidentLoader.style.display = "block";
 
-    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents;
-    // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents;
+    // const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents;
+    const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents;
     var accessToken = getCookie("jwtAccessToken");
 
     myLocation = document.getElementById("modal-add-incident-geocoordinates-field").value,
@@ -254,8 +254,8 @@ function createIncident(incidents) {
 function getAllIncidents(incidents, tableId) {
     let adminIncidentsListLoader = document.getElementById("view-admin-incidents-loader");
     adminIncidentsListLoader.style.display = "block";
-    const URL_INCIDENTS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents;
-    // const URL_INCIDENTS = 'http://localhost:5000/api/v1/' + incidents;
+    // const URL_INCIDENTS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents;
+    const URL_INCIDENTS = 'http://localhost:5000/api/v1/' + incidents;
     var accessToken = getCookie("jwtAccessToken");
     let fetchData = {
         method: 'GET',
@@ -339,8 +339,8 @@ function getAllIncidentsPerUserAdmin(incidents, tableId, userId) {
     // myRowIndex = element.parentNode.parentNode.rowIndex;
     // var userId = usersTable.rows[myRowIndex].cells[0].innerHTML
     // alert(userId)
-    const URL_INCIDENTS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users/' + userId + '/' + incidents;
-    // const URL_INCIDENTS = 'http://localhost:5000/api/v1/users/' + userId + '/' + incidents;
+    // const URL_INCIDENTS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users/' + userId + '/' + incidents;
+    const URL_INCIDENTS = 'http://localhost:5000/api/v1/users/' + userId + '/' + incidents;
 
     let userProfileIncidentsSummary = document.getElementById("table-userprofile-all-incidents-summary-admin-view");
 
@@ -454,8 +454,8 @@ function getAllIncidentsPerUser(incidents, tabSectionId) {
         }
     }
 
-    const URL_INCIDENTS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users/' + userId + '/' + incidents;
-    // const URL_INCIDENTS = 'http://localhost:5000/api/v1/users/' + userId + '/' + incidents;
+    // const URL_INCIDENTS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users/' + userId + '/' + incidents;
+    const URL_INCIDENTS = 'http://localhost:5000/api/v1/users/' + userId + '/' + incidents;
 
     fetch(URL_INCIDENTS, fetchData)
         .then(function (response) {
@@ -584,8 +584,8 @@ function filterIncidentsPerUser(incidents, tabSectionId) {
         incidentStatus = "all";
     }
 
-    const URL_INCIDENTS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users/' + userId + '/' + incidents;
-    // const URL_INCIDENTS = 'http://localhost:5000/api/v1/users/' + userId + '/' + incidents;
+    // const URL_INCIDENTS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users/' + userId + '/' + incidents;
+    const URL_INCIDENTS = 'http://localhost:5000/api/v1/users/' + userId + '/' + incidents;
 
     fetch(URL_INCIDENTS, fetchData)
         .then(function (response) {
@@ -690,8 +690,8 @@ function getIncidentById(incidents, element, tableId) {
     var incidentId = incidentTable.rows[myRowIndex].cells[0].innerHTML
 
 
-    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId;
-    // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + "/" + incidentId;
+    // const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId;
+    const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + "/" + incidentId;
     var accessToken = getCookie("jwtAccessToken");
     let fetchData = {
         method: 'GET',
@@ -769,8 +769,8 @@ function getIncidentById(incidents, element, tableId) {
 }
 
 function getUserIncidentById(incidents, incidentId) {
-    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId;
-    // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + "/" + incidentId;
+    // const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId;
+    const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + "/" + incidentId;
     var accessToken = getCookie("jwtAccessToken");
     let fetchData = {
         method: 'GET',
@@ -886,8 +886,8 @@ function updateUserIncident(incidents, incidentId) {
         }
     }
 
-    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + '/' + incidentId + '/' + incidentAttribute;
-    // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + '/' + incidentId + '/' + incidentAttribute;
+    // const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + '/' + incidentId + '/' + incidentAttribute;
+    const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + '/' + incidentId + '/' + incidentAttribute;
 
     let fetchData = {
         method: 'PATCH',
@@ -923,8 +923,8 @@ function deleteUserIncident(incidents, incidentId) {
     let userDeleteIncidentLoader = document.getElementById("user-delete-incident-loader");
     userDeleteIncidentLoader.style.display = "block";
 
-    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + '/' + incidentId;
-    // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + '/' + incidentId;
+    // const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + '/' + incidentId;
+    const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + '/' + incidentId;
     var accessToken = getCookie("jwtAccessToken");
     let fetchData = {
         method: 'DELETE',
@@ -957,8 +957,8 @@ function deleteUserIncident(incidents, incidentId) {
 function changeUserRole(userId) {
     let adminUpdateUserLoader = document.getElementById("admin-update-user-loader");
     adminUpdateUserLoader.style.display = "block";
-    const URL_USER = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users/' + userId;
-    // const URL_USER = 'http://localhost:5000/api/v1/users/' + userId;
+    // const URL_USER = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users/' + userId;
+    const URL_USER = 'http://localhost:5000/api/v1/users/' + userId;
     let modalUserRoleChangeBtn = document.getElementById("btn-user-role-change");
     let btnRoleState = modalUserRoleChangeBtn.innerHTML;
     let newUserRole = true;
@@ -1007,8 +1007,8 @@ function changeIncidentStatus(incidents, incidentId) {
     adminUpdateIncidentLoader.style.display = "block";
     let modelUpdateIncidentStatusBtn = document.getElementById("model-update-incident-status-btn");
     modelUpdateIncidentStatusBtn.style.display = "block";
-    const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId + "/status";
-    // const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + "/" + incidentId + "/status";
+    // const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId + "/status";
+    const URL_INCIDENT = 'http://localhost:5000/api/v1/' + incidents + "/" + incidentId + "/status";
     incidentStatusSelect = document.getElementById("modal-incident-status-select")
     statusChange = incidentStatusSelect.options[incidentStatusSelect.selectedIndex].text;
     var accessToken = getCookie("jwtAccessToken");
@@ -1046,8 +1046,8 @@ function changeIncidentStatus(incidents, incidentId) {
 function getAllUsers() {
     let adminIncidentsListLoader = document.getElementById("view-admin-incidents-loader");
     adminIncidentsListLoader.style.display = "block";
-    const url = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users';
-    // const url = 'http://localhost:5000/api/v1/users';
+    // const url = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users';
+    const url = 'http://localhost:5000/api/v1/users';
     // The parameters we are gonna pass to the fetch function
     var accessToken = getCookie("jwtAccessToken")
     let fetchData = {
@@ -1123,8 +1123,8 @@ function reLoadUserDetails(userId) {
 }
 
 function getUserById(userId) {
-    const URL_USER = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users/' + userId;
-    // const URL_USER = 'http://localhost:5000/api/v1/users/' + userId;
+    // const URL_USER = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users/' + userId;
+    const URL_USER = 'http://localhost:5000/api/v1/users/' + userId;
     // The parameters we are gonna pass to the fetch function
     let accessToken = getCookie("jwtAccessToken")
     let fetchData = {

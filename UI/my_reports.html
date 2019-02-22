@@ -21,6 +21,41 @@
         // addOnClickEventToFilterButton();
     </script>
     <link rel="stylesheet" type="text/css" href="css/main.css">
+    <style>
+        /* * {
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            list-style: none;
+            margin: 10px 0;
+        } */
+
+        /* #map-infor-container {
+            width: 300px;
+            text-align: center;
+            border: 3px solid rgb(65, 105, 225);
+            padding: 10x;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #info-window-incident-button {
+            position: relative;
+
+            appearance: none;
+            background-color: rgb(65, 105, 225);
+            border-radius: 30px;
+            border: 0;
+            color: #ffffff;
+            display: inline-block;
+            font-weight: bold;
+            padding: 3% 9%;
+            text-align: center;
+        } */
+    </style>
+    </style>
 </head>
 
 
@@ -229,7 +264,8 @@
 
                         <h3 class="modal-contents-item">Photograghoc Evidence</h3>
                         <div class="modal-contents-item" id="modal-incident-images"></div>
-                        <input id="modal-edit-report-images" class="edit-report-input" type="text" name="report-images"
+                        <input style="display: none;" id="modal-edit-report-images" class="edit-report-input"
+                            type="text" name="report-images"
                             placeholder="Enter image urls separated by commas (no spaces)" required>
                         <div class="edit-report-input">
                             <label class="edit-report-file">
@@ -242,7 +278,8 @@
                         <div id="model-update-incident-images-btn-div"></div>
                         <h3 class="modal-contents-item">Video Evidence</h3>
                         <div class="modal-contents-item" id="modal-incident-videos"></div>
-                        <input id="modal-edit-report-videos" class="edit-report-input" type="text" name="report-images"
+                        <input style="display: none;" id="modal-edit-report-videos" class="edit-report-input"
+                            type="text" name="report-images"
                             placeholder="Enter video urls separated by commas (no spaces)" required>
                         <div class="edit-report-input">
                             <label class="edit-report-file">
@@ -359,10 +396,10 @@
 
         var userId = getCookie("userIdCookie");
 
-        const URL_REDFLAGS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users/' + userId + '/red-flags';
-        const URL_INTERVENTIONS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users/' + userId + '/interventions';
-        // const URL_REDFLAGS = 'http://localhost:5000/api/v1/users/' + userId + '/red-flags';
-        // const URL_INTERVENTIONS = 'http://localhost:5000/api/v1/users/' + userId + '/interventions';
+        // const URL_REDFLAGS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users/' + userId + '/red-flags';
+        // const URL_INTERVENTIONS = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users/' + userId + '/interventions';
+        const URL_REDFLAGS = 'http://localhost:5000/api/v1/users/' + userId + '/red-flags';
+        const URL_INTERVENTIONS = 'http://localhost:5000/api/v1/users/' + userId + '/interventions';
         var fetchData = {
             method: 'GET',
             headers: {
@@ -370,6 +407,7 @@
                 'Authorization': 'Bearer ' + getCookie('jwtAccessToken')
             }
         }
+        
 
         fetch(URL_REDFLAGS, fetchData).then(function (response) {
             return response.json();
@@ -378,15 +416,25 @@
             if (myJson.status == 200) {
                 for (var incidentIndex = 0; incidentIndex < myJson.data.length; incidentIndex++) {
                     incident = myJson.data[incidentIndex];
+                    let infoHtml = '<div id="map-infor-container">' +
+                        '<ul>' +
+                        ' <li><b><span id="info-window-incident-title">' + incident.title + '</span></b></li>' +
+                        ' <li> <span id="info-window-incident-comment">' + incident.comment + '</span></li>' +
+                        '<li><button id="info-window-incident-button"  class="view-report-btn" onclick="getUserIncidentById(\'red-flags\', ' + incident.incident_id + ')">View</button></li>' +
+                        '</ul>' +
+                        '</div>';
+                    
                     locationCoordinates = incident.location.split(',');
                     myLatitude = parseFloat(locationCoordinates[0].trim());
                     myLogitude = parseFloat(locationCoordinates[1].trim());
                     L.marker([myLatitude, myLogitude])
                         .addTo(mymap)
-                        .bindPopup("<b>" + incident.title + "</b><br>I am " + incident.comment)
+                        .bindPopup(infoHtml)
                         .openPopup();
                     numberOfMapIncidents += 1;
                 }
+
+
             }
             if (numberOfMapIncidents < 1) {
                 noRecordsContainer.style.display = "block";
@@ -403,12 +451,19 @@
             if (myJson.status == 200) {
                 for (var incidentIndex = 0; incidentIndex < myJson.data.length; incidentIndex++) {
                     incident = myJson.data[incidentIndex];
+                        let infoHtml = '<div id="map-infor-container">' +
+                        '<ul>' +
+                        ' <li><b><span id="info-window-incident-title">' + incident.title + '</span></b></li>' +
+                        ' <li> <span id="info-window-incident-comment">' + incident.comment + '</span></li>' +
+                        '<li><button id="info-window-incident-button"  class="view-report-btn" onclick="getUserIncidentById(\'interventions\', ' + incident.incident_id + ')">View</button></li>' +
+                        '</ul>' +
+                        '</div>';
                     locationCoordinates = incident.location.split(',');
                     myLatitude = parseFloat(locationCoordinates[0].trim());
                     myLogitude = parseFloat(locationCoordinates[1].trim());
                     L.marker([myLatitude, myLogitude])
                         .addTo(mymap)
-                        .bindPopup("<b>" + incident.title + "</b><br>I am " + incident.comment)
+                        .bindPopup(infoHtml)
                         .openPopup();
                     numberOfMapIncidents += 1;
                 }
