@@ -148,6 +148,10 @@ header nav ul li a:link{
   100% { transform: rotate(360deg); }
 }
 
+#validate-first-name, #validate-last-name {
+  display: none;
+}
+
 .sign-form-container{
   width: 100%;
   margin: 0 auto;
@@ -200,18 +204,32 @@ header nav ul li a:link{
   line-height: 1.2;
   letter-spacing: 2px;
   text-align: center;
-  color: green;
+  /* color: green; */
   display: block;
   font-style: italic;
   margin: 10px;
 }
 
-#form-response-message-ok{
+#form-response-message-ok,
+#modal-id-images-message-success,
+#modal-id-videos-message-success,
+#modal-id-update-message-success,
+#modal-id-delete-message-success,
+#modal-id-create-incident-message-success,
+#modal-id-update-status-message-success,
+#modal-id-update-role-message-success{
   color: green;
   display: none;
 }
 
-#form-response-message-fail{
+#form-response-message-fail,
+#modal-id-images-message-fail,
+#modal-id-videos-message-fail,
+#modal-id-update-message-fail,
+#modal-id-delete-message-fail,
+#modal-id-create-incident-message-fail,
+#modal-id-update-status-message-fail,
+#modal-id-update-role-message-fail{
   color: red;
   display: none;
 }
@@ -517,7 +535,7 @@ h2.dashboard-header-element {
   padding: 10px 40px;
 }
 
-#user-incidents-map, #admin-incidents-map {
+#user-incidents-map {
   height: 600px;
   width: 100%;
 }
