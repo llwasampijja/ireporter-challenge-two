@@ -66,22 +66,72 @@
             <li><a href="#" onclick="logoutUser();">Logout</a></li>
         </ul>
     </nav>
+    <!-- <section>
+        <div>
+            <header class="inside-headers">
+                <h2 id="dashboard-header-incident-type" class="dashboard-header-element">Fgetterventions</h2>
+                <div class="filter-reports reports-type dashboard-header-element">
+                    <span class="dashboard-filter-item">Report Status</span>
+                    <select id="dashboard-select-filter-incidents" class="dashboard-filter-item">
+                        <option value="all">All</option>
+                        <option value="pending-investigation">Pending Investigation</option>
+                        <option value="under-investigation">Under Investigation</option>
+                        <option value="resolved">Resolved</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
+                    <button id="filter-incidents" class="button-Filter site-signup-btn site-btn dashboard-filter-item"
+                        onclick="addOnClickEventToFilterButton()">Filter
+                        Reports</button>
+                </div>
+                <input class="reports-search-box dashboard-header-element" type="text" placeholder="Search Incidents"
+                    id="id-searchreports" title="Type in a anythin" onkeyup="searchIncidentsByWord()">
+                <button type="button" id="new-report-btn"
+                    class="new-report-btn site-signup-btn site-btn dashboard-header-element"
+                    onclick="createNewReportsModal('interventions');">Create
+                    New</button>
 
+                <div class="admin-control-panel-container">
+                    <button class="admin-tab"
+                        onclick="openAdminManageTab(event, 'view-user-incidents'), setDashBoardHeaderIncidedentType('Map'); hideNoRecordsMessage();"
+                        id="openByDefault">Map-Incidents</button>
+                    <button class="admin-tab"
+                        onclick="openAdminManageTab(event, 'view-user-redflags'); getAllIncidentsPerUser('red-flags', 'view-user-redflags'), setDashBoardHeaderIncidedentType('Red-flags');">Red-flags</button>
+                    <button class="admin-tab"
+                        onclick="openAdminManageTab(event, 'view-user-interventions'); getAllIncidentsPerUser('interventions', 'view-user-interventions'), setDashBoardHeaderIncidedentType('Interventions');">Interventions</button>
+                </div>
+            </header>
+        </div>
+    </section> -->
     <section>
         <div>
             <header class="inside-headers">
                 <h2 class="dashboard-header-element">Admin Panel</h2>
-
+                <h2 style="display: none;" id="dashboard-header-incident-type" class="dashboard-header-element"></h2>
+                <div class="filter-reports reports-type dashboard-header-element">
+                    <span class="dashboard-filter-item">Report Status</span>
+                    <select id="dashboard-select-filter-incidents" class="dashboard-filter-item">
+                        <option value="all">All</option>
+                        <option value="pending-investigation">Pending Investigation</option>
+                        <option value="under-investigation">Under Investigation</option>
+                        <option value="resolved">Resolved</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
+                    <button id="filter-incidents" class="button-Filter site-signup-btn site-btn dashboard-filter-item"
+                        onclick="addOnClickEventToFilterButtonAdmin();">Filter
+                        Reports</button>
+                </div>
+                <input class="reports-search-box dashboard-header-element admin-search-box" type="text" placeholder="Search Incidents"
+                    id="id-searchreports" title="Type in a anythin" onkeyup="searchAdminIncidentsByWord()">
                 <div class="admin-control-panel-container">
                     <button class="admin-tab"
-                        onclick="openAdminManageTab(event, 'manage-incidents-map'); hideNoRecordsMessage();"
+                        onclick="openAdminManageTab(event, 'manage-incidents-map'); hideNoRecordsMessage(); setDashBoardHeaderIncidedentType('Map'); disableFilterPropertiesForMap();"
                         id="openByDefault">Map View</button>
                     <button class="admin-tab"
-                        onclick="openAdminManageTab(event, 'manage-redflags'); getAllIncidents('red-flags', 'redflags-list-table')">Red-Flags</button>
+                        onclick="openAdminManageTab(event, 'manage-redflags'); getAllIncidents('red-flags', 'redflags-list-table'); setDashBoardHeaderIncidedentType('Red-flags'); disableFilterPropertiesForMap();">Red-Flags</button>
                     <button class="admin-tab"
-                        onclick="openAdminManageTab(event, 'manage-interventions'); getAllIncidents('interventions', 'interventions-list-table')">Interventions</button>
+                        onclick="openAdminManageTab(event, 'manage-interventions'); getAllIncidents('interventions', 'interventions-list-table'); setDashBoardHeaderIncidedentType('Interventions'); disableFilterPropertiesForMap();">Interventions</button>
                     <button class="admin-tab"
-                        onclick="openAdminManageTab(event, 'manage-users'); getAllUsers();">Users</button>
+                        onclick="openAdminManageTab(event, 'manage-users'); getAllUsers(); setDashBoardHeaderIncidedentType('Users'); disableFilterPropertiesForMap();">Users</button>
                 </div>
             </header>
         </div>

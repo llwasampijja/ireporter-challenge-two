@@ -18,6 +18,7 @@
     <script>
         checkIfUserIsLoggedIn();
         avoidDashBoardForAdmins();
+        // searchIncidentsByWord();
         // addOnClickEventToFilterButton();
     </script>
     <link rel="stylesheet" type="text/css" href="css/main.css">
@@ -119,7 +120,7 @@
                         Reports</button>
                 </div>
                 <input class="reports-search-box dashboard-header-element" type="text" placeholder="Search Incidents"
-                    id="search_reports" />
+                    id="id-searchreports" title="Type in a anythin" onkeyup="searchIncidentsByWord()">
                 <button type="button" id="new-report-btn"
                     class="new-report-btn site-signup-btn site-btn dashboard-header-element"
                     onclick="createNewReportsModal('interventions');">Create
@@ -127,12 +128,12 @@
 
                 <div class="admin-control-panel-container">
                     <button class="admin-tab"
-                        onclick="openAdminManageTab(event, 'view-user-incidents'), setDashBoardHeaderIncidedentType('Map'); hideNoRecordsMessage();"
+                        onclick="openAdminManageTab(event, 'view-user-incidents'), setDashBoardHeaderIncidedentType('Map'); hideNoRecordsMessage(); disableFilterPropertiesForMap();"
                         id="openByDefault">Map-Incidents</button>
                     <button class="admin-tab"
-                        onclick="openAdminManageTab(event, 'view-user-redflags'); getAllIncidentsPerUser('red-flags', 'view-user-redflags'), setDashBoardHeaderIncidedentType('Red-flags');">Red-flags</button>
+                        onclick="openAdminManageTab(event, 'view-user-redflags'); getAllIncidentsPerUser('red-flags', 'view-user-redflags'), setDashBoardHeaderIncidedentType('Red-flags'); disableFilterPropertiesForMap();">Red-flags</button>
                     <button class="admin-tab"
-                        onclick="openAdminManageTab(event, 'view-user-interventions'); getAllIncidentsPerUser('interventions', 'view-user-interventions'), setDashBoardHeaderIncidedentType('Interventions');">Interventions</button>
+                        onclick="openAdminManageTab(event, 'view-user-interventions'); getAllIncidentsPerUser('interventions', 'view-user-interventions'), setDashBoardHeaderIncidedentType('Interventions'); disableFilterPropertiesForMap();">Interventions</button>
                 </div>
             </header>
         </div>
@@ -359,7 +360,8 @@
                             <div id="user-create-incident-loader" class="loader"></div>
                             <div><span id="modal-id-create-incident-message-success"
                                     class="form-response-message">Succeeded</span></div>
-                            <div><span id="modal-id-create-incident-message-fail" class="form-response-message">Failed</span>
+                            <div><span id="modal-id-create-incident-message-fail"
+                                    class="form-response-message">Failed</span>
                             </div>
                             <div class="edit-report-input">
                                 <button id="cancel-create-report" class="edit-form-btn">Cancel</button>
