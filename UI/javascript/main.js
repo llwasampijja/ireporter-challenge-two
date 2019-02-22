@@ -1,4 +1,7 @@
 function registerUser() {
+    let registerSuccessMessage = document.getElementById("form-response-message-ok");
+    let registerFailMessage = document.getElementById("form-response-message-fail");
+    registerFailMessage.style.display = "none"
     let mySignupLoader = document.getElementById("mysignup-loader");
     mySignupLoader.style.display = "block";
 
@@ -30,22 +33,29 @@ function registerUser() {
             if (myJson.status == 201) {
                 var accessToken = myJson.access_token;
                 setCookie("jwtAccessToken", accessToken, 3)
-                alert(myJson.message);
+                registerSuccessMessage.innerHTML = myJson.message;
+                registerSuccessMessage.style.display = "inline-block";
                 for (let user of myJson.data) {
                     setCookie("isAdmin", user.is_admin, 3);
                     setCookie("userIdCookie", user.user_id, 3);
                 }
-                openHomePage();
+                setTimeout(openHomePage, 2000);
+                // openHomePage();
                 mySignupLoader.style.display = "none";
             } else {
-                alert(myJson.error);
+                registerFailMessage.innerHTML = myJson.error;
+                registerFailMessage.style.display = "inline-block";
                 mySignupLoader.style.display = "none";
+                console.log(myJson.error)
             }
         });
 }
 
 function loginUser() {
     let myLoginLoader = document.getElementById("myloader");
+    let loginSuccessMessage = document.getElementById("form-response-message-ok");
+    let loginFailMessage = document.getElementById("form-response-message-fail");
+    loginFailMessage.style.display = "none"
     myLoginLoader.style.display = "block";
     const USER_USER = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/login';
     // const USER_USER = 'http://localhost:5000/api/v1/auth/login';
@@ -68,29 +78,39 @@ function loginUser() {
         })
         .then(function (myJson) {
             if (myJson.status == 200) {
-                alert(myJson.message);
+                // alert(myJson.message);
+                loginSuccessMessage.innerHTML = myJson.message;
+                loginSuccessMessage.style.display = "inline-block";
+                console.log(myJson.message)
                 var accessToken = myJson.access_token;
                 setCookie("jwtAccessToken", accessToken, 3)
                 for (let user of myJson.data) {
                     setCookie("isAdmin", user.is_admin, 3)
                     setCookie("userIdCookie", user.user_id, 3)
                     if (user.is_admin == true) {
-                        openAdminPage();
+                        setTimeout(openAdminPage, 2000);
                     } else {
-                        openHomePage();
+                        setTimeout(openHomePage, 2000);
                     }
                     myLoginLoader.style.display = "none";
                 }
 
             } else {
-                alert(myJson.error);
+                // alert(myJson.error);
+                loginFailMessage.innerHTML = myJson.error;
+                loginFailMessage.style.display = "inline-block";
                 myLoginLoader.style.display = "none";
+                console.log(myJson.error);
+
             }
         });
 }
 
 function uploadMedia(incidentType, incident_id) {
     let userUpdateIncidentImagesLoader = document.getElementById("user-update-incident-images-loader");
+    let uploadImageMessageFail = document.getElementById("modal-id-images-message-fail");
+    let uploadImageMessageSuccess = document.getElementById("modal-id-images-message-success");
+    uploadImageMessageFail.style.display = "none";
     userUpdateIncidentImagesLoader.style.display = "block";
     const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/files/uploads/images/' + incidentType + '/' + incident_id;
     // const URL_INCIDENT = 'http://localhost:5000/api/v1/files/uploads/images/' + incidentType + '/' + incident_id;
@@ -112,28 +132,37 @@ function uploadMedia(incidentType, incident_id) {
         body: myFormData
     });
 
-    var uploadImageIncidentPrompt = confirm("Continue and upload this image!");
-    if (uploadImageIncidentPrompt == true) {
-        fetch(req).then(function (response) {
-            return response.json();
-        }).then(function (myJson) {
+    // var uploadImageIncidentPrompt = confirm("Continue and upload this image!");
+    // if (uploadImageIncidentPrompt == true) {
+    fetch(req).then(function (response) {
+        return response.json();
+    }).then(function (myJson) {
 
-            if (myJson.status == 201) {
-                alert(myJson.message);
-                userUpdateIncidentImagesLoader.style.display = "none";
-            } else {
-                alert(myJson.error)
-                userUpdateIncidentImagesLoader.style.display = "none";
-            }
-        }).catch((myError) => {
-            console.log("Image Upload Error: " + myError.message);
-        })
-    }
+        if (myJson.status == 201) {
+            uploadImageMessageSuccess.innerHTML = myJson.message;
+            uploadImageMessageSuccess.style.display = "inline-block";
+            setTimeout(openHomePage, 2000);
+            userUpdateIncidentImagesLoader.style.display = "none";
+        } else {
+            uploadImageMessageFail.innerHTML = myJson.error;
+            uploadImageMessageFail.style.display = "inline-block";
+            console.log(myJson.error);
+            userUpdateIncidentImagesLoader.style.display = "none";
+        }
+    }).catch((myError) => {
+        uploadImageMessageFail.innerHTML = myError.message;
+        uploadImageMessageFail.style.display = "inline-block";
+        console.log("Image Upload Error: " + myError.message);
+    })
 }
+// }
 
 
 function uploadVideo(incidentType, incident_id) {
     let userUpdateIncidentVideosLoader = document.getElementById("user-update-incident-videos-loader");
+    let uploadVideosMessageFail = document.getElementById("modal-id-videos-message-fail");
+    let uploadVideosMessageSuccess = document.getElementById("modal-id-videos-message-success");
+    uploadVideosMessageFail.style.display = "none";
     userUpdateIncidentVideosLoader.style.display = "block";
     const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/files/uploads/videos/' + incidentType + '/' + incident_id;
     // const URL_INCIDENT = 'http://localhost:5000/api/v1/files/uploads/videos/' + incidentType + '/' + incident_id;
@@ -155,28 +184,38 @@ function uploadVideo(incidentType, incident_id) {
         body: myFormData
     });
 
-    var uploadVideoIncidentPrompt = confirm("Continue and upload this video!");
-    if (uploadVideoIncidentPrompt == true) {
-        fetch(req).then(function (response) {
-            return response.json();
-        }).then(function (myJson) {
+    // var uploadVideoIncidentPrompt = confirm("Continue and upload this video!");
+    // if (uploadVideoIncidentPrompt == true) {
+    fetch(req).then(function (response) {
+        return response.json();
+    }).then(function (myJson) {
 
-            if (myJson.status == 201) {
-                alert(myJson.message);
-                userUpdateIncidentVideosLoader.style.display = "none";
-            } else {
-                alert(myJson.error)
-                userUpdateIncidentVideosLoader.style.display = "none";
-            }
-        }).catch((myError) => {
-            console.log("Video Upload Error: " + myError.message);
-        })
-    }
-
+        if (myJson.status == 201) {
+            uploadVideosMessageSuccess.innerHTML = myJson.message;
+            uploadVideosMessageSuccess.style.display = "inline-block";
+            setTimeout(openHomePage, 2000);
+            console.log(myJson.message);
+            userUpdateIncidentVideosLoader.style.display = "none";
+        } else {
+            uploadVideosMessageFail.innerHTML = myJson.error;
+            uploadVideosMessageFail.style.display = "inline-block";
+            console.log(myJson.error);
+            userUpdateIncidentVideosLoader.style.display = "none";
+        }
+    }).catch((myError) => {
+        uploadVideosMessageFail.innerHTML = myError.message;
+        uploadVideosMessageFail.style.display = "inline-block";
+        console.log("Video Upload Error: " + myError.message);
+    })
 }
+
+// }
 
 function createIncident(incidents) {
     let userCreateIncidentLoader = document.getElementById("user-create-incident-loader");
+    let createIncidentMessageFail = document.getElementById("modal-id-create-incident-message-fail");
+    let createIncidentMessageSuccess = document.getElementById("modal-id-create-incident-message-success");
+    createIncidentMessageFail.style.display = "none";
     userCreateIncidentLoader.style.display = "block";
 
     const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents;
@@ -214,25 +253,31 @@ function createIncident(incidents) {
         }
     }
 
-    var createNewIncidentPrompt = confirm("Continue and create a new incident!");
-    if (createNewIncidentPrompt == true) {
-        fetch(URL_INCIDENT, fetchData)
-            .then(function (response) {
-                return response.json();
-            }).then(function (myJson) {
-                if (myJson.status == 201) {
-                    alert(myJson.message);
-                    openHomePage();
-                    userCreateIncidentLoader.style.display = "none";
-                } else {
-                    alert(myJson.error);
-                    userCreateIncidentLoader.style.display = "none";
-                }
-            }).catch((myError) => {
-                console.log("Create Error: " + myError.message);
-            });
-    }
+    // var createNewIncidentPrompt = confirm("Continue and create a new incident!");
+    // if (createNewIncidentPrompt == true) {
+    fetch(URL_INCIDENT, fetchData)
+        .then(function (response) {
+            return response.json();
+        }).then(function (myJson) {
+            if (myJson.status == 201) {
+                createIncidentMessageSuccess.innerHTML = myJson.message;
+                createIncidentMessageSuccess.style.display = "inline-block";
+                console.log(myJson.message);
+                setTimeout(openHomePage, 2000);
+                userCreateIncidentLoader.style.display = "none";
+            } else {
+                createIncidentMessageFail.innerHTML = myJson.error;
+                createIncidentMessageFail.style.display = "inline-block";
+                console.log(myJson.error);
+                userCreateIncidentLoader.style.display = "none";
+            }
+        }).catch((myError) => {
+            createIncidentMessageFail.innerHTML = myError.message;
+            createIncidentMessageFail.style.display = "inline-block";
+            console.log("Create Error: " + myError.message);
+        });
 }
+// }
 
 function getAllIncidents(incidents, tableId) {
     let adminIncidentsListLoader = document.getElementById("view-admin-incidents-loader");
@@ -297,10 +342,10 @@ function getAllIncidents(incidents, tableId) {
                 }
 
             } else if (jsonData.status == 401) {
-                alert(jsonData.error);
+                // alert(jsonData.error);
                 openSigninPage();
             } else {
-                alert(jsonData.error);
+                // alert(jsonData.error);
             }
             adminIncidentsListLoader.style.display = "none";
         });
@@ -410,10 +455,10 @@ function getAllIncidentsPerUserAdmin(incidents, tableId, userId) {
                 userProfileIncidentsSummary.rows[3].cells[5].innerHTML = parseInt(userProfileIncidentsSummary.rows[1].cells[5].innerHTML) + parseInt(userProfileIncidentsSummary.rows[2].cells[5].innerHTML);
 
             } else if (jsonData.status == 401) {
-                alert(jsonData.error);
+                // alert(jsonData.error);
                 openSigninPage();
             } else {
-                alert(jsonData.error);
+                // alert(jsonData.error);
             }
         }).catch((myError) => {
             console.log("Error Loading User Incidents: " + myError.message);
@@ -514,11 +559,11 @@ function getAllIncidentsPerUser(incidents, tabSectionId) {
                 userIncidentsListLoader.style.display = "none";
 
             } else if (jsonData.status == 401) {
-                alert(jsonData.error);
+                // alert(jsonData.error);
                 openSigninPage();
                 userIncidentsListLoader.style.display = "none";
             } else {
-                alert(jsonData.error);
+                // alert(jsonData.error);
                 userIncidentsListLoader.style.display = "none";
             }
         })
@@ -657,11 +702,11 @@ function filterIncidentsPerUser(incidents, tabSectionId) {
 
 
             } else if (jsonData.status == 401) {
-                alert(jsonData.error);
+                // alert(jsonData.error);
                 openSigninPage();
                 userIncidentsListLoader.style.display = "none";
             } else {
-                alert(jsonData.error);
+                // alert(jsonData.error);
                 userIncidentsListLoader.style.display = "none";
             }
         })
@@ -669,8 +714,14 @@ function filterIncidentsPerUser(incidents, tabSectionId) {
 
 function getIncidentById(incidents, element, tableId) {
     var incidentTable = document.getElementById(tableId);
+    let incidentId = 0;
     myRowIndex = element.parentNode.parentNode.rowIndex;
-    var incidentId = incidentTable.rows[myRowIndex].cells[0].innerHTML
+    if (typeof (tableId) === "string") {
+        incidentId = incidentTable.rows[myRowIndex].cells[0].innerHTML;
+    } else if (typeof (tableId) === "number") {
+        incidentId = tableId;
+    }
+
 
 
     const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId;
@@ -743,10 +794,10 @@ function getIncidentById(incidents, element, tableId) {
                 }
 
             } else if (jsonData.status == 401) {
-                alert(jsonData.error);
+                // alert(jsonData.error);
                 openSigninPage();
             } else {
-                alert(jsonData.error);
+                // alert(jsonData.error);
             }
         })
 }
@@ -838,16 +889,19 @@ function getUserIncidentById(incidents, incidentId) {
                 }
 
             } else if (jsonData.status == 401) {
-                alert(jsonData.error);
+                // alert(jsonData.error);
                 openSigninPage();
             } else {
-                alert(jsonData.error);
+                // alert(jsonData.error);
             }
         })
 }
 
 function updateUserIncident(incidents, incidentId) {
     let userUpdateIncidentAttributeLoader = document.getElementById("user-update-incident-attribute-loader");
+    let updateMessageFail = document.getElementById("modal-id-update-message-fail");
+    let updateMessageSuccess = document.getElementById("modal-id-update-message-success");
+    updateMessageFail.style.display = "none";
     userUpdateIncidentAttributeLoader.style.display = "block";
     var accessToken = getCookie("jwtAccessToken");
     let data = {};
@@ -880,30 +934,40 @@ function updateUserIncident(incidents, incidentId) {
             'Authorization': 'Bearer ' + accessToken
         }
     }
-    var changeMessage = confirm("Do you really want to change this incident's " + incidentAttribute + "?");
-    if (changeMessage == true) {
-        fetch(URL_INCIDENT, fetchData)
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (myJson) {
+    // var changeMessage = confirm("Do you really want to change this incident's " + incidentAttribute + "?");
+    // if (changeMessage == true) {
+    fetch(URL_INCIDENT, fetchData)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (myJson) {
 
-                if (myJson.status == 201) {
-                    // alert(myJson.message);
-                    alert("You have successfully updated this incident's " + incidentAttribute)
-                    openAdminPage();
-                    userUpdateIncidentAttributeLoader.style.display = "none";
-                } else {
-                    alert(myJson.error);
-                    userUpdateIncidentAttributeLoader.style.display = "none";
-                }
-            });
-        return true;
-    }
+            if (myJson.status == 201) {
+                updateMessageSuccess.innerHTML = "You have successfully updated this incident's " + incidentAttribute;
+                updateMessageSuccess.style.display = "inline-block";
+                console.log(myJson.message);
+                setTimeout(openHomePage, 2000);
+                userUpdateIncidentAttributeLoader.style.display = "none";
+            } else {
+                updateMessageFail.innerHTML = myJson.error;
+                updateMessageFail.style.display = "inline-block";
+                console.log(myJson.error);
+                userUpdateIncidentAttributeLoader.style.display = "none";
+            }
+        }).catch((myError) => {
+            updateMessageFail.innerHTML = myError.message;
+            updateMessageFail.style.display = "inline-block";
+            console.log(myError.message);
+        });
+    // return true;
 }
+// }
 
 function deleteUserIncident(incidents, incidentId) {
     let userDeleteIncidentLoader = document.getElementById("user-delete-incident-loader");
+    let deleteMessageFail = document.getElementById("modal-id-delete-message-fail");
+    let deleteMessageSuccess = document.getElementById("modal-id-delete-message-success");
+    deleteMessageFail.style.display = "none";
     userDeleteIncidentLoader.style.display = "block";
 
     const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + '/' + incidentId;
@@ -917,28 +981,40 @@ function deleteUserIncident(incidents, incidentId) {
         }
     }
 
-    var promptDeleteUserIncident = confirm("Do you really want to delete this incident?");
-    if (promptDeleteUserIncident == true) {
-        fetch(URL_INCIDENT, fetchData)
-            .then(function (response) {
-                return response.json();
-            }).then(function (myJson) {
-                if (myJson.status == 200) {
-                    alert(myJson.message);
-                    openHomePage();
-                    userDeleteIncidentLoader.style.display = "none";
-                } else {
-                    alert(myJson.error);
-                    userDeleteIncidentLoader.style.display = "none";
-                }
-            })
-    }
+    // var promptDeleteUserIncident = confirm("Do you really want to delete this incident?");
+    // if (promptDeleteUserIncident == true) {
+    fetch(URL_INCIDENT, fetchData)
+        .then(function (response) {
+            return response.json();
+        }).then(function (myJson) {
+            if (myJson.status == 200) {
+                deleteMessageSuccess.innerHTML = myJson.message;
+                deleteMessageSuccess.style.display = "inline-block";
+                setTimeout(openHomePage, 2000);
+                console.log(myJson.message);
+                userDeleteIncidentLoader.style.display = "none";
+            } else {
+                deleteMessageFail.innerHTML = myJson.error;
+                deleteMessageFail.style.display = "inline-block";
+                console.log(myJson.error);
+                userDeleteIncidentLoader.style.display = "none";
+            }
+        }).catch((myError) => {
+            deleteMessageFail.innerHTML = myError.message;
+            deleteMessageFail.style.display = "inline-block";
+            console.log(myError.message);
 
-
+        });
 }
+
+
+// }
 
 function changeUserRole(userId) {
     let adminUpdateUserLoader = document.getElementById("admin-update-user-loader");
+    let updateRoleMessageFail = document.getElementById("modal-id-update-role-message-fail");
+    let updateROleMessageSuccess = document.getElementById("modal-id-update-role-message-success");
+    updateRoleMessageFail.style.display = "none";
     adminUpdateUserLoader.style.display = "block";
     const URL_USER = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users/' + userId;
     // const URL_USER = 'http://localhost:5000/api/v1/users/' + userId;
@@ -966,27 +1042,36 @@ function changeUserRole(userId) {
         }
     }
 
-    var changeMessage = confirm("Do you really want to change this user's role?");
-    if (changeMessage == true) {
-        fetch(URL_USER, fetchDataf).then(function (response) {
-            return response.json();
-        }).then(function (myJson) {
-            if (myJson.status == 201) {
-                alert(myJson.message);
-                openAdminPage();
-                adminUpdateUserLoader.style.display = "none";
-            } else {
-                alert(myJson.message);
-                adminUpdateUserLoader.style.display = "none";
-            }
-        }).catch((myError) => {
-            console.log("Error updating status: " + myError.message);
-        });
-    }
+    // var changeMessage = confirm("Do you really want to change this user's role?");
+    // if (changeMessage == true) {
+    fetch(URL_USER, fetchDataf).then(function (response) {
+        return response.json();
+    }).then(function (myJson) {
+        if (myJson.status == 201) {
+            updateROleMessageSuccess.innerHTML = myJson.message;
+            updateROleMessageSuccess.style.display = "inline-block";
+            console.log(myJson.message);
+            setTimeout(openAdminPage, 2000);
+            adminUpdateUserLoader.style.display = "none";
+        } else {
+            updateRoleMessageFail.innerHTML = myJson.error;
+            updateRoleMessageFail.style.display = "inline-block";
+            console.log(myJson.error);
+            adminUpdateUserLoader.style.display = "none";
+        }
+    }).catch((myError) => {
+        updateRoleMessageFail.innerHTML = myError.error;
+        updateRoleMessageFail.style.display = "inline-block";
+        console.log("Error updating status: " + myError.message);
+    });
 }
+// }
 
 function changeIncidentStatus(incidents, incidentId) {
     let adminUpdateIncidentLoader = document.getElementById("admin-update-incident-loader");
+    let updateStatusMessageFail = document.getElementById("modal-id-update-status-message-fail");
+    let updateStatusMessageSuccess = document.getElementById("modal-id-update-status-message-success");
+    updateStatusMessageFail.style.display = "none";
     adminUpdateIncidentLoader.style.display = "block";
     let modelUpdateIncidentStatusBtn = document.getElementById("model-update-incident-status-btn");
     modelUpdateIncidentStatusBtn.style.display = "block";
@@ -1006,25 +1091,33 @@ function changeIncidentStatus(incidents, incidentId) {
             'Authorization': 'Bearer ' + accessToken
         }
     }
-    var changeMessage = confirm("Do you really want to change this incident's status?");
-    if (changeMessage == true) {
-        fetch(URL_INCIDENT, fetchData)
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (myJson) {
-                if (myJson.status == 201) {
-                    alert(myJson.message);
-                    openAdminPage();
-                    modelUpdateIncidentStatusBtn.style.display = "none";
-                } else {
-                    alert(myJson.error)
-                    modelUpdateIncidentStatusBtn.style.display = "none";
-                }
-            });
-        return true;
-    }
+    // var changeMessage = confirm("Do you really want to change this incident's status?");
+    // if (changeMessage == true) {
+    fetch(URL_INCIDENT, fetchData)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (myJson) {
+            if (myJson.status == 201) {
+                updateStatusMessageSuccess.innerHTML = myJson.message;
+                updateStatusMessageSuccess.style.display = "inline-block";
+                console.log(myJson.message);
+                setTimeout(openAdminPage, 2000);
+                modelUpdateIncidentStatusBtn.style.display = "none";
+            } else {
+                updateStatusMessageFail.innerHTML = myJson.error;
+                updateStatusMessageFail.style.display = "inline-block";
+                console.log(myJson.error);
+                modelUpdateIncidentStatusBtn.style.display = "none";
+            }
+        }).catch((myError) => {
+            updateStatusMessageFail.innerHTML = myError.message;
+            updateStatusMessageFail.style.display = "inline-block";
+            console.log(myError.message);
+        });
+    // return true;
 }
+// }
 
 function getAllUsers() {
     let adminIncidentsListLoader = document.getElementById("view-admin-incidents-loader");
@@ -1085,7 +1178,7 @@ function getAllUsers() {
                     numberOfRows = numberOfRows + 1;
                 }
             } else {
-                alert(myJson.error);
+                // alert(myJson.error);
                 openSigninPage();
             }
             adminIncidentsListLoader.style.display = "none";
@@ -1232,7 +1325,7 @@ function showViewIncidentMap(myIncidentlatitude, myIncidentLogitude, modalIncide
                     document.getElementById('modal-add-incident-geocoordinates-field').value = positionCoordinates;
                 });
             } else {
-                alert("HTML5 Geolocation isn't supported by your current browser.");
+                // alert("HTML5 Geolocation isn't supported by your current browser.");
             }
         }
     }, false);

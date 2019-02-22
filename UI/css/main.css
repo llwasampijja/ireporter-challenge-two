@@ -108,15 +108,6 @@ header nav ul li a:link{
   display: none;
 }
 
-#user-incidents-map, #admin-incidents-map {
-  height: 600px;
-  width: 100%;
-}
-
-#modal-incident-view-map-location, #modal-incident-new-map-location {
-  height: 200px;
-  width: 100%;
-}
 
 /* login window */
 .loader {
@@ -155,6 +146,10 @@ header nav ul li a:link{
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+#validate-first-name, #validate-last-name {
+  display: none;
 }
 
 .sign-form-container{
@@ -199,6 +194,44 @@ header nav ul li a:link{
     display: flex;
     flex-wrap: wrap;
     padding: 30px 45px;
+}
+
+.form-response-message{
+  width: 100%;
+  font-weight: bold;
+  /* font-size: 20px; */
+  /* color: #555555; */
+  line-height: 1.2;
+  letter-spacing: 2px;
+  text-align: center;
+  /* color: green; */
+  display: block;
+  font-style: italic;
+  margin: 10px;
+}
+
+#form-response-message-ok,
+#modal-id-images-message-success,
+#modal-id-videos-message-success,
+#modal-id-update-message-success,
+#modal-id-delete-message-success,
+#modal-id-create-incident-message-success,
+#modal-id-update-status-message-success,
+#modal-id-update-role-message-success{
+  color: green;
+  display: none;
+}
+
+#form-response-message-fail,
+#modal-id-images-message-fail,
+#modal-id-videos-message-fail,
+#modal-id-update-message-fail,
+#modal-id-delete-message-fail,
+#modal-id-create-incident-message-fail,
+#modal-id-update-status-message-fail,
+#modal-id-update-role-message-fail{
+  color: red;
+  display: none;
 }
   
 .sign-form-title {
@@ -329,6 +362,7 @@ input.sign-form-input {
   border-radius: 50%;
 }
 
+
 .grid-box-container {
   width: 25%;
   overflow: auto;
@@ -338,6 +372,9 @@ input.sign-form-input {
   margin: 10px;
   display: inline-block;
   border-radius: 20px;
+}
+
+.home-page-grid-container {
   height: 300px;
   overflow: hidden;
 }
@@ -496,6 +533,44 @@ h2.dashboard-header-element {
 
 .view-report-btn, .edit-report-btn, .view-user-profile-btn {
   padding: 10px 40px;
+}
+
+#user-incidents-map {
+  height: 600px;
+  width: 100%;
+}
+
+#modal-incident-view-map-location, #modal-incident-new-map-location {
+  height: 200px;
+  width: 100%;
+}
+
+#map-infor-container ul{
+  margin: 10px;
+}
+
+#map-infor-container ul li{
+  margin: 10px;
+}
+
+#map-infor-container {
+  width: 300px;
+  text-align: center;
+  border: 3px solid rgb(65, 105, 225);
+  border-radius: 10px;
+  padding: 10x;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#info-window-incident-title, #info-window-incident-comment{
+  margin: 10px;
+  padding: 10px;
+}
+
+#info-window-incident-button {
+  position: relative;
+  margin: 10px 0px 0px;
 }
 
 .relevant-sites-links-container {
