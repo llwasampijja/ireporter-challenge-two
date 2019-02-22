@@ -712,6 +712,38 @@ function filterIncidentsPerUser(incidents, tabSectionId) {
         })
 }
 
+function searchIncidentsByWord() {
+    let tabName = ""
+    if (document.getElementById("dashboard-header-incident-type").innerHTML.toString().toLowerCase() == "red-flags") {
+        tabName = 'view-user-redflags';
+    } else if (document.getElementById("dashboard-header-incident-type").innerHTML.toString().toLowerCase() == "interventions") {
+        tabName = 'view-user-interventions';
+    }
+    let searchInput = document.getElementById("id-searchreports");
+    let filterString = searchInput.value.toLowerCase();
+
+    let incidentsContainer = document.getElementById(tabName);
+    let incidentsListed = document.getElementById(tabName).children;
+    let newIncidentsListed = 0;
+
+    for (let incidentsCounter = 0; incidentsCounter < incidentsContainer.childElementCount; incidentsCounter++) {
+        let listedIncident = incidentsListed.item(incidentsCounter).innerHTML.toString().toLowerCase();
+        if (listedIncident.indexOf(filterString) > -1) {
+            incidentsListed.item(incidentsCounter).style.display = "";
+            newIncidentsListed+=1;
+        } else {
+            incidentsListed.item(incidentsCounter).style.display = "none";
+        }
+    }
+
+    let noRecordsContainer = document.getElementById("no-records-message-container-id");
+    if (newIncidentsListed < 1) {
+        noRecordsContainer.style.display = "block"
+    } else {
+        noRecordsContainer.style.display = "none"
+    }
+}
+
 function getIncidentById(incidents, element, tableId) {
     var incidentTable = document.getElementById(tableId);
     let incidentId = 0;
