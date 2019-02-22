@@ -73,7 +73,8 @@
                 <h2 class="dashboard-header-element">Admin Panel</h2>
 
                 <div class="admin-control-panel-container">
-                    <button class="admin-tab" onclick="openAdminManageTab(event, 'manage-incidents-map'); hideNoRecordsMessage();"
+                    <button class="admin-tab"
+                        onclick="openAdminManageTab(event, 'manage-incidents-map'); hideNoRecordsMessage();"
                         id="openByDefault">Map View</button>
                     <button class="admin-tab"
                         onclick="openAdminManageTab(event, 'manage-redflags'); getAllIncidents('red-flags', 'redflags-list-table')">Red-Flags</button>
@@ -92,7 +93,7 @@
 
     <section id="manage-incidents-map" class="section-manage-content">
         <div>
-            <div id="admin-incidents-map"></div>
+            <div id="user-incidents-map"></div>
         </div>
     </section>
 
@@ -357,6 +358,9 @@
             </section>
             <section class="profile-sections">
                 <div id="admin-update-user-loader" class="loader"></div>
+                <div><span id="modal-id-update-role-message-success" class="form-response-message">Succeeded</span>
+                </div>
+                <div><span id="modal-id-update-role-message-fail" class="form-response-message">Failed</span></div>
                 <button id="btn-user-role-change" class="site-signup-btn site-btn profile-group"></button>
             </section>
             <section class="data-tables">
@@ -460,6 +464,10 @@
                         <h3 class="modal-contents-item">Video Evidence</h3>
                         <div class="modal-contents-item" id="modal-admin-view-incident-videos"></div>
                         <div id="admin-update-incident-loader" class="loader"></div>
+                        <div><span id="modal-id-update-status-message-success"
+                                class="form-response-message">Succeeded</span></div>
+                        <div><span id="modal-id-update-status-message-fail" class="form-response-message">Failed</span>
+                        </div>
                         <div id="model-update-incident-status-btn"></div>
                     </div>
                 </div>
@@ -483,7 +491,7 @@
         let numberOfMapIncidents = 0;
         adminIncidentsListLoader.style.display = "none";
 
-        let mymap = L.map('admin-incidents-map').setView([0.32358400000000004, 32.5967872], 13);
+        let mymap = L.map('user-incidents-map').setView([0.32358400000000004, 32.5967872], 13);
 
         L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibGx3YXNhbXBpamphIiwiYSI6ImNqczdkY25wbDB3bm0zeW8zaXljaDN3cWgifQ.7GN9HpLQG2mAC6D-2lxuOg', {
             maxZoom: 18,
@@ -521,12 +529,20 @@
             if (myJson.status == 200) {
                 for (var incidentIndex = 0; incidentIndex < myJson.data.length; incidentIndex++) {
                     incident = myJson.data[incidentIndex];
+                    let infoHtml = '<div id="map-infor-container">' +
+                        '<ul>' +
+                        ' <li><b><span id="info-window-incident-title">' + incident.title + '</span></b></li>' +
+                        ' <li> <span id="info-window-incident-comment">' + incident.comment + '</span></li>' +
+                        '<li><button id="info-window-incident-button"  class="view-report-btn" onclick="getIncidentById(\'red-flags\', this,' + incident.incident_id + ')">View</button></li>' +
+                        '</ul>' +
+                        '</div>';
                     locationCoordinates = incident.location.split(',');
                     myLatitude = parseFloat(locationCoordinates[0].trim());
                     myLogitude = parseFloat(locationCoordinates[1].trim());
                     L.marker([myLatitude, myLogitude])
                         .addTo(mymap)
-                        .bindPopup("<b>" + incident.title + "</b><br>I am " + incident.comment)
+                        // .bindPopup("<b>" + incident.title + "</b><br>I am " + incident.comment)
+                        .bindPopup(infoHtml)
                         .openPopup();
                     numberOfMapIncidents += 1;
                 }
@@ -546,12 +562,19 @@
             if (myJson.status == 200) {
                 for (var incidentIndex = 0; incidentIndex < myJson.data.length; incidentIndex++) {
                     incident = myJson.data[incidentIndex];
+                    let infoHtml = '<div id="map-infor-container">' +
+                        '<ul>' +
+                        ' <li><b><span id="info-window-incident-title">' + incident.title + '</span></b></li>' +
+                        ' <li> <span id="info-window-incident-comment">' + incident.comment + '</span></li>' +
+                        '<li><button id="info-window-incident-button"  class="view-report-btn" onclick="getIncidentById(\'interventions\', this,' + incident.incident_id + ')">View</button></li>' +
+                        '</ul>' +
+                        '</div>';
                     locationCoordinates = incident.location.split(',');
                     myLatitude = parseFloat(locationCoordinates[0].trim());
                     myLogitude = parseFloat(locationCoordinates[1].trim());
                     L.marker([myLatitude, myLogitude])
                         .addTo(mymap)
-                        .bindPopup("<b>" + incident.title + "</b><br>I am " + incident.comment)
+                        .bindPopup(infoHtml)
                         .openPopup();
                     numberOfMapIncidents += 1;
                 }

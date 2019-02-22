@@ -108,6 +108,9 @@ function loginUser() {
 
 function uploadMedia(incidentType, incident_id) {
     let userUpdateIncidentImagesLoader = document.getElementById("user-update-incident-images-loader");
+    let uploadImageMessageFail = document.getElementById("modal-id-images-message-fail");
+    let uploadImageMessageSuccess = document.getElementById("modal-id-images-message-success");
+    uploadImageMessageFail.style.display = "none";
     userUpdateIncidentImagesLoader.style.display = "block";
     // const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/files/uploads/images/' + incidentType + '/' + incident_id;
     const URL_INCIDENT = 'http://localhost:5000/api/v1/files/uploads/images/' + incidentType + '/' + incident_id;
@@ -136,13 +139,19 @@ function uploadMedia(incidentType, incident_id) {
     }).then(function (myJson) {
 
         if (myJson.status == 201) {
-            // alert(myJson.message);
+            uploadImageMessageSuccess.innerHTML = myJson.message;
+            uploadImageMessageSuccess.style.display = "inline-block";
+            setTimeout(openHomePage, 2000);
             userUpdateIncidentImagesLoader.style.display = "none";
         } else {
-            // alert(myJson.error)
+            uploadImageMessageFail.innerHTML = myJson.error;
+            uploadImageMessageFail.style.display = "inline-block";
+            console.log(myJson.error);
             userUpdateIncidentImagesLoader.style.display = "none";
         }
     }).catch((myError) => {
+        uploadImageMessageFail.innerHTML = myError.message;
+        uploadImageMessageFail.style.display = "inline-block";
         console.log("Image Upload Error: " + myError.message);
     })
 }
@@ -151,6 +160,9 @@ function uploadMedia(incidentType, incident_id) {
 
 function uploadVideo(incidentType, incident_id) {
     let userUpdateIncidentVideosLoader = document.getElementById("user-update-incident-videos-loader");
+    let uploadVideosMessageFail = document.getElementById("modal-id-videos-message-fail");
+    let uploadVideosMessageSuccess = document.getElementById("modal-id-videos-message-success");
+    uploadVideosMessageFail.style.display = "none";
     userUpdateIncidentVideosLoader.style.display = "block";
     // const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/files/uploads/videos/' + incidentType + '/' + incident_id;
     const URL_INCIDENT = 'http://localhost:5000/api/v1/files/uploads/videos/' + incidentType + '/' + incident_id;
@@ -179,13 +191,20 @@ function uploadVideo(incidentType, incident_id) {
     }).then(function (myJson) {
 
         if (myJson.status == 201) {
-            // alert(myJson.message);
+            uploadVideosMessageSuccess.innerHTML = myJson.message;
+            uploadVideosMessageSuccess.style.display = "inline-block";
+            setTimeout(openHomePage, 2000);
+            console.log(myJson.message);
             userUpdateIncidentVideosLoader.style.display = "none";
         } else {
-            // alert(myJson.error)
+            uploadVideosMessageFail.innerHTML = myJson.error;
+            uploadVideosMessageFail.style.display = "inline-block";
+            console.log(myJson.error);
             userUpdateIncidentVideosLoader.style.display = "none";
         }
     }).catch((myError) => {
+        uploadVideosMessageFail.innerHTML = myError.message;
+        uploadVideosMessageFail.style.display = "inline-block";
         console.log("Video Upload Error: " + myError.message);
     })
 }
@@ -194,6 +213,9 @@ function uploadVideo(incidentType, incident_id) {
 
 function createIncident(incidents) {
     let userCreateIncidentLoader = document.getElementById("user-create-incident-loader");
+    let createIncidentMessageFail = document.getElementById("modal-id-create-incident-message-fail");
+    let createIncidentMessageSuccess = document.getElementById("modal-id-create-incident-message-success");
+    createIncidentMessageFail.style.display = "none";
     userCreateIncidentLoader.style.display = "block";
 
     // const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents;
@@ -238,14 +260,20 @@ function createIncident(incidents) {
             return response.json();
         }).then(function (myJson) {
             if (myJson.status == 201) {
-                // alert(myJson.message);
-                openHomePage();
+                createIncidentMessageSuccess.innerHTML = myJson.message;
+                createIncidentMessageSuccess.style.display = "inline-block";
+                console.log(myJson.message);
+                setTimeout(openHomePage, 2000);
                 userCreateIncidentLoader.style.display = "none";
             } else {
-                // alert(myJson.error);
+                createIncidentMessageFail.innerHTML = myJson.error;
+                createIncidentMessageFail.style.display = "inline-block";
+                console.log(myJson.error);
                 userCreateIncidentLoader.style.display = "none";
             }
         }).catch((myError) => {
+            createIncidentMessageFail.innerHTML = myError.message;
+            createIncidentMessageFail.style.display = "inline-block";
             console.log("Create Error: " + myError.message);
         });
 }
@@ -686,8 +714,14 @@ function filterIncidentsPerUser(incidents, tabSectionId) {
 
 function getIncidentById(incidents, element, tableId) {
     var incidentTable = document.getElementById(tableId);
+    let incidentId = 0;
     myRowIndex = element.parentNode.parentNode.rowIndex;
-    var incidentId = incidentTable.rows[myRowIndex].cells[0].innerHTML
+    if (typeof (tableId) === "string") {
+        incidentId = incidentTable.rows[myRowIndex].cells[0].innerHTML;
+    } else if (typeof (tableId) === "number") {
+        incidentId = tableId;
+    }
+
 
 
     // const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + "/" + incidentId;
@@ -865,6 +899,9 @@ function getUserIncidentById(incidents, incidentId) {
 
 function updateUserIncident(incidents, incidentId) {
     let userUpdateIncidentAttributeLoader = document.getElementById("user-update-incident-attribute-loader");
+    let updateMessageFail = document.getElementById("modal-id-update-message-fail");
+    let updateMessageSuccess = document.getElementById("modal-id-update-message-success");
+    updateMessageFail.style.display = "none";
     userUpdateIncidentAttributeLoader.style.display = "block";
     var accessToken = getCookie("jwtAccessToken");
     let data = {};
@@ -906,21 +943,31 @@ function updateUserIncident(incidents, incidentId) {
         .then(function (myJson) {
 
             if (myJson.status == 201) {
-                // alert(myJson.message);
-                // alert("You have successfully updated this incident's " + incidentAttribute)
-                openAdminPage();
+                updateMessageSuccess.innerHTML = "You have successfully updated this incident's " + incidentAttribute;
+                updateMessageSuccess.style.display = "inline-block";
+                console.log(myJson.message);
+                setTimeout(openHomePage, 2000);
                 userUpdateIncidentAttributeLoader.style.display = "none";
             } else {
-                // alert(myJson.error);
+                updateMessageFail.innerHTML = myJson.error;
+                updateMessageFail.style.display = "inline-block";
+                console.log(myJson.error);
                 userUpdateIncidentAttributeLoader.style.display = "none";
             }
+        }).catch((myError) => {
+            updateMessageFail.innerHTML = myError.message;
+            updateMessageFail.style.display = "inline-block";
+            console.log(myError.message);
         });
-    return true;
+    // return true;
 }
 // }
 
 function deleteUserIncident(incidents, incidentId) {
     let userDeleteIncidentLoader = document.getElementById("user-delete-incident-loader");
+    let deleteMessageFail = document.getElementById("modal-id-delete-message-fail");
+    let deleteMessageSuccess = document.getElementById("modal-id-delete-message-success");
+    deleteMessageFail.style.display = "none";
     userDeleteIncidentLoader.style.display = "block";
 
     // const URL_INCIDENT = 'https://ireporter-challenge-two.herokuapp.com/api/v1/' + incidents + '/' + incidentId;
@@ -941,14 +988,23 @@ function deleteUserIncident(incidents, incidentId) {
             return response.json();
         }).then(function (myJson) {
             if (myJson.status == 200) {
-                // alert(myJson.message);
-                openHomePage();
+                deleteMessageSuccess.innerHTML = myJson.message;
+                deleteMessageSuccess.style.display = "inline-block";
+                setTimeout(openHomePage, 2000);
+                console.log(myJson.message);
                 userDeleteIncidentLoader.style.display = "none";
             } else {
-                // alert(myJson.error);
+                deleteMessageFail.innerHTML = myJson.error;
+                deleteMessageFail.style.display = "inline-block";
+                console.log(myJson.error);
                 userDeleteIncidentLoader.style.display = "none";
             }
-        })
+        }).catch((myError) => {
+            deleteMessageFail.innerHTML = myError.message;
+            deleteMessageFail.style.display = "inline-block";
+            console.log(myError.message);
+
+        });
 }
 
 
@@ -956,6 +1012,9 @@ function deleteUserIncident(incidents, incidentId) {
 
 function changeUserRole(userId) {
     let adminUpdateUserLoader = document.getElementById("admin-update-user-loader");
+    let updateRoleMessageFail = document.getElementById("modal-id-update-role-message-fail");
+    let updateROleMessageSuccess = document.getElementById("modal-id-update-role-message-success");
+    updateRoleMessageFail.style.display = "none";
     adminUpdateUserLoader.style.display = "block";
     // const URL_USER = 'https://ireporter-challenge-two.herokuapp.com/api/v1/users/' + userId;
     const URL_USER = 'http://localhost:5000/api/v1/users/' + userId;
@@ -989,14 +1048,20 @@ function changeUserRole(userId) {
         return response.json();
     }).then(function (myJson) {
         if (myJson.status == 201) {
-            // alertalert(myJson.message);
-            openAdminPage();
+            updateROleMessageSuccess.innerHTML = myJson.message;
+            updateROleMessageSuccess.style.display = "inline-block";
+            console.log(myJson.message);
+            setTimeout(openAdminPage, 2000);
             adminUpdateUserLoader.style.display = "none";
         } else {
-            // alert(myJson.message);
+            updateRoleMessageFail.innerHTML = myJson.error;
+            updateRoleMessageFail.style.display = "inline-block";
+            console.log(myJson.error);
             adminUpdateUserLoader.style.display = "none";
         }
     }).catch((myError) => {
+        updateRoleMessageFail.innerHTML = myError.error;
+        updateRoleMessageFail.style.display = "inline-block";
         console.log("Error updating status: " + myError.message);
     });
 }
@@ -1004,6 +1069,9 @@ function changeUserRole(userId) {
 
 function changeIncidentStatus(incidents, incidentId) {
     let adminUpdateIncidentLoader = document.getElementById("admin-update-incident-loader");
+    let updateStatusMessageFail = document.getElementById("modal-id-update-status-message-fail");
+    let updateStatusMessageSuccess = document.getElementById("modal-id-update-status-message-success");
+    updateStatusMessageFail.style.display = "none";
     adminUpdateIncidentLoader.style.display = "block";
     let modelUpdateIncidentStatusBtn = document.getElementById("model-update-incident-status-btn");
     modelUpdateIncidentStatusBtn.style.display = "block";
@@ -1031,15 +1099,23 @@ function changeIncidentStatus(incidents, incidentId) {
         })
         .then(function (myJson) {
             if (myJson.status == 201) {
-                // alert(myJson.message);
-                openAdminPage();
+                updateStatusMessageSuccess.innerHTML = myJson.message;
+                updateStatusMessageSuccess.style.display = "inline-block";
+                console.log(myJson.message);
+                setTimeout(openAdminPage, 2000);
                 modelUpdateIncidentStatusBtn.style.display = "none";
             } else {
-                // alert(myJson.error)
+                updateStatusMessageFail.innerHTML = myJson.error;
+                updateStatusMessageFail.style.display = "inline-block";
+                console.log(myJson.error);
                 modelUpdateIncidentStatusBtn.style.display = "none";
             }
+        }).catch((myError) => {
+            updateStatusMessageFail.innerHTML = myError.message;
+            updateStatusMessageFail.style.display = "inline-block";
+            console.log(myError.message);
         });
-    return true;
+    // return true;
 }
 // }
 
