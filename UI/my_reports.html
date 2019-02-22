@@ -18,6 +18,7 @@
     <script>
         checkIfUserIsLoggedIn();
         avoidDashBoardForAdmins();
+        // searchIncidentsByWord();
         // addOnClickEventToFilterButton();
     </script>
     <link rel="stylesheet" type="text/css" href="css/main.css">
@@ -119,7 +120,7 @@
                         Reports</button>
                 </div>
                 <input class="reports-search-box dashboard-header-element" type="text" placeholder="Search Incidents"
-                    id="search_reports" />
+                    id="id-searchreports" title="Type in a anythin" onkeyup="searchIncidentsByWord()">
                 <button type="button" id="new-report-btn"
                     class="new-report-btn site-signup-btn site-btn dashboard-header-element"
                     onclick="createNewReportsModal('interventions');">Create
