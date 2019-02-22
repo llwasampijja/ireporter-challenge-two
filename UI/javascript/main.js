@@ -1,4 +1,7 @@
 function registerUser() {
+    let registerSuccessMessage = document.getElementById("form-response-message-ok");
+    let registerFailMessage = document.getElementById("form-response-message-fail");
+    registerFailMessage.style.display = "none"
     let mySignupLoader = document.getElementById("mysignup-loader");
     mySignupLoader.style.display = "block";
 
@@ -30,22 +33,29 @@ function registerUser() {
             if (myJson.status == 201) {
                 var accessToken = myJson.access_token;
                 setCookie("jwtAccessToken", accessToken, 3)
-                alert(myJson.message);
+                registerSuccessMessage.innerHTML = myJson.message;
+                registerSuccessMessage.style.display = "inline-block";
                 for (let user of myJson.data) {
                     setCookie("isAdmin", user.is_admin, 3);
                     setCookie("userIdCookie", user.user_id, 3);
                 }
-                openHomePage();
+                setTimeout(openHomePage, 2000);
+                // openHomePage();
                 mySignupLoader.style.display = "none";
             } else {
-                alert(myJson.error);
+                registerFailMessage.innerHTML = myJson.error;
+                registerFailMessage.style.display = "inline-block";
                 mySignupLoader.style.display = "none";
+                console.log(myJson.error)
             }
         });
 }
 
 function loginUser() {
     let myLoginLoader = document.getElementById("myloader");
+    let loginSuccessMessage = document.getElementById("form-response-message-ok");
+    let loginFailMessage = document.getElementById("form-response-message-fail");
+    loginFailMessage.style.display = "none"
     myLoginLoader.style.display = "block";
     // const USER_USER = 'https://ireporter-challenge-two.herokuapp.com/api/v1/auth/login';
     const USER_USER = 'http://localhost:5000/api/v1/auth/login';
@@ -68,23 +78,30 @@ function loginUser() {
         })
         .then(function (myJson) {
             if (myJson.status == 200) {
-                alert(myJson.message);
+                // alert(myJson.message);
+                loginSuccessMessage.innerHTML = myJson.message;
+                loginSuccessMessage.style.display = "inline-block";
+                console.log(myJson.message)
                 var accessToken = myJson.access_token;
                 setCookie("jwtAccessToken", accessToken, 3)
                 for (let user of myJson.data) {
                     setCookie("isAdmin", user.is_admin, 3)
                     setCookie("userIdCookie", user.user_id, 3)
                     if (user.is_admin == true) {
-                        openAdminPage();
+                        setTimeout(openAdminPage, 2000);
                     } else {
-                        openHomePage();
+                        setTimeout(openHomePage, 2000);
                     }
                     myLoginLoader.style.display = "none";
                 }
 
             } else {
-                alert(myJson.error);
+                // alert(myJson.error);
+                loginFailMessage.innerHTML = myJson.error;
+                loginFailMessage.style.display = "inline-block";
                 myLoginLoader.style.display = "none";
+                console.log(myJson.error);
+
             }
         });
 }
@@ -112,24 +129,24 @@ function uploadMedia(incidentType, incident_id) {
         body: myFormData
     });
 
-    var uploadImageIncidentPrompt = confirm("Continue and upload this image!");
-    if (uploadImageIncidentPrompt == true) {
-        fetch(req).then(function (response) {
-            return response.json();
-        }).then(function (myJson) {
+    // var uploadImageIncidentPrompt = confirm("Continue and upload this image!");
+    // if (uploadImageIncidentPrompt == true) {
+    fetch(req).then(function (response) {
+        return response.json();
+    }).then(function (myJson) {
 
-            if (myJson.status == 201) {
-                alert(myJson.message);
-                userUpdateIncidentImagesLoader.style.display = "none";
-            } else {
-                alert(myJson.error)
-                userUpdateIncidentImagesLoader.style.display = "none";
-            }
-        }).catch((myError) => {
-            console.log("Image Upload Error: " + myError.message);
-        })
-    }
+        if (myJson.status == 201) {
+            // alert(myJson.message);
+            userUpdateIncidentImagesLoader.style.display = "none";
+        } else {
+            // alert(myJson.error)
+            userUpdateIncidentImagesLoader.style.display = "none";
+        }
+    }).catch((myError) => {
+        console.log("Image Upload Error: " + myError.message);
+    })
 }
+// }
 
 
 function uploadVideo(incidentType, incident_id) {
@@ -155,25 +172,25 @@ function uploadVideo(incidentType, incident_id) {
         body: myFormData
     });
 
-    var uploadVideoIncidentPrompt = confirm("Continue and upload this video!");
-    if (uploadVideoIncidentPrompt == true) {
-        fetch(req).then(function (response) {
-            return response.json();
-        }).then(function (myJson) {
+    // var uploadVideoIncidentPrompt = confirm("Continue and upload this video!");
+    // if (uploadVideoIncidentPrompt == true) {
+    fetch(req).then(function (response) {
+        return response.json();
+    }).then(function (myJson) {
 
-            if (myJson.status == 201) {
-                alert(myJson.message);
-                userUpdateIncidentVideosLoader.style.display = "none";
-            } else {
-                alert(myJson.error)
-                userUpdateIncidentVideosLoader.style.display = "none";
-            }
-        }).catch((myError) => {
-            console.log("Video Upload Error: " + myError.message);
-        })
-    }
-
+        if (myJson.status == 201) {
+            // alert(myJson.message);
+            userUpdateIncidentVideosLoader.style.display = "none";
+        } else {
+            // alert(myJson.error)
+            userUpdateIncidentVideosLoader.style.display = "none";
+        }
+    }).catch((myError) => {
+        console.log("Video Upload Error: " + myError.message);
+    })
 }
+
+// }
 
 function createIncident(incidents) {
     let userCreateIncidentLoader = document.getElementById("user-create-incident-loader");
@@ -214,25 +231,25 @@ function createIncident(incidents) {
         }
     }
 
-    var createNewIncidentPrompt = confirm("Continue and create a new incident!");
-    if (createNewIncidentPrompt == true) {
-        fetch(URL_INCIDENT, fetchData)
-            .then(function (response) {
-                return response.json();
-            }).then(function (myJson) {
-                if (myJson.status == 201) {
-                    alert(myJson.message);
-                    openHomePage();
-                    userCreateIncidentLoader.style.display = "none";
-                } else {
-                    alert(myJson.error);
-                    userCreateIncidentLoader.style.display = "none";
-                }
-            }).catch((myError) => {
-                console.log("Create Error: " + myError.message);
-            });
-    }
+    // var createNewIncidentPrompt = confirm("Continue and create a new incident!");
+    // if (createNewIncidentPrompt == true) {
+    fetch(URL_INCIDENT, fetchData)
+        .then(function (response) {
+            return response.json();
+        }).then(function (myJson) {
+            if (myJson.status == 201) {
+                // alert(myJson.message);
+                openHomePage();
+                userCreateIncidentLoader.style.display = "none";
+            } else {
+                // alert(myJson.error);
+                userCreateIncidentLoader.style.display = "none";
+            }
+        }).catch((myError) => {
+            console.log("Create Error: " + myError.message);
+        });
 }
+// }
 
 function getAllIncidents(incidents, tableId) {
     let adminIncidentsListLoader = document.getElementById("view-admin-incidents-loader");
@@ -297,10 +314,10 @@ function getAllIncidents(incidents, tableId) {
                 }
 
             } else if (jsonData.status == 401) {
-                alert(jsonData.error);
+                // alert(jsonData.error);
                 openSigninPage();
             } else {
-                alert(jsonData.error);
+                // alert(jsonData.error);
             }
             adminIncidentsListLoader.style.display = "none";
         });
@@ -410,10 +427,10 @@ function getAllIncidentsPerUserAdmin(incidents, tableId, userId) {
                 userProfileIncidentsSummary.rows[3].cells[5].innerHTML = parseInt(userProfileIncidentsSummary.rows[1].cells[5].innerHTML) + parseInt(userProfileIncidentsSummary.rows[2].cells[5].innerHTML);
 
             } else if (jsonData.status == 401) {
-                alert(jsonData.error);
+                // alert(jsonData.error);
                 openSigninPage();
             } else {
-                alert(jsonData.error);
+                // alert(jsonData.error);
             }
         }).catch((myError) => {
             console.log("Error Loading User Incidents: " + myError.message);
@@ -514,11 +531,11 @@ function getAllIncidentsPerUser(incidents, tabSectionId) {
                 userIncidentsListLoader.style.display = "none";
 
             } else if (jsonData.status == 401) {
-                alert(jsonData.error);
+                // alert(jsonData.error);
                 openSigninPage();
                 userIncidentsListLoader.style.display = "none";
             } else {
-                alert(jsonData.error);
+                // alert(jsonData.error);
                 userIncidentsListLoader.style.display = "none";
             }
         })
@@ -657,11 +674,11 @@ function filterIncidentsPerUser(incidents, tabSectionId) {
 
 
             } else if (jsonData.status == 401) {
-                alert(jsonData.error);
+                // alert(jsonData.error);
                 openSigninPage();
                 userIncidentsListLoader.style.display = "none";
             } else {
-                alert(jsonData.error);
+                // alert(jsonData.error);
                 userIncidentsListLoader.style.display = "none";
             }
         })
@@ -743,10 +760,10 @@ function getIncidentById(incidents, element, tableId) {
                 }
 
             } else if (jsonData.status == 401) {
-                alert(jsonData.error);
+                // alert(jsonData.error);
                 openSigninPage();
             } else {
-                alert(jsonData.error);
+                // alert(jsonData.error);
             }
         })
 }
@@ -838,10 +855,10 @@ function getUserIncidentById(incidents, incidentId) {
                 }
 
             } else if (jsonData.status == 401) {
-                alert(jsonData.error);
+                // alert(jsonData.error);
                 openSigninPage();
             } else {
-                alert(jsonData.error);
+                // alert(jsonData.error);
             }
         })
 }
@@ -880,27 +897,27 @@ function updateUserIncident(incidents, incidentId) {
             'Authorization': 'Bearer ' + accessToken
         }
     }
-    var changeMessage = confirm("Do you really want to change this incident's " + incidentAttribute + "?");
-    if (changeMessage == true) {
-        fetch(URL_INCIDENT, fetchData)
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (myJson) {
+    // var changeMessage = confirm("Do you really want to change this incident's " + incidentAttribute + "?");
+    // if (changeMessage == true) {
+    fetch(URL_INCIDENT, fetchData)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (myJson) {
 
-                if (myJson.status == 201) {
-                    // alert(myJson.message);
-                    alert("You have successfully updated this incident's " + incidentAttribute)
-                    openAdminPage();
-                    userUpdateIncidentAttributeLoader.style.display = "none";
-                } else {
-                    alert(myJson.error);
-                    userUpdateIncidentAttributeLoader.style.display = "none";
-                }
-            });
-        return true;
-    }
+            if (myJson.status == 201) {
+                // alert(myJson.message);
+                // alert("You have successfully updated this incident's " + incidentAttribute)
+                openAdminPage();
+                userUpdateIncidentAttributeLoader.style.display = "none";
+            } else {
+                // alert(myJson.error);
+                userUpdateIncidentAttributeLoader.style.display = "none";
+            }
+        });
+    return true;
 }
+// }
 
 function deleteUserIncident(incidents, incidentId) {
     let userDeleteIncidentLoader = document.getElementById("user-delete-incident-loader");
@@ -917,25 +934,25 @@ function deleteUserIncident(incidents, incidentId) {
         }
     }
 
-    var promptDeleteUserIncident = confirm("Do you really want to delete this incident?");
-    if (promptDeleteUserIncident == true) {
-        fetch(URL_INCIDENT, fetchData)
-            .then(function (response) {
-                return response.json();
-            }).then(function (myJson) {
-                if (myJson.status == 200) {
-                    alert(myJson.message);
-                    openHomePage();
-                    userDeleteIncidentLoader.style.display = "none";
-                } else {
-                    alert(myJson.error);
-                    userDeleteIncidentLoader.style.display = "none";
-                }
-            })
-    }
-
-
+    // var promptDeleteUserIncident = confirm("Do you really want to delete this incident?");
+    // if (promptDeleteUserIncident == true) {
+    fetch(URL_INCIDENT, fetchData)
+        .then(function (response) {
+            return response.json();
+        }).then(function (myJson) {
+            if (myJson.status == 200) {
+                // alert(myJson.message);
+                openHomePage();
+                userDeleteIncidentLoader.style.display = "none";
+            } else {
+                // alert(myJson.error);
+                userDeleteIncidentLoader.style.display = "none";
+            }
+        })
 }
+
+
+// }
 
 function changeUserRole(userId) {
     let adminUpdateUserLoader = document.getElementById("admin-update-user-loader");
@@ -966,24 +983,24 @@ function changeUserRole(userId) {
         }
     }
 
-    var changeMessage = confirm("Do you really want to change this user's role?");
-    if (changeMessage == true) {
-        fetch(URL_USER, fetchDataf).then(function (response) {
-            return response.json();
-        }).then(function (myJson) {
-            if (myJson.status == 201) {
-                alert(myJson.message);
-                openAdminPage();
-                adminUpdateUserLoader.style.display = "none";
-            } else {
-                alert(myJson.message);
-                adminUpdateUserLoader.style.display = "none";
-            }
-        }).catch((myError) => {
-            console.log("Error updating status: " + myError.message);
-        });
-    }
+    // var changeMessage = confirm("Do you really want to change this user's role?");
+    // if (changeMessage == true) {
+    fetch(URL_USER, fetchDataf).then(function (response) {
+        return response.json();
+    }).then(function (myJson) {
+        if (myJson.status == 201) {
+            // alertalert(myJson.message);
+            openAdminPage();
+            adminUpdateUserLoader.style.display = "none";
+        } else {
+            // alert(myJson.message);
+            adminUpdateUserLoader.style.display = "none";
+        }
+    }).catch((myError) => {
+        console.log("Error updating status: " + myError.message);
+    });
 }
+// }
 
 function changeIncidentStatus(incidents, incidentId) {
     let adminUpdateIncidentLoader = document.getElementById("admin-update-incident-loader");
@@ -1006,25 +1023,25 @@ function changeIncidentStatus(incidents, incidentId) {
             'Authorization': 'Bearer ' + accessToken
         }
     }
-    var changeMessage = confirm("Do you really want to change this incident's status?");
-    if (changeMessage == true) {
-        fetch(URL_INCIDENT, fetchData)
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (myJson) {
-                if (myJson.status == 201) {
-                    alert(myJson.message);
-                    openAdminPage();
-                    modelUpdateIncidentStatusBtn.style.display = "none";
-                } else {
-                    alert(myJson.error)
-                    modelUpdateIncidentStatusBtn.style.display = "none";
-                }
-            });
-        return true;
-    }
+    // var changeMessage = confirm("Do you really want to change this incident's status?");
+    // if (changeMessage == true) {
+    fetch(URL_INCIDENT, fetchData)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (myJson) {
+            if (myJson.status == 201) {
+                // alert(myJson.message);
+                openAdminPage();
+                modelUpdateIncidentStatusBtn.style.display = "none";
+            } else {
+                // alert(myJson.error)
+                modelUpdateIncidentStatusBtn.style.display = "none";
+            }
+        });
+    return true;
 }
+// }
 
 function getAllUsers() {
     let adminIncidentsListLoader = document.getElementById("view-admin-incidents-loader");
@@ -1085,7 +1102,7 @@ function getAllUsers() {
                     numberOfRows = numberOfRows + 1;
                 }
             } else {
-                alert(myJson.error);
+                // alert(myJson.error);
                 openSigninPage();
             }
             adminIncidentsListLoader.style.display = "none";
@@ -1232,7 +1249,7 @@ function showViewIncidentMap(myIncidentlatitude, myIncidentLogitude, modalIncide
                     document.getElementById('modal-add-incident-geocoordinates-field').value = positionCoordinates;
                 });
             } else {
-                alert("HTML5 Geolocation isn't supported by your current browser.");
+                // alert("HTML5 Geolocation isn't supported by your current browser.");
             }
         }
     }, false);
