@@ -128,10 +128,12 @@ function openAdminPage() {
 function openViewReportsModal() {
     let modalViewReport = document.getElementById('view-report-details-modal');
     // var modalUser = document.getElementById('view-user-profile-modal');
+    let mapIncidents = document.getElementById("user-incidents-map");
 
     document.addEventListener('click', function (event) {
         if (event.target.classList.contains('view-report-btn')) {
             modalViewReport.style.display = "block";
+            mapIncidents.style.zIndex = 0;
             // modalUser.style.display = "none";
         }
     }, false);
@@ -182,7 +184,7 @@ function openViewUserProfileModal(userId) {
 function createNewReportsModal(incidentTypes) {
 
     var modal = document.getElementById('create-new-report-modal');
-    var mapIncidents = document.getElementById("user-incidents-map")
+    var mapIncidents = document.getElementById("user-incidents-map");
     // var adminTabLinks = document.getElementsByClassName("admin-tab");
     // if (document.getElementById("dashboard-header-incident-type").innerHTML === "Map") {
     //     openAdminManageTab(event, 'view-user-redflags');
@@ -210,7 +212,7 @@ function createNewReportsModal(incidentTypes) {
     document.addEventListener('click', function (event) {
         if (event.target.classList.contains('new-report-btn')) {
             modal.style.display = "block";
-            mapIncidents.style.display = "none"
+            mapIncidents.style.zIndex = 0;
         }
     }, false);
 
@@ -220,12 +222,12 @@ function createNewReportsModal(incidentTypes) {
 
     span.onclick = function () {
         modal.style.display = "none";
-        mapIncidents.style.display = "block"
+        // mapIncidents.style.display = "block"
     }
 
     cancel_create_report.onclick = function () {
         modal.style.display = "none";
-        mapIncidents.style.display = "block"
+        // mapIncidents.style.display = "block"
     }
 
     save_create_report.onclick = function () {
@@ -243,7 +245,7 @@ function createNewReportsModal(incidentTypes) {
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
-            mapIncidents.style.display = "block";
+            // mapIncidents.style.display = "block";
         }
     }
 }
