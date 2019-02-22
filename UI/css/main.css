@@ -504,6 +504,10 @@ i {
   text-align: center;
 }
 
+.admin-search-box {
+  margin-bottom: 20px;
+}
+
 h2.dashboard-header-element {
   margin: 3px 0;
 }
